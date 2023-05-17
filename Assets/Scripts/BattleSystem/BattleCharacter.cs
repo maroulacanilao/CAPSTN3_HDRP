@@ -1,0 +1,205 @@
+﻿using System;
+using System.Collections;
+using BaseCore;
+using Character;
+using CustomHelpers;
+using DG.Tweening;
+using NaughtyAttributes;
+using ObjectPool;
+using ScriptableObjectData.CharacterData;
+using UnityEngine;
+
+namespace BattleSystem
+{
+    public abstract class BattleCharacter : MonoBehaviour
+    {
+        #region Positions
+
+        [field: SerializeField] public BattleStation battleStation { get; private set; }
+        
+
+        #endregion
+        #region Components
+
+        [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
+        public CharacterBase character { get; private set; }
+        
+        [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
+        public SpellUser spellUser { get; private set; }
+        
+        [field: SerializeField] [field: Required()] [field: BoxGroup("Components")]
+        public CharacterController controller { get; private set; }
+
+        [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
+        public AnimationEventReceiver animEventReceiver { get; private set; }
+        
+        [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
+        public SpriteRenderer spriteRenderer { get; private set; }
+        
+        [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
+        public Animator animator { get; private set; }
+
+        #endregion
+        
+        #region Animation Parameters
+        [field: BoxGroup("Animation Parameters")] [field: AnimatorParam("animator")]
+        [field: SerializeField] public int xSpeedAnimationHash { get; private set; }
+        
+        [field: BoxGroup("Animation Parameters")] [field: AnimatorParam("animator")]
+        [field: SerializeField] public int moveAnimationHash { get; private set; }
+        
+        [field: BoxGroup("Animation Parameters")] [field: AnimatorParam("animator")]
+        [field: SerializeField] public int attackAnimationHash { get; private set; }
+        
+        [field: BoxGroup("Animation Parameters")] [field: AnimatorParam("animator")]
+        [field: SerializeField] public int spellAnimationHash { get; private set; }
+        
+        [field: BoxGroup("Animation Parameters")] [field: AnimatorParam("animator")]
+        [field: SerializeField] public int hurtAnimationHash { get; private set; }
+        
+        [field: BoxGroup("Animation Parameters")] [field: AnimatorParam("animator")]
+        [field: SerializeField] public int deathAnimationHash { get; private set; }
+
+        #endregion
+
+        #region AnimationEvents
+
+        [field: BoxGroup("Animation Event")] [field: SerializeField]
+        public string AnimEvent_AttackHit { get; private set; }
+        
+        [field: BoxGroup("Animation Event")] [field: SerializeField]
+        public string AnimEvent_AnimEnd { get; private set; }
+        
+        [field: BoxGroup("Animation Event")] [field: SerializeField]
+        public string AnimEvent_SpellCast { get; private set; }
+
+        #endregion
+
+        public CharacterData characterData => character.characterData;
+        public int Level { get; protected set; }
+        
+        protected bool defaultFlipX;
+
+
+        public HealthComponent HealthComponent => character.healthComponent;
+        public ManaComponent ManaComponent => character.manaComponent;
+        public virtual CombatStats TotalStats => character.statsData.GetTotalStats(Level);
+        public virtual CombatStats BaseStats => character.statsData.baseCombatStats;
+
+        public abstract BattleCharacter Initialize(CharacterData characterData_, int level_);
+
+        public float GetHorizontalVelocity()
+        {
+            Vector2 _velocity = new Vector2(controller.velocity.x, controller.velocity.y);
+            return _velocity.magnitude;
+        }
+
+        public void UpdateMoveAnim()
+        {
+            if (GetHorizontalVelocity().IsApproximatelyTo(0))
+            {
+                animator.SetFloat(xSpeedAnimationHash, 0);
+            }
+            
+            animator.SetFloat(xSpeedAnimationHash, 1);
+        }
+
+        public IEnumerator GoToPosition(Vector3 position_, float duration_ = 0.5f)
+        {
+            animator.SetTrigger(moveAnimationHash);
+            
+            var _moveTween = transform.DOMove(position_.SetY(transform.position.y), duration_);
+            
+            _moveTween.onUpdate += UpdateMoveAnim;
+            
+            yield return _moveTween.WaitForCompletion();
+            
+            animator.SetFloat(xSpeedAnimationHash, 0);
+            animator.ResetTrigger(moveAnimationHash);
+        }
+
+        public IEnumerator BasicAttack(BattleCharacter target_)
+        {
+            DamageInfo _tempDamageInfo = new DamageInfo(TotalStats.physicalDamage, gameObject, DamageType.Weapon);
+            AttackResult _attackResult = this.DamageTarget(target_, _tempDamageInfo);
+            
+            animator.SetTrigger(attackAnimationHash);
+            yield return animator.WaitForAnimationEvent(AnimEvent_AttackHit, 2);
+            
+            Debug.Log(_attackResult.attackResultType);
+            target_.Hit(_attackResult);
+
+            yield return animator.WaitForAnimationEvent(AnimEvent_AnimEnd, 1);
+            
+            animator.ResetTrigger(attackAnimationHash);
+            yield return CoroutineHelper.GetWait(0.2f);
+        }
+
+        public IEnumerator AttackTarget(BattleCharacter target_)
+        {
+            yield return GoToPosition(target_.battleStation.attackPosition);
+            yield return BasicAttack(target_);
+            yield return GoToPosition(battleStation.stationPosition);
+        }
+
+        public IEnumerator EvadeAnimation()
+        {
+            var _yPos = transform.position.y;
+            yield return transform.DOMove(battleStation.evadePosition.SetY(_yPos), 0.1f);
+            yield return CoroutineHelper.GetWait(0.1f);
+            yield return transform.DOMove(battleStation.stationPosition.SetY(_yPos), 0.1f);
+        }
+
+        public void Hit(AttackResult atkResult_)
+        {
+            if (atkResult_.attackResultType != AttackResultType.Miss)
+            {
+                HealthComponent.TakeDamage(atkResult_.damageInfo);
+                var _trigger = HealthComponent.IsAlive ? hurtAnimationHash : deathAnimationHash;
+                animator.SetTrigger(_trigger);
+                if(HealthComponent.IsAlive) transform.DoHitEffect();
+                var _damage = -atkResult_.damageInfo.DamageAmount;
+                DamageTextUI.ShowDamageText.Invoke(transform.position,_damage.ToString());
+            }
+            else
+            {
+                DamageTextUI.ShowDamageText.Invoke(transform.position,"Miss");
+                StartCoroutine(EvadeAnimation());
+            }
+        }
+
+        public IEnumerator PlayDeathAnim()
+        {
+            animator.SetTrigger(deathAnimationHash);
+            yield return animator.WaitForAnimationEvent(AnimEvent_AnimEnd, 2);
+            animator.ResetTrigger(deathAnimationHash);
+        }
+
+        public IEnumerator PlaySpellCastAnim()
+        {
+            animator.SetTrigger(spellAnimationHash);
+            yield return animator.WaitForAnimationEvent(AnimEvent_SpellCast, 2);
+            animator.ResetTrigger(spellAnimationHash);
+        }
+
+        #region FOR DEBUGGING ONLY, DELETE THIS FUTURE ME
+        
+        [Header("FOR DEBUGGING ONLY")]
+        public BattleCharacter opponent;
+        public int LevelDebug;
+
+        private void Start()
+        {
+            Level = LevelDebug;
+        }
+
+
+        [Button("Attack Opponent")]
+        public void AttackOpponent()
+        {
+            StartCoroutine(AttackTarget(opponent));
+        }
+        
+        #endregion
+    }
+}

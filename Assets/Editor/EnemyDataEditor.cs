@@ -1,0 +1,69 @@
+using BaseCore;
+using Character;
+using ScriptableObjectData.CharacterData;
+using UnityEditor;
+using UnityEngine;
+
+[CustomEditor(typeof(EnemyData))]
+public class StatsDataEditor : Editor
+{
+    private Vector2 scroll;
+    private bool showStatsSection = true; // Toggle to show or hide the stats section
+
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        EditorGUILayout.Space();
+        EnemyData _enemyData = target as EnemyData;
+        
+        if(_enemyData == null) return;
+        
+        StatsGrowth _statsGrowthDataData = _enemyData.statsData;
+        
+        EditorGUIUtility.labelWidth = 200;
+        // Toggle for showing or hiding the stats section
+        showStatsSection = EditorGUILayout.Toggle("Show Stats Per Level", showStatsSection);
+        
+        EditorGUIUtility.labelWidth = 50;
+        
+        if (showStatsSection)
+        {
+            // Calculate the total width required for the stats section
+            float totalWidth = EditorGUIUtility.labelWidth * 9f;
+
+            scroll = EditorGUILayout.BeginScrollView(scroll, GUILayout.MaxHeight(200), GUILayout.Width(EditorGUIUtility.currentViewWidth - 20));
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginHorizontal(GUILayout.Width(totalWidth));
+
+            EditorGUILayout.BeginVertical();
+            GUILayout.Space(10);
+
+            for (int i = 1; i <= 10; i++)
+            {
+                float width = EditorStyles.label.CalcSize(new GUIContent("Label")).x;
+
+                EditorGUILayout.BeginHorizontal();
+                CombatStats _lvlStats = _statsGrowthDataData.GetLeveledStats(i, 10);
+                EditorGUILayout.LabelField("Level " + (i), GUILayout.Width(EditorGUIUtility.labelWidth));
+                EditorGUILayout.LabelField("HP: " + _lvlStats.maxHp);
+                EditorGUILayout.LabelField("Mana: " + _lvlStats.maxMana);
+                EditorGUILayout.LabelField("WpnDmg: " + _lvlStats.physicalDamage);
+                EditorGUILayout.LabelField("Armor: " + _lvlStats.armor);
+                EditorGUILayout.LabelField("MagDmg: " + _lvlStats.magicDamage);
+                EditorGUILayout.LabelField("MagRes: " + _lvlStats.magicResistance);
+                EditorGUILayout.LabelField("Acc: " + _lvlStats.accuracy);
+                EditorGUILayout.LabelField("Speed: " + _lvlStats.speed);
+                EditorGUILayout.EndHorizontal();
+            }
+
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.EndScrollView();
+        }
+    }
+}
+
