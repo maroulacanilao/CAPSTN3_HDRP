@@ -66,6 +66,7 @@ namespace Player.ControllerState
             player.animator.SetBool(player.isIdleHash, _isIdle);
             
             if(_isIdle) return;
+            
             if (Mathf.Abs(_input.x) < 0.01f)
             {
                 var _val = Mathf.Sign(_input.y);

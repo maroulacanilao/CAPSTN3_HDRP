@@ -19,6 +19,7 @@ namespace BattleSystem
         
 
         #endregion
+        
         #region Components
 
         [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
@@ -77,8 +78,8 @@ namespace BattleSystem
 
         public CharacterData characterData => character.characterData;
         public int Level { get; protected set; }
-        
-        protected bool defaultFlipX;
+
+        protected Vector3 defaultPosition;
 
 
         public HealthComponent HealthComponent => character.healthComponent;
@@ -88,6 +89,11 @@ namespace BattleSystem
 
         public abstract BattleCharacter Initialize(CharacterData characterData_, int level_);
 
+        private void Awake()
+        {
+            defaultPosition = transform.position;
+        }
+        
         public float GetHorizontalVelocity()
         {
             Vector2 _velocity = new Vector2(controller.velocity.x, controller.velocity.y);
@@ -106,9 +112,10 @@ namespace BattleSystem
 
         public IEnumerator GoToPosition(Vector3 position_, float duration_ = 0.5f)
         {
+            transform.MoveToY(defaultPosition.y);
             animator.SetTrigger(moveAnimationHash);
             
-            var _moveTween = transform.DOMove(position_.SetY(transform.position.y), duration_);
+            var _moveTween = transform.DOMove(position_.SetY(defaultPosition.y), duration_);
             
             _moveTween.onUpdate += UpdateMoveAnim;
             
@@ -127,6 +134,7 @@ namespace BattleSystem
             yield return animator.WaitForAnimationEvent(AnimEvent_AttackHit, 2);
             
             Debug.Log(_attackResult.attackResultType);
+            
             target_.Hit(_attackResult);
 
             yield return animator.WaitForAnimationEvent(AnimEvent_AnimEnd, 1);

@@ -22,15 +22,17 @@ namespace Managers
         protected override void Awake()
         {
             base.Awake();
+            playerInventory.InitializeInventory();
+            ItemHelper.Initialize(GameDataBase);
             OnEnterBattle.AddListener(EnterBattle);
             OnExitBattle.AddListener(ExitBattle);
-            ItemHelper.Initialize(GameDataBase);
         }
 
         protected void OnDestroy()
         {
             OnEnterBattle.RemoveListener(EnterBattle);
             OnExitBattle.RemoveListener(ExitBattle);
+            playerInventory.DeInitializeInventory();
         }
         
         private void EnterBattle(PlayerCharacter playerCharacter_, CharacterBase enemyCharacter_)

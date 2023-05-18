@@ -33,7 +33,6 @@ namespace UI
         private void OnUpdateMana(ManaComponent manaComponent_)
         {
             var _percentage = (float)manaComponent_.CurrentMana / manaComponent_.MaxMana;
-            Debug.Log(_percentage);
             UpdateHpText();
             manaBarFill.DOFillAmount(_percentage, effectDuration);
         }

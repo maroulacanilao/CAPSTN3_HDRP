@@ -19,11 +19,6 @@ namespace Character
             base.Awake();
             OnPlayerCanMove.AddListener(CanMove);
         }
-        
-        protected void Start()
-        {
-            playerInventory.InitializeInventory();
-        }
 
         private void OnDestroy()
         {

@@ -53,6 +53,10 @@ public static class ItemHelper
             {
                 return new ItemSeed(data_, 1);
             }
+            case ItemType.Tool:
+            {
+                return new ItemTool(data_);
+            }
             default:
                 throw new ArgumentOutOfRangeException();
         }

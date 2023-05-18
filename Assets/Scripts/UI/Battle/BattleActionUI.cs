@@ -1,5 +1,6 @@
 using System.Collections;
 using BattleSystem;
+using CustomHelpers;
 using NaughtyAttributes;
 using UI.Battle;
 using UnityEngine;
@@ -67,6 +68,12 @@ public class BattleActionUI : MonoBehaviour
         StartCoroutine(Co_Spell(index_));
     }
     
+    public void SkipTurn()
+    {
+        mainPanel.SetActive(false);
+        StartCoroutine(Co_SkipTurn());
+    }
+    
     private void ShowActionMenu(BattleCharacter playerCharacter_)
     {
         player = playerCharacter_;
@@ -83,6 +90,13 @@ public class BattleActionUI : MonoBehaviour
     private IEnumerator Co_Spell(int index_)
     {
         yield return player.spellUser.UseSkill(index_, BattleManager.Instance.enemy);
+        BattleManager.OnPlayerEndDecide.Invoke();
+    }
+
+    private IEnumerator Co_SkipTurn()
+    {
+        Debug.Log("Player Skipped a Turn");
+        yield return CoroutineHelper.GetWait(0.2f);
         BattleManager.OnPlayerEndDecide.Invoke();
     }
 }

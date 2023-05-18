@@ -37,10 +37,9 @@ public abstract class StatusEffectBase : MonoBehaviour
     [field: BoxGroup("Base Properties")] [field: ShowAssetPreview()]
     [field: SerializeField] public Sprite Icon { get; private set; }
     
-    [field: SerializeField] 
     public StatusEffectReceiver Target { get; private set; }
-    public GameObject Source { get; private set; }
-    public int turns { get; private set; }
+    public GameObject Source { get; protected set; }
+    public int turns { get; protected set; }
 
     protected bool isActivated;
     
@@ -49,8 +48,11 @@ public abstract class StatusEffectBase : MonoBehaviour
     protected abstract void OnActivate();
     protected abstract void OnDeactivate();
     
-    protected virtual IEnumerator OnTick(TurnBaseState ownerTurnState_) { yield break; }
+    protected virtual void OnStackEffect(StatusEffectBase newEffect_) { }
+    
+    protected virtual IEnumerator OnBeforeTurnTick(TurnBaseState ownerTurnState_) { yield break; }
 
+    protected virtual IEnumerator OnAfterTurnTick(TurnBaseState ownerTurnState_) { yield break; }
     public StatusEffectBase Initialize(int damage_)
     {
         Damage = damage_;
@@ -79,19 +81,36 @@ public abstract class StatusEffectBase : MonoBehaviour
 
     public void RefreshStatusEffect() { turns = 0; }
 
-    public IEnumerator Tick(TurnBaseState ownerTurnState_)
+    public IEnumerator BeforeTurnTick(TurnBaseState ownerTurnState_)
     {
-        if (turns >= turnDuration)
-        {
-            SelfRemove();
-        }
-        yield return OnTick(ownerTurnState_);
-        turns++;
+        yield return OnBeforeTurnTick(ownerTurnState_);
+        HasStillTurns();
+        yield break;
+    }
+    
+    public IEnumerator AfterTurnTick(TurnBaseState ownerTurnState_)
+    {
+        yield return OnAfterTurnTick(ownerTurnState_);
+        HasStillTurns();
         yield break;
     }
 
     public void SelfRemove()
     {
         Target.RemoveStatusEffect(this);
+    }
+    
+    public void HasStillTurns()
+    {
+        if (turns > turnDuration)
+        {
+            SelfRemove();
+        }
+    }
+    
+    public void StackEffect(StatusEffectBase newEffect_)
+    {
+        if(this == newEffect_) return;
+        OnStackEffect(newEffect_);
     }
 }

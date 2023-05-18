@@ -131,8 +131,7 @@ namespace Farming
             if(IsNextPhase) return;
             
             // var _progress = farmTile.timeRemaining.Hours / (float) farmTile.seedData.minutesToGrow;
-            Debug.Log(farmTile.progress);
-            
+
             if (farmTile.progress >= 0.1f)
             {
                 IsNextPhase = true;
@@ -160,8 +159,9 @@ namespace Farming
 
         public override void Interact()
         {
-            var _item = farmTile.seedData.produceData.GetConsumableItem();
+            var _item = farmTile.seedData.produceData.GetConsumableItem(1);
             GameManager.Instance.GameDataBase.playerInventory.AddItem(_item);
+            farmTile.ChangeState(farmTile.emptyTileState);
         }
     }
 }

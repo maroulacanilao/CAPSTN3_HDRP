@@ -30,6 +30,9 @@ public class CropUI : MonoBehaviour
         currTile = obj_;
         transform.position = currTile.transform.position.Add(0, 2.5f, 1f);
         panel.SetActive(true);
+        var _produceData = currTile.seedData.produceData;
+        cropNameText.text = _produceData.ItemName;
+        icon.sprite = _produceData.Icon;
         UpdateUI(TimeManager.Instance);
     }
 
@@ -42,15 +45,16 @@ public class CropUI : MonoBehaviour
     private void UpdateUI(TimeManager timeManager_)
     {
         if(!panel.gameObject.activeSelf) return;
-        if (currTile == null)
+        if (currTile == null || currTile.tileState == TileState.Empty)
         {
             panel.SetActive(false);
             return;
         }
-        
-        var _produceData = currTile.seedData.produceData;
-        cropNameText.text = _produceData.ItemName;
-        icon.sprite = _produceData.Icon;
+        if(currTile.tileState == TileState.ReadyToHarvest)
+        {
+            timeTxt.text = "Ready To Harvest";
+            return;
+        }
         var _totalMinutes = currTile.minutesRemaining;
         timeTxt.text = $"{_totalMinutes / 60:00}:{_totalMinutes % 60:00}";
 

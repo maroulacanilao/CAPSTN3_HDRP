@@ -13,7 +13,9 @@ namespace Farming
         protected override void Interact()
         { 
             if (farmTile.tileState != TileState.ReadyToHarvest) return;
+            Debug.Log("Harvest");
             farmTile.OnInteract();
+            OnExitFarmTile.Invoke(farmTile);
         }
         
         protected override void Enter()

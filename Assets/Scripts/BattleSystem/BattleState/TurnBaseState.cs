@@ -12,12 +12,12 @@ namespace BattleSystem.BattleState
 
     public abstract class TurnBaseState : BattleStateBase
     {
-        protected BattleCharacter character;
+        protected BattleCharacter battleCharacter;
         
-        public TurnBaseState(BattleStateMachine stateMachine_, BattleCharacter character_) : base(stateMachine_)
+        public TurnBaseState(BattleStateMachine stateMachine_, BattleCharacter battleCharacter_) : base(stateMachine_)
         {
-            character = character_;
-            if (character == null) throw new Exception("Character is null");
+            battleCharacter = battleCharacter_;
+            if (battleCharacter == null) throw new Exception("Character is null");
         }
         public override abstract IEnumerator Enter();
         public abstract IEnumerator StartTurn();

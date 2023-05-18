@@ -11,7 +11,7 @@ namespace StatusEffect
 
         protected override void OnActivate()
         {
-            var _hpCom = Target.owner.healthComponent;
+            var _hpCom = Target.character.healthComponent;
             var _amount = Mathf.RoundToInt(_hpCom.MaxHp * healPercentage);
             
             HealInfo _healInfo = new HealInfo(_amount, Source);
@@ -23,7 +23,7 @@ namespace StatusEffect
         
         protected override void OnDeactivate()
         {
-
+            
         }
         
     }

@@ -6,33 +6,36 @@ namespace BattleSystem.BattleState
 {
     public class EnemyTurnState : TurnBaseState
     {
-        public EnemyTurnState(BattleStateMachine stateMachine_, BattleCharacter character_) : base(stateMachine_, character_)
+        public EnemyTurnState(BattleStateMachine stateMachine_, BattleCharacter battleCharacter_) : base(stateMachine_, battleCharacter_)
         {
         }
 
         public override IEnumerator Enter()
         {
-            Debug.Log($"{character.gameObject}'s Enter Turn");
+            Debug.Log($"{battleCharacter.gameObject}'s Enter Turn");
+            yield return CoroutineHelper.GetWait(0.1f);
+            yield return battleCharacter.character.statusEffectReceiver.BeforeTurnTick(this);
             yield return StartTurn();
         }
 
         public override IEnumerator StartTurn()
         {
-            Debug.Log($"{character.gameObject}'s Turn");
-            yield return CoroutineHelper.GetWait(.5f);
+            Debug.Log($"{battleCharacter.gameObject}'s Turn");
+            yield return CoroutineHelper.GetWait(.2f);
             yield return TurnLogic();
         }
 
         public override IEnumerator TurnLogic()
         {
-            yield return character.AttackTarget(BattleManager.Instance.player);
+            yield return battleCharacter.AttackTarget(BattleManager.Instance.player);
             yield return EndTurn();
         }
 
         public override IEnumerator EndTurn()
         {
             yield return CoroutineHelper.GetWait(0.1f);
-            Debug.Log($"{character.gameObject}'s End Turn");
+            yield return battleCharacter.character.statusEffectReceiver.AfterTurnTick(this);
+            Debug.Log($"{battleCharacter.gameObject}'s End Turn");
             if (BattleManager.player.HealthComponent.CurrentHp <= 0)
             {
                 yield return StateMachine.ChangeState(new BattleEndState(StateMachine, false));
@@ -43,7 +46,7 @@ namespace BattleSystem.BattleState
 
         public override IEnumerator Exit()
         {
-            Debug.Log($"{character.gameObject}'s Exit State");
+            Debug.Log($"{battleCharacter.gameObject}'s Exit State");
             yield break;
         }
     }

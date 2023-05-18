@@ -1,6 +1,7 @@
 using System.Collections;
 using BaseCore;
 using BattleSystem;
+using Character;
 using CustomHelpers;
 using Spells.Base;
 using UnityEngine;
@@ -25,14 +26,13 @@ namespace Spells
                 Quaternion.identity);
 
             yield return _projectile.StartProjectile(target.transform.position);
-            
             Destroy(_projectile.gameObject);
             
             target.Hit(_atkResult);
             
             if (_atkResult.attackResultType != AttackResultType.Miss)
             {
-                // TODO: Add burn status effect
+                target.character.statusEffectReceiver.ApplyStatusEffect(spellData.statusEffect, character.gameObject);
             }
             battleCharacter.animator.SetTrigger(battleCharacter.moveAnimationHash);
             yield return CoroutineHelper.GetWait(0.2f);

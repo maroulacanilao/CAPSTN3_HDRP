@@ -30,12 +30,6 @@ namespace Spells.Base
 		
 		[field: BoxGroup("Spell Behavior")] [field: SerializeField] [field: ShowIf("hasStatusEffect")]
 		public StatusEffectBase statusEffect { get; protected set; }
-		
-		[field: BoxGroup("Spell Behavior")] [field: SerializeField] [field: ShowIf("hasStatusEffect")]
-		public bool IsStatusEffectHasDuration { get; protected set; }
-		
-		[field: BoxGroup("Spell Behavior")] [field: SerializeField] [field: ShowIf(EConditionOperator.And, "hasStatusEffect", "IsStatusEffectHasDuration")]
-		public int StatusEffectDuration { get; protected set; }
 
 		[field: BoxGroup("Damage Properties")] [field: SerializeField] [field: Range(0,2f)]
 		[field: ShowIf("spellType", SpellType.Magical )] 

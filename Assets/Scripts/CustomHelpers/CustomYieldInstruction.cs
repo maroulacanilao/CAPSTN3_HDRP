@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using CustomEvent;
 using DG.Tweening;
+using Managers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -185,5 +186,83 @@ namespace CustomHelpers
         }
 
         public override bool keepWaiting => _framesToWait-- > 0;
+    }
+    
+    public class WaitForAnyInstruction : CustomYieldInstruction
+    {
+        private readonly CustomYieldInstruction[] instructions;
+
+        public WaitForAnyInstruction(params CustomYieldInstruction[] instructions)
+        {
+            this.instructions = instructions;
+        }
+
+        public override bool keepWaiting
+        {
+            get
+            {
+                foreach (var _instruction in instructions)
+                {
+                    if (!_instruction.keepWaiting)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+    }
+    
+    public class WaitForAnyInstructionWithCoroutine : CustomYieldInstruction
+    {
+        private readonly CustomYieldInstruction customInstruction;
+        private readonly IEnumerator coroutine;
+
+        public WaitForAnyInstructionWithCoroutine(CustomYieldInstruction customInstruction, IEnumerator coroutine)
+        {
+            this.customInstruction = customInstruction;
+            this.coroutine = coroutine;
+        }
+
+        public override bool keepWaiting
+        {
+            get { return customInstruction.keepWaiting || (coroutine != null && coroutine.MoveNext()); }
+        }
+    }
+    
+    public class WaitForBothInstruction : CustomYieldInstruction
+    {
+        private readonly CustomYieldInstruction customInstruction;
+        private readonly IEnumerator coroutine;
+        private bool customInstructionFinished;
+        private bool coroutineFinished;
+
+        public WaitForBothInstruction(CustomYieldInstruction customInstruction, IEnumerator coroutine, MonoBehaviour mono)
+        {
+            this.customInstruction = customInstruction;
+            this.coroutine = coroutine;
+            customInstructionFinished = false;
+            coroutineFinished = false;
+
+            // Start a coroutine to check if the custom instruction finishes
+            mono.StartCoroutine(CheckCustomInstructionFinished());
+        }
+
+        public override bool keepWaiting
+        {
+            get { return !customInstructionFinished || !coroutineFinished; }
+        }
+
+        private IEnumerator CheckCustomInstructionFinished()
+        {
+            yield return customInstruction;
+            customInstructionFinished = true;
+        }
+
+        public IEnumerator CoroutineExample()
+        {
+            yield return new WaitForSeconds(3f);
+            coroutineFinished = true;
+        }
     }
 }
