@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using CustomHelpers;
 using Items;
 using Items.ItemData;
@@ -21,12 +22,13 @@ namespace Farming
 
         public SeedData seedData { get; set; }
 
+        public Sprite defaultSoilSprite { get; private set; }
+        public Sprite defaultPlantSprite { get; private set; }
+        
         public bool isWatered { get; set; }
         
         public int minutesRemaining { get; set; }
         public int totalMinutesDuration => seedData.minutesToGrow;
-        public Sprite defaultSoilSprite;
-        public Sprite defaultPlantSprite;
         public float progress
         {
             get
@@ -49,19 +51,21 @@ namespace Farming
         
         public EmptyTileState emptyTileState;
         public PlantedTileState plantedTileState;
-        public GrowingTileState GrowingTileState;
+        public GrowingTileState growingTileState;
         public ReadyToHarvestTileState readyToHarvestTileState;
 
         #endregion
         
         [SerializeReference] private FarmTileState currentState;
+        
         public FarmTile Initialize()
         {
             defaultSoilSprite = soilRenderer.sprite;
             defaultPlantSprite = plantRenderer.sprite;
+            
             emptyTileState = new EmptyTileState(this);
             plantedTileState = new PlantedTileState(this);
-            GrowingTileState = new GrowingTileState(this);
+            growingTileState = new GrowingTileState(this);
             readyToHarvestTileState = new ReadyToHarvestTileState(this);
             
             ChangeState(emptyTileState);
@@ -77,17 +81,17 @@ namespace Farming
 
         public void OnWaterPlant()
         {
-            currentState.WaterPlant();
+            currentState?.WaterPlant();
         }
         
         public void OnPlantSeed(SeedData seedData_)
         {
-            currentState.PlantSeed(seedData_);
+            currentState?.PlantSeed(seedData_);
         }
         
         public void OnInteract()
         {
-            currentState.Interact();
+            currentState?.Interact();
         }
     }
 }

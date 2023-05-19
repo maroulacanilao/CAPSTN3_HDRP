@@ -108,9 +108,24 @@ namespace UI.InventoryMenu
             if(currMenuItem == null) return;
             
             var _index = currMenuItem.index;
-            
-            if(currMenuItem.isToolBar) inventory.RemoveItemInHand(currMenuItem.index);
-            else inventory.RemoveItemInStorage(_index);
+
+            switch (currMenuItem.inventoryItemType)
+            {
+                case Item_MenuItem.InventoryItemType.storage:
+                    inventory.RemoveItemInStorage(_index);
+                    break;
+                case Item_MenuItem.InventoryItemType.toolBar:
+                    inventory.RemoveItemInHand(currMenuItem.index);
+                    break;
+                case Item_MenuItem.InventoryItemType.weaponBar:
+                    inventory.DiscardEquippedWeapon();
+                    break;
+                case Item_MenuItem.InventoryItemType.armorBar:
+                    inventory.DiscardEquippedArmor();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             currMenuItem.UpdateDisplay();
         }
         

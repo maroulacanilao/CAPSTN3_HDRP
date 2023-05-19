@@ -23,7 +23,7 @@ namespace Player
         public int currIndex { get; private set; }
         public Item CurrentItem => playerInventory.ItemTools[currIndex];
         
-        public static readonly Evt<Item> OnChangeItemOnHand = new Evt<Item>();
+        public static readonly Evt<int> OnChangeItemOnHand = new Evt<int>();
 
         private void Start()
         {
@@ -36,7 +36,7 @@ namespace Player
             {
                 OnUpdateTools(i, playerInventory.ItemTools[i]);
             }
-            OnChangeItemOnHand.Invoke(CurrentItem);
+            OnChangeItemOnHand.Invoke(0);
         }
 
         private void OnEnable()
@@ -61,14 +61,14 @@ namespace Player
             if (isNext_) currIndex++;
             else currIndex--;
             ClampIndex();
-            OnChangeItemOnHand.Invoke(CurrentItem);
+            OnChangeItemOnHand.Invoke(currIndex);
         }
 
         public void SelectTool(int index_)
         {
             currIndex = index_;
             ClampIndex();
-            OnChangeItemOnHand.Invoke(CurrentItem);
+            OnChangeItemOnHand.Invoke(currIndex);
         }
 
         private void ClampIndex()

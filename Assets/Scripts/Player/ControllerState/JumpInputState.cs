@@ -16,9 +16,8 @@ namespace Player.ControllerState
         public override void Enter()
         {
             base.Enter();
-            Debug.Log($"Enter @ {StateMachine.velocityOnExit}");
             rb.velocity = new Vector3(StateMachine.velocityOnExit.x, player.jumpForce, StateMachine.velocityOnExit.z);
-            // player.animator.SetTrigger(player.jumpHash);
+            rb.SetVelocity(StateMachine.velocityOnExit.SetY(player.jumpForce));
             jumpTimer = 0;
         }
 

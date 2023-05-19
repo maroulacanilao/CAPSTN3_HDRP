@@ -55,7 +55,6 @@ namespace Player.ControllerState
             base.Exit();
             player.animator.ResetTrigger(player.groundedHash);
             StateMachine.velocityOnExit = rb.velocity;
-            Debug.Log($"Exit @ {StateMachine.velocityOnExit}");
         }
     }
 }

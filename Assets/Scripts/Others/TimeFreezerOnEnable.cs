@@ -8,11 +8,11 @@ public class TimeFreezerOnEnable : MonoBehaviour
 {
     private void OnEnable()
     {
-        TimeManager.PauseTime();
+        TimeManager.Instance.PauseTime();
     }
 
     private void OnDisable()
     {
-        TimeManager.ResumeTime();
+        TimeManager.Instance.ResumeTime();
     }
 }

@@ -22,6 +22,8 @@ namespace UI.InventoryMenu
         [SerializeField] private GameObject menuPanel;
         [SerializeField] Item_MenuItem[] toolBarItems;
         [SerializeField] Item_MenuItem[] storageItems;
+        [SerializeField] private Item_MenuItem weaponBar;
+        [SerializeField] private Item_MenuItem armorBar;
 
         public static readonly Evt<bool> OnOpenInventoryMenu = new Evt<bool>();
         public static readonly Evt<Item_MenuItem> OnItemSelect = new Evt<Item_MenuItem>();
@@ -43,7 +45,8 @@ namespace UI.InventoryMenu
                 // // to remove
                 // storageItems[j].SetDisplay();
             }
-            
+            armorBar.Initialize(this,0);
+            weaponBar.Initialize(this,0);
             inventoryDetailsPanel.Initialize(this);
         }
 

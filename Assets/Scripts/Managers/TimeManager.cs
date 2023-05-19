@@ -1,26 +1,12 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using BaseCore;
 using CustomEvent;
 using UnityEngine;
 
 namespace Managers
 {
-    public enum Month
-    {
-        January = 1,
-        February = 2,
-        March = 3,
-        April = 4,
-        May = 5,
-        June = 6,
-        July = 7,
-        August = 8,
-        September = 9,
-        October = 10,
-        November = 11,
-        December = 12
-    }
-
     public class TimeManager : Singleton<TimeManager>
     {
         [Header("Time Values (24hr format)")]
@@ -43,8 +29,8 @@ namespace Managers
         private int dayCounter = 0;
         private bool didDayStart = false;
         private DateTime dateTime;
-
-        private float timer = 0;
+        private bool isTimeLoopRunning;
+        private CancellationTokenSource timerCTS; // CTS = CancellationTokenSource
 
         #region Getters and Setters
 
@@ -85,7 +71,6 @@ namespace Managers
         public static int CurrentHour => DateTime.Hour;
         public static int CurrentMinute => DateTime.Minute;
         public static int CurrentYear => DateTime.Year;
-        public static Month CurrentMonth => (Month) DateTime.Month;
         public static int CurrentDate => DateTime.Day;
         public static DayOfWeek CurrentDay => DateTime.DayOfWeek;
         public static DateTime DateTime => Instance.dateTime;
@@ -106,55 +91,18 @@ namespace Managers
             OnBeginDay.Invoke(this);
 
             isTimePaused = true;
-            
             //TODO: remove this
             StartDay();
         }
 
-        private void Update()
+        private void OnDestroy()
         {
-            // for testing
-            if (isTimePaused) return;
-            
-            if (timer >= timeScale)
-            {
-                dateTime = dateTime.AddMinutes(1);
-                OnMinuteTick.Invoke(this);
-                timer = 0;
-                if (CurrentMinute != 0) return;
-                
-                OnHourTick.Invoke(this);
-
-                if (CurrentHour == nightHour)
-                {
-                    OnNightTime.Invoke(this);
-                }
-                
-                if (CurrentHour >= endingHour)
-                {
-                    EndDay();
-                    isTimePaused = true;
-                }
-            }
-            else
-            {
-                timer += Time.deltaTime;
-            }
+            timerCTS.Cancel();
         }
 
-        private void EndDay()
-        {
-            isTimePaused = true;
-
-            didDayStart = false;
-
-            // for checking if game over and other visual things
-            OnEndDay.Invoke(this);
-        }
-        
         // called when starting a day to update time
-        [ContextMenu("Start Day")]
-        public static void StartDay()
+        [NaughtyAttributes.Button("Start Day")]
+        public void StartDay()
         {
             Instance.isTimePaused = false;
 
@@ -179,20 +127,86 @@ namespace Managers
             if (_prevDateTime.Month != DateTime.Month) OnNewMonth.Invoke(Instance);
             
             OnMinuteTick.Invoke(Instance);
+
+            timerCTS = new CancellationTokenSource();
+            StartMainTimeLoop();
+        }
+        
+        
+        [NaughtyAttributes.Button("EndDay")]
+        private void EndDay()
+        {
+            isTimePaused = true;
+            isTimeLoopRunning = false;
+
+            didDayStart = false;
+
+            // for checking if game over and other visual things
+            OnEndDay.Invoke(this);
         }
 
-        public static void PauseTime(bool freezeTimescale_ = true)
+        [NaughtyAttributes.Button("Pause Time")]
+        public void PauseTime()
         {
-            if (freezeTimescale_) Time.timeScale = 0f;
-            Instance.isTimePaused = true;
+            timerCTS.Cancel();
+            isTimePaused = true;
+            isTimeLoopRunning = false;
             OnPauseTime.Invoke(Instance, Instance.isTimePaused);
         }
 
-        public static void ResumeTime()
+        [NaughtyAttributes.Button("Resume Time")]
+        public void ResumeTime()
         {
-            Time.timeScale = 1f;
-            Instance.isTimePaused = false;
+            if(!isTimePaused) return;
+            isTimePaused = false;
+            
             OnPauseTime.Invoke(Instance, Instance.isTimePaused);
+            
+            timerCTS = new CancellationTokenSource();
+
+            StartMainTimeLoop();
+        }
+
+        private async void StartMainTimeLoop()
+        {
+            try
+            {
+                int _delay = Mathf.RoundToInt(timeScale * 1000);
+            
+                while (!timerCTS.Token.IsCancellationRequested)
+                {
+                    await Task.Delay(_delay, timerCTS.Token);
+                    if(timerCTS.Token.IsCancellationRequested) break;
+                    UpdateTime();
+                }
+            }
+            catch (Exception e)
+            {
+                isTimePaused = true;
+                timerCTS = new CancellationTokenSource();
+            }
+        }
+
+        private void UpdateTime()
+        {
+            if(isTimePaused) return;
+            
+            dateTime = dateTime.AddMinutes(1);
+            OnMinuteTick.Invoke(this);
+
+            if (CurrentMinute != 0) return;
+                
+            OnHourTick.Invoke(this);
+
+            if (CurrentHour == nightHour)
+            {
+                OnNightTime.Invoke(this);
+            }
+
+            if (CurrentHour < endingHour) return;
+            
+            EndDay();
+            isTimePaused = true;
         }
     }
 }

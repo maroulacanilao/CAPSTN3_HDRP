@@ -40,14 +40,14 @@ namespace Farming
             PlayerEquipment.OnChangeItemOnHand.AddListener(ChangeItem);
         }
 
-        private void ChangeItem(Items.Item item_)
+        private void ChangeItem(int index_)
         {
-            if (item_ == null)
-            {
-                gameObject.SetActive(false);
-                return;
-            }
-            gameObject.SetActive(item_.ItemType is Items.ItemType.Tool or Items.ItemType.Seed);
+            // if (item_ == null)
+            // {
+            //     gameObject.SetActive(false);
+            //     return;
+            // }
+            // gameObject.SetActive(item_.ItemType is Items.ItemType.Tool or Items.ItemType.Seed);
         }
         
         public void Instantiate(Vector2 size_)

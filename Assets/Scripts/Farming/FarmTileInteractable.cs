@@ -15,12 +15,21 @@ namespace Farming
             if (farmTile.tileState != TileState.ReadyToHarvest) return;
             Debug.Log("Harvest");
             farmTile.OnInteract();
+            showIcon = false;
+            OnExit.Invoke(this);
             OnExitFarmTile.Invoke(farmTile);
         }
         
         protected override void Enter()
         {
             if(farmTile == null) return;
+            
+            if (farmTile.tileState == TileState.ReadyToHarvest && 
+                !showIcon)
+            {
+                showIcon = true;
+                OnEnter.Invoke(this);
+            }
             if(farmTile.tileState == TileState.Empty) return;
             OnEnterFarmTile.Invoke(farmTile);
         }

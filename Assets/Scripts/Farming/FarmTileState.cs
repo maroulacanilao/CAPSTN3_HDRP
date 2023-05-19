@@ -1,35 +1,35 @@
-using System;
-using Items;
 using Items.ItemData;
 using Managers;
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 
 namespace Farming
 {
     [System.Serializable]
-    public enum TileState { Empty = 0, Planted = 1, Growing = 2, ReadyToHarvest = 3 }   
-    
+    public enum TileState { Empty = 0, Planted = 1, Growing = 2, ReadyToHarvest = 3 }
+
     [System.Serializable]
     public abstract class FarmTileState
     {
         public TileState tileState { get; protected set; }
         protected FarmTile farmTile;
-        
+
         public FarmTileState(FarmTile farmTile_)
         {
             farmTile = farmTile_;
         }
-        
-        public virtual void EnterLogic() {}
 
-        public virtual void ExitLogic() {}
-        public virtual void Interact() {}
-        
+        public virtual void EnterLogic() { }
+
+        public virtual void ExitLogic() { }
+        public virtual void Interact() { }
+
         public virtual void PlantSeed(SeedData seedData_) { }
         public virtual void WaterPlant() { }
-        public virtual ItemConsumable HarvestPlant() { return null; }
     }
-    
+
     [System.Serializable]
     public class EmptyTileState : FarmTileState
     {
@@ -37,7 +37,7 @@ namespace Farming
         {
             tileState = TileState.Empty;
         }
-        
+
         public override void EnterLogic()
         {
             //TODO: Add mat to farmtile
@@ -46,14 +46,14 @@ namespace Farming
 
             farmTile.minutesRemaining = 0;
             farmTile.isWatered = false;
-            
+
             farmTile.plantRenderer.gameObject.SetActive(false);
             farmTile.plantRenderer.sprite = farmTile.defaultPlantSprite;
-            
+
             farmTile.soilRenderer.color = farmTile.tilledColor;
             farmTile.soilRenderer.sprite = farmTile.defaultSoilSprite;
         }
-        
+
         public override void WaterPlant()
         {
             farmTile.isWatered = true;
@@ -63,12 +63,12 @@ namespace Farming
         public override void PlantSeed(SeedData seedData_)
         {
             farmTile.seedData = seedData_;
-            
-            if(farmTile.isWatered) farmTile.ChangeState(farmTile.GrowingTileState);
+
+            if (farmTile.isWatered) farmTile.ChangeState(farmTile.growingTileState);
             else farmTile.ChangeState(farmTile.plantedTileState);
         }
     }
-    
+
     [System.Serializable]
     public class PlantedTileState : FarmTileState
     {
@@ -76,20 +76,20 @@ namespace Farming
         {
             tileState = TileState.Planted;
         }
-    
+
         public override void EnterLogic()
         {
             farmTile.soilRenderer.sprite = farmTile.seedData.soilSprite;
         }
-        
+
         public override void WaterPlant()
         {
             farmTile.isWatered = true;
             farmTile.soilRenderer.color = farmTile.wateredColor;
-            farmTile.ChangeState(farmTile.GrowingTileState);
+            farmTile.ChangeState(farmTile.growingTileState);
         }
     }
-    
+
     [System.Serializable]
     public class GrowingTileState : FarmTileState
     {
@@ -98,14 +98,14 @@ namespace Farming
         {
             tileState = TileState.Growing;
         }
-    
+
         public override void EnterLogic()
         {
             IsNextPhase = false;
-            
+
             farmTile.datePlanted = TimeManager.DateTime;
             farmTile.minutesRemaining = farmTile.totalMinutesDuration;
-            
+
             farmTile.soilRenderer.sprite = farmTile.seedData.soilSprite;
             farmTile.soilRenderer.color = farmTile.wateredColor;
             TimeManager.OnMinuteTick.AddListener(UpdateTimeRemaining);
@@ -115,21 +115,22 @@ namespace Farming
         {
             TimeManager.OnMinuteTick.RemoveListener(UpdateTimeRemaining);
         }
-    
+
         public override void Interact() { }
-        
+
         private void UpdateTimeRemaining(TimeManager timeManager_)
         {
-            if(!farmTile.isWatered) return;
+            if (!farmTile.isWatered) return;
             if (farmTile.minutesRemaining <= 0)
             {
                 farmTile.ChangeState(farmTile.readyToHarvestTileState);
                 return;
             }
+
             farmTile.minutesRemaining--;
 
-            if(IsNextPhase) return;
-            
+            if (IsNextPhase) return;
+
             // var _progress = farmTile.timeRemaining.Hours / (float) farmTile.seedData.minutesToGrow;
 
             if (farmTile.progress >= 0.1f)
@@ -149,7 +150,7 @@ namespace Farming
         {
             tileState = TileState.ReadyToHarvest;
         }
-    
+
         public override void EnterLogic()
         {
             farmTile.minutesRemaining = 0;

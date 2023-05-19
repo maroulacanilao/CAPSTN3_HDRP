@@ -12,15 +12,32 @@ namespace UI.InventoryMenu
     [RequireComponent(typeof(Button))]
     public class Item_MenuItem : MonoBehaviour, IPointerClickHandler, ISelectHandler, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler
     {
+        public enum InventoryItemType { storage = 0, toolBar = 1, weaponBar = 2, armorBar = 3  }
+        
         [SerializeField] private TextMeshProUGUI countTXT;
         [SerializeField] private Image icon;
         [SerializeField] private Image ghostIcon;
-        [field: SerializeField] public bool isToolBar { get; private set; } = false;
+        [field: SerializeField] public InventoryItemType inventoryItemType { get; private set; }
+
         public int index { get; private set; }
+        
         public Button button { get; private set; }
         private PlayerInventory inventory;
         private InventoryMenu inventoryMenu;
-        public Item item => isToolBar ? inventory.ItemTools[index] : inventory.GetItemInStorage(index);
+        private bool hasInitialized;
+        public Item item
+        {
+            get
+            {
+                return inventoryItemType switch
+                {
+                    InventoryItemType.toolBar => inventory.ItemTools[index],
+                    InventoryItemType.weaponBar => inventory.WeaponEquipped,
+                    InventoryItemType.armorBar => inventory.ArmorEquipped,
+                    _ => inventory.GetItemInStorage(index)
+                };
+            }
+        }
 
         public static bool isDragging;
         public static Item_MenuItem draggingItem;
@@ -32,6 +49,7 @@ namespace UI.InventoryMenu
         
         private void OnDisable()
         {
+            ghostIcon.transform.localPosition = Vector3.zero;
             isDragging = false;
             draggingItem = null;
         }
@@ -43,6 +61,7 @@ namespace UI.InventoryMenu
             inventory = inventoryMenu.Inventory;
             button = GetComponent<Button>();
             InventoryEvents.OrganizeInventory.AddListener(UpdateDisplay);
+            hasInitialized = true;
         }
 
         public void OnDestroy()
@@ -52,10 +71,21 @@ namespace UI.InventoryMenu
 
         public void UpdateDisplay()
         {
-            icon.gameObject.SetActive(item != null);
+            if(!hasInitialized) return;
+            bool isItemValid = item != null && item.Data != null;
+            icon.gameObject.SetActive(isItemValid);
             countTXT.gameObject.SetActive(item is {IsStackable: true});
             
-            icon.sprite = ghostIcon.sprite = item?.Data.Icon;
+            if (isItemValid)
+            {
+                icon.sprite = item.Data.Icon;
+                ghostIcon.sprite = item.Data.Icon;
+            }
+            else
+            {
+                icon.sprite = null;
+                ghostIcon.sprite = null;
+            }
             if(countTXT.gameObject.activeSelf) countTXT.SetText($"{item.StackCount}x");
         }
         
@@ -111,34 +141,42 @@ namespace UI.InventoryMenu
         {
             if(draggingItem == null) return;
             
-            if(draggingItem.isToolBar && isToolBar)
+            switch (draggingItem.inventoryItemType)
             {
-                // var temp = inventory.ItemTools[index];
-                // inventory.ItemTools[index] = inventory.ItemTools[draggingItem.index];
-                // inventory.ItemTools[draggingItem.index] = temp;
-                inventory.SwapItemInToolBar(draggingItem.index, index);
+                case InventoryItemType.toolBar when this.inventoryItemType is InventoryItemType.toolBar:
+                    inventory.SwapItemInToolBar(draggingItem.index, index);
+                    break;
+                
+                case InventoryItemType.storage when this.inventoryItemType is InventoryItemType.storage:
+                    inventory.SwapItemsInStorage(draggingItem.index, index);
+                    break;
+                
+                case InventoryItemType.toolBar when this.inventoryItemType is InventoryItemType.storage:
+                    inventory.SwapItemsInToolBarAndStorage(draggingItem.index, index);
+                    break;
+                
+                case InventoryItemType.storage when this.inventoryItemType is InventoryItemType.toolBar:
+                    inventory.SwapItemsInToolBarAndStorage(index, draggingItem.index);
+                    break;
+                
+                case InventoryItemType.weaponBar when this.inventoryItemType is InventoryItemType.storage:
+                    inventory.EquipWeapon(draggingItem.index);
+                    break;
+                
+                case InventoryItemType.storage when this.inventoryItemType is InventoryItemType.weaponBar:
+                    inventory.EquipWeapon(this.index);
+                    break;
+                
+                case InventoryItemType.armorBar when this.inventoryItemType is InventoryItemType.storage:
+                    inventory.EquipArmor(draggingItem.index);
+                    break;
+                
+                case InventoryItemType.storage when this.inventoryItemType is InventoryItemType.armorBar:
+                    inventory.EquipArmor(this.index);
+                    break;
             }
-            else if(!draggingItem.isToolBar && !isToolBar)
-            {
-                // var temp = inventory.ItemStorage[index];
-                // inventory.ItemStorage[index] = inventory.ItemStorage[draggingItem.index];
-                // inventory.ItemStorage[draggingItem.index] = temp;
-                inventory.SwapItemsInStorage(draggingItem.index, index);
-            }
-            else if(draggingItem.isToolBar && !isToolBar)
-            {
-                // var temp = inventory.ItemStorage[index];
-                // inventory.ItemStorage[index] = inventory.ItemTools[draggingItem.index];
-                // inventory.ItemTools[draggingItem.index] = temp;
-                inventory.SwapItemsInToolBarAndStorage(draggingItem.index, index);
-            }
-            else if(!draggingItem.isToolBar && isToolBar)
-            {
-                // var temp = inventory.ItemTools[index];
-                // inventory.ItemTools[index] = inventory.ItemStorage[draggingItem.index];
-                // inventory.ItemStorage[draggingItem.index] = temp;
-                inventory.SwapItemsInToolBarAndStorage(index, draggingItem.index);
-            }
+            
+            
             UpdateDisplay();
             draggingItem.UpdateDisplay();
         }

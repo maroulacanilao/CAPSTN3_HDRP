@@ -72,6 +72,8 @@ namespace Items.Inventory
                 itemTools[i] = _tool;
                 InventoryEvents.OnItemOnHandUpdate.Invoke(i, _tool);
             }
+            armorEquipped = null;
+            weaponEquipped = null;
             InventoryEvents.OnUpdateStackable.AddListener(UpdateStackable);
             hasInitialized = true;
         }
@@ -190,22 +192,52 @@ namespace Items.Inventory
             RemoveItemInStorage(stackableItem_);
         }
 
-        public void EquipWeapon(ItemWeapon weapon_)
+        public void EquipWeapon(int storageIndex_)
         {
             InitializeInventory();
-            weaponEquipped?.OnUnEquip(playerData.statsData);
-            weaponEquipped = weapon_;
+            if (!itemStorageDictionary.TryGetValue(storageIndex_, out var _item)) return;
+            if(_item is not ItemWeapon _itemWeapon) return;
+
+            var _prevWpn = weaponEquipped;
+            _prevWpn?.OnUnEquip(playerData.statsData);
+            
+            weaponEquipped = _itemWeapon;
             weaponEquipped?.OnEquip(playerData.statsData);
-            InventoryEvents.OnWeaponEquip.Invoke(weapon_);
+            
+            if (_prevWpn == null) itemStorageDictionary.Remove(storageIndex_);
+            else itemStorageDictionary[storageIndex_] = _prevWpn;
+            
+            InventoryEvents.OnWeaponEquip.Invoke(weaponEquipped);
+        }
+
+        public void DiscardEquippedWeapon()
+        {
+            weaponEquipped?.OnUnEquip(playerData.statsData);
+            weaponEquipped = null;
+        }
+
+        public void EquipArmor(int storageIndex_)
+        {
+            InitializeInventory();
+            if (!itemStorageDictionary.TryGetValue(storageIndex_, out var _item)) return;
+            if(_item is not ItemArmor _itemArmor) return;
+
+            var _prevArm = armorEquipped;
+            _prevArm?.OnUnEquip(playerData.statsData);
+            
+            armorEquipped = _itemArmor;
+            armorEquipped?.OnEquip(playerData.statsData);
+            
+            if (_prevArm == null) itemStorageDictionary.Remove(storageIndex_);
+            else itemStorageDictionary[storageIndex_] = _prevArm;
+            
+            InventoryEvents.OnArmorEquip.Invoke(armorEquipped);
         }
         
-        public void EquipArmor(ItemArmor armor_)
+        public void DiscardEquippedArmor()
         {
-            InitializeInventory();
             armorEquipped?.OnUnEquip(playerData.statsData);
-            armorEquipped = armor_;
-            armorEquipped?.OnEquip(playerData.statsData);
-            InventoryEvents.OnArmorEquip.Invoke(armor_);
+            armorEquipped = null;
         }
         
         public void AddGold(int amount_)
@@ -263,11 +295,13 @@ namespace Items.Inventory
         public void SwapItemsInToolBarAndStorage(int toolBarIndex_, int storageIndex_)
         {
             InitializeInventory();
+            itemStorageDictionary.TryAdd(storageIndex_, null);
             var _storageItem = itemStorageDictionary[storageIndex_];
             
             if(_storageItem is {IsToolable: false}) return;
 
-            // (itemTools[toolBarIndex_], itemStorage[storageIndex_]) = (itemStorage[storageIndex_], itemTools[toolBarIndex_]);
+            // (itemTools[toolBarIndex_], itemStorageDictionary[storageIndex_]) = (itemStorageDictionary[storageIndex_], itemTools[toolBarIndex_]);
+
             
             itemStorageDictionary[storageIndex_] = itemTools[toolBarIndex_];
             itemTools[toolBarIndex_] = _storageItem;
