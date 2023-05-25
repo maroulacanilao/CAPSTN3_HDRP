@@ -8,43 +8,43 @@ namespace UI
 {
     public class ManaBarUI : MonoBehaviour
     {
-        [SerializeField] private ManaComponent manaComponent;
+        [SerializeField] private CharacterMana characterMana;
         [SerializeField] private Image manaBarFill;
         [SerializeField] private TextMeshProUGUI manaBarText;
         [SerializeField] private float effectDuration = 0.1f;
         
         private void Awake()
         {
-            manaComponent.OnUseMana.AddListener(OnUpdateMana);
-            manaComponent.OnAddMana.AddListener(OnUpdateMana);
+            characterMana.OnUseMana.AddListener(OnUpdateMana);
+            characterMana.OnAddMana.AddListener(OnUpdateMana);
         }
         
         private void OnDestroy()
         {
-            manaComponent.OnUseMana.RemoveListener(OnUpdateMana);
-            manaComponent.OnAddMana.RemoveListener(OnUpdateMana);
+            characterMana.OnUseMana.RemoveListener(OnUpdateMana);
+            characterMana.OnAddMana.RemoveListener(OnUpdateMana);
         }
 
         private void Start()
         {
-            manaBarText.text = $"Mana: {manaComponent.CurrentMana}/{manaComponent.MaxMana}";
+            manaBarText.text = $"Mana: {characterMana.CurrentMana}/{characterMana.MaxMana}";
         }
 
-        private void OnUpdateMana(ManaComponent manaComponent_)
+        private void OnUpdateMana(CharacterMana characterMana_)
         {
-            var _percentage = (float)manaComponent_.CurrentMana / manaComponent_.MaxMana;
+            var _percentage = (float)characterMana_.CurrentMana / characterMana_.MaxMana;
             UpdateHpText();
             manaBarFill.DOFillAmount(_percentage, effectDuration);
         }
         
         private void UpdateHpText()
         {
-            var _prevVal = Mathf.FloorToInt(manaComponent.MaxMana * manaBarFill.fillAmount);
-            int _targetVal = manaComponent.CurrentMana;
+            var _prevVal = Mathf.FloorToInt(characterMana.MaxMana * manaBarFill.fillAmount);
+            int _targetVal = characterMana.CurrentMana;
         
             DOTween.To(() => _prevVal, x => _prevVal = x, _targetVal, effectDuration).OnUpdate(() =>
             {
-                manaBarText.text = $"Mana: {_prevVal}/{manaComponent.MaxMana}";
+                manaBarText.text = $"Mana: {_prevVal}/{characterMana.MaxMana}";
             });
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using Character;
 using CustomEvent;
 using Spells.Base;
 using TMPro;
@@ -17,15 +18,19 @@ namespace UI.Battle
         public SpellUser spellUser { get; private set; }
         public SpellObject spellObject { get; private set; }
         public SpellData spellData { get; private set; }
-        
-        public static readonly Evt<SpellBtnItemUI> OnSelectSpell = new Evt<SpellBtnItemUI>();
+        private CharacterMana playerCharacterMana => mainPanel.player.character.mana;
 
+        public static int currIndex = 0;
+        public static readonly Evt<SpellBtnItemUI> OnSelectSpell = new Evt<SpellBtnItemUI>();
 
         private void Awake()
         {
             button.onClick.AddListener(() =>
             {
-                mainPanel.UseSpell(spellIndex);
+                mainPanel.currentAction = BattleAction.Spell;
+                currIndex = spellIndex;
+                if(spellData.spellType is SpellType.Magical or SpellType.Physical) mainPanel.ShowEnemyTargetPanel();
+                else mainPanel.ShowPlayerTargetPanel();
             });
         }
         
@@ -33,14 +38,7 @@ namespace UI.Battle
         {
             Debug.Log(gameObject.name);
             spellIndex = index_;
-            
-            // if (spellUser.spellList.Count <= spellIndex)
-            // {
-            //     Debug.Log(spellUser.spellList.Count <= index_);
-            //     gameObject.SetActive(false);
-            //     return;
-            // }
-            
+
             mainPanel = mainPanel_;
             spellUser = mainPanel.player.spellUser;
 
@@ -58,6 +56,11 @@ namespace UI.Battle
         public void OnPointerEnter(PointerEventData eventData)
         {
             button.Select();
+        }
+
+        private void OnEnable()
+        {
+            button.interactable = spellData.manaCost <= playerCharacterMana.CurrentMana;
         }
     }
 }

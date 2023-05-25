@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Spells.Base
 {
 	[System.Serializable]
-	public enum SpellType { Passive = 1, Physical = 2, Magical = 3, Buff = 4 }
+	public enum SpellType { Passive = 1, Physical = 2, Magical = 3, Buff = 4, DeBuff = 5, Heal = 6 }
 
 	[CreateAssetMenu(menuName = "ScriptableObjects/SpellData", fileName = "SpellData")]
 	public class SpellData : ScriptableObject

@@ -11,9 +11,11 @@ namespace BattleSystem
     {
         public BattleManager battleManager;
         public BattleData battleData;
-        public BattleStateBase currentState;
+        public TurnBaseState currentTurn;
         public PlayerTurnState playerTurn;
         public EnemyTurnState enemyTurn;
+        
+        public Queue<TurnBaseState> turnQueue = new Queue<TurnBaseState>();
         
         public BattleStateMachine(BattleManager battleManager_)
         {
@@ -23,23 +25,54 @@ namespace BattleSystem
 
         public IEnumerator Initialize()
         {
-            playerTurn = new PlayerTurnState(this, battleManager.player);
-            enemyTurn = new EnemyTurnState(this, battleManager.enemy);
-            yield return ChangeState(new BattleStartState(this));
+            enemyTurn = new EnemyTurnState(this, battleManager.enemyParty[0]);
+
+            turnQueue = new Queue<TurnBaseState>();
+            BattleCharacter[] _characters = battleManager.playerParty.Concat(battleManager.enemyParty).ToArray();
+            
+            _characters = _characters.OrderByDescending(c => c.character.stats.speed).ToArray();
+            
+            var _startPhase = new BattleStartState(this);
+            foreach (var _character in _characters)
+            {
+                var _turnState = GetTurnState(_character);
+                turnQueue.Enqueue(_turnState);
+            }
+            yield return _startPhase.Enter();
         }
 
-        public IEnumerator ChangeState(BattleStateBase _newState)
+        private TurnBaseState GetTurnState(BattleCharacter character_)
         {
-            yield return currentState?.Exit();
-            currentState = _newState;
-            if (currentState == null) throw new Exception("State is null");
-            yield return currentState.Enter();
-        }
-        
-        private BattleStateBase GetTurnState(BattleCharacter character_)
-        {
-            
+            switch (character_.character.characterData)
+            {
+                case PlayerData _:
+                    return new PlayerTurnState(this, character_);
+                case EnemyData _: 
+                    return new EnemyTurnState(this, character_);
+                case AllyData _:
+                    return new AllyTurnState(this, character_);
+                default:
+                    throw new Exception("NO TYPE");
+            }
             return null;
+        }
+
+        public IEnumerator NextTurnState()
+        {
+            if (currentTurn != null && currentTurn.battleCharacter.character.IsAlive)
+            {
+                yield return currentTurn.Exit();
+                turnQueue.Enqueue(currentTurn);
+            }
+            
+            do
+            {
+                if (turnQueue.Count == 0) throw new Exception("NO MORE TURN");
+                currentTurn = turnQueue.Dequeue();
+                
+            } while(currentTurn == null || !currentTurn.battleCharacter.character.IsAlive);
+            
+            yield return currentTurn.Enter();
         }
     }
 }

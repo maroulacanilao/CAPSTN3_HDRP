@@ -53,5 +53,10 @@ namespace UI.Battle
             if(!gameObject.activeSelf) return;
             mainPanel.BackToActionPanel();
         }
+        
+        public bool IsSpellIndexValid(int index_)
+        {
+            return index_ >= 0 && index_ < spellBtnItems.Length;
+        }
     }
 }

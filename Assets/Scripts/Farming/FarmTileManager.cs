@@ -1,25 +1,18 @@
 using System.Collections.Generic;
+using System.Linq;
 using BaseCore;
 using CustomEvent;
+using CustomHelpers;
 using UnityEngine;
 
 namespace Farming
 {
     public class FarmTileManager : Singleton<FarmTileManager>
     {
-        [SerializeField] private Material tilledMaterial;
-        [SerializeField] private Material plantedMaterial;
-        [SerializeField] private Material wateredMaterial;
-        [SerializeField] private Material growingMaterial;
-        
-        private HashSet<FarmTile> farmTiles = new HashSet<FarmTile>();
-    
+        [field: SerializeField] public LayerMask farmTileLayerMask { get; private set; }
+        public HashSet<FarmTile> farmTiles { get; private set; } = new HashSet<FarmTile>();
+
         public static readonly Evt<FarmTile> OnAddFarmTile = new Evt<FarmTile>();
-        
-        public static Material TilledMaterial => Instance.tilledMaterial;
-        public static Material PlantedMaterial => Instance.plantedMaterial;
-        public static Material WateredMaterial => Instance.wateredMaterial;
-        public static Material GrowingMaterial => Instance.growingMaterial;
 
         protected override void Awake()
         {
@@ -37,6 +30,27 @@ namespace Farming
         {
             farmTiles.Add(farmTile_);
             farmTile_.transform.SetParent(transform);
+        }
+
+        public List<FarmTile> GetAllNonEmptyTile()
+        {
+            PurgeNulls();
+            return farmTiles.Where(f => f.IsValid() && f.tileState != TileState.Empty).ToList();
+        }
+
+        private void PurgeNulls()
+        {
+            for (int i = farmTiles.Count - 1; i >= 0; i--)
+            {
+                var _tile = farmTiles.ElementAt(i);
+                if(_tile.IsEmptyOrDestroyed()) farmTiles.Remove(_tile);
+            }
+        }
+        
+        public bool HasNonEmptyTile()
+        {
+            PurgeNulls();
+            return farmTiles.Any(f => f.IsValid() && f.tileState != TileState.Empty);
         }
     }
 }

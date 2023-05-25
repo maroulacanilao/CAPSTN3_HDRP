@@ -100,8 +100,7 @@ namespace Player
                     var _seed = (ItemSeed) item_;
                     _equipmentActions[index_] = () =>
                     {
-                        farmTools.PlantSeed(_seed.Data as SeedData);
-                        _seed.RemoveStack();
+                        farmTools.PlantSeed(_seed);
                     };
                     break;
                 }

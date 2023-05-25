@@ -9,7 +9,7 @@ public class TreasureChest : LootDropObject
 {
     [SerializeField] private LootTable lootTable;
     
-    private void Awake()
+    private void Start()
     {
         lootDrop = lootTable.GetDrop(GameManager.Instance.GameDataBase.itemDatabase);
     }

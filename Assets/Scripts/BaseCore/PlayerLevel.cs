@@ -23,6 +23,8 @@ namespace BaseCore
         public int PrevLevelExperience => currLvl <= 0 ? 0 : EvaluateExperience(currLvl - 1);
         public int CurrentLevelExperience => totalExperience - PrevLevelExperience;
         public int ExperienceNeededToLevelUp => NextLevelExperience - totalExperience;
+        
+        public static readonly Evt<PlayerLevel> OnLevelUp = new Evt<PlayerLevel>();
 
         /// <summary>
         /// return true if player leveled up
@@ -35,13 +37,21 @@ namespace BaseCore
             
             totalExperience += expAmount_;
             totalExperience = Mathf.Clamp(totalExperience, 0, ExperienceCap);
+
+            if (_prevLvl == currLvl) return false;
             
-            return _prevLvl != currLvl;
+            OnLevelUp.Invoke(this);
+            return true;
         }
 
         public int EvaluateExperience(int level_)
         {
             return expLvlCurve.EvaluateScaledCurve(level_, LevelCap, ExperienceCap);
+        }
+        
+        public void ResetExperience()
+        {
+            totalExperience = 0;
         }
     }
 }

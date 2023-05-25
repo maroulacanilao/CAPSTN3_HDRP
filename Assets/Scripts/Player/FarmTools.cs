@@ -2,6 +2,7 @@ using System;
 using CustomHelpers;
 using Farming;
 using Items;
+using Items.Inventory;
 using Items.ItemData;
 using UnityEngine;
 
@@ -10,8 +11,6 @@ namespace Player
     public class FarmTools : MonoBehaviour
     {
         [SerializeField] private FarmTile tilledTilePrefab;
-        [SerializeField] private LayerMask tileLayer;
-        [SerializeField] private LayerMask tillableLayer;
 
         private Vector3 ToolPosition => toolArea.transform.position;
         private ToolArea toolArea;
@@ -50,14 +49,16 @@ namespace Player
             return _tile;
         }
 
-        public void PlantSeed(SeedData itemSeed_)
+        public void PlantSeed(ItemSeed itemSeed_)
         {
             var _farmTile = toolArea.GetFarmTile();
 
             if(_farmTile == null) return;
             if(_farmTile.tileState != TileState.Empty) return;
             
-            _farmTile.OnPlantSeed(itemSeed_);
+            _farmTile.OnPlantSeed(itemSeed_.Data as SeedData);
+            itemSeed_.RemoveStack();
+            InventoryEvents.OnUpdateStackable.Invoke(itemSeed_);
         }
     }
 }

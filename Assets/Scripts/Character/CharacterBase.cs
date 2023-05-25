@@ -4,27 +4,20 @@ using UnityEngine;
 
 namespace Character
 {
-    public class CharacterBase : MonoBehaviour
+    public class CharacterBase : MonoBehaviour, IDamagable, IHealable
     {
-        [field: SerializeField] public HealthComponent healthComponent { get; private set; }
-        [field: SerializeField] public ManaComponent manaComponent { get; private set; }
+        [field: SerializeField] public CharacterHealth health { get; private set; }
+        [field: SerializeField] public CharacterMana mana { get; private set; }
         [field: SerializeField] public StatusEffectReceiver statusEffectReceiver { get; protected set; }
         [field: SerializeField] public CharacterData characterData { get; private set; }
 
         public int level { get; private set; }
         public StatsGrowth statsData => characterData.statsData;
-        public CombatStats stats => statsData.GetLeveledStats(level);
-        public bool IsAlive => healthComponent.IsAlive;
-
-        protected virtual void Awake()
-        {
-            SetMaxHpAndMana();
-        }
+        public CombatStats stats => statsData.GetTotalStats(level);
+        public bool IsAlive => health.IsAlive;
         
-        private void SetMaxHpAndMana()
-        {
-            healthComponent.Initialize(stats.maxHp);
-            manaComponent.Initialize(stats.maxMana);
-        }
+        public void TakeDamage(DamageInfo damageInfo_) => health.TakeDamage(damageInfo_);
+        
+        public void Heal(HealInfo healInfo_, bool isOverHeal_ = false) => health.ReceiveHeal(healInfo_, isOverHeal_);
     }
 }

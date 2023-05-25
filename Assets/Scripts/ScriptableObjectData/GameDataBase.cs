@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ScriptableObjectData
 {
-    [CreateAssetMenu(menuName = "ScriptableObjects/GameDataBase", fileName = "GameDataBase")]
+    // [CreateAssetMenu(menuName = "ScriptableObjects/GameDataBase", fileName = "GameDataBase")]
     public class GameDataBase : ScriptableObject
     {
         [field: SerializeField] public ItemDatabase itemDatabase { get; private set; }

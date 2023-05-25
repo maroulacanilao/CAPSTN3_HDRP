@@ -5,12 +5,12 @@
     {
         private void Reset()
         {
-            itemType = ItemType.Gold;
+            ItemType = ItemType.Gold;
         }
 
-        private void OnValidate()
+        protected override void OnValidate()
         {
-            itemType = ItemType.Gold;
+            ItemType = ItemType.Gold;
         }
         
         public ItemGold GetGoldItem(int amount_)

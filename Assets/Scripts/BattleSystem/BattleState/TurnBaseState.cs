@@ -12,7 +12,7 @@ namespace BattleSystem.BattleState
 
     public abstract class TurnBaseState : BattleStateBase
     {
-        protected BattleCharacter battleCharacter;
+        public BattleCharacter battleCharacter { get; protected set; }
         
         public TurnBaseState(BattleStateMachine stateMachine_, BattleCharacter battleCharacter_) : base(stateMachine_)
         {
@@ -24,5 +24,21 @@ namespace BattleSystem.BattleState
         public abstract IEnumerator TurnLogic();
         public abstract IEnumerator EndTurn();
         public override abstract IEnumerator Exit();
+
+        protected IEnumerator CheckForEndState(bool willEndCurrentState_ = false)
+        {
+            if (!BattleManager.IsEnemyPartyStillAlive())
+            {
+                yield return new BattleEndState(StateMachine, true).Enter();
+                yield break;
+            }
+            else if (!BattleManager.IsPlayerPartyStillAlive())
+            {
+                yield return new BattleEndState(StateMachine, false).Enter();
+                yield break;
+            }
+            if (willEndCurrentState_) yield return StateMachine.NextTurnState();
+            yield break;
+        }
     }
 }

@@ -79,7 +79,7 @@ namespace CustomHelpers
         /// <param name="X"></param>
         /// <param name="Y"></param>
         /// <param name="Z"></param>
-        public static Transform MoveTo(this Transform transform, float X, float Y, float Z = 0)
+        public static Transform SetPosition(this Transform transform, float X, float Y, float Z = 0)
         {
             transform.position = new Vector3(X, Y, Z);
             return transform;
@@ -91,7 +91,7 @@ namespace CustomHelpers
         /// <param name="transform"></param>
         /// <param name="X"></param>
         /// <returns></returns>
-        public static Transform MoveToX(this Transform transform, float X)
+        public static Transform SetX(this Transform transform, float X)
         {
             transform.position = transform.position.SetX(X);
             return transform;
@@ -103,7 +103,7 @@ namespace CustomHelpers
         /// <param name="transform"></param>
         /// <param name="Y"></param>
         /// <returns></returns>
-        public static Transform MoveToY(this Transform transform, float Y)
+        public static Transform SetY(this Transform transform, float Y)
         {
             transform.position = transform.position.SetY(Y);
             return transform;
@@ -115,7 +115,7 @@ namespace CustomHelpers
         /// <param name="transform"></param>
         /// <param name="Z"></param>
         /// <returns></returns>
-        public static Transform MoveToZ(this Transform transform, float Z)
+        public static Transform SetZ(this Transform transform, float Z)
         {
             transform.position = transform.position.SetZ(Z);
             return transform;

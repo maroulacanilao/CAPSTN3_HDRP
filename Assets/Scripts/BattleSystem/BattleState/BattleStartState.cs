@@ -16,7 +16,7 @@ namespace BattleSystem.BattleState
         {
             Debug.Log("Start Battle");
             yield return new WaitForSeconds(2f);
-            yield return StateMachine.ChangeState(StateMachine.playerTurn);
+            yield return StateMachine.NextTurnState();
         }
 
         public override IEnumerator Exit()

@@ -29,12 +29,12 @@ namespace CustomHelpers
             return new WaitForAction(action_);
         }
         
-        public static CustomYieldInstruction WaitForAnimationEnd(this Animator animator_, string animationName_, int fallbackTime = 0)
+        public static CustomYieldInstruction WaitForAnimationEnd(this Animator animator_, string animationName_, float fallbackTime = 0)
         {
             return new WaitForAnimationEnd(animator_, animationName_, fallbackTime);
         }
         
-        public static CustomYieldInstruction WaitForAnimationEvent(this Animator animator_, string eventName_, int fallbackTime = 5)
+        public static CustomYieldInstruction WaitForAnimationEvent(this Animator animator_, string eventName_, float fallbackTime = 5)
         {
             return new WaitForAnimationEvent(animator_, eventName_, fallbackTime);
         }

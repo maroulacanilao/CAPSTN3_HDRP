@@ -20,7 +20,7 @@ namespace UI.InventoryMenu
         [SerializeField] private TextMeshProUGUI maxHpTxt, maxMpTxt, wpnDmgTxt, armValTxt, magDmgTxt, magResTxt, accTxt, speedTxt;
 
         [NaughtyAttributes.BoxGroup("Buttons")]
-        [SerializeField] private Button consumeBtn, equipBtn, discardBtn;
+        [SerializeField] private Button consumeBtn, equipBtn, unequipBTN,discardBtn;
 
         [NaughtyAttributes.BoxGroup("Icon")]
         [SerializeField] private Image itemIcon;
@@ -37,16 +37,21 @@ namespace UI.InventoryMenu
             inventory = inventoryMenu.Inventory;
             
             InventoryMenu.OnItemSelect.AddListener(ShowItemDetail);
+            InventoryEvents.OnUpdateInventory.AddListener(UpdateInventoryWrapper);
             
             consumeBtn.onClick.AddListener(ConsumedItem);
             equipBtn.onClick.AddListener(EquipItem);
             discardBtn.onClick.AddListener(DiscardItem);
+            unequipBTN.onClick.AddListener(UnEquipItem);
         }
 
         public void OnDestroy()
         {
             InventoryMenu.OnItemSelect.RemoveListener(ShowItemDetail);
+            InventoryEvents.OnUpdateInventory.RemoveListener(UpdateInventoryWrapper);
         }
+
+        private void UpdateInventoryWrapper(PlayerInventory inventory_) => ShowItemDetail(null);
 
         public void ShowItemDetail(Item_MenuItem menuItem_)
         {
@@ -83,7 +88,9 @@ namespace UI.InventoryMenu
             else statsPanel.SetActive(false);
             
             consumeBtn.gameObject.SetActive(currItem is ItemConsumable);
-            equipBtn.gameObject.SetActive(currItem is ItemGear);
+            equipBtn.gameObject.SetActive(currItem is ItemGear && !currItem.IsGearEquipped);
+            
+            unequipBTN.gameObject.SetActive(currItem is ItemGear && currItem.IsGearEquipped);
             discardBtn.gameObject.SetActive(currItem.IsDiscardable);
             
             gameObject.SetActive(true);
@@ -131,7 +138,34 @@ namespace UI.InventoryMenu
         
         private void EquipItem()
         {
-            
+            if(currMenuItem.inventoryItemType is not Item_MenuItem.InventoryItemType.storage) return;
+
+            switch (currItem.ItemType)
+            {
+                case ItemType.Weapon:
+                    inventory.EquipWeapon(currMenuItem.index);
+                    break;
+                case ItemType.Armor:
+                    inventory.EquipArmor(currMenuItem.index);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void UnEquipItem()
+        {
+            switch (currItem.ItemType)
+            {
+                case ItemType.Weapon:
+                    inventory.UnEquipWeapon();
+                    break;
+                case ItemType.Armor:
+                    inventory.UnEquipArmor();
+                    break;
+                default:
+                    break;
+            }
         }
         
         private void ConsumedItem()

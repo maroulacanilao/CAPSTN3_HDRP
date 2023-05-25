@@ -4,6 +4,7 @@ using Items;
 using UnityEngine;
 using ObjectPool;
 using ScriptableObjectData;
+using ScriptableObjectData.CharacterData;
 
 namespace Managers
 {
@@ -13,7 +14,8 @@ namespace Managers
         [SerializeField] private ItemDatabase itemDatabase;
         
         [Header("For Debugging")]
-        [SerializeField] private LootTable lootTable;
+        [SerializeField] private EnemyData enemyData;
+        [SerializeField] private Vector3 lootPosition;
 
         public static readonly Evt<LootTable, Vector3> OnSpawnLoot = new Evt<LootTable, Vector3>();
 
@@ -38,7 +40,7 @@ namespace Managers
         [ContextMenu("TestSpawn")]
         private void TestSpawn()
         {
-            SpawnLoot(lootTable, transform.position);
+            SpawnLoot(enemyData.LootTable, lootPosition);
         }
         
         [ContextMenu("DeSpawn Test")]

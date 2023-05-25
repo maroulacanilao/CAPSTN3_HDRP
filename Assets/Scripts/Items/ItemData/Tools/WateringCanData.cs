@@ -10,5 +10,11 @@ namespace Items.ItemData.Tools
         {
             playerEquipment_.farmTools.WaterTile();
         }
+
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            ItemType = ItemType.Tool;
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace Items.Inventory
         private ItemArmor armorEquipped;
 
         [ReadOnly] [SerializeReference] private Item[] itemTools;
-        private Dictionary<ItemData.ItemData, ItemStackable> stackableDictionary;
+        [ReadOnly]  private SerializedDictionary<ItemData.ItemData, ItemStackable> stackableDictionary;
         [ReadOnly]  private SerializedDictionary<int, Item> itemStorageDictionary = new SerializedDictionary<int, Item>();
 
         #region Getters
@@ -56,13 +56,13 @@ namespace Items.Inventory
 
         private bool hasInitialized = false;
 
-        public void InitializeInventory()
+        public void Initialize()
         {
             if(hasInitialized) return;
             gold = new ItemGold(itemDatabase.GoldItemData, startingMoney);
             itemTools = new Item[4];
 
-            stackableDictionary = new Dictionary<ItemData.ItemData, ItemStackable>();
+            stackableDictionary = new SerializedDictionary<ItemData.ItemData, ItemStackable>();
             
             ResetItemStorage();
 
@@ -72,6 +72,7 @@ namespace Items.Inventory
                 itemTools[i] = _tool;
                 InventoryEvents.OnItemOnHandUpdate.Invoke(i, _tool);
             }
+            
             armorEquipped = null;
             weaponEquipped = null;
             InventoryEvents.OnUpdateStackable.AddListener(UpdateStackable);
@@ -95,7 +96,7 @@ namespace Items.Inventory
 
         public bool AddItem(Item item_)
         {
-            InitializeInventory();
+            Initialize();
             if (itemStorageDictionary == null)
             {
                 throw new Exception("Item Storage is not initialized.");
@@ -130,6 +131,12 @@ namespace Items.Inventory
             return !itemStorageDictionary.ContainsKey(slotIndex);
         }
 
+        public bool IsAnyOpenSlot(out int index_)
+        {
+            index_ = GetFirstEmptySlotIndex();
+            return index_ != -1;
+        }
+
         public int GetFirstEmptySlotIndex()
         {
             for (int i = 0; i < maxInventorySize; i++)
@@ -144,6 +151,7 @@ namespace Items.Inventory
 
         public void RemoveItemInStorage(int index_)
         {
+            if(index_ == -1) return;
             if (itemStorageDictionary[index_].IsStackable)
             {
                 stackableDictionary.Remove(itemStorageDictionary[index_].Data);
@@ -159,7 +167,7 @@ namespace Items.Inventory
         /// <param name="item_"></param>
         public void RemoveItemInStorage(Item item_)
         {
-            InitializeInventory();
+            Initialize();
             Debug.Log("remove + " + item_.Data.ItemName );
             var _key = itemStorageDictionary.FirstOrDefault(x => x.Value == item_).Key;
             RemoveItemInStorage(_key);
@@ -173,9 +181,24 @@ namespace Items.Inventory
             InventoryEvents.OnItemOnHandUpdate.Invoke(index_, null);
         }
 
+        public bool IsItemOnToolBar(Item item_, out int index_)
+        {
+            index_ = -1;
+            if (!item_.IsToolable) return false;
+            for (int i = 0; i < itemTools.Length; i++)
+            {
+                if (itemTools[i] == item_)
+                {
+                    index_ = i;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void RemoveStackable(ItemStackable stackableItem_, int count_)
         {
-            InitializeInventory();
+            Initialize();
             if (!stackableDictionary.TryGetValue(stackableItem_.Data, out var _stackable)) return;
 
             if (!_stackable.RemoveStack(count_)) return;
@@ -184,20 +207,27 @@ namespace Items.Inventory
 
         public void UpdateStackable(ItemStackable stackableItem_)
         {
-            InitializeInventory();
+            Initialize();
 
             if (!stackableDictionary.TryGetValue(stackableItem_.Data, out var _stackable)) return;
-            Debug.Log(_stackable.HasStack);
+
             if (_stackable.HasStack) return;
+
+            if (IsItemOnToolBar(stackableItem_, out var _index))
+            {
+                RemoveItemInHand(_index);
+                return;
+            }
             RemoveItemInStorage(stackableItem_);
         }
 
         public void EquipWeapon(int storageIndex_)
         {
-            InitializeInventory();
+            Initialize();
             if (!itemStorageDictionary.TryGetValue(storageIndex_, out var _item)) return;
             if(_item is not ItemWeapon _itemWeapon) return;
 
+            weaponEquipped?.OnUnEquip(playerData.statsData);
             var _prevWpn = weaponEquipped;
             _prevWpn?.OnUnEquip(playerData.statsData);
             
@@ -208,6 +238,19 @@ namespace Items.Inventory
             else itemStorageDictionary[storageIndex_] = _prevWpn;
             
             InventoryEvents.OnWeaponEquip.Invoke(weaponEquipped);
+            InventoryEvents.OnUpdateInventory.Invoke(this);
+        }
+        
+        public bool UnEquipWeapon()
+        {
+            if (!IsAnyOpenSlot(out var _index)) return false;
+            
+            itemStorageDictionary.Add(_index, weaponEquipped);
+            weaponEquipped?.OnUnEquip(playerData.statsData);
+            weaponEquipped = null;
+            InventoryEvents.OnArmorEquip.Invoke(null);
+            InventoryEvents.OnUpdateInventory.Invoke(this);
+            return true;
         }
 
         public void DiscardEquippedWeapon()
@@ -218,10 +261,12 @@ namespace Items.Inventory
 
         public void EquipArmor(int storageIndex_)
         {
-            InitializeInventory();
+            Debug.Log(storageIndex_);
+            Initialize();
             if (!itemStorageDictionary.TryGetValue(storageIndex_, out var _item)) return;
             if(_item is not ItemArmor _itemArmor) return;
 
+            armorEquipped?.OnUnEquip(playerData.statsData);
             var _prevArm = armorEquipped;
             _prevArm?.OnUnEquip(playerData.statsData);
             
@@ -232,6 +277,19 @@ namespace Items.Inventory
             else itemStorageDictionary[storageIndex_] = _prevArm;
             
             InventoryEvents.OnArmorEquip.Invoke(armorEquipped);
+            InventoryEvents.OnUpdateInventory.Invoke(this);
+        }
+        
+        public bool UnEquipArmor()
+        {
+            if (!IsAnyOpenSlot(out var _index)) return false;
+            
+            itemStorageDictionary.Add(_index, armorEquipped);
+            armorEquipped?.OnUnEquip(playerData.statsData);
+            armorEquipped = null;
+            InventoryEvents.OnArmorEquip.Invoke(null);
+            InventoryEvents.OnUpdateInventory.Invoke(this);
+            return true;
         }
         
         public void DiscardEquippedArmor()
@@ -242,19 +300,19 @@ namespace Items.Inventory
         
         public void AddGold(int amount_)
         {
-            InitializeInventory();
+            Initialize();
             Gold.AddGold(amount_);
         }
         
         public void RemoveGold(int amount_)
         {
-            InitializeInventory();
+            Initialize();
             Gold.RemoveGold(amount_);
         }
         
         public void SwapItemsInStorage(int index1_, int index2_)
         {
-            InitializeInventory();
+            Initialize();
             //
             if(itemStorageDictionary.ContainsKey(index1_))
             {
@@ -285,7 +343,7 @@ namespace Items.Inventory
         }
         public void SwapItemInToolBar(int index1_, int index2_)
         {
-            InitializeInventory();
+            Initialize();
             (itemTools[index1_], itemTools[index2_]) = (itemTools[index2_], itemTools[index1_]);
             InventoryEvents.OnUpdateInventory.Invoke(this);
             InventoryEvents.OnItemOnHandUpdate.Invoke(index1_, itemTools[index1_]);
@@ -294,7 +352,7 @@ namespace Items.Inventory
         
         public void SwapItemsInToolBarAndStorage(int toolBarIndex_, int storageIndex_)
         {
-            InitializeInventory();
+            Initialize();
             itemStorageDictionary.TryAdd(storageIndex_, null);
             var _storageItem = itemStorageDictionary[storageIndex_];
             
@@ -314,9 +372,14 @@ namespace Items.Inventory
             InventoryEvents.OnItemOnHandUpdate.Invoke(toolBarIndex_, itemTools[toolBarIndex_]);
         }
 
+        // By Item Type
         public void ReOrganizeInventory()
         {
-            var _temp = itemStorageDictionary.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+            var _temp = itemStorageDictionary
+                .OrderBy(x => x.Key)
+                .ThenBy(x => x.Value.ItemType)
+                .ToDictionary(x => x.Key, x => x.Value);
+
             itemStorageDictionary = new SerializedDictionary<int, Item>();
             
             int _newIndex = 0;
@@ -331,7 +394,7 @@ namespace Items.Inventory
 
         public Item GetItemInStorage(int index_)
         {
-            InitializeInventory();
+            Initialize();
             return itemStorageDictionary.TryGetValue(index_, out var _value) ? _value : null;
         }
     }

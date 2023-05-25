@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using CustomEvent;
 using Items;
 using Items.Inventory;
 using TMPro;
@@ -17,6 +18,8 @@ namespace UI.InventoryMenu
         [SerializeField] private TextMeshProUGUI countTXT;
         [SerializeField] private Image icon;
         [SerializeField] private Image ghostIcon;
+        [SerializeField] private Color highLightColor;
+        
         [field: SerializeField] public InventoryItemType inventoryItemType { get; private set; }
 
         public int index { get; private set; }
@@ -24,6 +27,7 @@ namespace UI.InventoryMenu
         public Button button { get; private set; }
         private PlayerInventory inventory;
         private InventoryMenu inventoryMenu;
+        private Image borderImage;
         private bool hasInitialized;
         public Item item
         {
@@ -41,6 +45,11 @@ namespace UI.InventoryMenu
 
         public static bool isDragging;
         public static Item_MenuItem draggingItem;
+        private static readonly Evt<Item_MenuItem> OnHighlightToolBar = new Evt<Item_MenuItem>();
+        private static readonly Evt<Item_MenuItem> OnHighlightArmorBar = new Evt<Item_MenuItem>();
+        private static readonly Evt<Item_MenuItem> OnHighlightWeaponBar = new Evt<Item_MenuItem>();
+        private static readonly Evt<Item_MenuItem> OnRemoveHighlights = new Evt<Item_MenuItem>();
+
 
         private void OnEnable()
         {
@@ -52,6 +61,7 @@ namespace UI.InventoryMenu
             ghostIcon.transform.localPosition = Vector3.zero;
             isDragging = false;
             draggingItem = null;
+            RemoveHighlight(this);
         }
         
         public void Initialize(InventoryMenu inventoryMenu_, int index_)
@@ -60,14 +70,29 @@ namespace UI.InventoryMenu
             inventoryMenu = inventoryMenu_;
             inventory = inventoryMenu.Inventory;
             button = GetComponent<Button>();
+            borderImage = button.image;
             InventoryEvents.OrganizeInventory.AddListener(UpdateDisplay);
+            InventoryEvents.OnUpdateInventory.AddListener(UpdateDisplayWrapper);
+            
+            if(inventoryItemType == InventoryItemType.toolBar) OnHighlightToolBar.AddListener(Highlight);
+            if(inventoryItemType == InventoryItemType.armorBar) OnHighlightArmorBar.AddListener(Highlight);
+            if(inventoryItemType == InventoryItemType.weaponBar) OnHighlightWeaponBar.AddListener(Highlight);
+            OnRemoveHighlights.AddListener(RemoveHighlight);
+            
             hasInitialized = true;
         }
 
         public void OnDestroy()
         {
             InventoryEvents.OrganizeInventory.RemoveListener(UpdateDisplay);
+            InventoryEvents.OnUpdateInventory.RemoveListener(UpdateDisplayWrapper);
+            OnHighlightToolBar.RemoveListener(Highlight);
+            OnHighlightArmorBar.RemoveListener(Highlight);
+            OnHighlightWeaponBar.RemoveListener(Highlight);
+            OnRemoveHighlights.RemoveListener(RemoveHighlight);
         }
+
+        private void UpdateDisplayWrapper(PlayerInventory inventory_) => UpdateDisplay();
 
         public void UpdateDisplay()
         {
@@ -105,6 +130,13 @@ namespace UI.InventoryMenu
             isDragging = true;
             ghostIcon.transform.SetParent(inventoryMenu.ghostIconParent);
             ghostIcon.gameObject.SetActive(true);
+
+            if (item.IsToolable)
+            {
+                OnHighlightToolBar.Invoke(this);
+            }
+            if(item.ItemType == ItemType.Armor) OnHighlightArmorBar.Invoke(this);
+            if(item.ItemType == ItemType.Weapon) OnHighlightWeaponBar.Invoke(this);
         }
         
         public void OnDrag(PointerEventData eventData)
@@ -120,6 +152,7 @@ namespace UI.InventoryMenu
             ghostIcon.gameObject.SetActive(false);
             ghostIcon.transform.SetParent(transform);
             ghostIcon.transform.position = transform.position;
+            OnRemoveHighlights.Invoke(this);
             StartCoroutine(ExitDrag());
         }
         
@@ -160,19 +193,19 @@ namespace UI.InventoryMenu
                     break;
                 
                 case InventoryItemType.weaponBar when this.inventoryItemType is InventoryItemType.storage:
-                    inventory.EquipWeapon(draggingItem.index);
-                    break;
-                
-                case InventoryItemType.storage when this.inventoryItemType is InventoryItemType.weaponBar:
                     inventory.EquipWeapon(this.index);
                     break;
                 
+                case InventoryItemType.storage when this.inventoryItemType is InventoryItemType.weaponBar:
+                    inventory.EquipWeapon(draggingItem.index);
+                    break;
+                
                 case InventoryItemType.armorBar when this.inventoryItemType is InventoryItemType.storage:
-                    inventory.EquipArmor(draggingItem.index);
+                    inventory.EquipArmor(this.index);
                     break;
                 
                 case InventoryItemType.storage when this.inventoryItemType is InventoryItemType.armorBar:
-                    inventory.EquipArmor(this.index);
+                    inventory.EquipArmor(draggingItem.index);
                     break;
             }
             
@@ -188,6 +221,16 @@ namespace UI.InventoryMenu
         public void OnPointerUp(PointerEventData eventData)
         {
             button.Select();
+        }
+        
+        public void Highlight(Item_MenuItem item)
+        {
+            borderImage.color = highLightColor;
+        }
+        
+        public void RemoveHighlight(Item_MenuItem item)
+        {
+            borderImage.color = Color.white;
         }
     }
 }

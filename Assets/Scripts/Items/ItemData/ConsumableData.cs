@@ -20,12 +20,12 @@ namespace Items.ItemData
 
         private void Reset()
         {
-            itemType = ItemType.Consumable;
+            ItemType = ItemType.Consumable;
         }
 
-        private void OnValidate()
+        protected override void OnValidate()
         {
-            itemType = ItemType.Consumable;
+            ItemType = ItemType.Consumable;
         }
     }
 }

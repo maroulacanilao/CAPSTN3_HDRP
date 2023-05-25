@@ -8,12 +8,12 @@ namespace Items.ItemData
     {
         private void Reset()
         {
-            itemType = ItemType.Weapon;
+            ItemType = ItemType.Weapon;
         }
 
-        private void OnValidate()
+        protected override void OnValidate()
         {
-            itemType = ItemType.Weapon;
+            ItemType = ItemType.Weapon;
         }
     }
 }

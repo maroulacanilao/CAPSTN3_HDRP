@@ -1,6 +1,8 @@
 using System;
 using BaseCore;
 using CustomHelpers;
+using Items;
+using Items.Inventory;
 using Player;
 using UnityEngine;
 
@@ -8,6 +10,7 @@ namespace Farming
 {
     public class ToolArea : Singleton<ToolArea>
     {
+        [SerializeField] private PlayerInventory inventory;
         [SerializeField] private float distanceToPlayer = 2f;
         [SerializeField] private float distanceToGround = 0.01f;
         [SerializeField] private float lineWidth = 0.01f;
@@ -23,6 +26,11 @@ namespace Farming
         private Vector2 size = Vector2.one;
         private Vector3 playerPosition;
 
+        public void Instantiate(Vector2 size_)
+        {
+            size = size_;
+        }
+        
         protected override void Awake()
         {
             base.Awake();
@@ -38,23 +46,24 @@ namespace Farming
             vertices = new Vector3[lineRenderer.positionCount];
             playerPosition = transform.position;
             PlayerEquipment.OnChangeItemOnHand.AddListener(ChangeItem);
+            InventoryEvents.OnItemOnHandUpdate.AddListener(ItemOnHandUpdate);
         }
 
+        private void ItemOnHandUpdate(int index_, Item item_)
+        {
+            if (item_ == null)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+            gameObject.SetActive(item_.ItemType is Items.ItemType.Tool or Items.ItemType.Seed);
+        }
+        
         private void ChangeItem(int index_)
         {
-            // if (item_ == null)
-            // {
-            //     gameObject.SetActive(false);
-            //     return;
-            // }
-            // gameObject.SetActive(item_.ItemType is Items.ItemType.Tool or Items.ItemType.Seed);
+            ItemOnHandUpdate(index_, inventory.ItemTools[index_]);
         }
-        
-        public void Instantiate(Vector2 size_)
-        {
-            size = size_;
-        }
-        
+
         public void UpdatePosition(Vector3 direction_,Vector3 playerPosition_)
         {
             if(!gameObject.activeInHierarchy) return;

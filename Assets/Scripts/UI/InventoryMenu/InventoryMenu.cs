@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 
 namespace UI.InventoryMenu
 {
-    public class InventoryMenu : MonoBehaviour
+    public class InventoryMenu : FarmUI
     {
         [field: Header("Data")]
         [field: SerializeField] public PlayerInventory Inventory { get; private set; }
@@ -24,14 +24,11 @@ namespace UI.InventoryMenu
         [SerializeField] Item_MenuItem[] storageItems;
         [SerializeField] private Item_MenuItem weaponBar;
         [SerializeField] private Item_MenuItem armorBar;
-
-        public static readonly Evt<bool> OnOpenInventoryMenu = new Evt<bool>();
+        
         public static readonly Evt<Item_MenuItem> OnItemSelect = new Evt<Item_MenuItem>();
-
-        private void Awake()
+        
+        public override void Initialize()
         {
-            OnOpenInventoryMenu.AddListener(OpenMenu);
-            InputManager.OnInventoryMenuAction.AddListener(CloseMenu);
             for (int i = 0; i < toolBarItems.Length; i++)
             {
                 toolBarItems[i].Initialize(this,i);
@@ -49,35 +46,10 @@ namespace UI.InventoryMenu
             weaponBar.Initialize(this,0);
             inventoryDetailsPanel.Initialize(this);
         }
-
-        private void OnDestroy()
+        
+        public override void OpenMenu()
         {
-            OnOpenInventoryMenu.RemoveListener(OpenMenu);
-            InputManager.OnInventoryMenuAction.RemoveListener(CloseMenu);
-        }
-
-        private void OpenMenu(bool willOpen_)
-        {
-            // if(willOpen_ && !menuPanel.activeSelf)
-            // {
-            //     // Debug.Log("Open Menu");
-            //     // menuPanel.gameObject.SetActive(true);
-            // }
-            // else if(!willOpen_ && menuPanel.activeSelf)
-            // {
-            //     // Debug.Log("Close Menu");
-            //     // menuPanel.gameObject.SetActive(false);
-            //     // Debug.Log(menuPanel.activeSelf);
-            // }
-            toolBarItems[0].button.Select();
-        }
-
-        private void CloseMenu(InputAction.CallbackContext context_)
-        {
-            if(!gameObject.activeSelf) return;
-            if(!context_.started) return;
-            
-            menuPanel.gameObject.SetActive(!menuPanel.activeSelf);
+            FarmUIManager.Instance.lastOpenMenu = this;
         }
     }
 }

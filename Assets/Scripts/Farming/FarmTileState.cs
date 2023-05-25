@@ -133,7 +133,7 @@ namespace Farming
 
             // var _progress = farmTile.timeRemaining.Hours / (float) farmTile.seedData.minutesToGrow;
 
-            if (farmTile.progress >= 0.1f)
+            if (farmTile.progress >= 0.3f)
             {
                 IsNextPhase = true;
                 farmTile.plantRenderer.gameObject.SetActive(true);

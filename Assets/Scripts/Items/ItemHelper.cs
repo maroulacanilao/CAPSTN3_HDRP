@@ -19,7 +19,7 @@ public static class ItemHelper
 
     public static void Initialize(GameDataBase gameDataBase_)
     {
-        GameDataBase = GameManager.Instance.GameDataBase;
+        GameDataBase = gameDataBase_;
         ItemDatabase = GameDataBase.itemDatabase;
         PlayerLevel = GameDataBase.playerData.playerLevelData;
         GoldData = ItemDatabase.GoldItemData;

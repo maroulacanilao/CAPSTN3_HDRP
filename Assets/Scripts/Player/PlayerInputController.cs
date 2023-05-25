@@ -1,3 +1,4 @@
+using System;
 using CustomEvent;
 using CustomHelpers;
 using Farming;
@@ -75,20 +76,37 @@ namespace Player
         private PlayerInputStateMachine StateMachine;
         
         public bool IsGrounded => collisionDetector.isGrounded;
+        
+        [Header("Components To Disable On Freeze")]
+        [SerializeField] private MonoBehaviour[] scriptsToDisable;
+        
+        public static readonly Evt<bool> OnPlayerCanMove = new Evt<bool>();
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            OnPlayerCanMove.AddListener(CanMove);
             cameraTransform = gameObject.scene.GetFirstMainCameraInScene().transform;
             toolArea = ToolArea.Instance;
             StateMachine = new PlayerInputStateMachine(this);
+
+        }
+
+        private void OnDestroy()
+        {
+            OnPlayerCanMove.RemoveListener(CanMove);
         }
 
         private void OnEnable()
         {
             StateMachine.Initialize();
         }
-    
+
+        private void OnDisable()
+        {
+            rb.velocity = Vector3.zero;
+        }
+
         private void Update()
         {
             StateMachine.StateUpdate();
@@ -97,6 +115,14 @@ namespace Player
         private void FixedUpdate()
         {
             StateMachine.StateFixedUpdate();
+        }
+        
+        public void CanMove(bool canMove_)
+        {
+            foreach (var _component in scriptsToDisable)
+            {
+                _component.enabled = canMove_;
+            }
         }
     }
 }

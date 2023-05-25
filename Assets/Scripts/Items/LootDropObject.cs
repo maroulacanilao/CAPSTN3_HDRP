@@ -11,6 +11,7 @@ namespace Items
 {
     public class LootDropObject : InteractableObject, IPoolable
     {
+        [SerializeField] GameObject ghostObject;
         public LootDrop lootDrop { get; protected set; }
         
         public static readonly Evt<LootDropObject> OnLootInteract = new Evt<LootDropObject>();
@@ -39,9 +40,15 @@ namespace Items
             OnLootInteract.Invoke(this);
         }
 
-        protected override void Enter() { }
+        protected override void Enter()
+        {
+            ghostObject.SetActive(true);
+        }
 
-        protected override void Exit() { }
+        protected override void Exit()
+        {
+            ghostObject.SetActive(false);
+        }
 
         private void OnDestroy()
         {

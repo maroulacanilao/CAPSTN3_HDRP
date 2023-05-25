@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using CustomEvent;
 using CustomHelpers;
 using NaughtyAttributes;
@@ -8,20 +10,13 @@ using UnityEngine;
 
 public class TestWaitAction : MonoBehaviour
 {
-    public int param1 = 2;
-    private readonly Evt sampleEvent = new Evt();
-    private readonly Evt<int> sampleEventWithParam = new Evt<int>();
+    public string paramName;
 
-    private IEnumerator Start()
+    private Dictionary<string, TaskCompletionSource<bool>> animationEventTaskCompletionSources;
+
+    private void Awake()
     {
-        Debug.Log("Start waiting for event");
-        yield return sampleEvent.WaitForEvt();
-        Debug.Log("Event called");
+        
+        animationEventTaskCompletionSources = new Dictionary<string, TaskCompletionSource<bool>>();
     }
-    
-    [Button("Call Event")]
-    private void CallEvent() => sampleEvent.Invoke();
-    
-    [Button("Call Event With Param")]
-    private void CallEventWithParam() => sampleEventWithParam.Invoke(param1);
 }

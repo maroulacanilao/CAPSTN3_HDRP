@@ -2,6 +2,7 @@
 using System.Collections;
 using BaseCore;
 using Character;
+using CustomEvent;
 using CustomHelpers;
 using DG.Tweening;
 using NaughtyAttributes;
@@ -35,8 +36,11 @@ namespace BattleSystem
         public AnimationEventReceiver animEventReceiver { get; private set; }
         
         [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
-        public SpriteRenderer spriteRenderer { get; private set; }
+        public SpriteOutline spriteOutline { get; private set; }
         
+        [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
+        public SpriteRenderer spriteRenderer { get; private set; }
+
         [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
         public Animator animator { get; private set; }
 
@@ -80,10 +84,11 @@ namespace BattleSystem
         public int Level { get; protected set; }
 
         protected Vector3 defaultPosition;
-
-
-        public HealthComponent HealthComponent => character.healthComponent;
-        public ManaComponent ManaComponent => character.manaComponent;
+        
+        public static readonly Evt<BattleCharacter> OnSelectMenu = new Evt<BattleCharacter>();
+        
+        public CharacterHealth characterHealth => character.health;
+        public CharacterMana characterMana => character.mana;
         public virtual CombatStats TotalStats => character.statsData.GetTotalStats(Level);
         public virtual CombatStats BaseStats => character.statsData.baseCombatStats;
 
@@ -93,6 +98,23 @@ namespace BattleSystem
         {
             defaultPosition = transform.position;
         }
+
+        private void OnEnable()
+        {
+            OnSelectMenu.AddListener(Select);
+        }
+
+        private void OnDisable()
+        {
+            OnSelectMenu.RemoveListener(Select);
+        }
+
+        private void Select(BattleCharacter battleCharacter_)
+        {
+            spriteOutline.enabled = battleCharacter_ == this;
+        }
+
+        #region Movement
         
         public float GetHorizontalVelocity()
         {
@@ -112,7 +134,7 @@ namespace BattleSystem
 
         public IEnumerator GoToPosition(Vector3 position_, float duration_ = 0.5f)
         {
-            transform.MoveToY(defaultPosition.y);
+            transform.SetY(defaultPosition.y);
             animator.SetTrigger(moveAnimationHash);
             
             var _moveTween = transform.DOMove(position_.SetY(defaultPosition.y), duration_);
@@ -162,10 +184,10 @@ namespace BattleSystem
         {
             if (atkResult_.attackResultType != AttackResultType.Miss)
             {
-                HealthComponent.TakeDamage(atkResult_.damageInfo);
-                var _trigger = HealthComponent.IsAlive ? hurtAnimationHash : deathAnimationHash;
+                character.TakeDamage(atkResult_.damageInfo);
+                var _trigger = characterHealth.IsAlive ? hurtAnimationHash : deathAnimationHash;
                 animator.SetTrigger(_trigger);
-                if(HealthComponent.IsAlive) transform.DoHitEffect();
+                if(characterHealth.IsAlive) transform.DoHitEffect();
                 var _damage = -atkResult_.damageInfo.DamageAmount;
                 DamageTextUI.ShowDamageText.Invoke(transform.position,_damage.ToString());
             }
@@ -189,6 +211,8 @@ namespace BattleSystem
             yield return animator.WaitForAnimationEvent(AnimEvent_SpellCast, 2);
             animator.ResetTrigger(spellAnimationHash);
         }
+        
+        #endregion
 
         #region FOR DEBUGGING ONLY, DELETE THIS FUTURE ME
         

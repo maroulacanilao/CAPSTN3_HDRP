@@ -13,6 +13,7 @@ namespace BattleSystem.BattleState
         public override IEnumerator Enter()
         {
             Debug.Log($"{battleCharacter.gameObject}'s Enter Turn");
+            yield return battleCharacter.character.statusEffectReceiver.BeforeTurnTick(this);
             yield return StartTurn();
         }
 
@@ -21,6 +22,7 @@ namespace BattleSystem.BattleState
             Debug.Log($"{battleCharacter.gameObject}'s Turn");
             // Open UI
             yield return CoroutineHelper.GetWait(0.1f);
+            yield return CheckForEndState();
             yield return TurnLogic();
         }
 
@@ -34,13 +36,9 @@ namespace BattleSystem.BattleState
         public override IEnumerator EndTurn()
         {
             yield return CoroutineHelper.GetWait(1f);
+            yield return battleCharacter.character.statusEffectReceiver.AfterTurnTick(this);
             Debug.Log($"{battleCharacter.gameObject}'s End Turn");
-            if (BattleManager.enemy.HealthComponent.CurrentHp <= 0)
-            {
-                yield return StateMachine.ChangeState(new BattleEndState(StateMachine, true));
-                yield break;
-            }
-            else yield return StateMachine.ChangeState(StateMachine.enemyTurn);
+            yield return CheckForEndState(true);
         }
 
         public override IEnumerator Exit()

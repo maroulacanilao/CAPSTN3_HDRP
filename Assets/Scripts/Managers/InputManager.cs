@@ -14,7 +14,7 @@ namespace Managers
         public static InputAction InteractAction { get; private set; }
         public static InputAction SprintAction { get; private set; }
         public static InputAction UseToolAction { get; private set; }
-        public static InputAction InventoryMenuAction { get; private set; }
+        public static InputAction MenuAction { get; private set; }
         
         public static Vector2 MoveDelta { get; private set; }
 
@@ -25,7 +25,7 @@ namespace Managers
         public static readonly Evt<InputAction.CallbackContext> OnInteractAction = new Evt<InputAction.CallbackContext>();
         public static readonly Evt<InputAction.CallbackContext> OnUseToolAction = new Evt<InputAction.CallbackContext>();
         public static readonly Evt<InputAction.CallbackContext> OnSprintAction = new Evt<InputAction.CallbackContext>();
-        public static readonly Evt<InputAction.CallbackContext> OnInventoryMenuAction = new Evt<InputAction.CallbackContext>();
+        public static readonly Evt<InputAction.CallbackContext> OnMenuAction = new Evt<InputAction.CallbackContext>();
         public static readonly Evt<bool> OnCycleTool= new Evt<bool>();
         public static readonly Evt<int> OnSelectTool = new Evt<int>();
         #endregion
@@ -40,7 +40,7 @@ namespace Managers
             InteractAction = _playerInput.actions["Interact"];
             SprintAction = _playerInput.actions["Sprint"];
             UseToolAction = _playerInput.actions["UseTool"];
-            InventoryMenuAction = _playerInput.actions["InventoryMenu"];
+            MenuAction = _playerInput.actions["Menu"];
         }
 
         public void OnMove(InputAction.CallbackContext inputContext_)
@@ -59,9 +59,9 @@ namespace Managers
             OnInteractAction.Invoke(context);
         }
         
-        public void OnInventoryMenu(InputAction.CallbackContext context)
+        public void OnMenu(InputAction.CallbackContext context)
         {
-            OnInventoryMenuAction.Invoke(context);
+            OnMenuAction.Invoke(context);
         }
         
         public void OnUseTool(InputAction.CallbackContext context)

@@ -14,7 +14,6 @@ namespace UI.LootMenu
         [SerializeField] private UI_LootMenuItem lootMenuItemPrefab;
         [SerializeField] private PlayerInventory playerInventory;
         [SerializeField] private UI_LootMenuDetailsPanel detailsPanel;
-        [SerializeField] private GameObject lootPanel;
 
         [Header("Parents")]
         [SerializeField] private Transform itemParent;
@@ -26,18 +25,12 @@ namespace UI.LootMenu
 
         private List<UI_LootMenuItem> lootMenuItemList;
         private LootDropObject lootDropObject;
-        
+
         #region UnityEvents
         
         public override void Initialize()
         {
-            
-        }
-        
-        private void Awake()
-        {
             LootDropObject.OnLootInteract.AddListener(ShowLootMenu);
-            lootPanel.SetActive(false);
             detailsPanel.Initialize(this);
             
             lootAllBtn.onClick.AddListener(() =>
@@ -68,6 +61,11 @@ namespace UI.LootMenu
                 }
             });
         }
+        
+        public override void OpenMenu()
+        {
+            
+        }
 
         private void OnDestroy()
         {
@@ -76,11 +74,13 @@ namespace UI.LootMenu
 
         private void OnEnable()
         {
+            Cursor.visible = true;
             OnShowItemDetail.AddListener(ShowItemDetail);
         }
 
         private void OnDisable()
         {
+            Cursor.visible = false;
             OnShowItemDetail.RemoveListener(ShowItemDetail);
         }
 
@@ -88,6 +88,8 @@ namespace UI.LootMenu
 
         private void ShowLootMenu(LootDropObject lootDropObject_)
         {
+            FarmUIManager.Instance.CloseAllUI();
+            
             lootDropObject = lootDropObject_;
             var _lootDrop = lootDropObject_.lootDrop;
             
@@ -102,7 +104,7 @@ namespace UI.LootMenu
                 lootMenuItemList.Add(_uiLootMenuItem);
             }
             lootMenuItemList[0].GetComponent<Button>().Select();
-            lootPanel.SetActive(true);
+            gameObject.SetActive(true);
         }
 
         private void ShowItemDetail(UI_LootMenuItem lootMenuItem_)
@@ -133,12 +135,9 @@ namespace UI.LootMenu
 
         public void ClosePanel()
         {
-            lootPanel.SetActive(false);
             lootDropObject = null;
-            
-            if(lootMenuItemList.Count <= 0) return;
-            
-            lootMenuItemList.DestroyComponents();
+            if(lootMenuItemList.Count > 0) lootMenuItemList.DestroyComponents();
+            FarmUIManager.Instance.CloseAllUI();
         }
     }
 }

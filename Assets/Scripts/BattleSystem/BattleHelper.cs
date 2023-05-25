@@ -16,6 +16,7 @@ namespace BattleSystem
     {
         public static AttackResult DamageTarget(this BattleCharacter attacker_, BattleCharacter target_, DamageInfo baseDamageInfo_)
         {
+            UnityEngine.Random.InitState(Time.timeSinceLevelLoad.GetHashCode());
             var _attackResult = new AttackResult() { attackResultType = AttackResultType.Miss, damageInfo = baseDamageInfo_};
             if (IsAttackEvaded(attacker_.TotalStats, target_.TotalStats))
             {
@@ -59,7 +60,9 @@ namespace BattleSystem
         
         private static bool IsAttackEvaded(CombatStats attacker_, CombatStats target_)
         {
-            float _evadeChance = 1 - ((float)attacker_.accuracy / (attacker_.accuracy + target_.speed));
+            float _acc = attacker_.accuracy * 1.5f;
+            float _evadeChance = (1 - (_acc / (attacker_.accuracy + target_.speed)));
+            _evadeChance = Mathf.Clamp(_evadeChance, 0.02f, 0.95f);
             return Random.value < _evadeChance;
         }
         

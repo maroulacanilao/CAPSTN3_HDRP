@@ -6,5 +6,5 @@ using UnityEngine;
 
 public interface IHealable
 {
-    public Evt<HealInfo, bool> OnHeal { get; set; }
+    public void Heal(HealInfo healInfo_, bool isOverHeal_ = false);
 }

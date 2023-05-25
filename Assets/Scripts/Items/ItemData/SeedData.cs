@@ -18,12 +18,12 @@ namespace Items.ItemData
 
         private void Reset()
         {
-            itemType = ItemType.Seed;
+            ItemType = ItemType.Seed;
         }
 
-        private void OnValidate()
+        protected override void OnValidate()
         {
-            itemType = ItemType.Seed;
+            ItemType = ItemType.Seed;
         }
     }
 }

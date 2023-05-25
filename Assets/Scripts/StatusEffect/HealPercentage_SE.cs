@@ -11,12 +11,12 @@ namespace StatusEffect
 
         protected override void OnActivate()
         {
-            var _hpCom = Target.character.healthComponent;
+            var _hpCom = Target.character.health;
             var _amount = Mathf.RoundToInt(_hpCom.MaxHp * healPercentage);
             
             HealInfo _healInfo = new HealInfo(_amount, Source);
             
-            _hpCom.ReceiveHeal(_healInfo);
+            Target.character.Heal(_healInfo);
             
             SelfRemove();
         }

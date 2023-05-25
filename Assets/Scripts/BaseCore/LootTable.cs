@@ -33,7 +33,9 @@ namespace BaseCore
     [System.Serializable]
     public class LootTable
     {
-        [MinMaxSlider(0, 1000)] [SerializeField] private Vector2Int possibleExperienceDrop;
+        [field: MinMaxSlider(0, 1000)] [field: SerializeField] 
+        public Vector2Int possibleExperienceDrop { get; private set; }
+        
         [MinMaxSlider(0, 1000)] [SerializeField] private Vector2Int possibleMoneyDrop;
         [MinMaxSlider(0, 10)] [SerializeField] private Vector2Int possibleItemCount;
     

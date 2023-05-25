@@ -43,7 +43,7 @@ namespace BaseCore
         public CombatStats equipmentStats { get; private set; }
         public CombatStats bonusStats { get; private set; }
 
-        public List<Item> equipmentStatsSources { get; private set; } = new List<Item>();
+        public HashSet<Item> equipmentStatsSources { get; private set; } = new HashSet<Item>();
 
         public CombatStats GetTotalStats(int level_)
         {
@@ -52,7 +52,7 @@ namespace BaseCore
 
         public void AddEquipmentStats(CombatStats stats_, Item item_)
         {
-            if (!equipmentStatsSources.AddUnique(item_)) return;
+            if (!equipmentStatsSources.Add(item_)) return;
 
             equipmentStats += stats_;
         }
@@ -61,7 +61,7 @@ namespace BaseCore
         {
             if (!equipmentStatsSources.Remove(item_)) return;
 
-            equipmentStats += stats_;
+            equipmentStats -= stats_;
         }
 
         /// <summary>
@@ -78,6 +78,13 @@ namespace BaseCore
         public void RemoveBonusStats(CombatStats stats_)
         {
             bonusStats -= stats_;
+        }
+        
+        public void ClearAdditionalStats()
+        {
+            equipmentStats = new CombatStats();
+            bonusStats = new CombatStats();
+            equipmentStatsSources.Clear();
         }
         
         #region Stats Growth Calculation

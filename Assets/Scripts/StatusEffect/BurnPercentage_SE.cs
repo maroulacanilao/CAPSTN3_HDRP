@@ -22,12 +22,12 @@ namespace StatusEffect
         
         protected override void OnStackEffect(StatusEffectBase newEffect_)
         {
-            turns += turnDuration;
+            RefreshStatusEffect();
         }
         
         protected override IEnumerator OnBeforeTurnTick(TurnBaseState ownerTurnState_)
         {
-            var _hpCom = Target.character.healthComponent;
+            var _hpCom = Target.character.health;
             var _amount = Mathf.RoundToInt(_hpCom.MaxHp * damagePercentage);
             turns++;
             

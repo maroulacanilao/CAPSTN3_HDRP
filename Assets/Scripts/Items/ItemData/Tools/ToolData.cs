@@ -7,12 +7,12 @@ namespace Items.ItemData.Tools
     {
         private void Reset()
         {
-            itemType = ItemType.Tool;
+            ItemType = ItemType.Tool;
         }
 
-        private void OnValidate()
+        protected override void OnValidate()
         {
-            itemType = ItemType.Tool;
+            ItemType = ItemType.Tool;
         }
         
         public abstract void UseTool(PlayerEquipment playerEquipment_);

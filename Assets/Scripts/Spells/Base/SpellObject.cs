@@ -70,7 +70,7 @@ namespace Spells.Base
 		public IEnumerator Deactivate()
 		{
 			target = null;
-			character.manaComponent.UseMana(spellData.manaCost);
+			character.mana.UseMana(spellData.manaCost);
 			yield return OnDeactivate();
 		}
 

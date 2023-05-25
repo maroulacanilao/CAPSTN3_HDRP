@@ -12,14 +12,24 @@ namespace ScriptableObjectData.CharacterData
     {
         [field: SerializeField] [field: BoxGroup("LootTable")]  public LootTable LootTable { get; private set; }
 
+        [field: SerializeField] public EnemyCombatTendency combatTendency { get; private set; } = new EnemyCombatTendency();
+
         public EnemyBattleCharacter SpawnBattleEnemy(int level_)
         {
             var _enemy = battlePrefab.GetInstance();
             return _enemy.GetComponent<EnemyBattleCharacter>().Initialize(this, level_) as EnemyBattleCharacter;
         }
 
-        #if UNITY_EDITOR
+        [ContextMenu("Sort Spells")]
+        public void SortSpells() => combatTendency.SortSpells();
         
+        private void OnValidate()
+        {
+            combatTendency?.SortSpells();
+        }
+
+#if UNITY_EDITOR
+
         // [Button("Create Other Data")]
         // public void CreateAssetWithDependencies()
         // {
@@ -44,7 +54,7 @@ namespace ScriptableObjectData.CharacterData
         //         Debug.Log("ScriptableObject is not an asset in the project.");
         //     }
         // }
-        
-        #endif
+
+#endif
     }
 }

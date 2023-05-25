@@ -3,86 +3,61 @@ using BaseCore;
 using Managers;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 
 // Source: https://dotnetfiddle.net/7jfc0O
 
 public class MainLightManager : Singleton<MainLightManager>
 {
+    [Header("Light")]
+    [SerializeField] private Light mainLight;
+    [SerializeField] private HDAdditionalLightData lightData;
+    
     [Header("Day")]
-    [SerializeField] private Light sunLight;
     [SerializeField] private Color dayLightColor;
-    [SerializeField] private float maxSunLightIntensity;
-    [SerializeField] private float sunriseHour;
-    [SerializeField] private float sunsetHour;
-
-    [Header("Night")]
-    [SerializeField] private Light moonLight;
+    [SerializeField] private float dayTemperature;
+    [SerializeField] private float dayIntensity;
+    
+    [Header("Day")]
     [SerializeField] private Color nightLightColor;
-    [SerializeField] private float maxMoonLightIntensity;
+    [SerializeField] private float nightTemperature;
+    [SerializeField] private float nightIntensity;
     
-    [Header("Light Curve")]
-    [SerializeField] [CurveRange(0,0,1,1,EColor.Yellow)]
-    private AnimationCurve lightChangeCurve;
+    [Header("Curves")]
+    [SerializeField] private AnimationCurve intensityCurve;
+    [SerializeField] private AnimationCurve colorCurve;
+    [SerializeField] private AnimationCurve temperatureCurve;
     
-    private TimeSpan sunriseTime;
+    
+    private int DayTime=> TimeManager.StartingHour; 
+    private int NightTime => TimeManager.NightHour;
+    private int DayDuration => NightTime - DayTime;
 
-    private TimeSpan sunsetTime;
 
-    protected void Start()
+    protected override void Awake()
     {
-        sunriseTime = TimeSpan.FromHours(sunriseHour);
-        sunsetTime = TimeSpan.FromHours(sunsetHour);
-        TimeManager.OnMinuteTick.AddListener(RotateSun);
-        RotateSun(TimeManager.Instance);
+        base.Awake();
+        TimeManager.OnMinuteTick.AddListener(UpdateLight);
     }
 
-    private void RotateSun(TimeManager timeManager_)
+    private void UpdateLight(TimeManager timeManager_)
     {
-        float _sunLightRotation;
-        
-        var _timeOfDay = TimeManager.DateTime.TimeOfDay;
-        
-        if (_timeOfDay > sunriseTime && _timeOfDay < sunsetTime)
-        {
-            var _sunriseToSunsetDuration = CalculateTimeDifference(sunriseTime, sunsetTime);
-            var _timeSinceSunrise = CalculateTimeDifference(sunriseTime, _timeOfDay);
+        bool isDay = TimeManager.GameTime >= DayTime && TimeManager.GameTime < NightTime;
+        var _scaledTime = isDay ? ScaledTime() : 1;
+        var _intensityScale = intensityCurve.Evaluate(_scaledTime);
+        var _colorScale = colorCurve.Evaluate(_scaledTime);
+        var _temperatureScale = temperatureCurve.Evaluate(_scaledTime);
 
-            var _percentage = _timeSinceSunrise.TotalMinutes / _sunriseToSunsetDuration.TotalMinutes;
-
-            _sunLightRotation = Mathf.Lerp(0, 180, (float) _percentage);
-        }
-        else
-        {
-            var _sunsetToSunriseDuration = CalculateTimeDifference(sunsetTime, sunriseTime);
-            var _timeSinceSunset = CalculateTimeDifference(sunsetTime, _timeOfDay);
-
-            var _percentage = _timeSinceSunset.TotalMinutes / _sunsetToSunriseDuration.TotalMinutes;
-
-            _sunLightRotation = Mathf.Lerp(180, 360, (float) _percentage);
-        }
-
-        sunLight.transform.rotation = Quaternion.AngleAxis(_sunLightRotation, Vector3.right);
-        
-        UpdateLightSettings();
+        lightData.intensity = Mathf.Lerp(dayIntensity, nightIntensity, _intensityScale);
+        lightData.color = Color.Lerp(dayLightColor, nightLightColor, _colorScale);
+        mainLight.color = Color.Lerp(dayLightColor, nightLightColor, _colorScale);
+        mainLight.colorTemperature = Mathf.Lerp(dayTemperature, nightTemperature, _temperatureScale);
     }
 
-    private void UpdateLightSettings()
+    private float ScaledTime()
     {
-        float _dotProduct = Vector3.Dot(sunLight.transform.forward, Vector3.down);
-        sunLight.intensity = Mathf.Lerp(0, maxSunLightIntensity, lightChangeCurve.Evaluate(_dotProduct));
-        moonLight.intensity = Mathf.Lerp(maxMoonLightIntensity, 0, lightChangeCurve.Evaluate(_dotProduct));
-        RenderSettings.ambientLight = Color.Lerp(nightLightColor, dayLightColor, lightChangeCurve.Evaluate(_dotProduct));
-    }
-
-    private TimeSpan CalculateTimeDifference(TimeSpan fromTime, TimeSpan toTime)
-    {
-        TimeSpan _difference = toTime - fromTime;
-
-        if (_difference.TotalSeconds < 0)
-        {
-            _difference += TimeSpan.FromHours(24);
-        }
-
-        return _difference;
+        var _scaledTime = TimeManager.GameTime - DayTime;
+        _scaledTime /= DayDuration;
+        return _scaledTime;
     }
 }

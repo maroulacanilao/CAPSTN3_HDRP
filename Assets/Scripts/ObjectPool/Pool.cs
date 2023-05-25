@@ -128,7 +128,7 @@ namespace ObjectPool
             
             foreach (var _obj in activeSet)
             {
-                if (_obj == null || _obj.IsDestroyed()) continue;
+                if (_obj.IsEmptyOrDestroyed()) continue;
                 Object.Destroy(_obj.gameObject);
             }
             activeSet.Clear();

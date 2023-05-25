@@ -6,5 +6,5 @@ using UnityEngine;
 
 public interface IDamagable
 {
-    public Evt<DamageInfo> OnDamage { get; set; }
+    public void TakeDamage(DamageInfo damageInfo_);
 }

@@ -13,6 +13,16 @@ namespace BaseCore
         private float totalWeight;
 
         private T itemWithLargestWeight;
+        
+        public WeightedDictionary()
+        {
+        }
+        
+        public WeightedDictionary(SerializedDictionary<T, float> itemDictionary_)
+        {
+            itemDictionary = itemDictionary_;
+            ForceInitialize();
+        }
 
         public void Initialize()
         {
@@ -102,5 +112,12 @@ namespace BaseCore
             itemDictionary[itemToChange] = newWeight;
             RecalculateChances();
         }
+
+        public WeightedDictionary<T> GetCopy()
+        {
+            var _copy = new WeightedDictionary<T>(this.itemDictionary);
+            return _copy;
+        }
+        
     }
 }

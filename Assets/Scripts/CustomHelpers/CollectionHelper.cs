@@ -87,6 +87,50 @@ namespace CustomHelpers
             return nearestObject.gameObject;
         }
 
+        public static Transform GetNearestTransform(this IList<Transform> source_, Vector3 position_)
+        {
+            if (source_ == null) return null;
+            if(source_.Count == 0) return null;
+            
+            var shortestDistance = Mathf.Infinity;
+            var nearestObject = source_[0];
+            
+            foreach (var _transform in source_)
+            {
+                if(_transform.IsUnityNull()) continue;
+                var distance = Vector3.Distance(position_, _transform.transform.position);
+
+                if (distance >= shortestDistance) continue;
+                
+                shortestDistance = distance;
+                nearestObject = _transform;
+            }
+
+            return nearestObject;
+        }
+        
+        public static T GetNearestComponent<T>(this ICollection<T> source_, Vector3 position_) where T : MonoBehaviour
+        {
+            if (source_ == null) return null;
+            if(source_.Count == 0) return null;
+            
+            var _shortestDistance = Mathf.Infinity;
+            var _nearestObject = source_.First();
+            
+            foreach (var _component in source_)
+            {
+                if(_component.IsUnityNull()) continue;
+                var _distance = Vector3.Distance(position_, _component.transform.position);
+
+                if (_distance >= _shortestDistance) continue;
+                
+                _shortestDistance = _distance;
+                _nearestObject = _component;
+            }
+
+            return _nearestObject;
+        }
+
         #endregion
 
         #region Random Generic
@@ -120,6 +164,26 @@ namespace CustomHelpers
             if (list.Count == 0) throw new IndexOutOfRangeException("Cannot select a random item from an empty list");
             return list[UnityEngine.Random.Range(0, list.Count)];
         }
+        
+        /// <summary>
+        /// Return a random item from the list with a specified item excluded.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="excludedItem"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
+        public static T GetRandomItem<T>(this IList<T> list, T excludedItem)
+        {
+            if (list.Count == 0) throw new IndexOutOfRangeException("Cannot select a random item from an empty list");
+            
+            var _copyList = new List<T>(list);
+            if (_copyList == null) throw new ArgumentNullException(nameof(_copyList));
+            
+            _copyList.Remove(excludedItem);
+            return _copyList[UnityEngine.Random.Range(0, _copyList.Count)];
+        }
+
 
         /// <summary>
         /// Removes a random item from the list, returning that item.

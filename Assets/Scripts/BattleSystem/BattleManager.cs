@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BaseCore;
 using BattleSystem.BattleState;
 using Character;
@@ -10,8 +12,8 @@ namespace BattleSystem
 {
     public class BattleManager : Singleton<BattleManager>
     {
-        [field: SerializeField] public BattleCharacter player { get; private set; }
-        [field: SerializeField] public BattleCharacter enemy { get; private set; }
+        [field: SerializeField] public List<BattleCharacter> playerParty { get; private set; }
+        [field: SerializeField] public List<BattleCharacter> enemyParty { get; private set; }
         [field: SerializeField] public BattleData battleData { get; private set; }
 
         public BattleStateMachine BattleStateMachine { get; private set; }
@@ -21,13 +23,12 @@ namespace BattleSystem
         public static readonly Evt<string> OnBattleEvent = new Evt<string>();
         public static readonly Evt<bool> OnBattleEnd = new Evt<bool>();
 
-        public List<BattleCharacter> characterList; 
-
         protected override void Awake()
         {
             base.Awake();
             BattleStateMachine = new BattleStateMachine(this);
         }
+        
         private void Start()
         {
             StartCoroutine(BattleStateMachine.Initialize());
@@ -37,6 +38,21 @@ namespace BattleSystem
         {
             StopAllCoroutines();
             OnBattleEnd.Invoke(hasWon_);
+        }
+        
+        public bool IsEnemyPartyStillAlive()
+        {
+            return enemyParty.Any(e => e.character.IsAlive);
+        }
+        
+        public bool IsPlayerPartyStillAlive()
+        {
+            return playerParty.Any(e => e.character.IsAlive);
+        }
+        
+        public BattleCharacter GetFirstAliveEnemy()
+        {
+            return enemyParty.FirstOrDefault(e => e.character.IsAlive);
         }
     }
 }

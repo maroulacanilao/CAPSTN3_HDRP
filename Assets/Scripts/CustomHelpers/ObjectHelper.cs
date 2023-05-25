@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace CustomHelpers
@@ -100,6 +101,26 @@ namespace CustomHelpers
         public static T GetOrAddComponent<T>(this UnityEngine.Component component_) where T : UnityEngine.Component
         {
             return component_.gameObject.GetOrAddComponent<T>();
+        }
+        
+        public static bool IsEmptyOrDestroyed<T>(this T component_) where T : UnityEngine.Component
+        {
+            return component_ == null || component_.IsDestroyed();
+        }
+        
+        public static bool IsEmptyOrDestroyed(this UnityEngine.GameObject gameObject_)
+        {
+            return gameObject_ == null || gameObject_.IsDestroyed();
+        }
+        
+        public static bool IsValid(this UnityEngine.GameObject gameObject_)
+        {
+            return gameObject_ != null && !gameObject_.IsDestroyed();
+        }
+        
+        public static bool IsValid(this UnityEngine.Component component_)
+        {
+            return component_ != null && !component_.IsDestroyed();
         }
     }
 }

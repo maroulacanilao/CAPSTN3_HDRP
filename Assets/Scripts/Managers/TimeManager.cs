@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BaseCore;
 using CustomEvent;
+using Player;
 using UnityEngine;
 
 namespace Managers
@@ -95,9 +96,21 @@ namespace Managers
             StartDay();
         }
 
+        private void OnEnable()
+        {
+            if(timerCTS != null) ResumeTime();
+        }
+
+        private void OnDisable()
+        {
+            PauseTime();
+        }
+
+
         private void OnDestroy()
         {
-            timerCTS.Cancel();
+            timerCTS?.Cancel();
+            timerCTS?.Dispose();
         }
 
         // called when starting a day to update time
@@ -127,8 +140,12 @@ namespace Managers
             if (_prevDateTime.Month != DateTime.Month) OnNewMonth.Invoke(Instance);
             
             OnMinuteTick.Invoke(Instance);
+            OnHourTick.Invoke(Instance);
 
+            timerCTS?.Cancel();
+            timerCTS?.Dispose();
             timerCTS = new CancellationTokenSource();
+            Time.timeScale = 1;
             StartMainTimeLoop();
         }
         
@@ -152,6 +169,7 @@ namespace Managers
             isTimePaused = true;
             isTimeLoopRunning = false;
             OnPauseTime.Invoke(Instance, Instance.isTimePaused);
+            PlayerInputController.OnPlayerCanMove.Invoke(false);
         }
 
         [NaughtyAttributes.Button("Resume Time")]
@@ -162,8 +180,10 @@ namespace Managers
             
             OnPauseTime.Invoke(Instance, Instance.isTimePaused);
             
+            timerCTS?.Cancel();
+            timerCTS?.Dispose();
             timerCTS = new CancellationTokenSource();
-
+            PlayerInputController.OnPlayerCanMove.Invoke(true);
             StartMainTimeLoop();
         }
 

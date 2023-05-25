@@ -10,22 +10,18 @@ using UnityEngine;
 
 namespace Character
 {
-    public class StatusEffectReceiver : MonoBehaviour
+    public class StatusEffectReceiver : CharacterCore
     {
-        [field: SerializeField] public CharacterBase character { get; private set; }
         private Transform container;
         
-        public BattleCharacter battleCharacter { get; private set; }
         public string CharacterName => character.characterData.characterName;
 
         public Evt<StatusEffectBase, StatusEffectReceiver> OnApply = new Evt<StatusEffectBase, StatusEffectReceiver>();
         public Evt<StatusEffectBase, StatusEffectReceiver> OnRemove = new Evt<StatusEffectBase, StatusEffectReceiver>();
         private Dictionary<int, StatusEffectBase> StatusEffectsDictionary;
 
-        private void Start()
+        protected override void Initialize()
         {
-            if (character == null) character = transform.parent.GetComponent<CharacterBase>();
-            battleCharacter = character.GetComponent<BattleCharacter>();
             StatusEffectsDictionary = new Dictionary<int, StatusEffectBase>();
             container = new GameObject("StatusEffect Container").transform;
             container.parent = gameObject.transform;

@@ -1,3 +1,4 @@
+using System;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -5,9 +6,7 @@ namespace Items.ItemData
 {
     public abstract class ItemData : ScriptableObject
     {
-        protected ItemType itemType = ItemType.None;
-
-        public ItemType ItemType => itemType;
+        [field: SerializeField] public ItemType ItemType { get; protected set; }
 
         [field: SerializeField] public string ItemID { get; private set; }
 
@@ -27,5 +26,10 @@ namespace Items.ItemData
 
         [field: ShowAssetPreview]
         [field: SerializeField] public GameObject Prefab { get; private set; }
+
+        protected virtual void OnValidate()
+        {
+            
+        }
     }
 }

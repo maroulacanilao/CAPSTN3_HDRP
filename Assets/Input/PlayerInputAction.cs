@@ -127,7 +127,7 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""InventoryMenu"",
+                    ""name"": ""Menu"",
                     ""type"": ""Button"",
                     ""id"": ""3b215262-54db-4537-a357-4d40a4239664"",
                     ""expectedControlType"": ""Button"",
@@ -397,7 +397,7 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""InventoryMenu"",
+                    ""action"": ""Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -408,7 +408,7 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""InventoryMenu"",
+                    ""action"": ""Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -419,7 +419,7 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""InventoryMenu"",
+                    ""action"": ""Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -441,7 +441,7 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
         m_Explore_SecondTool = m_Explore.FindAction("SecondTool", throwIfNotFound: true);
         m_Explore_ThirdTool = m_Explore.FindAction("ThirdTool", throwIfNotFound: true);
         m_Explore_FourthTool = m_Explore.FindAction("FourthTool", throwIfNotFound: true);
-        m_Explore_InventoryMenu = m_Explore.FindAction("InventoryMenu", throwIfNotFound: true);
+        m_Explore_Menu = m_Explore.FindAction("Menu", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -512,7 +512,7 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
     private readonly InputAction m_Explore_SecondTool;
     private readonly InputAction m_Explore_ThirdTool;
     private readonly InputAction m_Explore_FourthTool;
-    private readonly InputAction m_Explore_InventoryMenu;
+    private readonly InputAction m_Explore_Menu;
     public struct ExploreActions
     {
         private @PlayerInputAction m_Wrapper;
@@ -528,7 +528,7 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
         public InputAction @SecondTool => m_Wrapper.m_Explore_SecondTool;
         public InputAction @ThirdTool => m_Wrapper.m_Explore_ThirdTool;
         public InputAction @FourthTool => m_Wrapper.m_Explore_FourthTool;
-        public InputAction @InventoryMenu => m_Wrapper.m_Explore_InventoryMenu;
+        public InputAction @Menu => m_Wrapper.m_Explore_Menu;
         public InputActionMap Get() { return m_Wrapper.m_Explore; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -571,9 +571,9 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                 @FourthTool.started -= m_Wrapper.m_ExploreActionsCallbackInterface.OnFourthTool;
                 @FourthTool.performed -= m_Wrapper.m_ExploreActionsCallbackInterface.OnFourthTool;
                 @FourthTool.canceled -= m_Wrapper.m_ExploreActionsCallbackInterface.OnFourthTool;
-                @InventoryMenu.started -= m_Wrapper.m_ExploreActionsCallbackInterface.OnInventoryMenu;
-                @InventoryMenu.performed -= m_Wrapper.m_ExploreActionsCallbackInterface.OnInventoryMenu;
-                @InventoryMenu.canceled -= m_Wrapper.m_ExploreActionsCallbackInterface.OnInventoryMenu;
+                @Menu.started -= m_Wrapper.m_ExploreActionsCallbackInterface.OnMenu;
+                @Menu.performed -= m_Wrapper.m_ExploreActionsCallbackInterface.OnMenu;
+                @Menu.canceled -= m_Wrapper.m_ExploreActionsCallbackInterface.OnMenu;
             }
             m_Wrapper.m_ExploreActionsCallbackInterface = instance;
             if (instance != null)
@@ -611,9 +611,9 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
                 @FourthTool.started += instance.OnFourthTool;
                 @FourthTool.performed += instance.OnFourthTool;
                 @FourthTool.canceled += instance.OnFourthTool;
-                @InventoryMenu.started += instance.OnInventoryMenu;
-                @InventoryMenu.performed += instance.OnInventoryMenu;
-                @InventoryMenu.canceled += instance.OnInventoryMenu;
+                @Menu.started += instance.OnMenu;
+                @Menu.performed += instance.OnMenu;
+                @Menu.canceled += instance.OnMenu;
             }
         }
     }
@@ -631,6 +631,6 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
         void OnSecondTool(InputAction.CallbackContext context);
         void OnThirdTool(InputAction.CallbackContext context);
         void OnFourthTool(InputAction.CallbackContext context);
-        void OnInventoryMenu(InputAction.CallbackContext context);
+        void OnMenu(InputAction.CallbackContext context);
     }
 }
