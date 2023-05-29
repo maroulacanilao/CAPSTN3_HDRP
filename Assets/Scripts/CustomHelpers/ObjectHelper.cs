@@ -21,7 +21,7 @@ namespace CustomHelpers
             // Checks whether an object is null or Unity pseudo-null
             // without having to cast to UnityEngine.Object manually
 
-            return obj == null || obj is UnityEngine.Object o && o == null;
+            return obj == null || obj is UnityEngine.Object _o && _o == null;
         }
 
         public static bool IsUnityValid(this UnityEngine.Object obj)
@@ -105,22 +105,22 @@ namespace CustomHelpers
         
         public static bool IsEmptyOrDestroyed<T>(this T component_) where T : UnityEngine.Component
         {
-            return component_ == null || component_.IsDestroyed();
+            return component_.IsUnityNull() || component_.IsDestroyed();
         }
         
         public static bool IsEmptyOrDestroyed(this UnityEngine.GameObject gameObject_)
         {
-            return gameObject_ == null || gameObject_.IsDestroyed();
+            return gameObject_.IsUnityNull() || gameObject_.IsDestroyed();
         }
         
         public static bool IsValid(this UnityEngine.GameObject gameObject_)
         {
-            return gameObject_ != null && !gameObject_.IsDestroyed();
+            return !gameObject_.IsUnityNull() && !gameObject_.IsDestroyed();
         }
         
         public static bool IsValid(this UnityEngine.Component component_)
         {
-            return component_ != null && !component_.IsDestroyed();
+            return !component_.IsUnityNull() && !component_.IsDestroyed();
         }
     }
 }

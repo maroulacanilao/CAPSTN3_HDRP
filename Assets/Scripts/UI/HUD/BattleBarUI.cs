@@ -12,9 +12,9 @@ namespace UI.HUD
         [SerializeField] private GameObject selectIndicator;
         protected BattleCharacter battleCharacter;
         
-        protected override void Awake()
+        protected override void Start()
         {
-            base.Awake();
+            base.Start();
             
             name_TXT.text = character.characterData.characterName;
             

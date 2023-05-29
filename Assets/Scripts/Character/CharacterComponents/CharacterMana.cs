@@ -1,9 +1,10 @@
+using BaseCore;
 using CustomEvent;
-using ScriptableObjectData.CharacterData;
 using UnityEngine;
 
-namespace Character
+namespace Character.CharacterComponents
 {
+    [System.Serializable]
     public class CharacterMana : CharacterCore
     {
         public readonly Evt<CharacterMana> OnAddMana = new Evt<CharacterMana>();
@@ -17,7 +18,7 @@ namespace Character
 
         public int CurrentMana { get; protected set; }
         
-        protected override void Initialize()
+        public CharacterMana(CharacterBase character_) : base(character_)
         {
             CurrentMana = MaxMana;
         }

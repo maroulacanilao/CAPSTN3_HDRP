@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using BaseCore;
 using CustomHelpers;
 using Items;
 using Items.Inventory;
+using Managers;
 using Player;
 using UnityEngine;
 
@@ -10,53 +12,51 @@ namespace Farming
 {
     public class ToolArea : Singleton<ToolArea>
     {
-        [SerializeField] private PlayerInventory inventory;
+        [SerializeField] private LineRenderer lineRenderer;
         [SerializeField] private float distanceToPlayer = 2f;
         [SerializeField] private float distanceToGround = 0.01f;
         [SerializeField] private float lineWidth = 0.01f;
-        [SerializeField] private Color color = Color.white;
-        [SerializeField] private LayerMask farmGroundLayer;
-        [SerializeField] private LayerMask farmTileLayer;
 
         private bool ShowLine = true;
-
-        private LineRenderer lineRenderer;
-
+        private PlayerInventory inventory;
+        private LayerMask farmTileLayer;
+        private LayerMask farmGroundLayer;
+        
         private Vector3[] vertices;
         private Vector2 size = Vector2.one;
         private Vector3 playerPosition;
 
-        public void Instantiate(Vector2 size_)
+        public void Instantiate(Vector2 size_, LayerMask farmTileLayer_, LayerMask farmGroundLayer_)
         {
             size = size_;
-        }
-        
-        protected override void Awake()
-        {
-            base.Awake();
-            lineRenderer = GetComponent<LineRenderer>();
-        
-            lineRenderer.startColor = color;
-            lineRenderer.endColor = color;
+            farmTileLayer = farmTileLayer_;
+            farmGroundLayer = farmGroundLayer_;
+            inventory = GameManager.Instance.PlayerData.playerInventory;
+            
             lineRenderer.startWidth = lineWidth;
             lineRenderer.endWidth = lineWidth;
-            
+
             lineRenderer.positionCount = 4;
-            
+            lineRenderer.useWorldSpace = false;
+
+            DrawLine();
+
             vertices = new Vector3[lineRenderer.positionCount];
             playerPosition = transform.position;
             PlayerEquipment.OnChangeItemOnHand.AddListener(ChangeItem);
             InventoryEvents.OnItemOnHandUpdate.AddListener(ItemOnHandUpdate);
         }
+        
+        #region Event Listeners
 
         private void ItemOnHandUpdate(int index_, Item item_)
         {
             if (item_ == null)
             {
-                gameObject.SetActive(false);
+                lineRenderer.gameObject.SetActive(false);
                 return;
             }
-            gameObject.SetActive(item_.ItemType is Items.ItemType.Tool or Items.ItemType.Seed);
+            lineRenderer.gameObject.SetActive(item_.ItemType is Items.ItemType.Tool or Items.ItemType.Seed);
         }
         
         private void ChangeItem(int index_)
@@ -64,28 +64,20 @@ namespace Farming
             ItemOnHandUpdate(index_, inventory.ItemTools[index_]);
         }
 
+        #endregion
+
+
         public void UpdatePosition(Vector3 direction_,Vector3 playerPosition_)
         {
-            if(!gameObject.activeInHierarchy) return;
-            
             playerPosition = playerPosition_ + direction_ * distanceToPlayer;
             
             var _groundHit = GetGround();
             
             bool _isOnGround = _groundHit.collider;
-            gameObject.SetActive(_isOnGround);
-            if(!_isOnGround) return;
             
-            SnapToPosition(_groundHit.point.y);
-            DrawLine();
-        }
-
-        public RaycastHit GetGround()
-        {
-            var _ray = new Ray(playerPosition.AddY(0.5f), Vector3.down);
-
-            Physics.Raycast(_ray, out var _hit, 0.55f, farmGroundLayer);
-            return _hit;
+            var _groundPosY = _isOnGround ? _groundHit.point.y : playerPosition.y;
+            SnapToPosition(_groundPosY);
+            //if(_isOnGround) DrawLine();
         }
 
         private void SnapToPosition(float groundElevation_)
@@ -101,14 +93,13 @@ namespace Farming
             if(!ShowLine) return;
         
             var _scaledSize = size / 2;
-            var _pos = transform.position;
-        
+
             vertices = new []
             {
-                _pos + new Vector3(-_scaledSize.x, 0f, -_scaledSize.y),
-                _pos + new Vector3(_scaledSize.x, 0f, -_scaledSize.y),
-                _pos + new Vector3(_scaledSize.x, 0f, _scaledSize.y),
-                _pos + new Vector3(-_scaledSize.x, 0f, _scaledSize.y),
+                new Vector3(-_scaledSize.x, 0f, -_scaledSize.y),
+                new Vector3(_scaledSize.x, 0f, -_scaledSize.y),
+                new Vector3(_scaledSize.x, 0f, _scaledSize.y),
+                new Vector3(-_scaledSize.x, 0f, _scaledSize.y),
             };
         
             lineRenderer.SetPositions(vertices);
@@ -118,7 +109,7 @@ namespace Farming
         
         public FarmTile GetFarmTile()
         {
-            if (!gameObject.activeInHierarchy) return null;
+            if (!lineRenderer.enabled) return null;
             
             var _ray = new Ray(transform.position.AddY(1f), Vector3.down);
             
@@ -128,24 +119,26 @@ namespace Farming
         
         public bool IsTillable()
         {
-            if (!gameObject.activeInHierarchy) return false;
-            
-            foreach (var _pos in vertices)
+            if (!lineRenderer.enabled) return false;
+
+            for (int i = 0; i < lineRenderer.positionCount; i++)
             {
+                var _pos = lineRenderer.GetPosition(i) + transform.position;
                 var _rayDown = new Ray(_pos.AddY(0.1f), Vector3.down);
                 if (!Physics.Raycast(_rayDown, out var _hitInfo, 0.2f, farmGroundLayer))
                 {
                     return false;
                 }
-                
-                //var _rayUp = new Ray(_pos, Vector3.up);
-                //
-                // if (Physics.Raycast(new Ray(_pos, Vector3.up), out var _hitUp, 1.1f, farmGroundLayer))
-                // {
-                //     return false;
-                // }
             }
             return true;
+        }
+        
+        public RaycastHit GetGround()
+        {
+            var _ray = new Ray(playerPosition.AddY(0.5f), Vector3.down);
+
+            Physics.Raycast(_ray, out var _hit, 0.55f, farmGroundLayer);
+            return _hit;
         }
 
         public void ShowToolAreaBox(bool value_)
@@ -154,21 +147,20 @@ namespace Farming
             lineRenderer.enabled = ShowLine; 
         }
 
+        #endregion
+        
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.blue;
             if(vertices == null) return;
             if(vertices.Length == 0) return;
-            
-            foreach (var _pos in vertices)
+
+            for (int i = 0; i < lineRenderer.positionCount; i++)
             {
-                // var _vertPos = _pos;
-                //var _rayUp = new Ray(transform.position.AddY(0.1f), Vector3.up);
+                var _pos = lineRenderer.GetPosition(i) + transform.position;
                 Gizmos.DrawLine(_pos, _pos + Vector3.up * 1.1f);
             }
         }
-
-        #endregion
     }
 }
 

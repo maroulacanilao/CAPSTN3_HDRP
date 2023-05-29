@@ -77,7 +77,7 @@ namespace UI.InventoryMenu
                 return;
             }
         
-            valueTxt.SetText($"Value: {_data.ItemBaseValue} gold");
+            valueTxt.SetText($"Value: {_data.SellValue} gold");
             nameTxt.SetText(_data.ItemName);
             typeTxt.SetText(currItem.ItemType.ToString());
             rarityTxt.SetText(currItem.RarityType.ToString());

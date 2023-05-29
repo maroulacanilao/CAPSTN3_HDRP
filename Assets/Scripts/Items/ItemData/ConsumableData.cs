@@ -12,8 +12,6 @@ namespace Items.ItemData
         
         [field: NaughtyAttributes.InfoBox("Effect on Enemy when used")]
         [field: SerializeField] public StatusEffectBase UseEffect { get; private set; }
-        
-        [field: SerializeField] public bool IsStackable { get; private set; } = true;
 
         [field: SerializeField] [field: MinValue(1)] [field: ShowIf("IsStackable")]
         public int maxPossibleDropCount { get; private set; } = 1;
@@ -21,11 +19,13 @@ namespace Items.ItemData
         private void Reset()
         {
             ItemType = ItemType.Consumable;
+            IsStackable = true;
         }
 
         protected override void OnValidate()
         {
             ItemType = ItemType.Consumable;
+            IsStackable = true;
         }
     }
 }

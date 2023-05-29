@@ -1,4 +1,5 @@
 using System;
+using Character.CharacterComponents;
 using NaughtyAttributes;
 using UnityEngine;
 

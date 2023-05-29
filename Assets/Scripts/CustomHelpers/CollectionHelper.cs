@@ -165,6 +165,12 @@ namespace CustomHelpers
             return list[UnityEngine.Random.Range(0, list.Count)];
         }
         
+        public static T GetRandomFromCollection<T>(this ICollection<T> source_)
+        {
+            if (source_ == null) throw new IndexOutOfRangeException("Cannot select a random item from an empty list");
+            return source_.ElementAt(UnityEngine.Random.Range(0, source_.Count));
+        }
+        
         /// <summary>
         /// Return a random item from the list with a specified item excluded.
         /// </summary>

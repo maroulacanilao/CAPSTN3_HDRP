@@ -17,14 +17,14 @@ namespace Managers
         [SerializeField] private float timeScale = 1; // 1 second in real time = 1 minute in game
 
         [Header("Events")]
-        public static readonly Evt<TimeManager> OnMinuteTick = new Evt<TimeManager>();
-        public static readonly Evt<TimeManager> OnHourTick = new Evt<TimeManager>();
-        public static readonly Evt<TimeManager> OnEndDay = new Evt<TimeManager>();
-        public static readonly Evt<TimeManager> OnBeginDay = new Evt<TimeManager>();
-        public static readonly Evt<TimeManager> OnNewWeek = new Evt<TimeManager>();
-        public static readonly Evt<TimeManager> OnNewMonth = new Evt<TimeManager>();
-        public static readonly Evt<TimeManager, bool> OnPauseTime = new Evt<TimeManager, bool>();
-        public static readonly Evt<TimeManager> OnNightTime = new Evt<TimeManager>();
+        public static readonly Evt OnMinuteTick = new Evt();
+        public static readonly Evt OnHourTick = new Evt();
+        public static readonly Evt OnEndDay = new Evt();
+        public static readonly Evt OnBeginDay = new Evt();
+        public static readonly Evt OnNewWeek = new Evt();
+        public static readonly Evt OnNewMonth = new Evt();
+        public static readonly Evt<bool> OnPauseTime = new Evt<bool>();
+        public static readonly Evt OnNightTime = new Evt();
 
         private bool isTimePaused = false;
         private int dayCounter = 0;
@@ -89,7 +89,7 @@ namespace Managers
             // reset hour to starting hour
             dateTime = dateTime.AddHours(startingHour);
 
-            OnBeginDay.Invoke(this);
+            OnBeginDay.Invoke();
 
             isTimePaused = true;
             //TODO: remove this
@@ -133,14 +133,14 @@ namespace Managers
             // reset hour to starting hour
             Instance.dateTime = DateTime.AddHours(Instance.startingHour);
 
-            OnBeginDay.Invoke(Instance);
+            OnBeginDay.Invoke();
 
             // check if new week month or year
-            if (CurrentDay == DayOfWeek.Monday) OnNewWeek.Invoke(Instance);
-            if (_prevDateTime.Month != DateTime.Month) OnNewMonth.Invoke(Instance);
+            if (CurrentDay == DayOfWeek.Monday) OnNewWeek.Invoke();
+            if (_prevDateTime.Month != DateTime.Month) OnNewMonth.Invoke();
             
-            OnMinuteTick.Invoke(Instance);
-            OnHourTick.Invoke(Instance);
+            OnMinuteTick.Invoke();
+            OnHourTick.Invoke();
 
             timerCTS?.Cancel();
             timerCTS?.Dispose();
@@ -159,7 +159,7 @@ namespace Managers
             didDayStart = false;
 
             // for checking if game over and other visual things
-            OnEndDay.Invoke(this);
+            OnEndDay.Invoke();
         }
 
         [NaughtyAttributes.Button("Pause Time")]
@@ -168,7 +168,7 @@ namespace Managers
             timerCTS.Cancel();
             isTimePaused = true;
             isTimeLoopRunning = false;
-            OnPauseTime.Invoke(Instance, Instance.isTimePaused);
+            OnPauseTime.Invoke(Instance.isTimePaused);
             PlayerInputController.OnPlayerCanMove.Invoke(false);
         }
 
@@ -178,7 +178,7 @@ namespace Managers
             if(!isTimePaused) return;
             isTimePaused = false;
             
-            OnPauseTime.Invoke(Instance, Instance.isTimePaused);
+            OnPauseTime.Invoke(Instance.isTimePaused);
             
             timerCTS?.Cancel();
             timerCTS?.Dispose();
@@ -212,15 +212,15 @@ namespace Managers
             if(isTimePaused) return;
             
             dateTime = dateTime.AddMinutes(1);
-            OnMinuteTick.Invoke(this);
+            OnMinuteTick.Invoke();
 
             if (CurrentMinute != 0) return;
                 
-            OnHourTick.Invoke(this);
+            OnHourTick.Invoke();
 
             if (CurrentHour == nightHour)
             {
-                OnNightTime.Invoke(this);
+                OnNightTime.Invoke();
             }
 
             if (CurrentHour < endingHour) return;

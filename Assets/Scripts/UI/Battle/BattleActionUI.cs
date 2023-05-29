@@ -151,7 +151,7 @@ namespace UI.Battle
     
         private IEnumerator Co_Spell(BattleCharacter target_)
         {
-            yield return player.spellUser.UseSkill(SpellBtnItemUI.currIndex, target_);
+            yield return player.spellUser.UseSpell(SpellBtnItemUI.currIndex, target_);
             BattleManager.OnPlayerEndDecide.Invoke();
         }
         

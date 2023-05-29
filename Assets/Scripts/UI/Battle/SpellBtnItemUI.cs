@@ -1,5 +1,6 @@
 using System;
 using Character;
+using Character.CharacterComponents;
 using CustomEvent;
 using Spells.Base;
 using TMPro;

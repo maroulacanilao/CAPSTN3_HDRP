@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Items.Inventory;
 using NaughtyAttributes;
 using ScriptableObjectData.CharacterData;
+using Trading;
 using UnityEngine;
 
 namespace ScriptableObjectData
@@ -11,10 +12,13 @@ namespace ScriptableObjectData
     {
         [field: SerializeField] public ItemDatabase itemDatabase { get; private set; }
         [field: SerializeField] private List<EnemyData> enemyDataList { get; set; }
+        
+        [field: SerializeField] public List<RequestOrderTemplate> requestOrderTemplates { get; private set; }
     
         [field: Header("PlayerFields")]
         [field: SerializeField] public PlayerData playerData { get; private set; }
         [field: SerializeField] public PlayerInventory playerInventory { get; private set; }
+        [field: SerializeField] public SeedDataBase seedDataBase { get; private set; }
 
         private Dictionary<int, EnemyData> enemyDataDictionary = new Dictionary<int, EnemyData>();
     
@@ -26,10 +30,13 @@ namespace ScriptableObjectData
             {
                 enemyDataDictionary.Add(_enemyData.characterID, _enemyData);
             }
+            playerData.Initialize(this);
+            //seedDataBase.Initialize(playerData.playerLevelData.CurrentLevel);
         }
     
         public void DeInitialize()
         {
+            playerData.DeInitialize();
         }
     
         public EnemyData GetEnemyData(int enemyID_)
@@ -48,6 +55,18 @@ namespace ScriptableObjectData
             foreach (var _data in _enemiesData)
             {
                 enemyDataList.Add(_data);
+            }
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        
+        [Button(" Get All Request Template")]
+        private void GetAllRequestTemplate()
+        {
+            requestOrderTemplates = new List<RequestOrderTemplate>();
+            var _requestTemplates = Resources.LoadAll<RequestOrderTemplate>("Data/RequestTemplates");
+            foreach (var _data in _requestTemplates)
+            {
+                requestOrderTemplates.Add(_data);
             }
             UnityEditor.EditorUtility.SetDirty(this);
         }

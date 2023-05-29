@@ -1,23 +1,27 @@
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using BaseCore;
+using CustomEvent;
 using CustomHelpers;
 using Items;
 using Items.ItemData;
 using Managers;
 using NaughtyAttributes;
+using UI.Farming;
 using UnityEngine;
 
 namespace Farming
 {
-    public class FarmTile : MonoBehaviour
+    public class FarmTile : MonoBehaviour, IDamagable, IHealable
     {
         [field: SerializeField] public SpriteRenderer soilRenderer { get; private set; }
         [field: SerializeField] public SpriteRenderer plantRenderer { get; private set; }
-        
         [field: SerializeField] public Color tilledColor { get; private set; }
         [field: SerializeField] public Color wateredColor { get; private set; }
+        [field: SerializeField] public int maxHealth { get; private set; }
 
+        public GenericHealth health { get; private set; }
         public DateTime datePlanted { get; set; }
 
         public SeedData seedData { get; set; }
@@ -44,8 +48,8 @@ namespace Farming
                 }
             }
         }
-        
-        public TileState tileState => currentState.tileState;
+
+        public TileState tileState => currentState?.tileState ?? TileState.Empty;
 
         #region States
         
@@ -57,11 +61,15 @@ namespace Farming
         #endregion
         
         [SerializeReference] private FarmTileState currentState;
-        
+
+        public readonly Evt<TileState> OnChangeState = new Evt<TileState>();
+
         public FarmTile Initialize()
         {
             defaultSoilSprite = soilRenderer.sprite;
             defaultPlantSprite = plantRenderer.sprite;
+
+            health = new GenericHealth(maxHealth);
             
             emptyTileState = new EmptyTileState(this);
             plantedTileState = new PlantedTileState(this);
@@ -71,12 +79,14 @@ namespace Farming
             ChangeState(emptyTileState);
             return this;
         }
-
+        
         public void ChangeState(FarmTileState farmTileState_)
         {
             currentState?.ExitLogic();
             currentState = farmTileState_;
             currentState?.EnterLogic();
+            
+            OnChangeState.Invoke(tileState);
         }
 
         public void OnWaterPlant()
@@ -91,7 +101,19 @@ namespace Farming
         
         public void OnInteract()
         {
+            if(tileState != TileState.ReadyToHarvest) return;
+            
             currentState?.Interact();
+        }
+        
+        public void TakeDamage(DamageInfo damageInfo_)
+        {
+            health.AddHealth(-damageInfo_.DamageAmount);
+        }
+        
+        public void Heal(HealInfo healInfo_, bool isOverHeal_ = false)
+        {
+            health.AddHealth(healInfo_.HealAmount);
         }
     }
 }

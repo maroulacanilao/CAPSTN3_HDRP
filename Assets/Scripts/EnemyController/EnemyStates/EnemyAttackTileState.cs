@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using BaseCore;
 using CustomHelpers;
 using Farming;
 using UnityEngine;
@@ -8,9 +9,14 @@ namespace EnemyController.EnemyStates
     [System.Serializable]
     public class EnemyAttackTileState : EnemyControllerState
     {
-        IEnumerator attackCoroutine;
+        private readonly DamageInfo damageInfo;
         public EnemyAttackTileState(EnemyAIController aiController_, EnemyStateMachine stateMachine_) : base(aiController_, stateMachine_)
         {
+            damageInfo = new DamageInfo()
+            {
+                DamageAmount = 10,
+                Source = controller.gameObject
+            };
         }
 
         public override void Enter()
@@ -36,13 +42,14 @@ namespace EnemyController.EnemyStates
                 Debug.Log("Not Within Attack Range");
                 return;
             }
-            Debug.Log("Damage " + stateMachine.targetTile.name);
-            
+            stateMachine.targetTile.TakeDamage(damageInfo);
         }
 
         private IEnumerator Co_AttackTile()
         {
-            while (IsWithinAttackRange(stateMachine.tileCol) && this.isStateActive)
+            while (this.isStateActive 
+                   && IsWithinAttackRange(stateMachine.tileCol) 
+                   && stateMachine.targetTile.tileState!= TileState.Empty)
             {
                 Debug.Log("ATTACK Coroutine");
                 controller.animator.SetTrigger(controller.AttackHash);

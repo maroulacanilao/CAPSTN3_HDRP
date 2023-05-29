@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using BattleSystem;
 using Character;
+using Character.CharacterComponents;
 using UnityEngine;
 
 namespace Spells.Base

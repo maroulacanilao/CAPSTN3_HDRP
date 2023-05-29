@@ -61,7 +61,7 @@ namespace UI.LootMenu
                 return;
             }
         
-            valueTxt.SetText($"Value: {_data.ItemBaseValue}");
+            valueTxt.SetText($"Value: {_data.SellValue}");
             nameTxt.SetText(_data.ItemName);
             typeTxt.SetText(_currItem.ItemType.ToString());
             rarityTxt.SetText(_currItem.RarityType.ToString());

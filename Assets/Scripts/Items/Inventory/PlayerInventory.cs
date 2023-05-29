@@ -41,8 +41,11 @@ namespace Items.Inventory
         private ItemArmor armorEquipped;
 
         [ReadOnly] [SerializeReference] private Item[] itemTools;
-        [ReadOnly]  private SerializedDictionary<ItemData.ItemData, ItemStackable> stackableDictionary;
-        [ReadOnly]  private SerializedDictionary<int, Item> itemStorageDictionary = new SerializedDictionary<int, Item>();
+        [ReadOnly] private SerializedDictionary<ItemData.ItemData, ItemStackable> stackableDictionary;
+        [ReadOnly] private SerializedDictionary<int, Item> itemStorageDictionary;
+        [ReadOnly] private SerializedDictionary<ItemData.ItemData, List<Item>> lookupDictionary;
+        
+        
 
         #region Getters
 
@@ -51,6 +54,7 @@ namespace Items.Inventory
         public ItemGold Gold => gold;
         public Item[] ItemTools => itemTools;
         public int GoldAmount => gold.GoldAmount;
+        public SerializedDictionary<ItemData.ItemData, List<Item>> itemsLookup => lookupDictionary;
 
         #endregion
 
@@ -62,8 +66,6 @@ namespace Items.Inventory
             gold = new ItemGold(itemDatabase.GoldItemData, startingMoney);
             itemTools = new Item[4];
 
-            stackableDictionary = new SerializedDictionary<ItemData.ItemData, ItemStackable>();
-            
             ResetItemStorage();
 
             for (int i = 0; i < startingTools.Length; i++)
@@ -82,8 +84,11 @@ namespace Items.Inventory
         public void DeInitializeInventory()
         {
             InventoryEvents.OnUpdateStackable.RemoveListener(UpdateStackable);
-            itemStorageDictionary = new SerializedDictionary<int, Item>();
+            
+            itemStorageDictionary?.Clear();
             stackableDictionary?.Clear();
+            lookupDictionary?.Clear();
+            
             gold = null;
             itemTools = null;
             hasInitialized = false;
@@ -92,6 +97,8 @@ namespace Items.Inventory
         private void ResetItemStorage()
         {
             itemStorageDictionary = new SerializedDictionary<int, Item>();
+            stackableDictionary = new SerializedDictionary<ItemData.ItemData, ItemStackable>();
+            lookupDictionary = new SerializedDictionary<ItemData.ItemData, List<Item>>();
         }
 
         public bool AddItem(Item item_)
@@ -122,6 +129,16 @@ namespace Items.Inventory
             if (_openIndex == -1) return false;
             
             itemStorageDictionary.Add(_openIndex, item_);
+            
+            if(lookupDictionary.TryGetValue(item_.Data, out var _list)) 
+            {
+                _list.Add(item_);
+            }
+            else
+            {
+                lookupDictionary.Add(item_.Data, new List<Item>(){item_});
+            }
+            
             InventoryEvents.OnUpdateInventory.Invoke(this);
             return true;
         }
@@ -148,7 +165,20 @@ namespace Items.Inventory
             }
             return -1;
         }
-
+        
+        /// <summary>
+        /// remove item in storage, on hand or in equipped slot.
+        /// </summary>
+        /// <param name="item_"></param>
+        public void RemoveItem(Item item_)
+        {
+            if(item_ == weaponEquipped) DiscardEquippedWeapon();
+            else if(item_ == armorEquipped) DiscardEquippedArmor();
+            else if(itemTools.Contains(item_)) RemoveItemInHand(item_);
+            else RemoveItemInStorage(item_);
+        }
+        
+        
         public void RemoveItemInStorage(int index_)
         {
             if(index_ == -1) return;
@@ -156,6 +186,9 @@ namespace Items.Inventory
             {
                 stackableDictionary.Remove(itemStorageDictionary[index_].Data);
             }
+
+            lookupDictionary[itemStorageDictionary[index_].Data].Remove(itemStorageDictionary[index_]);
+            if(lookupDictionary[itemStorageDictionary[index_].Data].Count == 0) lookupDictionary.Remove(itemStorageDictionary[index_].Data);
             
             itemStorageDictionary.Remove(index_);
             InventoryEvents.OnUpdateInventory.Invoke(this);
@@ -179,6 +212,17 @@ namespace Items.Inventory
             if(itemTools[index_].IsStackable) stackableDictionary.Remove(itemTools[index_].Data);
             itemTools[index_] = null;
             InventoryEvents.OnItemOnHandUpdate.Invoke(index_, null);
+        }
+
+        public void RemoveItemInHand(Item item_)
+        {
+            if(!item_.IsToolable) return;
+            for (int i = 0; i < itemTools.Length; i++)
+            {
+                if (itemTools[i] != item_) continue;
+                RemoveItemInHand(i);
+                return;
+            }
         }
 
         public bool IsItemOnToolBar(Item item_, out int index_)

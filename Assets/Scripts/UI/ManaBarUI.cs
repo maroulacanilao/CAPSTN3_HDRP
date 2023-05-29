@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Character;
+using Character.CharacterComponents;
 using DG.Tweening;
 using TMPro;
 

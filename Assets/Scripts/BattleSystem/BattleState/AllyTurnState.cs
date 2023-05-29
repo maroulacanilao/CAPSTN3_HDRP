@@ -14,17 +14,17 @@ namespace BattleSystem.BattleState
         {
             yield break;
         }
-        public override IEnumerator StartTurn()
+        protected override IEnumerator StartTurn()
         {
             yield break;
         }
 
-        public override IEnumerator TurnLogic()
+        protected override IEnumerator TurnLogic()
         {
             yield break;
         }
-        
-        public override IEnumerator EndTurn()
+
+        protected override IEnumerator EndTurn()
         {
             yield break;
         }

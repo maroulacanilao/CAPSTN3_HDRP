@@ -12,7 +12,7 @@ namespace UI
         private void Awake()
         {
             TimeManager.OnMinuteTick.AddListener(UpdateText);
-            UpdateText(TimeManager.Instance);
+            UpdateText();
         }
     
         private void OnDestroy()
@@ -20,7 +20,7 @@ namespace UI
             TimeManager.OnMinuteTick.RemoveListener(UpdateText);
         }
 
-        private void UpdateText(TimeManager timeManager_)
+        private void UpdateText()
         {
             Time_TXT.SetText(TimeManager.DateTime.ToString("hh:mm tt"));
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using CustomHelpers;
+using UI.Battle;
 
 namespace BattleSystem.BattleState
 {
@@ -14,8 +15,10 @@ namespace BattleSystem.BattleState
 
         public override IEnumerator Enter()
         {
-            Debug.Log("Start Battle");
-            yield return new WaitForSeconds(2f);
+            yield return null;
+
+            yield return BattleTextManager.DoWrite("Battle Start!");
+            
             yield return StateMachine.NextTurnState();
         }
 

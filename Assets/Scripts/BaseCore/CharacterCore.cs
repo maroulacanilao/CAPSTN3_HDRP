@@ -1,28 +1,27 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using BattleSystem;
 using Character;
 using ScriptableObjectData.CharacterData;
 using UnityEngine;
 
-public abstract class CharacterCore : MonoBehaviour
+namespace BaseCore
 {
-    [field: SerializeField] public CharacterBase character { get; private set; }
-    public BattleCharacter battleCharacter { get; private set; }
-    public CharacterData characterData { get; private set; }
-
-    protected void Awake()
+    public abstract class CharacterCore
     {
-        if(character == null) character = GetComponentInParent<CharacterBase>();
-        characterData = character.characterData;
+        [field: SerializeField] public CharacterBase character { get; private set; }
+        public BattleCharacter battleCharacter { get; private set; }
+        public CharacterData characterData { get; private set; }
 
-        if (character.TryGetComponent(out BattleCharacter _battleCharacter))
+    
+        public CharacterCore(CharacterBase character_)
         {
-            battleCharacter = _battleCharacter;
+            character = character_;
+            characterData = character_.characterData;
+            if (character.TryGetComponent(out BattleCharacter _battleCharacter))
+            {
+                battleCharacter = _battleCharacter;
+            }
         }
-        Initialize();
+    
+        public virtual void OnCharacterEnable() {}
     }
-
-    protected abstract void Initialize();
 }

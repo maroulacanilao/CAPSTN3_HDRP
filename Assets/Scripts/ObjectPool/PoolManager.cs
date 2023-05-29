@@ -49,7 +49,7 @@ namespace ObjectPool
             _pool.DestroyPool(willDestroyActive_);
             pools.Remove(prefab_);
         }
-
+        
         #region Getters and returns
         
         public GameObject Get(GameObject prefab_)
@@ -177,6 +177,23 @@ namespace ObjectPool
             Instance.Return(obj_);
         }
         
+        public static void DestroyPoolInstance(GameObject prefab_, bool willDestroyActive_ = false)
+        {
+            if(!Instance.pools.TryGetValue(prefab_, out Pool _pool)) return;
+            
+            _pool.DestroyPool(willDestroyActive_);
+            Instance.pools.Remove(prefab_);
+        }
+        
+        public static void DestroyAllPoolInstances(bool willDestroyActive_ = false)
+        {
+            foreach (var _pair in Instance.pools)
+            {
+                _pair.Value.DestroyPool(willDestroyActive_);
+            }
+            Instance.pools.Clear();
+        }
+
         #endregion
     }
 }

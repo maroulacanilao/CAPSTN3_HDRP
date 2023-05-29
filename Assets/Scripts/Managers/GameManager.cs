@@ -24,9 +24,10 @@ namespace Managers
         
         [field: SerializeField] [field: NaughtyAttributes.Scene]
         public string BattleSceneName { get; private set; }
-
+        
         public PlayerData PlayerData => GameDataBase.playerData;
         
+        public PlayerCharacter playerOnFarm { get; private set;}
         public GameObject currentEnemy { get; private set; }
         
         public static readonly Evt<EnemyCharacter> OnEnterBattle = new Evt<EnemyCharacter>();
@@ -36,14 +37,16 @@ namespace Managers
         {
             base.Awake();
             ItemHelper.Initialize(GameDataBase);
-            PlayerData.Initialize(GameDataBase);
+            GameDataBase.Initialize();
             OnEnterBattle.AddListener(EnterBattle);
             OnExitBattle.AddListener(ExitBattle);
+            
+            playerOnFarm = GameObject.FindWithTag("Player").GetComponent<PlayerCharacter>();
         }
 
         protected void OnDestroy()
         {
-            PlayerData.DeInitialize();
+            GameDataBase.DeInitialize();
             OnEnterBattle.RemoveListener(EnterBattle);
             OnExitBattle.RemoveListener(ExitBattle);
         }

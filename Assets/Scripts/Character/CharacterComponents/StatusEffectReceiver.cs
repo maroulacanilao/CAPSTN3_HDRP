@@ -1,15 +1,18 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using BattleSystem;
+using AYellowpaper.SerializedCollections;
+using BaseCore;
 using BattleSystem.BattleState;
 using CustomEvent;
 using CustomHelpers;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-namespace Character
+namespace Character.CharacterComponents
 {
+    
+    [System.Serializable]
     public class StatusEffectReceiver : CharacterCore
     {
         private Transform container;
@@ -18,32 +21,41 @@ namespace Character
 
         public Evt<StatusEffectBase, StatusEffectReceiver> OnApply = new Evt<StatusEffectBase, StatusEffectReceiver>();
         public Evt<StatusEffectBase, StatusEffectReceiver> OnRemove = new Evt<StatusEffectBase, StatusEffectReceiver>();
-        private Dictionary<int, StatusEffectBase> StatusEffectsDictionary;
+        
+        private SerializedDictionary<int, StatusEffectBase> StatusEffectsDictionary;
 
-        protected override void Initialize()
+        public StatusEffectReceiver(CharacterBase character_) : base(character_)
         {
-            StatusEffectsDictionary = new Dictionary<int, StatusEffectBase>();
+            StatusEffectsDictionary = new SerializedDictionary<int, StatusEffectBase>();
             container = new GameObject("StatusEffect Container").transform;
-            container.parent = gameObject.transform;
+            container.parent = character.transform;
             container.localPosition = Vector3.zero;
         }
         
+        ~StatusEffectReceiver()
+        {
+            foreach (var _effect in StatusEffectsDictionary.Values)
+            {
+                Object.Destroy(_effect.gameObject);
+            }
+        }
+
         public bool ApplyStatusEffect(StatusEffectBase effect_, GameObject source_ = null)
         {
-            // if stackable and status effect already in effect
-            if (effect_.IsStackable && StatusEffectsDictionary.TryGetValue(effect_.ID, out var _effect))
+            if (StatusEffectsDictionary.TryGetValue(effect_.ID, out var _effect))
             {
+                if (!_effect.IsStackable) return false;
+                
                 _effect.StackEffect(effect_);
                 return true;
             }
-            if(!effect_.IsStackable && StatusEffectsDictionary.ContainsKey(effect_.ID)) return false;
+            effect_.transform.ResetTransformation();
+            effect_.transform.SetParent(container);
             
-            var _effectInstance = Instantiate(effect_, Vector3.zero, Quaternion.identity, container);
+            StatusEffectsDictionary.Add(effect_.ID, effect_);
 
-            StatusEffectsDictionary.Add(effect_.ID, _effectInstance);
-
-            _effectInstance.Activate(this, source_);
-            OnApply?.Invoke(_effectInstance, this);
+            effect_.Activate(this, source_);
+            OnApply?.Invoke(effect_, this);
             return true;
         }
 
@@ -88,6 +100,22 @@ namespace Character
             foreach (var _null in _nulls)
             {
                 StatusEffectsDictionary.Remove(_null.Key);
+            }
+        }
+        
+        public void RemoveAllStatusEffect()
+        {
+            foreach (var _effect in StatusEffectsDictionary.Values.ToList())
+            {
+                RemoveStatusEffect(_effect);
+            }
+        }
+        
+        public void TransferStatusEffect(StatusEffectReceiver target_)
+        {
+            foreach (var _effect in StatusEffectsDictionary.Values.ToList())
+            {
+                target_.ApplyStatusEffect(_effect);
             }
         }
     }

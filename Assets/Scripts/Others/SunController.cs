@@ -22,7 +22,7 @@ public class SunController : MonoBehaviour
         TimeManager.OnHourTick.AddListener(CheckNight);
     }
 
-    private void UpdateRotation(TimeManager timeManager_)
+    private void UpdateRotation()
     {
         float _alpha = TimeManager.GameTime / 24f;
         float _sunRotation = Mathf.Lerp(-90, 270, _alpha);
@@ -32,7 +32,7 @@ public class SunController : MonoBehaviour
         moon.transform.localRotation = Quaternion.Euler(_moonRotation, yRotation, 0);
     }
     
-    private void CheckNight(TimeManager timeManager_)
+    private void CheckNight()
     {
         switch (TimeManager.CurrentHour)
         {

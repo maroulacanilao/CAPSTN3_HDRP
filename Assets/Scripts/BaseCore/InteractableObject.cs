@@ -10,14 +10,16 @@ namespace BaseCore
         public static readonly Evt<InteractableObject> OnEnter = new Evt<InteractableObject>();
         public static readonly Evt<InteractableObject> OnExit = new Evt<InteractableObject>();
 
-        private void OnEnable()
+        protected bool isEfectActive;
+        
+        protected virtual void OnEnable()
         {
             OnInteract.AddListener(InteractWrapper);
             OnEnter.AddListener(EnterWrapper);
             OnExit.AddListener(ExitWrapper);
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             OnInteract.RemoveListener(InteractWrapper);
             OnEnter.RemoveListener(EnterWrapper);
@@ -32,13 +34,20 @@ namespace BaseCore
     
         private void EnterWrapper(InteractableObject obj_)
         {
-            if(obj_ != this) return;
+            if (obj_ != this)
+            {
+                if(isEfectActive) Exit();
+                return;
+            }
+            
+            isEfectActive = true;
             Enter();
         }
 
         private void ExitWrapper(InteractableObject obj_)
         {
             if(obj_ != this) return;
+            isEfectActive = false;
             Exit();
         }
 

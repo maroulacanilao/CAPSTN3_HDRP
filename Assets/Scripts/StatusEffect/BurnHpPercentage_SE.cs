@@ -3,13 +3,16 @@ using BaseCore;
 using BattleSystem;
 using BattleSystem.BattleState;
 using CustomHelpers;
+using UI.Battle;
 using UnityEngine;
 
 namespace StatusEffect
 {
-    public class BurnPercentage_SE : StatusEffectBase
+    public class BurnHpPercentage_SE : StatusEffectBase
     {
         [Range(0,1f)] [SerializeField] private float damagePercentage = 0.1f;
+        
+        
         protected override void OnActivate()
         {
         
@@ -22,14 +25,15 @@ namespace StatusEffect
         
         protected override void OnStackEffect(StatusEffectBase newEffect_)
         {
-            RefreshStatusEffect();
+            turnsLeft += turnDuration;
         }
         
         protected override IEnumerator OnBeforeTurnTick(TurnBaseState ownerTurnState_)
         {
             var _hpCom = Target.character.health;
             var _amount = Mathf.RoundToInt(_hpCom.MaxHp * damagePercentage);
-            turns++;
+            
+            turnsLeft--;
             
             DamageInfo _damageInfo = new DamageInfo(_amount, Source);
             AttackResult _attackResult = new AttackResult()
@@ -38,9 +42,16 @@ namespace StatusEffect
                 damageInfo = _damageInfo
             };
             Target.battleCharacter.Hit(_attackResult);
-            yield return CoroutineHelper.GetWait(0.5f);
-            Debug.Log($"{Target.CharacterName} was burned for {_amount} damage");
-            yield return CoroutineHelper.GetWait(0.2f);
+
+            var _msg = BattleText
+                .Replace("NAME", characterName)
+                .Replace("DMG", _damageInfo.DamageAmount.ToString());
+
+            yield return null;
+            
+            yield return BattleTextManager.DoWrite(_msg);
+            
+            yield return CoroutineHelper.GetWait(0.1f);
 
         }
     }

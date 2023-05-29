@@ -1,5 +1,6 @@
 using System.Collections;
 using Character;
+using Character.CharacterComponents;
 using DG.Tweening;
 using ScriptableObjectData.CharacterData;
 using TMPro;
@@ -15,15 +16,19 @@ namespace UI.HUD
 
         private CharacterMana characterMana;
         private PlayerData playerData;
-        protected override void Awake()
+        
+        protected override void Start()
         {
-            base.Awake();
+            base.Start();
             characterMana = character.mana;
             playerData = character.characterData as PlayerData;
             characterMana.OnUseMana.AddListener(UpdateMana);
             characterMana.OnAddMana.AddListener(UpdateMana);
             characterHealth.OnManuallyUpdateHealth.AddListener(ManuallyUpdateHealthBar);
             characterMana.OnManuallyUpdateMana.AddListener(ManuallyUpdateManaBar);
+            
+            ManuallyUpdateHealthBar(characterHealth);
+            ManuallyUpdateManaBar(characterMana);
         }
         
         private void OnDestroy()
@@ -32,12 +37,6 @@ namespace UI.HUD
             characterMana.OnManuallyUpdateMana.RemoveListener(ManuallyUpdateManaBar);
             characterMana.OnUseMana.RemoveListener(UpdateMana);
             characterMana.OnAddMana.RemoveListener(UpdateMana);
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            //StartCoroutine(UpdateValues());
         }
 
         private void UpdateMana(CharacterMana characterMana_)
@@ -55,12 +54,6 @@ namespace UI.HUD
             {
                 mana_TXT.text = $"Mana: {_prevVal}/{characterMana.MaxMana}";
             });
-        }
-
-        private IEnumerator UpdateValues()
-        {
-            yield return null;
-            //
         }
 
         private void ManuallyUpdateHealthBar(CharacterHealth characterHealth_)

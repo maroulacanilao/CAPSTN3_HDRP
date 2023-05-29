@@ -40,7 +40,7 @@ public class MainLightManager : Singleton<MainLightManager>
         TimeManager.OnMinuteTick.AddListener(UpdateLight);
     }
 
-    private void UpdateLight(TimeManager timeManager_)
+    private void UpdateLight()
     {
         bool isDay = TimeManager.GameTime >= DayTime && TimeManager.GameTime < NightTime;
         var _scaledTime = isDay ? ScaledTime() : 1;

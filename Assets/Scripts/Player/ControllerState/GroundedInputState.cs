@@ -25,16 +25,20 @@ namespace Player.ControllerState
             if(!canInput) return;
             if (InputManager.InteractAction.triggered)
             {
+
                 player.interactDetector.Interact();
+                return;
             }
             if (InputManager.UseToolAction.triggered)
             {
                 //TODO: Add Use Tool State
                 player.playerEquipment.UseTool();
+                return;
             }
             if(InputManager.MenuAction.triggered)
             {
                 FarmUIManager.Instance.OpenMenu();
+                return;
             }
             if (CanJump())
             {
@@ -51,7 +55,6 @@ namespace Player.ControllerState
         public override void PhysicsUpdate()
         {
             MovementUpdate();
-            UpdateToolArea();
             if(IsPlayerFalling()) return;
             rb.velocity = rb.velocity.SetY(0);
         }

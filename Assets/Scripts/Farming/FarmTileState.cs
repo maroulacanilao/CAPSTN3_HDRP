@@ -118,7 +118,7 @@ namespace Farming
 
         public override void Interact() { }
 
-        private void UpdateTimeRemaining(TimeManager timeManager_)
+        private void UpdateTimeRemaining()
         {
             if (!farmTile.isWatered) return;
             if (farmTile.minutesRemaining <= 0)

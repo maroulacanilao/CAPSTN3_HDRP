@@ -3,13 +3,13 @@ using ScriptableObjectData.CharacterData;
 
 namespace Character.CharacterComponents
 {
+    [System.Serializable]
     public class PlayerCharacterMana : CharacterMana
     {
         private PlayerData playerData;
         
-        protected override void Initialize()
+        public PlayerCharacterMana(CharacterBase character_) : base(character_)
         {
-            base.Initialize();
             playerData = characterData as PlayerData;
             InventoryEvents.OnUpdateInventory.AddListener(OnUpdateInventory);
             if(playerData.CurrentMana > 0) return;
@@ -17,9 +17,17 @@ namespace Character.CharacterComponents
             OnManuallyUpdateMana.Invoke(this);
         }
         
-        protected void OnDestroy()
+        ~PlayerCharacterMana()
         {
             InventoryEvents.OnUpdateInventory.RemoveListener(OnUpdateInventory);
+        }
+
+        public override void OnCharacterEnable()
+        {
+            var _hp = playerData != null ? playerData.CurrentHp : 0;
+            if(_hp <= 0) return;
+            CurrentMana = playerData.CurrentMana;
+            OnManuallyUpdateMana.Invoke(this);
         }
 
         protected override void SetCurrentMana(int newCurrMana_)
@@ -27,15 +35,7 @@ namespace Character.CharacterComponents
             base.SetCurrentMana(newCurrMana_);
             playerData.CurrentMana = CurrentMana;
         }
-        
-        protected void OnEnable()
-        {
-            var _hp = playerData != null ? playerData.CurrentHp : 0;
-            if(_hp <= 0) return;
-            CurrentMana = playerData.CurrentMana;
-            OnManuallyUpdateMana.Invoke(this);
-        }
-        
+
         private void OnUpdateInventory(PlayerInventory inventory)
         {
             SetCurrentMana(CurrentMana);

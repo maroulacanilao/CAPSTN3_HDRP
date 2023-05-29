@@ -20,7 +20,7 @@ namespace CustomHelpers
         /// <returns></returns>
         public static bool RandomBool(float probability_)
         {
-            return Random.Range(0, 1f) < probability_;
+            return Random.value < probability_;
         }
     }
 }

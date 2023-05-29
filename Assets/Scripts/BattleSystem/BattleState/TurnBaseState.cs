@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using CustomHelpers;
+using UnityEngine;
 
 namespace BattleSystem.BattleState
 {
@@ -13,17 +15,49 @@ namespace BattleSystem.BattleState
     public abstract class TurnBaseState : BattleStateBase
     {
         public BattleCharacter battleCharacter { get; protected set; }
-        
-        public TurnBaseState(BattleStateMachine stateMachine_, BattleCharacter battleCharacter_) : base(stateMachine_)
+
+        protected TurnBaseState(BattleStateMachine stateMachine_, BattleCharacter battleCharacter_) : base(stateMachine_)
         {
             battleCharacter = battleCharacter_;
             if (battleCharacter == null) throw new Exception("Character is null");
         }
-        public override abstract IEnumerator Enter();
-        public abstract IEnumerator StartTurn();
-        public abstract IEnumerator TurnLogic();
-        public abstract IEnumerator EndTurn();
-        public override abstract IEnumerator Exit();
+        
+        public override IEnumerator Enter()
+        {
+            if (!battleCharacter.character.IsAlive)
+            {
+                StateMachine.NextTurnState();
+            }
+            Debug.Log($"{battleCharacter.gameObject}'s Enter Turn");
+            yield return CoroutineHelper.GetWait(0.15f);
+            yield return battleCharacter.character.statusEffectReceiver.BeforeTurnTick(this);
+            yield return StartTurn();
+        }
+
+        protected virtual IEnumerator StartTurn()
+        {
+            Debug.Log($"{battleCharacter.gameObject}'s Turn");
+            yield return CheckForEndState();
+            yield return CoroutineHelper.GetWait(.2f);
+            yield return TurnLogic();
+        }
+
+        protected abstract IEnumerator TurnLogic();
+
+        protected virtual IEnumerator EndTurn()
+        {
+            yield return CoroutineHelper.GetWait(0.1f);
+            yield return battleCharacter.character.statusEffectReceiver.AfterTurnTick(this);
+            Debug.Log($"{battleCharacter.gameObject}'s End Turn");
+            
+            yield return CheckForEndState(true);
+        }
+        
+        public override IEnumerator Exit()
+        {
+            Debug.Log($"{battleCharacter.gameObject}'s Exit State");
+            yield break;
+        }
 
         protected IEnumerator CheckForEndState(bool willEndCurrentState_ = false)
         {

@@ -10,9 +10,10 @@ namespace Player
 {
     public class InteractDetector : MonoBehaviour
     {
+        [SerializeField] private Transform player;
         [SerializeField] private Vector3 offset, size;
         [SerializeField] private LayerMask interactableLayer;
-        [SerializeField] private float tickRate = 0.2f;
+        [SerializeField] private float tickRate = 0.25f;
         
         public InteractableObject nearestInteractable { get; private set; }
 
@@ -39,7 +40,7 @@ namespace Player
 
         private void GetNearestInteractable()
         {
-            var _pos = transform.position;
+            var _pos = player.position;
             Collider[] _colliders = new Collider[3];
             
             int _count = Physics.OverlapBoxNonAlloc(_pos + offset, size, 
@@ -59,9 +60,9 @@ namespace Player
                 return;
             }
 
-            if(nearestInteractable != null &&nearestInteractable.gameObject == _obj) return;
+            if(nearestInteractable != null && nearestInteractable.gameObject == _obj) return;
 
-            if (!nearestInteractable.IsUnityNull())
+            if (!nearestInteractable.IsUnityValid())
             {
                 InteractableObject.OnExit.Invoke(nearestInteractable);
             }

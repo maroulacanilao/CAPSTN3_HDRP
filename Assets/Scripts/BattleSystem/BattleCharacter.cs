@@ -2,6 +2,7 @@
 using System.Collections;
 using BaseCore;
 using Character;
+using Character.CharacterComponents;
 using CustomEvent;
 using CustomHelpers;
 using DG.Tweening;
@@ -25,10 +26,7 @@ namespace BattleSystem
 
         [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
         public CharacterBase character { get; private set; }
-        
-        [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
-        public SpellUser spellUser { get; private set; }
-        
+
         [field: SerializeField] [field: Required()] [field: BoxGroup("Components")]
         public CharacterController controller { get; private set; }
 
@@ -43,6 +41,8 @@ namespace BattleSystem
 
         [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
         public Animator animator { get; private set; }
+        
+        public SpellUser spellUser { get; protected set; }
 
         #endregion
         
@@ -89,7 +89,7 @@ namespace BattleSystem
         
         public CharacterHealth characterHealth => character.health;
         public CharacterMana characterMana => character.mana;
-        public virtual CombatStats TotalStats => character.statsData.GetTotalStats(Level);
+        public virtual CombatStats TotalStats => character.stats;
         public virtual CombatStats BaseStats => character.statsData.baseCombatStats;
 
         public abstract BattleCharacter Initialize(CharacterData characterData_, int level_);
@@ -97,6 +97,7 @@ namespace BattleSystem
         private void Awake()
         {
             defaultPosition = transform.position;
+            spellUser = new SpellUser(character);
         }
 
         private void OnEnable()

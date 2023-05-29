@@ -4,6 +4,7 @@ using BattleSystem;
 using Character;
 using CustomHelpers;
 using Spells.Base;
+using StatusEffect;
 using UnityEngine;
 
 namespace Spells
@@ -12,6 +13,9 @@ namespace Spells
     {
         [SerializeField]
         private Projectile projectile;
+        
+        [Range(0,1f)] [SerializeField] 
+        private float magicDmgBurnScale = .15f;
         
         protected override IEnumerator OnActivate()
         {
@@ -32,7 +36,11 @@ namespace Spells
             
             if (_atkResult.attackResultType != AttackResultType.Miss)
             {
-                target.character.statusEffectReceiver.ApplyStatusEffect(spellData.statusEffect, character.gameObject);
+                var _effectInstance = Instantiate(spellData.statusEffect, Vector3.zero, Quaternion.identity) as BurnFixedDamage_SE;
+                var _burnDmg = Mathf.RoundToInt(character.stats.magicDamage * magicDmgBurnScale);
+                
+                _effectInstance.SetDamage(_burnDmg);
+                target.character.statusEffectReceiver.ApplyStatusEffect(_effectInstance, character.gameObject);
             }
             battleCharacter.animator.SetTrigger(battleCharacter.moveAnimationHash);
             yield return CoroutineHelper.GetWait(0.2f);

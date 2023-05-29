@@ -1,70 +1,74 @@
 using System;
-using CustomHelpers;
 using Farming;
-using Managers;
-using Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CropUI : MonoBehaviour
+namespace UI.Farming
 {
-    [SerializeField] private GameObject panel;
-    [SerializeField] private TextMeshProUGUI cropNameText, timeTxt;
-    [SerializeField] private Image icon;
-
-    private FarmTile currTile;
-
-    private void Awake()
+    public class CropUI : MonoBehaviour
     {
-        FarmTileInteractable.OnEnterFarmTile.AddListener(Enter);
-        FarmTileInteractable.OnExitFarmTile.AddListener(Exit);
-        TimeManager.OnMinuteTick.AddListener(UpdateUI);
-        panel.SetActive(false);
-    }
-
-    private void Enter(FarmTile obj_)
-    {
-        if(obj_ == null) return;
+        [SerializeField] private GameObject panel;
+        [SerializeField] private TextMeshProUGUI cropNameText, timeTxt;
+        [SerializeField] private Image icon;
+        [SerializeField] private FarmTile tile;
         
-        currTile = obj_;
-        transform.position = currTile.transform.position.Add(0, 2.5f, 1f);
-        panel.SetActive(true);
-        var _produceData = currTile.seedData.produceData;
-        cropNameText.text = _produceData.ItemName;
-        icon.sprite = _produceData.Icon;
-        UpdateUI(TimeManager.Instance);
-    }
-
-    private void Exit(FarmTile obj_)
-    {
-        if(obj_ == null) return;
-        panel.SetActive(false);
-    }
-
-    private void UpdateUI(TimeManager timeManager_)
-    {
-        if(!panel.gameObject.activeSelf) return;
-        if (currTile == null || currTile.tileState == TileState.Empty)
+        private void OnEnable()
         {
-            panel.SetActive(false);
-            return;
+            UpdateUI(tile.tileState);
+            tile.OnChangeState.AddListener(UpdateUI);
         }
-        if(currTile.tileState == TileState.ReadyToHarvest)
-        {
-            timeTxt.text = "Ready To Harvest";
-            return;
-        }
-        var _totalMinutes = currTile.minutesRemaining;
-        timeTxt.text = $"{_totalMinutes / 60:00}:{_totalMinutes % 60:00}";
 
-    }
-    
-    private void OnEnable()
-    {
-        if (currTile == null)
+        private void OnDisable()
         {
-            panel.SetActive(false);
+            tile.OnChangeState.RemoveListener(UpdateUI);
+        }
+
+        private void UpdateUI(TileState state_)
+        {
+            panel.SetActive(tile.tileState != TileState.Empty && enabled);
+            
+            switch (tile.tileState)
+            {
+                case TileState.Empty:
+                {
+                    return;
+                }
+                case TileState.ReadyToHarvest:
+                {
+                    timeTxt.text = "Press F To Harvest";
+                    break;
+                }
+                case TileState.Planted:
+                {
+                    timeTxt.text = "Has not watered yet";
+                    break;
+                }
+                case TileState.Growing:
+                {
+                    var _totalMinutes = tile.minutesRemaining;
+                    timeTxt.text = $"{_totalMinutes / 60:00}:{_totalMinutes % 60:00}";
+                    break;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
+            cropNameText.text = tile.seedData.produceData.ItemName;
+            icon.sprite = tile.seedData.produceData.Icon;
+        }
+
+        private void Update()
+        {
+            if(!panel.activeSelf) return;
+
+            if (tile.tileState is 
+                TileState.Empty or TileState.ReadyToHarvest or TileState.Planted) return;
+
+            if (tile.tileState != TileState.Growing) return;
+            
+            var _totalMinutes = tile.minutesRemaining;
+            timeTxt.text = $"{_totalMinutes / 60:00}:{_totalMinutes % 60:00}";
         }
     }
 }

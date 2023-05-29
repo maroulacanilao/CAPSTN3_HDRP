@@ -29,7 +29,7 @@ namespace UI.EndDay
             
         }
 
-        private async void EndDay(TimeManager timeManager_)
+        private async void EndDay()
         {
             startDay_BTN.gameObject.SetActive(false);
             FarmUIManager.Instance.CloseAllUI();

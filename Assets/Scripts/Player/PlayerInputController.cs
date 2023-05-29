@@ -115,6 +115,7 @@ namespace Player
         private void FixedUpdate()
         {
             StateMachine.StateFixedUpdate();
+            UpdateToolPosition();
         }
         
         public void CanMove(bool canMove_)
@@ -123,6 +124,12 @@ namespace Player
             {
                 _component.enabled = canMove_;
             }
+        }
+
+        private void UpdateToolPosition()
+        {
+            if(rb.velocity.magnitude.IsApproximatelyTo(0)) return;
+            toolArea.UpdatePosition(StateMachine.direction, transform.position);
         }
     }
 }

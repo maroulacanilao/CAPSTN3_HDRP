@@ -102,11 +102,5 @@ namespace Player.ControllerState
             yield return new WaitForSeconds(waitTime_);
             StateMachine.ChangeState(StateMachine.GroundedState);
         }
-
-        protected void UpdateToolArea()
-        {
-            //Debug.Log(player.transform.position + StateMachine.direction);
-            player.toolArea.UpdatePosition(StateMachine.direction, player.transform.position);
-        }
     }
 }

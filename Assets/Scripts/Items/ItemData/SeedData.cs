@@ -19,11 +19,13 @@ namespace Items.ItemData
         private void Reset()
         {
             ItemType = ItemType.Seed;
+            IsStackable = true;
         }
 
         protected override void OnValidate()
         {
             ItemType = ItemType.Seed;
+            IsStackable = true;
         }
     }
 }

@@ -1,5 +1,6 @@
 using BaseCore;
 using Character;
+using Character.CharacterComponents;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -18,17 +19,13 @@ namespace UI.HUD
         
         Color originalColor;
         protected CharacterHealth characterHealth;
-        
-        protected virtual void Awake()
+
+        protected virtual void Start()
         {
             characterHealth = character.health;
             characterHealth.OnTakeDamage.AddListener(DamageEffect);
             characterHealth.OnHeal.AddListener(HealEffect);
             originalColor = hpBar.color;
-        }
-
-        protected virtual void Start()
-        {
             hpText.text = $"Health: {characterHealth.CurrentHp}/{characterHealth.MaxHp}";
             hpBar.fillAmount = characterHealth.HpPercentage;
         }

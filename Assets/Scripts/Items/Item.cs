@@ -1,6 +1,7 @@
 using System;
 using BaseCore;
 using Character;
+using Character.CharacterComponents;
 using Items.ItemData;
 using Items.ItemData.Tools;
 using Player;
@@ -170,7 +171,10 @@ namespace Items
         public override bool Consume(StatusEffectReceiver statusEffectReceiver_)
         {
             var _data = (ConsumableData) data;
-            statusEffectReceiver_.ApplyStatusEffect(_data.ConsumeEffect);
+            
+            var _effectInstance = UnityEngine.Object.Instantiate(_data.ConsumeEffect, Vector3.zero, Quaternion.identity);
+            
+            statusEffectReceiver_.ApplyStatusEffect(_effectInstance);
 
             RemoveStack();
             return HasStack;
@@ -205,6 +209,11 @@ namespace Items
 
             goldAmount -= amount_;
             return true;
+        }
+        
+        public void SetAmount(int amount_)
+        {
+            goldAmount = amount_;
         }
     }
     

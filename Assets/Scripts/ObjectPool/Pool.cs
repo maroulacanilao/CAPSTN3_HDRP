@@ -24,13 +24,12 @@ namespace ObjectPool
             }
         }
 
-        private Poolable CreateInstance()
+        private void CreateInstance()
         {
             var _obj = Object.Instantiate(prefab, root);
             _obj.OnDeSpawn();
             standbyQueue.Enqueue(_obj);
             _obj.SetPool(this);
-            return _obj;
         }
         
         #region Getters
@@ -99,7 +98,6 @@ namespace ObjectPool
             if(poolableObject_ == null) return;
             if(poolableObject_.IsDestroyed()) return;
             if (!activeSet.Contains(poolableObject_)) return;
-            
             activeSet.Remove(poolableObject_);
             poolableObject_.OnDeSpawn();
             standbyQueue.Enqueue(poolableObject_);
@@ -133,5 +131,7 @@ namespace ObjectPool
             }
             activeSet.Clear();
         }
+        
+        
     }
 }

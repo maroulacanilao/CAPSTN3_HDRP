@@ -3,6 +3,7 @@ using BattleSystem.BattleState;
 using CustomEvent;
 using UnityEngine;
 using Character;
+using Character.CharacterComponents;
 using NaughtyAttributes;
 
 public abstract class StatusEffectBase : MonoBehaviour
@@ -39,10 +40,12 @@ public abstract class StatusEffectBase : MonoBehaviour
     
     public StatusEffectReceiver Target { get; private set; }
     public GameObject Source { get; protected set; }
-    public int turns { get; protected set; }
+    public int turnsLeft { get; protected set; }
 
     protected bool isActivated;
     
+    protected string characterName => Target.character.characterData.characterName;
+
     public Evt<StatusEffectBase, StatusEffectReceiver> OnEffectEnd = new Evt<StatusEffectBase, StatusEffectReceiver>();
 
     protected abstract void OnActivate();
@@ -53,11 +56,6 @@ public abstract class StatusEffectBase : MonoBehaviour
     protected virtual IEnumerator OnBeforeTurnTick(TurnBaseState ownerTurnState_) { yield break; }
 
     protected virtual IEnumerator OnAfterTurnTick(TurnBaseState ownerTurnState_) { yield break; }
-    public StatusEffectBase Initialize(int damage_)
-    {
-        Damage = damage_;
-        return this;
-    }
 
     public void Activate(StatusEffectReceiver target, GameObject source = null)
     {
@@ -65,6 +63,7 @@ public abstract class StatusEffectBase : MonoBehaviour
         Target = target;
         Source = source;
         isActivated = true;
+        if (HasDuration) turnsLeft = turnDuration;
         OnActivate();
     }
 
@@ -79,7 +78,7 @@ public abstract class StatusEffectBase : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void RefreshStatusEffect() { turns = 0; }
+    public void RefreshStatusEffect() { turnsLeft = turnDuration; }
 
     public IEnumerator BeforeTurnTick(TurnBaseState ownerTurnState_)
     {
@@ -102,10 +101,9 @@ public abstract class StatusEffectBase : MonoBehaviour
     
     public void HasStillTurns()
     {
-        if (turns > turnDuration)
-        {
-            SelfRemove();
-        }
+        if (turnsLeft > 0) return;
+        
+        SelfRemove();
     }
     
     public void StackEffect(StatusEffectBase newEffect_)

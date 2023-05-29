@@ -12,6 +12,7 @@ namespace BaseCore
             get
             {
                 if (_instance) return _instance;
+                if (!ReferenceEquals(_instance, null) && _instance == null) return null;
 
                 // get instances
                 var objs = FindObjectsOfType(typeof(T)) as T[];

@@ -1,10 +1,10 @@
 using BaseCore;
 using CustomEvent;
-using ScriptableObjectData.CharacterData;
 using UnityEngine;
 
-namespace Character
+namespace Character.CharacterComponents
 {
+    [System.Serializable]
     public class CharacterHealth : CharacterCore
     {
         [field: Header("Events")]
@@ -19,8 +19,8 @@ namespace Character
         public int CurrentHp { get; protected set; }
         public float HpPercentage => (float) CurrentHp / MaxHp;
         public bool IsAlive => CurrentHp > 0;
-        
-        protected override void Initialize()
+
+        public CharacterHealth(CharacterBase character_) : base(character_)
         {
             CurrentHp = MaxHp;
         }
