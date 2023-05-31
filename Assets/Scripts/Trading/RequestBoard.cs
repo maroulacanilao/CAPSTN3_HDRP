@@ -7,6 +7,7 @@ using CustomHelpers;
 using Items.Inventory;
 using Items.ItemData;
 using Managers;
+using NaughtyAttributes;
 using ScriptableObjectData;
 using UnityEngine;
 
@@ -21,8 +22,8 @@ namespace Trading
         private float requestBaseChance = 0.5f;
 
         private PlayerInventory inventory;
-        
-        public List<RequestOrder> requestOrders { get; private set; }
+
+        [field: SerializeField] private List<RequestOrder> requestOrders;
         
         public static readonly Evt<RequestOrder> OnRequestOrderAdded = new Evt<RequestOrder>();
         public static readonly Evt<RequestOrder> OnRequestOrderCompleted = new Evt<RequestOrder>();
@@ -66,12 +67,6 @@ namespace Trading
             PurgeNulls();
             requestOrders.Add(_newOrder);
             OnRequestOrderAdded.Invoke(_newOrder);
-            
-            Debug.Log($"Added new order: {_newOrder.OrderTitle}");
-            foreach (var _requestItems in _newOrder.RequestItems.Values)
-            {
-                Debug.Log(_requestItems.itemNeededData.ItemName);
-            }
         }
         
         public void CompleteOrder(RequestOrder requestOrder_)

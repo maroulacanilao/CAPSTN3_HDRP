@@ -8,8 +8,8 @@ namespace BattleSystem
     public class BattleData : ScriptableObject
     {
         [field: SerializeField] public PlayerData playerData { get; private set; }
+        [field: SerializeField] public EnemyData currentEnemyData { get; private set; }
 
-        public EnemyData currentEnemyData { get; private set; }
         public Vector3 currentEnemyPosition { get; private set; }
 
         public void ResetData()

@@ -17,7 +17,7 @@ namespace BattleSystem
     {
         #region Positions
 
-        [field: SerializeField] public BattleStation battleStation { get; private set; }
+        [field: SerializeField] public BattleStation battleStation { get; protected set; }
         
 
         #endregion
@@ -92,12 +92,18 @@ namespace BattleSystem
         public virtual CombatStats TotalStats => character.stats;
         public virtual CombatStats BaseStats => character.statsData.baseCombatStats;
 
-        public abstract BattleCharacter Initialize(CharacterData characterData_, int level_);
-
-        private void Awake()
+        public virtual BattleCharacter Initialize(BattleStation battleStation_, int level_)
         {
+            battleStation = battleStation_;
+            Level = level_;
+            
+            transform.SetParent(battleStation.transform);
+            
+            transform.ResetLocalTransform();
+            
             defaultPosition = transform.position;
             spellUser = new SpellUser(character);
+            return this;
         }
 
         private void OnEnable()
@@ -150,6 +156,7 @@ namespace BattleSystem
 
         public IEnumerator BasicAttack(BattleCharacter target_)
         {
+            if(!character.IsAlive) yield break;
             DamageInfo _tempDamageInfo = new DamageInfo(TotalStats.physicalDamage, gameObject, DamageType.Weapon);
             AttackResult _attackResult = this.DamageTarget(target_, _tempDamageInfo);
             
@@ -168,6 +175,7 @@ namespace BattleSystem
 
         public IEnumerator AttackTarget(BattleCharacter target_)
         {
+            if(!character.IsAlive) yield break;
             yield return GoToPosition(target_.battleStation.attackPosition);
             yield return BasicAttack(target_);
             yield return GoToPosition(battleStation.stationPosition);
@@ -175,6 +183,7 @@ namespace BattleSystem
 
         public IEnumerator EvadeAnimation()
         {
+            if(!character.IsAlive) yield break;
             var _yPos = transform.position.y;
             yield return transform.DOMove(battleStation.evadePosition.SetY(_yPos), 0.1f);
             yield return CoroutineHelper.GetWait(0.1f);
@@ -183,6 +192,8 @@ namespace BattleSystem
 
         public void Hit(AttackResult atkResult_)
         {
+            if(!character.IsAlive) return;
+            
             if (atkResult_.attackResultType != AttackResultType.Miss)
             {
                 character.TakeDamage(atkResult_.damageInfo);
@@ -208,6 +219,7 @@ namespace BattleSystem
 
         public IEnumerator PlaySpellCastAnim()
         {
+            if(!character.IsAlive) yield break;
             animator.SetTrigger(spellAnimationHash);
             yield return animator.WaitForAnimationEvent(AnimEvent_SpellCast, 2);
             animator.ResetTrigger(spellAnimationHash);

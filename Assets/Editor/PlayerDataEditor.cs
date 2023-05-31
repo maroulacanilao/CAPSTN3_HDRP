@@ -27,7 +27,21 @@ public class PlayerDataEditor : Editor
 
         showLevelSection = EditorGUILayout.Toggle("Show Experience Per Level", showLevelSection);
         showStatsSection = EditorGUILayout.Toggle("Show Stats Per Level", showStatsSection);
-
+        
+        // Exp
+        EditorGUILayout.BeginHorizontal("box");
+        EditorGUILayout.LabelField("Total EXP ");
+        EditorGUILayout.LabelField(_levelData.TotalExperience + " XP");
+        EditorGUILayout.EndHorizontal();
+        
+        // Level
+        EditorGUILayout.BeginHorizontal("box");
+        EditorGUILayout.LabelField("Current Level ");
+        EditorGUILayout.LabelField(_levelData.CurrentLevel.ToString());
+        EditorGUILayout.EndHorizontal();
+        
+        // Stats
+        
         EditorGUIUtility.labelWidth = 100;
 
         if (showLevelSection)

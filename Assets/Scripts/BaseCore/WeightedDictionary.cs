@@ -113,7 +113,7 @@ namespace BaseCore
             RecalculateChances();
         }
 
-        public WeightedDictionary<T> GetCopy()
+        public WeightedDictionary<T> Clone()
         {
             var _copy = new WeightedDictionary<T>(this.itemDictionary);
             return _copy;

@@ -15,6 +15,8 @@ namespace BattleSystem
         [field: SerializeField] public List<BattleCharacter> playerParty { get; private set; }
         [field: SerializeField] public List<BattleCharacter> enemyParty { get; private set; }
         [field: SerializeField] public BattleData battleData { get; private set; }
+        [field: SerializeField] public List<BattleStation> playerPartyStation { get; private set; }
+        [field: SerializeField] public List<BattleStation> enemyPartyStation { get; private set; }
 
         public BattleStateMachine BattleStateMachine { get; private set; }
 
@@ -26,6 +28,7 @@ namespace BattleSystem
         protected override void Awake()
         {
             base.Awake();
+            SpawnCharacters();
             BattleStateMachine = new BattleStateMachine(this);
         }
         
@@ -53,6 +56,44 @@ namespace BattleSystem
         public BattleCharacter GetFirstAliveEnemy()
         {
             return enemyParty.FirstOrDefault(e => e.character.IsAlive);
+        }
+        
+        public void SpawnCharacters()
+        {
+            playerParty = new List<BattleCharacter>();
+            enemyParty = new List<BattleCharacter>();
+            
+            var _level = battleData.playerData.playerLevelData.CurrentLevel;
+            var _player = playerPartyStation[0].Initialize(battleData.playerData, _level);
+            playerParty.Add(_player);
+            
+            var _index = 1;
+            foreach (var _allyData in battleData.playerData.alliesData)
+            {
+                if(_allyData == null) continue;
+                
+                var _ally = playerPartyStation[_index].Initialize(_allyData, _level);
+                playerParty.Add(_ally);
+                _index++;
+            }
+            
+            var _mainEnemy = enemyPartyStation[0].Initialize(battleData.currentEnemyData, _level);
+            enemyParty.Add(_mainEnemy);
+
+            var _count = UnityEngine.Random.Range(0, 3);
+            _index = 1;
+            for (var i = 0; i < _count; i++)
+            {
+                var _enemyAllyData = battleData.currentEnemyData.alliesDictionary.GetWeightedRandom();
+                if(_enemyAllyData == null) continue;
+                
+                if(enemyPartyStation.Count <= _index) break;
+                
+                var _enemy = enemyPartyStation[_index].Initialize(_enemyAllyData, _level);
+                
+                enemyParty.Add(_enemy);
+                _index++;
+            }
         }
     }
 }

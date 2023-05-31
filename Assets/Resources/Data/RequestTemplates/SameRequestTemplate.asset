@@ -16,14 +16,23 @@ MonoBehaviour:
   <orderTitle>k__BackingField: I NEED IT!
   <orderDescription>k__BackingField: I need it to create somethinfg
   <guaranteedRequestedItems>k__BackingField:
-    _serializedList:
-    - Key: {fileID: 11400000, guid: e88b3c2ffdb5fca4380a54db620ffbea, type: 2}
-      Value: {x: 1, y: 2}
+  - itemData: {fileID: 11400000, guid: e88b3c2ffdb5fca4380a54db620ffbea, type: 2}
+    requestCount: 1
+    itemsGiven: []
   <possibleItemCount>k__BackingField: {x: 1, y: 3}
-  <otherRequestedItems>k__BackingField:
-    _serializedList:
-    - Key: {fileID: 11400000, guid: a07fb1f81f2f37047a65917abef3a85b, type: 2}
-      Value: {x: 1, y: 1}
+  <additionalRequestedItems>k__BackingField:
+    itemDictionary:
+      _serializedList:
+      - Key:
+          itemData: {fileID: 0}
+          requestCount: 0
+          itemsGiven: []
+        Value: 3
+      - Key:
+          itemData: {fileID: 11400000, guid: a07fb1f81f2f37047a65917abef3a85b, type: 2}
+          requestCount: 1
+          itemsGiven: []
+        Value: 1
   <sellModifier>k__BackingField: 1.1
   <rewardTable>k__BackingField:
     <possibleExperienceDrop>k__BackingField: {x: 50, y: 50}
@@ -38,3 +47,6 @@ MonoBehaviour:
         _serializedList:
         - Key: {fileID: 11400000, guid: 004ea5c2fe93d494ba69efc34ea86818, type: 2}
           Value: 1
+  references:
+    version: 2
+    RefIds: []

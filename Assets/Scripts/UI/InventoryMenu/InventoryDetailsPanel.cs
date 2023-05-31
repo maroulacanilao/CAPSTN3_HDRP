@@ -25,6 +25,8 @@ namespace UI.InventoryMenu
         [NaughtyAttributes.BoxGroup("Icon")]
         [SerializeField] private Image itemIcon;
         
+        [SerializeField] [NaughtyAttributes.Tag] private string inventoryItemTag;
+        
         private Item_MenuItem currMenuItem;
         private Item currItem;
         
@@ -36,7 +38,7 @@ namespace UI.InventoryMenu
             inventoryMenu = inventoryMenu_;
             inventory = inventoryMenu.Inventory;
             
-            InventoryMenu.OnItemSelect.AddListener(ShowItemDetail);
+            InventoryMenu.OnInventoryItemSelect.AddListener(ShowItemDetail);
             InventoryEvents.OnUpdateInventory.AddListener(UpdateInventoryWrapper);
             
             consumeBtn.onClick.AddListener(ConsumedItem);
@@ -47,22 +49,30 @@ namespace UI.InventoryMenu
 
         public void OnDestroy()
         {
-            InventoryMenu.OnItemSelect.RemoveListener(ShowItemDetail);
+            InventoryMenu.OnInventoryItemSelect.RemoveListener(ShowItemDetail);
             InventoryEvents.OnUpdateInventory.RemoveListener(UpdateInventoryWrapper);
         }
 
         private void UpdateInventoryWrapper(PlayerInventory inventory_) => ShowItemDetail(null);
 
-        public void ShowItemDetail(Item_MenuItem menuItem_)
+        public void ShowItemDetail(SelectableMenuButton selectedObject_)
         {
-            if (menuItem_ == null || menuItem_.item == null)
+            if (selectedObject_ == null)
             {
                 gameObject.SetActive(false);
                 return;
             }
             
-            currMenuItem = menuItem_;
-            currItem = menuItem_.item;
+            if(!selectedObject_.TryGetComponent(out Item_MenuItem _menuItem)) return;
+
+            if (_menuItem == null || _menuItem.item == null)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
+            
+            currMenuItem = _menuItem;
+            currItem = _menuItem.item;
             var _data = currItem.Data;
         
             namePanel.SetActive(currItem.ItemType != ItemType.Gold);

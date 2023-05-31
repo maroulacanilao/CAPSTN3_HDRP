@@ -13,15 +13,15 @@ namespace ScriptableObjectData.CharacterData
         [field: SerializeField] public PlayerInventory playerInventory { get; private set; }
         [field: SerializeField] public PlayerLevel playerLevelData { get; private set; }
 
-        [field: SerializeField] public AllyData allyData { get; private set; }
+        [field: SerializeField] public List<AllyData> alliesData { get; private set; }
         [field: SerializeField] public BlessingMeter blessingMeter { get; private set; }
         
         public int CurrentHp { get; set; }
         public int CurrentMana { get; set; }
         
-        public void SetAlly(AllyData allyData_)
+        public void AddAlly(AllyData allyData_)
         {
-            allyData = allyData_;
+            alliesData.Add(allyData_);
         }
 
         public void Initialize(GameDataBase gameDataBase)

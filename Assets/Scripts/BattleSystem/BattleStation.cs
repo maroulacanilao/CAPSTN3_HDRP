@@ -1,3 +1,5 @@
+using Managers;
+using ScriptableObjectData.CharacterData;
 using UnityEngine;
 
 namespace BattleSystem
@@ -11,12 +13,21 @@ namespace BattleSystem
         public Vector3 stationPosition => transform.position;
         
         public Vector3 evadePosition => evadeTargetPos.position;
+        
+        public BattleCharacter battleCharacter { get; private set; }
 
-        public BattleCharacter Initialize(BattleCharacter battleCharacter_)
+        public BattleCharacter Initialize(CharacterData characterData_, int level_)
         {
             // Instantiate
-            // set parent here
-            return null;
+            battleCharacter = Instantiate(characterData_.battlePrefab).Initialize(this, level_);
+                //characterData_.SpawnBattleCharacter(level_);
+            
+            Transform _transform = battleCharacter.transform;
+            //
+            // _transform.SetParent(transform);
+            // _transform.localPosition = Vector3.zero;
+
+            return battleCharacter;
         }
     }
 }

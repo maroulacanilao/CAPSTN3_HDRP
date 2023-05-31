@@ -12,9 +12,17 @@ namespace CustomHelpers
         public static Transform ResetTransformation(this Transform transform)
         {
             transform.position = Vector3.zero;
-            transform.localRotation = Quaternion.identity;
+            transform.rotation = Quaternion.identity;
             transform.localScale = Vector3.one;
             return transform;
+        }
+
+        public static Transform ResetLocalTransform(this Transform transform_)
+        {
+            transform_.localPosition = Vector3.zero;
+            transform_.localRotation = Quaternion.identity;
+            transform_.localScale = Vector3.one;
+            return transform_;
         }
         
         public static Transform ResetRotation(this Transform transform)

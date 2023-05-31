@@ -11,7 +11,7 @@ using UnityEngine.UI;
 namespace UI.InventoryMenu
 {
     [RequireComponent(typeof(Button))]
-    public class Item_MenuItem : MonoBehaviour, IPointerClickHandler, ISelectHandler, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler
+    public class Item_MenuItem : SelectableMenuButton, IPointerClickHandler, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler
     {
         public enum InventoryItemType { storage = 0, toolBar = 1, weaponBar = 2, armorBar = 3  }
         
@@ -19,7 +19,7 @@ namespace UI.InventoryMenu
         [SerializeField] private Image icon;
         [SerializeField] private Image ghostIcon;
         [SerializeField] private Color highLightColor;
-        
+
         [field: SerializeField] public InventoryItemType inventoryItemType { get; private set; }
 
         public int index { get; private set; }
@@ -29,6 +29,7 @@ namespace UI.InventoryMenu
         private InventoryMenu inventoryMenu;
         private Image borderImage;
         private bool hasInitialized;
+        
         public Item item
         {
             get
@@ -55,8 +56,8 @@ namespace UI.InventoryMenu
         {
             UpdateDisplay();
         }
-        
-        private void OnDisable()
+
+        protected override void OnDisable()
         {
             ghostIcon.transform.localPosition = Vector3.zero;
             isDragging = false;
@@ -119,11 +120,12 @@ namespace UI.InventoryMenu
             button.Select();
         }
         
-        public void OnSelect(BaseEventData eventData)
+        public override void OnSelect(BaseEventData eventData)
         {
-            InventoryMenu.OnItemSelect.Invoke(this);
+            base.OnSelect(eventData);
+            InventoryMenu.OnInventoryItemSelect.Invoke(this);
         }
-        
+
         public void OnBeginDrag(PointerEventData eventData)
         {
             if(item == null) return;

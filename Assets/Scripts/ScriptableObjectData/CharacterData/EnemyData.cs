@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using BaseCore;
 using BattleSystem;
 using NaughtyAttributes;
 using ObjectPool;
+using Unity.VisualScripting;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace ScriptableObjectData.CharacterData
 {
@@ -13,12 +16,8 @@ namespace ScriptableObjectData.CharacterData
         [field: SerializeField] [field: BoxGroup("LootTable")]  public LootTable LootTable { get; private set; }
 
         [field: SerializeField] public EnemyCombatTendency combatTendency { get; private set; } = new EnemyCombatTendency();
-
-        public EnemyBattleCharacter SpawnBattleEnemy(int level_)
-        {
-            var _enemy = battlePrefab.GetInstance();
-            return _enemy.GetComponent<EnemyBattleCharacter>().Initialize(this, level_) as EnemyBattleCharacter;
-        }
+        
+        [field: SerializeField] public WeightedDictionary<EnemyData> alliesDictionary { get; private set; }
 
         [ContextMenu("Sort Spells")]
         public void SortSpells() => combatTendency.SortSpells();

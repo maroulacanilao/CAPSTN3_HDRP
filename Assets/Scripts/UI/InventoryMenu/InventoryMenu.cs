@@ -19,13 +19,13 @@ namespace UI.InventoryMenu
         [field: Header("Panels")]
         [field: SerializeField] public Transform ghostIconParent { get; private set; }
         [field: SerializeField] public InventoryDetailsPanel inventoryDetailsPanel { get; private set; }
-        [SerializeField] private GameObject menuPanel;
-        [SerializeField] Item_MenuItem[] toolBarItems;
-        [SerializeField] Item_MenuItem[] storageItems;
-        [SerializeField] private Item_MenuItem weaponBar;
-        [SerializeField] private Item_MenuItem armorBar;
         
-        public static readonly Evt<Item_MenuItem> OnItemSelect = new Evt<Item_MenuItem>();
+        [field: SerializeField] public Item_MenuItem[] toolBarItems { get; private set; }
+        [field: SerializeField] public Item_MenuItem[] storageItems { get; private set; }
+        [field: SerializeField] public Item_MenuItem weaponBar { get; private set; }
+        [field: SerializeField] public Item_MenuItem armorBar { get; private set; }
+        
+        public static readonly Evt<SelectableMenuButton> OnInventoryItemSelect = new Evt<SelectableMenuButton>();
         
         public override void Initialize()
         {

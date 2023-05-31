@@ -2,6 +2,7 @@ using System;
 using BaseCore;
 using Character;
 using CustomEvent;
+using CustomHelpers;
 using Managers;
 using ScriptableObjectData;
 using UnityEngine;
@@ -20,12 +21,14 @@ public class FarmSceneManager : Singleton<FarmSceneManager>
     protected void OnEnable()
     {
         eventQueueData.ExecuteAllEvents();
+        if(InputManager.Instance.IsEmptyOrDestroyed()) return;
         InputManager.Instance.enabled = false;
     }
     
     protected void OnDisable()
     {
         eventQueueData.ClearQueue();
+        if(InputManager.Instance.IsEmptyOrDestroyed()) return;
         InputManager.Instance.enabled = true;
     }
 }

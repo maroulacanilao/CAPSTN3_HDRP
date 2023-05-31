@@ -30,7 +30,7 @@ namespace BattleSystem
         public AICombatAction GetAction(CharacterBase character_)
         {
             var _enemyAction = new AICombatAction();
-            var _possibleActions = actionTypeWeights.GetCopy();
+            var _possibleActions = actionTypeWeights.Clone();
             
             if(character_.health.HpPercentage <= 0.4f)
             {

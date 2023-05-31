@@ -10,15 +10,22 @@ using UnityEngine.UI;
 public class ButtonSelectFirst : MonoBehaviour
 {
     private Button button;
-    private void Awake()
+
+    private void Reset()
     {
         button = GetComponent<Button>();
+    }
+    private void Awake()
+    {
+        if(button == null) button = GetComponent<Button>();
     }
 
     private void OnEnable()
     {
+        Canvas.ForceUpdateCanvases();
         button.Select();
         InputUIManager.OnMove.AddListener(Move);
+        Canvas.ForceUpdateCanvases();
     }
 
     private void OnDisable()

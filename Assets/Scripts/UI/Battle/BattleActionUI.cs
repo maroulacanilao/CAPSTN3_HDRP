@@ -25,7 +25,7 @@ namespace UI.Battle
 
         #region Unity Functions
 
-        private void Awake()
+        private void Start()
         {
             BattleManager.OnPlayerTurnStart.AddListener(ShowActionMenu);
             battleManager = BattleManager.Instance;
