@@ -29,13 +29,14 @@ namespace Player.ControllerState
                 player.interactDetector.Interact();
                 return;
             }
+            
             if (InputManager.UseToolAction.triggered)
             {
                 //TODO: Add Use Tool State
                 player.playerEquipment.UseTool();
                 return;
             }
-            if(InputManager.MenuAction.triggered)
+            if(InputUIManager.MenuAction.triggered)
             {
                 FarmUIManager.Instance.OpenMenu();
                 return;

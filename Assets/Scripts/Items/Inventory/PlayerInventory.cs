@@ -165,6 +165,22 @@ namespace Items.Inventory
             }
             return -1;
         }
+
+        public bool HasFreeSlotInToolBar()
+        {
+            return itemTools.Any(x => x == null);
+        }
+        
+        public int GetFirstEmptySlotInToolBar()
+        {
+            for (int i = 0; i < itemTools.Length; i++)
+            {
+                if (itemTools[i] != null) continue;
+                
+                return i;
+            }
+            return -1;
+        }
         
         /// <summary>
         /// remove item in storage, on hand or in equipped slot.
@@ -322,6 +338,18 @@ namespace Items.Inventory
             
             InventoryEvents.OnArmorEquip.Invoke(armorEquipped);
             InventoryEvents.OnUpdateInventory.Invoke(this);
+        }
+
+        public void EquipTool(int index_)
+        {
+            if(!itemStorageDictionary.TryGetValue(index_, out Item _item)) return;
+            if(_item == null) return;
+            if(!_item.IsToolable) return;
+
+            var _indexSlot = GetFirstEmptySlotInToolBar();
+            
+            if(_indexSlot == -1) return;
+            SwapItemsInToolBarAndStorage(_indexSlot, index_);
         }
         
         public bool UnEquipArmor()

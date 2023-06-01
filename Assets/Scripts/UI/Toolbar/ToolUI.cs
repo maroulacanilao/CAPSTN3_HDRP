@@ -10,6 +10,7 @@ namespace UI
 {
     public class ToolUI : MonoBehaviour
     {
+        [SerializeField] private Outline outline;
         [SerializeField] private Image toolIcon;
         [SerializeField] private TextMeshProUGUI count_TXT;
         [SerializeField] private Color selectColor, deselectColor;
@@ -40,7 +41,7 @@ namespace UI
 
         private void ChangeItem(int index_)
         {
-            background.color = index == index_ ? selectColor : deselectColor;
+            outline.effectColor = index == index_ ? selectColor : deselectColor;
         }
         
         private void UpdateToolBar(int index_, Item item_)

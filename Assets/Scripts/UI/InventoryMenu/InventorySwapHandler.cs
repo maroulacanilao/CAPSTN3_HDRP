@@ -1,52 +1,211 @@
 ﻿using System;
+using Items;
+using Items.Inventory;
+using TMPro;
 using UnityEngine;
+using static UI.InventoryMenu.Item_MenuItem.InventoryItemType;
 
 namespace UI.InventoryMenu
 {
     public class InventorySwapHandler : MonoBehaviour
     {
-        [SerializeField]  private InventoryMenu inventoryMenu;
+        [SerializeField] private TextMeshProUGUI errorTxt;
+        [SerializeField] private InventoryMenu inventoryMenu;
+        private PlayerInventory inventory => inventoryMenu.Inventory;
+
+        private Item_MenuItem swappingItem
+        {
+            get => Item_MenuItem.swappingItem;
+            set => Item_MenuItem.swappingItem = value;
+        }
         
-        private Item_MenuItem selectedItem;
-        private Item_MenuItem swappingItem;
+        private Item_MenuItem selectedItem
+        {
+            get => Item_MenuItem.selectedItem;
+            set => Item_MenuItem.selectedItem = value;
+        }
+        
+        private bool isSwapping => swappingItem != null;
+        
+
         private void Reset()
         {
             inventoryMenu = GameObject.FindObjectOfType<InventoryMenu>();
         }
 
-        private void Awake()
-        {
-            InventoryMenu.OnInventoryItemSelect.AddListener(ItemSelect);
-        }
-
         private void OnEnable()
         {
             InputUIManager.OnSwap.AddListener(OnSwap);
+            errorTxt.gameObject.SetActive(false);
+            InputUIManager.OnCancel.AddListener(OnCancel);
         }
 
         private void OnDisable()
         {
             InputUIManager.OnSwap.RemoveListener(OnSwap);
-        }
-
-        private void ItemSelect(SelectableMenuButton inventoryItem_)
-        {
-            inventoryItem_.TryGetComponent(out selectedItem);
+            InputUIManager.OnCancel.RemoveListener(OnCancel);
+            selectedItem = null;
+            swappingItem = null;
+            ResetOutlines();
         }
         
-        private void OnSwap()
+        private void OnCancel()
         {
-            if (selectedItem == null) return;
-            if(swappingItem == null) swappingItem = selectedItem;
-            else
-            {
-                
-            }
+            if(!enabled) return;
+            swappingItem = null;
+            ResetOutlines();
+            selectedItem.button.Select();
         }
 
-        private void SwapItems()
+        private void OnSwap()
         {
+            if(!enabled) return;
+            Debug.Log($"Selected Item: {selectedItem.item}");
+            if(!isSwapping) SelectItem();
+            else SwapItem();
+        }
+        
+        private void SelectItem()
+        {
+            if(selectedItem == null) return;
+            if(selectedItem.item == null) return;
             
+            swappingItem = selectedItem;
+            Highlight();
+            selectedItem.button.Select();
+            swappingItem.SwappingOutline();
+        }
+
+        private void SwapItem()
+        {
+            if(!CanSwap()) return;
+
+            switch (swappingItem.inventoryItemType)
+            {
+                case toolBar when selectedItem.inventoryItemType is toolBar:
+                    inventory.SwapItemInToolBar(swappingItem.index, selectedItem.index);
+                    break;
+                
+                case storage when selectedItem.inventoryItemType is storage:
+                    inventory.SwapItemsInStorage(swappingItem.index, selectedItem.index);
+                    break;
+                
+                case toolBar when selectedItem.inventoryItemType is storage:
+                    inventory.SwapItemsInToolBarAndStorage(swappingItem.index, selectedItem.index);
+                    break;
+                
+                case storage when selectedItem.inventoryItemType is toolBar:
+                    inventory.SwapItemsInToolBarAndStorage(selectedItem.index, swappingItem.index);
+                    break;
+                
+                case weaponBar when selectedItem.inventoryItemType is storage:
+                    inventory.EquipWeapon(selectedItem.index);
+                    break;
+                
+                case storage when selectedItem.inventoryItemType is weaponBar:
+                    inventory.EquipWeapon(swappingItem.index);
+                    break;
+                
+                case armorBar when selectedItem.inventoryItemType is storage:
+                    inventory.EquipArmor(selectedItem.index);
+                    break;
+                
+                case storage when selectedItem.inventoryItemType is armorBar:
+                    inventory.EquipArmor(swappingItem.index);
+                    break;
+                
+                default: break;
+            }
+            
+            swappingItem = null;
+            ResetOutlines();
+        }
+        
+        private void ResetOutlines()
+        {
+            foreach (var _i in inventoryMenu.storageItems)
+            {
+                _i.ResetOutline();
+            }
+
+            foreach (var _i in inventoryMenu.toolBarItems)
+            {
+                _i.ResetOutline();
+            }
+            
+            inventoryMenu.armorBar.ResetOutline();
+            inventoryMenu.weaponBar.ResetOutline();
+        }
+
+        public bool CanSwap()
+        {
+            var _item = swappingItem.item;
+            if(_item == null) return false;
+            
+            switch (selectedItem.inventoryItemType)
+            {
+                case toolBar:
+                    if (!_item.IsToolable)
+                    {
+                        errorTxt.gameObject.SetActive(true);
+                        errorTxt.SetText("Item cannot be equipped to tool bar");
+                        Debug.Log("Item cannot be equipped to tool bar");
+                        return false;
+                    }
+                    break;
+
+                case weaponBar:
+                    if (_item.ItemType != ItemType.Weapon)
+                    {
+                        errorTxt.gameObject.SetActive(true);
+                        errorTxt.SetText("Item cannot be equipped as Weapon");
+                        Debug.Log("Item cannot be equipped to Weapon");
+                        return false;
+                    }
+                    break;
+                case armorBar:
+                    if (_item.ItemType != ItemType.Armor)
+                    {
+                        errorTxt.gameObject.SetActive(true);
+                        errorTxt.SetText("Item cannot be equipped as Armor");
+                        Debug.Log("Item cannot be equipped to Armor");
+                        return false;
+                    }
+                    break;
+                case storage:
+                default:
+                    break;
+            }
+            
+            errorTxt.gameObject.SetActive(false);
+            return true;
+        }
+
+        public void Highlight()
+        {
+            ResetOutlines();
+            var _item = swappingItem.item;
+            if(_item == null) return;
+            
+            if (_item.IsToolable)
+            {
+                foreach (var _i in inventoryMenu.toolBarItems)
+                {
+                    _i.EquipOutline();
+                }
+                return;
+            }
+            
+            if (_item.ItemType == ItemType.Armor)
+            {
+                inventoryMenu.armorBar.EquipOutline();
+                return;
+            }
+            if (_item.ItemType == ItemType.Weapon)
+            {
+                inventoryMenu.weaponBar.EquipOutline();
+                return;
+            }
         }
     }
 }

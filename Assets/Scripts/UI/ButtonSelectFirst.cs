@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -10,6 +11,7 @@ using UnityEngine.UI;
 public class ButtonSelectFirst : MonoBehaviour
 {
     private Button button;
+    private SelectableMenuButton selectableMenuButton;
 
     private void Reset()
     {
@@ -18,12 +20,14 @@ public class ButtonSelectFirst : MonoBehaviour
     private void Awake()
     {
         if(button == null) button = GetComponent<Button>();
+        TryGetComponent(out selectableMenuButton);
+        EventSystem.current.firstSelectedGameObject = button.gameObject;
     }
 
     private void OnEnable()
     {
-        Canvas.ForceUpdateCanvases();
         button.Select();
+        if(selectableMenuButton != null) selectableMenuButton.button.Select();
         InputUIManager.OnMove.AddListener(Move);
         Canvas.ForceUpdateCanvases();
     }

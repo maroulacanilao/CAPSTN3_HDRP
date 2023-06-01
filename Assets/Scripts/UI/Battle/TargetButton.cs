@@ -8,14 +8,14 @@ using UnityEngine.UI;
 
 namespace UI.Battle
 {
-    public class TargetButton : MonoBehaviour, ISelectHandler, IPointerEnterHandler
+    public class TargetButton : SelectableMenuButton, IPointerEnterHandler
     {
         [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI name_TXT;
         private BattleCharacter battleCharacter;
         private BattleActionUI battleActionUI;
 
-        private static readonly Evt<TargetButton> OnSelectButton = new Evt<TargetButton>();
+        private static readonly Evt<TargetButton> OnTargetSelectButton = new Evt<TargetButton>();
         
         public TargetButton Initialize(BattleActionUI battleActionUI_,BattleCharacter character_)
         {
@@ -31,13 +31,13 @@ namespace UI.Battle
             
             name_TXT.text = battleCharacter.characterData.characterName;
             button.onClick.AddListener(() => battleActionUI.StartAction(battleCharacter));
-            OnSelectButton.AddListener(OnSelectButtonHandler);
+            OnTargetSelectButton.AddListener(OnSelectButtonHandler);
             return this;
         }
 
         private void OnDestroy()
         {
-            OnSelectButton.RemoveListener(OnSelectButtonHandler);
+            OnTargetSelectButton.RemoveListener(OnSelectButtonHandler);
         }
 
         private void OnEnable()
@@ -45,17 +45,20 @@ namespace UI.Battle
             button.interactable = battleCharacter.character.IsAlive;
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
+            
             BattleCharacter.OnSelectMenu.Invoke(null);
         }
 
-        public void OnSelect(BaseEventData eventData)
+        public override void SelectButton()
         {
+            base.SelectButton();
             if(!button.interactable) return;
-            OnSelectButton.Invoke(this);
+            OnTargetSelectButton.Invoke(this);
         }
-        
+
         public void OnPointerEnter(PointerEventData eventData)
         {
             button.Select();

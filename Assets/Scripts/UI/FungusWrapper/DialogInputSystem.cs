@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
-using UnityEngine;
 using UnityEngine.EventSystems;
-using Fungus;
 using UnityEngine.InputSystem.UI;
+using Fungus;
 
 namespace UI.FungusWrapper
 {
-    // Copy of DialogInput from FUngus with the new InputSystem instead of StandaloneInputModule
+    // Copy of DialogInput from Fungus with the new InputSystem instead of StandaloneInputModule
     
     /// <summary>
     /// Supported modes for clicking through a Say Dialog.
@@ -26,31 +25,35 @@ namespace UI.FungusWrapper
     /// <summary>
     /// Input handler for say dialogs.
     /// </summary>
-    public class DialogInputSystem : MonoBehaviour
+    public sealed class DialogInputSystem : MonoBehaviour
     {
         [Tooltip("Click to advance story")]
-        [SerializeField] protected ClickMode clickMode;
+        [SerializeField]
+        private ClickMode clickMode;
 
         [Tooltip("Delay between consecutive clicks. Useful to prevent accidentally clicking through story.")]
-        [SerializeField] protected float nextClickDelay = 0f;
+        [SerializeField]
+        private float nextClickDelay = 0f;
 
         [Tooltip("Allow holding Cancel to fast forward text")]
-        [SerializeField] protected bool cancelEnabled = true;
+        [SerializeField]
+        private bool cancelEnabled = true;
 
         [Tooltip("Ignore input if a Menu dialog is currently active")]
-        [SerializeField] protected bool ignoreMenuClicks = true;
+        [SerializeField]
+        private bool ignoreMenuClicks = true;
 
-        protected bool dialogClickedFlag;
+        private bool dialogClickedFlag;
 
-        protected bool nextLineInputFlag;
+        private bool nextLineInputFlag;
 
-        protected float ignoreClickTimer;
+        private float ignoreClickTimer;
 
-        protected InputSystemUIInputModule uiInput;
+        private InputSystemUIInputModule uiInput;
 
-        protected Writer writer;
+        private Writer writer;
 
-        protected virtual void Awake()
+        private void Awake()
         {
             writer = GetComponent<Writer>();
 
@@ -59,7 +62,7 @@ namespace UI.FungusWrapper
 
         // There must be an Event System in the scene for Say and Menu input to work.
         // This method will automatically instantiate one if none exists.
-        protected virtual void CheckEventSystem()
+        private void CheckEventSystem()
         {
             EventSystem eventSystem = GameObject.FindObjectOfType<EventSystem>();
             if (eventSystem == null)
@@ -73,8 +76,8 @@ namespace UI.FungusWrapper
                 }
             }
         }
-            
-        protected virtual void Update()
+
+        private void Update()
         {
             if (EventSystem.current == null)
             {
@@ -149,7 +152,7 @@ namespace UI.FungusWrapper
         /// <summary>
         /// Trigger next line input event from script.
         /// </summary>
-        public virtual void SetNextLineFlag()
+        public void SetNextLineFlag()
         {
             if(writer.IsWaitingForInput || writer.IsWriting)
             {
@@ -159,7 +162,7 @@ namespace UI.FungusWrapper
         /// <summary>
         /// Set the ClickAnywhere click flag.
         /// </summary>
-        public virtual void SetClickAnywhereClickedFlag()
+        public void SetClickAnywhereClickedFlag()
         {
             if (ignoreClickTimer > 0f)
             {
@@ -176,7 +179,7 @@ namespace UI.FungusWrapper
         /// <summary>
         /// Set the dialog clicked flag (usually from an Event Trigger component in the dialog UI).
         /// </summary>
-        public virtual void SetDialogClickedFlag()
+        public void SetDialogClickedFlag()
         {
             // Ignore repeat clicks for a short time to prevent accidentally clicking through the character dialogue
             if (ignoreClickTimer > 0f)
@@ -195,7 +198,7 @@ namespace UI.FungusWrapper
         /// <summary>
         /// Sets the button clicked flag.
         /// </summary>
-        public virtual void SetButtonClickedFlag()
+        public void SetButtonClickedFlag()
         {
             // Only applies if clicking is not disabled
             if (clickMode != ClickMode.Disabled)

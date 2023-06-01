@@ -15,12 +15,10 @@ public class InputUIManager : MonoBehaviour
     
     // specific UI Buttons
     public static readonly Evt OnSwap = new Evt();
-    private void Awake()
-    {
-        if(!playerInput) return;
-        playerInput.actions["Swap"].started += this.Swap;
-    }
-    
+
+    public static InputAction MenuAction { get; private set; }
+    public static InputAction SwapAction { get; private set; }
+
     private void OnEnable()
     {
         inputSystemUi = GetComponent<InputSystemUIInputModule>();
@@ -31,6 +29,8 @@ public class InputUIManager : MonoBehaviour
         // for specific UI Buttons
         if(!playerInput) return;
         playerInput.actions["Swap"].started += this.Swap;
+        SwapAction = playerInput.actions["Swap"];
+        MenuAction = playerInput.actions["Menu"];
     }
 
     private void OnDisable()
@@ -55,6 +55,7 @@ public class InputUIManager : MonoBehaviour
     
     private void Swap(InputAction.CallbackContext context_)
     {
+        Debug.Log("SWAP");
         OnSwap.Invoke();
     }
 }

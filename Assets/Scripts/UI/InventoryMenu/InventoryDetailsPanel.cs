@@ -12,6 +12,9 @@ namespace UI.InventoryMenu
     {
         [NaughtyAttributes.BoxGroup("Panels")]
         [SerializeField] private GameObject namePanel, statsPanel, descriptionPanel, valuePanel;
+        
+        [NaughtyAttributes.BoxGroup("Panels")]
+        [SerializeField] private InventoryActionButtonGroup actionButtonGroup; 
 
         [NaughtyAttributes.BoxGroup("Info Text")]
         [SerializeField] private TextMeshProUGUI nameTxt, typeTxt, rarityTxt, valueTxt, descriptionTxt;
@@ -37,6 +40,7 @@ namespace UI.InventoryMenu
         {
             inventoryMenu = inventoryMenu_;
             inventory = inventoryMenu.Inventory;
+            actionButtonGroup.Initialize();
             
             InventoryMenu.OnInventoryItemSelect.AddListener(ShowItemDetail);
             InventoryEvents.OnUpdateInventory.AddListener(UpdateInventoryWrapper);
@@ -63,6 +67,8 @@ namespace UI.InventoryMenu
                 return;
             }
             
+            actionButtonGroup.gameObject.SetActive(false);
+
             if(!selectedObject_.TryGetComponent(out Item_MenuItem _menuItem)) return;
 
             if (_menuItem == null || _menuItem.item == null)
@@ -98,10 +104,17 @@ namespace UI.InventoryMenu
             else statsPanel.SetActive(false);
             
             consumeBtn.gameObject.SetActive(currItem is ItemConsumable);
-            equipBtn.gameObject.SetActive(currItem is ItemGear && !currItem.IsGearEquipped);
+            
+            var _canEquip = (currItem is ItemGear && !currItem.IsGearEquipped) ||
+                            (currItem.IsToolable && currMenuItem.inventoryItemType == Item_MenuItem.InventoryItemType.storage 
+                             && inventory.HasFreeSlotInToolBar());
+
+            equipBtn.gameObject.SetActive(_canEquip);
             
             unequipBTN.gameObject.SetActive(currItem is ItemGear && currItem.IsGearEquipped);
             discardBtn.gameObject.SetActive(currItem.IsDiscardable);
+            
+            actionButtonGroup.gameObject.SetActive(true);
             
             gameObject.SetActive(true);
         }
@@ -154,12 +167,15 @@ namespace UI.InventoryMenu
             {
                 case ItemType.Weapon:
                     inventory.EquipWeapon(currMenuItem.index);
-                    break;
+                    return;
                 case ItemType.Armor:
                     inventory.EquipArmor(currMenuItem.index);
-                    break;
-                default:
-                    break;
+                    return;
+            }
+
+            if (currItem.IsToolable)
+            {
+                inventory.EquipTool(currMenuItem.index);
             }
         }
 

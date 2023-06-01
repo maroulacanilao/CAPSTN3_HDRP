@@ -21,7 +21,6 @@ namespace UI
             {
                 _ui.Initialize();
             }
-            InputUIManager.OnCancel.AddListener(CloseAllUI);
         }
 
         public void CloseAllUI()
@@ -37,7 +36,11 @@ namespace UI
 
         public void OpenMenu()
         {
-            if(IsMenuOpen()) return;
+            if (IsMenuOpen())
+            {
+                CloseAllUI();
+                return;
+            }
 
             var _menu = lastOpenMenu != null ? lastOpenMenu : farmUIs[0]; 
             _menu.gameObject.SetActive(true);

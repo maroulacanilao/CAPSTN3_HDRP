@@ -32,19 +32,17 @@ namespace UI.InventoryMenu
             for (int i = 0; i < toolBarItems.Length; i++)
             {
                 toolBarItems[i].Initialize(this,i);
-                // // to remove
-                // toolBarItems[i].SetDisplay();
             }
             
             for (int j = 0; j < storageItems.Length; j++)
             {
                 storageItems[j].Initialize(this,j);
-                // // to remove
-                // storageItems[j].SetDisplay();
             }
             armorBar.Initialize(this,0);
             weaponBar.Initialize(this,0);
+            
             inventoryDetailsPanel.Initialize(this);
+            inventoryDetailsPanel.gameObject.SetActive(false);
         }
         
         public override void OpenMenu()
