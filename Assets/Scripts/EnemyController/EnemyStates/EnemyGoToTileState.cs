@@ -3,20 +3,32 @@ using Farming;
 using Pathfinding;
 using UnityEngine;
 using CustomHelpers;
+using Managers;
 
 namespace EnemyController.EnemyStates
 {
     [System.Serializable]
     public class EnemyChaseTileState : EnemyControllerState
     {
-
-        public EnemyChaseTileState(EnemyAIController aiController_, EnemyStateMachine stateMachine_) : base(aiController_, stateMachine_)
+        private readonly Collider targetCol;
+        
+        private Vector3 targetPos;
+        public EnemyChaseTileState(EnemyAIController aiController_, EnemyStateMachine stateMachine_, FarmTile target_) : base(aiController_, stateMachine_)
         {
+            targetTile = target_;
+            if(targetTile == null) return;
+            targetCol = targetTile.GetComponent<Collider>();
         }
 
         public override void Enter()
         {
             base.Enter();
+            if (targetTile == null)
+            {
+                DefaultState();
+                return;
+            }
+            
             controller.StopAllCoroutines();
             stateMachine.targetDestination = default;
 
@@ -24,54 +36,37 @@ namespace EnemyController.EnemyStates
             controller.aiPath.whenCloseToDestination = CloseToDestinationMode.ContinueToExactDestination;
             
             var _position = controller.transform.position;
-            stateMachine.targetTile = FarmTileManager.Instance.GetAllNonEmptyTile().GetNearestComponent(_position);
             
-            if(stateMachine.targetTile == null)
-            {
-                DefaultState();
-                return;
-            }
+            targetPos = targetTile.transform.position;
             
-            stateMachine.tileCol = stateMachine.targetTile.GetComponent<Collider>();
-
-            var _tilePos = stateMachine.targetTile.transform.position;
-            
-            var _leftDist = Vector3.Distance(_position, _tilePos.AddX(-1.5f));
-            var _rightDist = Vector3.Distance(_position, _tilePos.AddX(1.5f));
-
+            var _leftDist = Vector3.Distance(_position, targetPos.AddX(-1.5f));
+            var _rightDist = Vector3.Distance(_position, targetPos.AddX(1.5f));
             
             if (_leftDist > _rightDist)
             {
                 // if right is nearer
-                stateMachine.targetDestination = _tilePos.AddX(1.5f);
+                stateMachine.targetDestination = targetPos.AddX(1.5f);
                 stateMachine.isTileOnRight = true;
             }
             else
             {
-                stateMachine.targetDestination = _tilePos.AddX(-1.5f);
+                stateMachine.targetDestination = targetPos.AddX(-1.5f);
                 stateMachine.isTileOnRight = false;
             }
-
+            
             controller.animator.SetTrigger(controller.GroundedHash);
             controller.aiPath.destination = stateMachine.targetDestination;
-            controller.StartCoroutine(OnReachDestination());
+            controller.StartCoroutine(Co_IsWithinRange());
         }
-
+        
         public override void Exit()
         {
             base.Exit();
             controller.StopAllCoroutines();
             controller.animator.ResetTrigger(controller.GroundedHash);
         }
-
-        private IEnumerator OnReachDestination()
-        {
-            yield return Co_IsWithinRange(FarmTileManager.Instance.farmTileLayerMask);
-            Debug.Log("Reached Destination");
-            stateMachine.ChangeState(stateMachine.attackTileState);
-        }
         
-        private IEnumerator Co_IsWithinRange(LayerMask layerMask_, float refreshRate_ = 1f)
+        private IEnumerator Co_IsWithinRange(float refreshRate_ = 1f)
         {
             var _waiter = new WaitForSeconds(refreshRate_);
 
@@ -87,24 +82,25 @@ namespace EnemyController.EnemyStates
             {
                 yield return _waiter;
 
-                if (stateMachine.targetTile.IsEmptyOrDestroyed())
+                if (targetTile.IsEmptyOrDestroyed())
                 {
                     DefaultState();
                     yield break;
                 }
 
-                if (stateMachine.targetTile.tileState == TileState.Empty)
+                if (targetTile.tileState == TileState.Empty)
                 {
                     DefaultState();
                     yield break;
                 }
                 
-                if(IsWithinAttackRange(stateMachine.tileCol)) yield break;
+                if(IsWithinAttackRange(targetCol)) yield break;
                 
                 controller.aiPath.destination = stateMachine.targetDestination;
             }
+            
+            
+            stateMachine.ChangeState(new EnemyAttackTileState(controller,stateMachine,targetTile));
         }
-
-
     }
 }
