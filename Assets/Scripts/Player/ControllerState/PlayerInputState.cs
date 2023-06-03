@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Player.ControllerState
 {
+    
+    public enum PlayerSate { Grounded, Jumping, Falling, Swimming, Climbing, Dashing, Attacking, UsingTool, Interacting, Menu }
+    
     [System.Serializable]
     public abstract class PlayerInputState : UnitState
     {
@@ -14,6 +17,7 @@ namespace Player.ControllerState
 
         protected readonly Rigidbody rb;
         protected bool isStateActive;
+        public PlayerSate playerState { get; protected set; }
 
         protected PlayerInputState(PlayerInputStateMachine stateMachine_, int animEndEventHash_)
         {

@@ -75,6 +75,9 @@ namespace Managers
         public static int CurrentDate => DateTime.Day;
         public static DayOfWeek CurrentDay => DateTime.DayOfWeek;
         public static DateTime DateTime => Instance.dateTime;
+        
+        public static int DayDuration => EndingHour - StartingHour;
+        public static float ScaledGameTime => (float) (GameTime - StartingHour) / DayDuration;
 
         #endregion
 
@@ -200,7 +203,7 @@ namespace Managers
                     UpdateTime();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 isTimePaused = true;
                 timerCTS = new CancellationTokenSource();

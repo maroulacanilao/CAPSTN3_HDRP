@@ -1,8 +1,10 @@
 ﻿using System;
+using CustomHelpers;
 using Items;
 using Items.Inventory;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static UI.InventoryMenu.Item_MenuItem.InventoryItemType;
 
 namespace UI.InventoryMenu
@@ -36,8 +38,10 @@ namespace UI.InventoryMenu
         private void OnEnable()
         {
             InputUIManager.OnSwap.AddListener(OnSwap);
-            errorTxt.gameObject.SetActive(false);
             InputUIManager.OnCancel.AddListener(OnCancel);
+            errorTxt.gameObject.SetActive(false);
+            
+            Item_MenuItem.OnDragStateChange.AddListener(OnDragStateChange);
         }
 
         private void OnDisable()
@@ -54,7 +58,11 @@ namespace UI.InventoryMenu
             if(!enabled) return;
             swappingItem = null;
             ResetOutlines();
+            
+            if(selectedItem.IsEmptyOrDestroyed()) return;
             selectedItem.button.Select();
+            
+            if(swappingItem == null) selectedItem.SelectButton();
         }
 
         private void OnSwap()
@@ -207,5 +215,38 @@ namespace UI.InventoryMenu
                 return;
             }
         }
+        
+        private void OnDragStateChange(PointerEventData eventData_, DragState state_)
+        {
+            switch (state_)
+            {
+                case DragState.BeginDrag:
+                    swappingItem = selectedItem;
+                    Highlight();
+                    swappingItem.SwappingOutline();
+                    break;
+                case DragState.Dragging:
+                    break;
+
+                case DragState.EndDrag:
+                {
+                    var _res = eventData_.pointerCurrentRaycast;
+                    if(_res.gameObject == null) return;
+                    Debug.Log(_res.gameObject.name);
+                    var _menuEndItem = _res.gameObject.GetComponent<Item_MenuItem>();
+                    
+                    if(_menuEndItem == null) return;
+                    
+                    if(_menuEndItem == swappingItem) return;
+                    if(swappingItem.item == null) return;
+                    
+                    selectedItem = _menuEndItem;
+                    SwapItem();
+                    _menuEndItem.button.Select();
+                    break;
+                }
+            }
+        }
+        
     }
 }

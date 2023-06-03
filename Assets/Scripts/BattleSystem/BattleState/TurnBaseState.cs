@@ -28,7 +28,6 @@ namespace BattleSystem.BattleState
             {
                 StateMachine.NextTurnState();
             }
-            Debug.Log($"{battleCharacter.gameObject}'s Enter Turn");
             yield return CoroutineHelper.GetWait(0.15f);
             yield return battleCharacter.character.statusEffectReceiver.BeforeTurnTick(this);
             yield return StartTurn();
@@ -36,7 +35,6 @@ namespace BattleSystem.BattleState
 
         protected virtual IEnumerator StartTurn()
         {
-            Debug.Log($"{battleCharacter.gameObject}'s Turn");
             yield return CheckForEndState();
             yield return CoroutineHelper.GetWait(.2f);
             yield return TurnLogic();
@@ -48,14 +46,12 @@ namespace BattleSystem.BattleState
         {
             yield return CoroutineHelper.GetWait(0.1f);
             yield return battleCharacter.character.statusEffectReceiver.AfterTurnTick(this);
-            Debug.Log($"{battleCharacter.gameObject}'s End Turn");
-            
+
             yield return CheckForEndState(true);
         }
         
         public override IEnumerator Exit()
         {
-            Debug.Log($"{battleCharacter.gameObject}'s Exit State");
             yield break;
         }
 

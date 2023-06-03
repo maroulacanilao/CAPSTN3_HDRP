@@ -18,7 +18,6 @@ namespace Character
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log(other.gameObject.name);
             if (!other.gameObject.CompareTag("Player")) return;
             if(!other.gameObject.TryGetComponent(out PlayerCharacter playerCharacter)) return;
             

@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using EnemyController.EnemyStates;
+using Farming;
 using NaughtyAttributes;
 using Pathfinding;
 using UnityEngine;
@@ -79,7 +81,7 @@ namespace EnemyController
         
         private void Start()
         {
-            stateMachine.Initialize();
+            
         }
 
         private void FixedUpdate()
@@ -92,7 +94,9 @@ namespace EnemyController
             var _waiter = new WaitForSeconds(refreshRate_);
             while (gameObject.activeSelf)
             {
+                if(target_ == null) yield break;
                 aiPath.destination = target_.position;
+                aiPath.OnTargetReached();
                 yield return _waiter;
             }
         }
@@ -107,6 +111,16 @@ namespace EnemyController
                 yield return _waiter;
                 if(aiPath.reachedDestination) yield break;
             }
+        }
+
+        public void SetTileTarget(FarmTile tile_)
+        {
+            if (stateMachine == null)
+            {
+                stateMachine = new EnemyStateMachine(this);
+            }
+            StopAllCoroutines();
+            stateMachine.ChangeState(new EnemyGoToTileState(this, stateMachine, tile_));
         }
     }
 }

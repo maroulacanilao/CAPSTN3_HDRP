@@ -1,5 +1,6 @@
 ﻿using System;
 using CustomEvent;
+using CustomHelpers;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -28,21 +29,22 @@ namespace UI
             if(outline == null) outline = GetComponent<Outline>();
 
             outline.effectDistance = outlineSize;
-            OnSelectButton.AddListener(SelectButtonHandler);
         }
 
-        private void OnDestroy()
+        protected virtual void OnEnable()
         {
+            OnSelectButton.AddListener(SelectButtonHandler);
+        }
+        
+        protected virtual void OnDisable()
+        {
+            outline.effectColor = Color.clear;
             OnSelectButton.RemoveListener(SelectButtonHandler);
         }
 
-        private void OnEnable()
-        {
-            if(outline == null) Debug.Log(gameObject.name);
-        }
-        
         public void OnSelect(BaseEventData eventData)
         {
+            Debug.Log("Select");
             OnSelectButton.Invoke(this);
         }
         
@@ -58,11 +60,6 @@ namespace UI
         }
 
         public virtual void DeselectButton()
-        {
-            outline.effectColor = Color.clear;
-        }
-
-        protected virtual void OnDisable()
         {
             outline.effectColor = Color.clear;
         }

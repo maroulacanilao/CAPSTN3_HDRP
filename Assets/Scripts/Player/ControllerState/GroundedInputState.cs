@@ -18,6 +18,7 @@ namespace Player.ControllerState
             player.animator.SetTrigger(player.groundedHash);
             canInput = false;
             player.StartCoroutine(InputDelay());
+            playerState = PlayerSate.Grounded;
         }
 
         public override void HandleInput()
@@ -25,14 +26,6 @@ namespace Player.ControllerState
             if(!canInput) return;
             if (InputManager.InteractAction.triggered)
             {
-
-                player.interactDetector.Interact();
-                return;
-            }
-            
-            if (InputManager.UseToolAction.triggered)
-            {
-                //TODO: Add Use Tool State
                 player.playerEquipment.UseTool();
                 return;
             }

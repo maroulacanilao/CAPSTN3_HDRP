@@ -12,7 +12,6 @@ namespace Player
 {
     public class FarmTools : MonoBehaviour
     {
-        private Vector3 ToolPosition => toolArea.transform.position;
         private ToolArea toolArea;
         
         private void Start()
@@ -20,43 +19,67 @@ namespace Player
             toolArea = ToolArea.Instance;
         }
         
-        public void TillTile()
+        public bool TillTile()
         {
-            if (toolArea.GetFarmTile())
-            {
-                DestroyTile();
-                return;
-            }
-            if(!toolArea.IsTillable()) return;
+            var _tile = toolArea.GetFarmTile();
             
-            FarmTileManager.OnAddFarmTile.Invoke();
+            if (_tile == null)
+            {
+                if(!toolArea.IsTillable()) return false;
+            
+                FarmTileManager.AddFarmTileAtToolLocation();
+                return true;
+            }
+            
+            if (TryHarvest(_tile)) return true;
+            
+           DestroyTile();
+           return true;
         }
 
-        public void WaterTile()
+        public bool WaterTile()
         {
             var _farmTile = toolArea.GetFarmTile();
             
-            if(_farmTile == null) return;
+            if(_farmTile == null) return false;
+            
+            if(TryHarvest(_farmTile)) return true;
+
+            if (_farmTile.tileState == TileState.ReadyToHarvest) return true;
             
             _farmTile.OnWaterPlant();
             _farmTile.Heal(new HealInfo(10));
+            return true;
         }
 
-        public void PlantSeed(ItemSeed itemSeed_)
+        public bool PlantSeed(ItemSeed itemSeed_)
         {
             var _farmTile = toolArea.GetFarmTile();
 
-            if(_farmTile == null) return;
-            if(_farmTile.tileState != TileState.Empty) return;
+            if(_farmTile == null) return false;
+            
+            if(TryHarvest(_farmTile)) return true;
+            
+            if(_farmTile.tileState != TileState.Empty) return false;
             
             _farmTile.OnPlantSeed(itemSeed_.Data as SeedData);
             itemSeed_.RemoveStack();
             InventoryEvents.OnUpdateStackable.Invoke(itemSeed_);
+            return true;
         }
         
         public void DestroyTile()
         {
-            FarmTileManager.OnRemoveTile.Invoke();
+            FarmTileManager.RemoveTileAtToolLocation();
+        }
+
+        public bool TryHarvest(FarmTile tile_)
+        {
+            if(tile_.tileState != TileState.ReadyToHarvest) return false;
+            if(tile_.seedData == null) return false;
+            
+            tile_.OnInteract();
+            return true;
         }
     }
 }

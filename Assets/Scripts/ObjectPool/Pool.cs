@@ -95,8 +95,7 @@ namespace ObjectPool
 
         public void Release(Poolable poolableObject_)
         {
-            if(poolableObject_ == null) return;
-            if(poolableObject_.IsDestroyed()) return;
+            if(poolableObject_.IsEmptyOrDestroyed()) return;
             if (!activeSet.Contains(poolableObject_)) return;
             activeSet.Remove(poolableObject_);
             poolableObject_.OnDeSpawn();

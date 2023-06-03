@@ -32,6 +32,7 @@ namespace UI.HUD
 
         private void OnDestroy()
         {
+            if(characterHealth == null) return;
             characterHealth.OnTakeDamage.RemoveListener(DamageEffect);
             characterHealth.OnHeal.RemoveListener(HealEffect);
         }

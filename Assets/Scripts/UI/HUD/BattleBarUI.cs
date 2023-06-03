@@ -8,17 +8,29 @@ namespace UI.HUD
 {
     public class BattleBarUI : HealthBarUI, IPointerEnterHandler, IPointerExitHandler
     {
+        [SerializeField] private BattleStation battleStation;
         [SerializeField] private TextMeshProUGUI name_TXT;
         [SerializeField] private GameObject selectIndicator;
+        
         protected BattleCharacter battleCharacter;
         
         protected override void Start()
         {
+            if (battleStation != null)
+            {
+                if (battleStation.battleCharacter == null)
+                {
+                    gameObject.SetActive(false);
+                    return;
+                }
+                
+                battleCharacter = battleStation.battleCharacter;
+                character = battleCharacter.character;
+            }
+            
             base.Start();
             
             name_TXT.text = character.characterData.characterName;
-            
-            if(!character.TryGetComponent(out battleCharacter)) return;
         }
 
         protected virtual void OnEnable()

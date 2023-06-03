@@ -10,7 +10,6 @@ namespace UI.Battle
 {
     public class TargetButton : SelectableMenuButton, IPointerEnterHandler
     {
-        [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI name_TXT;
         private BattleCharacter battleCharacter;
         private BattleActionUI battleActionUI;
@@ -40,8 +39,9 @@ namespace UI.Battle
             OnTargetSelectButton.RemoveListener(OnSelectButtonHandler);
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             button.interactable = battleCharacter.character.IsAlive;
         }
 

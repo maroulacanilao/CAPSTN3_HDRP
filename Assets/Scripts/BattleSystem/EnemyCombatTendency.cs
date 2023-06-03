@@ -88,8 +88,10 @@ namespace BattleSystem
             }
         }
         
-        public SerializedDictionary<SpellType, List<SpellData>> GetPossibleSpells(int _currentMana)
+        public SerializedDictionary<SpellType, List<SpellData>>GetPossibleSpells(int _currentMana)
         {
+            if (spellDictionary == null) SortSpells();
+            
             var _spellDictionary = new SerializedDictionary<SpellType, List<SpellData>>(spellDictionary);
 
             foreach (var _spellPair in _spellDictionary)

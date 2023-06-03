@@ -109,6 +109,9 @@ namespace Farming
         public void TakeDamage(DamageInfo damageInfo_)
         {
             health.AddHealth(-damageInfo_.DamageAmount);
+            
+            if(health.CurrentHealth > 0) return;
+            FarmTileManager.RemoveTile(this);
         }
         
         public void Heal(HealInfo healInfo_, bool isOverHeal_ = false)

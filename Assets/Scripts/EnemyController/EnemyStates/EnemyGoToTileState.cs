@@ -8,16 +8,17 @@ using Managers;
 namespace EnemyController.EnemyStates
 {
     [System.Serializable]
-    public class EnemyChaseTileState : EnemyControllerState
+    public class EnemyGoToTileState : EnemyControllerState
     {
         private readonly Collider targetCol;
-        
+
         private Vector3 targetPos;
-        public EnemyChaseTileState(EnemyAIController aiController_, EnemyStateMachine stateMachine_, FarmTile target_) : base(aiController_, stateMachine_)
+        public EnemyGoToTileState(EnemyAIController aiController_, EnemyStateMachine stateMachine_, FarmTile target_) : base(aiController_, stateMachine_)
         {
             targetTile = target_;
             if(targetTile == null) return;
             targetCol = targetTile.GetComponent<Collider>();
+            stateName = "GoToTile";
         }
 
         public override void Enter()
@@ -84,23 +85,28 @@ namespace EnemyController.EnemyStates
 
                 if (targetTile.IsEmptyOrDestroyed())
                 {
+                    Debug.Log("Tile Destroyed");
                     DefaultState();
                     yield break;
                 }
 
                 if (targetTile.tileState == TileState.Empty)
                 {
+                    Debug.Log("Tile is Empty");
                     DefaultState();
                     yield break;
                 }
-                
-                if(IsWithinAttackRange(targetCol)) yield break;
+
+                if (IsWithinAttackRange(targetCol))
+                {
+                    Debug.Log("IS NEAR");
+                    stateMachine.ChangeState(new EnemyAttackTileState(controller,stateMachine,targetTile));
+                    yield break;
+                }
                 
                 controller.aiPath.destination = stateMachine.targetDestination;
             }
-            
-            
-            stateMachine.ChangeState(new EnemyAttackTileState(controller,stateMachine,targetTile));
+            DefaultState();
         }
     }
 }

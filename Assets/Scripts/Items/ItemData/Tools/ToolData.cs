@@ -15,7 +15,7 @@ namespace Items.ItemData.Tools
             ItemType = ItemType.Tool;
         }
         
-        public abstract void UseTool(PlayerEquipment playerEquipment_);
+        public abstract bool UseTool(PlayerEquipment playerEquipment_);
         
         public ItemTool GetItem()
         {

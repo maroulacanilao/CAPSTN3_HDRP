@@ -19,14 +19,13 @@ namespace Farming
         public HashSet<FarmTile> farmTiles { get; private set; } = new HashSet<FarmTile>();
         
 
-        public static readonly Evt OnAddFarmTile = new Evt();
-        public static readonly Evt OnRemoveTile = new Evt();
+        public static readonly Evt<FarmTile> OnAddFarmTile = new Evt<FarmTile>();
+        public static readonly Evt<FarmTile> OnRemoveTile = new Evt<FarmTile>();
 
         protected override void Awake()
         {
             base.Awake();
-            OnAddFarmTile.AddListener(AddFarmTile);
-            OnRemoveTile.AddListener(RemoveTile);
+            
             transform.position = Vector3.zero;
         }
 
@@ -42,15 +41,7 @@ namespace Farming
 
         private void OnDestroy()
         {
-            OnAddFarmTile.RemoveListener(AddFarmTile);
-            OnRemoveTile.RemoveListener(RemoveTile);
-        }
-    
-        private void AddFarmTile()
-        {
-            var _tile = SpawnTileAtToolArea();
-            farmTiles.Add(_tile);
-            _tile.transform.SetParent(transform);
+            
         }
 
         public List<FarmTile> GetAllNonEmptyTile()
@@ -74,17 +65,43 @@ namespace Farming
             return farmTiles.Any(f => f.IsValid() && f.tileState != TileState.Empty);
         }
         
-        private void RemoveTile()
+        public FarmTile[] GetNonEmptyTiles()
         {
-            var _farmTile = toolArea.GetFarmTile();
-
-            if(_farmTile == null) return;
+            PurgeNulls();
+            return farmTiles.Where(f_ => f_.IsValid() && f_.tileState != TileState.Empty).ToArray();
+        }
+        
+        public static void AddFarmTileAtToolLocation()
+        {
+            if(Instance.IsEmptyOrDestroyed()) return;
+            var _tile = Instance.SpawnTileAtToolArea();
+            Instance.farmTiles.Add(_tile);
+            _tile.transform.SetParent(Instance.transform);
+            OnAddFarmTile.Invoke(_tile);
+        }
+        
+        public static void RemoveTileAtToolLocation()
+        {
+            if(Instance.IsEmptyOrDestroyed()) return;
+            var _farmTile = Instance.toolArea.GetFarmTile();
+            
             if(_farmTile.IsEmptyOrDestroyed()) return;
             
             if(_farmTile.tileState != TileState.Empty) return;
             
-            farmTiles.Remove(_farmTile); 
+            Instance.farmTiles.Remove(_farmTile);
+            OnRemoveTile.Invoke(_farmTile);
             Destroy(_farmTile.gameObject);
+        }
+        
+        public static void RemoveTile(FarmTile farmTile_)
+        {
+            if(Instance.IsEmptyOrDestroyed()) return;
+            if(farmTile_.IsEmptyOrDestroyed()) return;
+            
+            Instance.farmTiles.Remove(farmTile_);
+            OnRemoveTile.Invoke(farmTile_);
+            Destroy(farmTile_.gameObject);
         }
 
         public FarmTile SpawnTileAtToolArea()

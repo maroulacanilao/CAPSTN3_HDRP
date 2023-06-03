@@ -19,6 +19,7 @@ namespace Player.ControllerState
             rb.velocity = new Vector3(StateMachine.velocityOnExit.x, player.jumpForce, StateMachine.velocityOnExit.z);
             rb.SetVelocity(StateMachine.velocityOnExit.SetY(player.jumpForce));
             jumpTimer = 0;
+            playerState = PlayerSate.Jumping;
         }
 
         public override void LogicUpdate()
@@ -66,6 +67,7 @@ namespace Player.ControllerState
         {
             base.Enter();
             //player.animator.SetTrigger(player.fallHash);
+            playerState = PlayerSate.Falling;
         }
 
         public override void LogicUpdate()

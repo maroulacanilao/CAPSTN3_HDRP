@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4038587377004680470}
   - component: {fileID: 6985937829449706452}
   - component: {fileID: 5210182999718579121}
+  - component: {fileID: 5434340240564495711}
   m_Layer: 5
   m_Name: TargetBtn
   m_TagString: Untagged
@@ -53,7 +54,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15b4bb4f1cd84d1479cf2492b9caa3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: {fileID: 5210182999718579121}
+  <button>k__BackingField: {fileID: 5210182999718579121}
+  <outline>k__BackingField: {fileID: 5434340240564495711}
+  <outlineColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  <outlineSize>k__BackingField: {x: 3, y: 3}
   name_TXT: {fileID: 6350829358317446211}
 --- !u!222 &4038587377004680470
 CanvasRenderer:
@@ -137,6 +141,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5434340240564495711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5399305495291340110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &7871715699644645407
 GameObject:
   m_ObjectHideFlags: 0

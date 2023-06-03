@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using CustomHelpers;
+using Farming;
+using Managers;
 using UnityEngine;
 
 namespace EnemyController.EnemyStates
@@ -11,6 +13,9 @@ namespace EnemyController.EnemyStates
         public readonly EnemyAIController controller;
         public readonly EnemyStateMachine stateMachine;
         public bool isStateActive; 
+        
+        protected FarmTile targetTile;
+        public string stateName;
 
         public EnemyControllerState(EnemyAIController aiController_, EnemyStateMachine stateMachine_)
         {
@@ -32,11 +37,16 @@ namespace EnemyController.EnemyStates
         
         protected void DefaultState()
         {
-            stateMachine.targetTile = null;
-            stateMachine.tileCol = null;
+            if(EnemySpawner.Instance.IsEmptyOrDestroyed()) return;
+            var _newTarget = EnemySpawner.Instance.GetNewTileTarget(controller, targetTile);
 
-            stateMachine.targetDestination = default;
-            stateMachine.ChangeState(stateMachine.patrolState);
+            if (_newTarget == null)
+            {
+                stateMachine.ChangeState(new EnemyChasePlayerState(controller,stateMachine));
+                return;
+            }
+            
+            stateMachine.ChangeState(new EnemyGoToTileState(controller,stateMachine,_newTarget));
         }
 
         protected bool IsWithinAttackRange(Collider targetCol_)

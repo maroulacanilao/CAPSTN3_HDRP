@@ -63,8 +63,7 @@ namespace Player
         [field: SerializeField] public AnimationEventReceiver animationEventReceiver { get; private set; }
         [field: SerializeField] public MovementCollisionDetector collisionDetector { get; private set; }
         [field: SerializeField] public PlayerEquipment playerEquipment { get; private set; }
-        [field: SerializeField] public InteractDetector interactDetector { get; private set; }
-        
+
         #endregion
         
         public Rigidbody rb { get; private set; }
@@ -76,6 +75,16 @@ namespace Player
         private PlayerInputStateMachine StateMachine;
         
         public bool IsGrounded => collisionDetector.isGrounded;
+        
+        public PlayerSate playerState
+        {
+            get
+            {
+                var _state = StateMachine.CurrentState as PlayerInputState;
+                if (_state != null) return _state.playerState;
+                return PlayerSate.Grounded;
+            }
+        }
         
         [Header("Components To Disable On Freeze")]
         [SerializeField] private MonoBehaviour[] scriptsToDisable;
@@ -129,7 +138,7 @@ namespace Player
         private void UpdateToolPosition()
         {
             if(rb.velocity.magnitude.IsApproximatelyTo(0)) return;
-            toolArea.UpdatePosition(StateMachine.direction, transform.position);
+            toolArea.UpdatePosition(StateMachine.direction, transform.position, IsGrounded);
         }
     }
 }

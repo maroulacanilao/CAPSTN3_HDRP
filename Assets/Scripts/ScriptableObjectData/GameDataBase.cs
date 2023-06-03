@@ -11,7 +11,7 @@ namespace ScriptableObjectData
     public class GameDataBase : ScriptableObject
     {
         [field: SerializeField] public ItemDatabase itemDatabase { get; private set; }
-        [field: SerializeField] private List<EnemyData> enemyDataList { get; set; }
+        [field: SerializeField] public EnemyDataBase enemyDataBase { get; private set; }
         
         [field: SerializeField] public List<RequestOrderTemplate> requestOrderTemplates { get; private set; }
     
@@ -25,11 +25,6 @@ namespace ScriptableObjectData
         public void Initialize()
         {
             enemyDataDictionary = new Dictionary<int, EnemyData>();
-        
-            foreach (var _enemyData in enemyDataList)
-            {
-                enemyDataDictionary.Add(_enemyData.characterID, _enemyData);
-            }
             playerData.Initialize(this);
             //seedDataBase.Initialize(playerData.playerLevelData.CurrentLevel);
         }
@@ -46,19 +41,7 @@ namespace ScriptableObjectData
         }
         
         #if UNITY_EDITOR
-        
-        [Button(" Get All Enemy Data")]
-        private void GetAllEnemyData()
-        {
-            enemyDataList = new List<EnemyData>();
-            var _enemiesData = Resources.LoadAll<EnemyData>("Data/EnemyData");
-            foreach (var _data in _enemiesData)
-            {
-                enemyDataList.Add(_data);
-            }
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-        
+
         [Button(" Get All Request Template")]
         private void GetAllRequestTemplate()
         {

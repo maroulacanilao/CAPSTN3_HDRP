@@ -2,10 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BaseCore;
-using BattleSystem.BattleState;
-using Character;
 using CustomEvent;
-using ScriptableObjectData.CharacterData;
 using UnityEngine;
 
 namespace BattleSystem
@@ -17,6 +14,8 @@ namespace BattleSystem
         [field: SerializeField] public BattleData battleData { get; private set; }
         [field: SerializeField] public List<BattleStation> playerPartyStation { get; private set; }
         [field: SerializeField] public List<BattleStation> enemyPartyStation { get; private set; }
+        
+        [SerializeField] private GameObject eventSystem;
 
         public BattleStateMachine BattleStateMachine { get; private set; }
 
@@ -32,9 +31,17 @@ namespace BattleSystem
             BattleStateMachine = new BattleStateMachine(this);
         }
         
-        private void Start()
+        private IEnumerator Start()
         {
-            StartCoroutine(BattleStateMachine.Initialize());
+            eventSystem.SetActive(false);
+            yield return null;
+            eventSystem.SetActive(true);
+            yield return BattleStateMachine.Initialize();
+        }
+
+        private void OnEnable()
+        {
+            Cursor.visible = true;
         }
 
         public void End(bool hasWon_)

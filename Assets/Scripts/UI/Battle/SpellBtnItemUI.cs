@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace UI.Battle
 {
-    public class SpellBtnItemUI : MonoBehaviour, ISelectHandler, IPointerEnterHandler
+    public class SpellBtnItemUI : SelectableMenuButton, ISelectHandler, IPointerEnterHandler
     {
         [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI buttonTXT;
@@ -48,19 +48,21 @@ namespace UI.Battle
             buttonTXT.text = spellData.spellName;
             gameObject.SetActive(true);
         }
-        
-        public void OnSelect(BaseEventData eventData)
+
+        public override void SelectButton()
         {
+            base.SelectButton();
             OnSelectSpell.Invoke(this);
         }
-        
+
         public void OnPointerEnter(PointerEventData eventData)
         {
             button.Select();
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             button.interactable = spellData.manaCost <= playerCharacterMana.CurrentMana;
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using CustomEvent;
+using CustomHelpers;
 using DG.Tweening;
 using UnityEngine;
 
@@ -21,7 +22,12 @@ public class DamageTextUI : MonoBehaviour
         ShowHealText.AddListener(ShowHeal);
         panel.SetActive(false);
     }
-    
+
+    private void OnDestroy()
+    {
+        ShowDamageText.RemoveListener(ShowDamage);
+        ShowHealText.RemoveListener(ShowHeal);
+    }
     
     private void ShowDamage(Vector3 pos_, string val_)
     {
@@ -52,6 +58,7 @@ public class DamageTextUI : MonoBehaviour
     
     private void SetPosition(Vector3 pos_)
     {
+        if(transform.IsEmptyOrDestroyed()) return;
         transform.position = pos_ + offset;
     }
 }

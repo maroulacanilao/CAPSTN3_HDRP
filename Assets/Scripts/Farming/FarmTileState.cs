@@ -52,6 +52,8 @@ namespace Farming
 
             farmTile.soilRenderer.color = farmTile.tilledColor;
             farmTile.soilRenderer.sprite = farmTile.defaultSoilSprite;
+            
+            farmTile.health.RefillHealth();
         }
 
         public override void WaterPlant()
@@ -116,8 +118,6 @@ namespace Farming
             TimeManager.OnMinuteTick.RemoveListener(UpdateTimeRemaining);
         }
 
-        public override void Interact() { }
-
         private void UpdateTimeRemaining()
         {
             if (!farmTile.isWatered) return;
@@ -163,6 +163,7 @@ namespace Farming
             var _item = farmTile.seedData.produceData.GetConsumableItem(1);
             GameManager.Instance.GameDataBase.playerInventory.AddItem(_item);
             farmTile.ChangeState(farmTile.emptyTileState);
+            farmTile.health.RefillHealth();
         }
     }
 }

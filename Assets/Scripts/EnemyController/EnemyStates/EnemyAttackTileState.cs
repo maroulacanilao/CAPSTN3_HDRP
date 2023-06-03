@@ -10,20 +10,32 @@ namespace EnemyController.EnemyStates
     public class EnemyAttackTileState : EnemyControllerState
     {
         private readonly DamageInfo damageInfo;
-        public EnemyAttackTileState(EnemyAIController aiController_, EnemyStateMachine stateMachine_) : base(aiController_, stateMachine_)
+        private readonly Collider tileCol;
+        
+        public EnemyAttackTileState(EnemyAIController aiController_, EnemyStateMachine stateMachine_, FarmTile targetTile_) : base(aiController_, stateMachine_)
         {
+            Debug.Log("TargetTile");
+            stateName = "Attack Tile";
             damageInfo = new DamageInfo()
             {
                 DamageAmount = 10,
                 Source = controller.gameObject
             };
+            targetTile = targetTile_;
+            
+            if(targetTile == null) return;
+            tileCol = targetTile.GetComponent<Collider>();
         }
 
         public override void Enter()
         {
             base.Enter();
+            if (targetTile == null)
+            {
+                DefaultState();
+                return;
+            }
             controller.aiPath.isStopped = true;
-            Debug.Log("Attack Tile");
             controller.StartCoroutine(Co_AttackTile());
         }
         
@@ -37,41 +49,29 @@ namespace EnemyController.EnemyStates
 
         public void AttackTile()
         {
-            if (!IsWithinAttackRange(stateMachine.tileCol))
+            if (!IsWithinAttackRange(tileCol))
             {
-                Debug.Log("Not Within Attack Range");
                 return;
             }
-            stateMachine.targetTile.TakeDamage(damageInfo);
+            targetTile.TakeDamage(damageInfo);
         }
 
         private IEnumerator Co_AttackTile()
         {
-            while (this.isStateActive 
-                   && IsWithinAttackRange(stateMachine.tileCol) 
-                   && stateMachine.targetTile.tileState!= TileState.Empty)
+            while (this.isStateActive &&
+                   IsWithinAttackRange(tileCol) &&
+                   targetTile.tileState!= TileState.Empty)
             {
-                Debug.Log("ATTACK Coroutine");
                 controller.animator.SetTrigger(controller.AttackHash);
-                Debug.Log("ATTACK Trigger");
-            
-            
-                yield return controller.animator.WaitForAnimationEvent(controller.AttackHitEvent, 0.25f);
+                
+                yield return controller.animator.WaitForAnimationEvent(controller.AttackHitEvent, 1f);
             
                 AttackTile();
                 yield return new WaitForSeconds(controller.attackCooldown);
                 controller.animator.ResetTrigger(controller.AttackHash);
             }
             
-            if (FarmTileManager.Instance.HasNonEmptyTile())
-            {
-                stateMachine.ChangeState(stateMachine.chaseTileState);
-                yield break;
-            }
-            else
-            {
-                stateMachine.ChangeState(stateMachine.chasePlayerState);
-            }
+            DefaultState();
         }
     }
 }

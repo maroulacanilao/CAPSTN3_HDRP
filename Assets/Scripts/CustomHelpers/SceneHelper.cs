@@ -36,7 +36,7 @@ namespace CustomHelpers
         /// <param name="scene"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T FindFirstComponentInScene<T>(this Scene scene, bool includeInactive)
+        public static T FindFirstComponentInScene<T>(this Scene scene, bool includeInactive = true)
         {
             return scene.FindComponentsInScene<T>(includeInactive).FirstOrDefault();
         }
@@ -47,7 +47,7 @@ namespace CustomHelpers
         /// </summary>
         /// <param name="includeInActive"></param>
         /// <returns></returns>
-        public static List<Camera> GetAllMainCamerasInScene(this Scene scene, bool includeInActive)
+        public static List<Camera> GetAllMainCamerasInScene(this Scene scene, bool includeInActive = true)
         {
             return includeInActive ?
                 Camera.allCameras.Where(c => c.gameObject.scene == scene && c.gameObject.CompareTag("MainCamera")).ToList() :

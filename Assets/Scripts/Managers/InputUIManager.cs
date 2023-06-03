@@ -55,7 +55,6 @@ public class InputUIManager : MonoBehaviour
     
     private void Swap(InputAction.CallbackContext context_)
     {
-        Debug.Log("SWAP");
         OnSwap.Invoke();
     }
 }

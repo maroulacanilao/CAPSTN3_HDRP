@@ -15,6 +15,7 @@ namespace Player
     {
         [field: SerializeField] public PlayerCharacter player { get; private set; }
         [field: SerializeField] public FarmTools farmTools { get; private set; }
+        [field: SerializeField] public InteractDetector interactDetector { get; private set; }
 
         private PlayerInventory playerInventory;
 
@@ -30,6 +31,9 @@ namespace Player
             playerInventory = player.playerInventory;
             currIndex = 0;
             _equipmentActions = new Action[4];
+            
+            if(interactDetector == null) interactDetector = farmTools.GetComponent<InteractDetector>();
+            
             InventoryEvents.OnItemOnHandUpdate.AddListener(OnUpdateTools);
 
             for (int i = 0; i < playerInventory.ItemTools.Length; i++)
@@ -53,6 +57,7 @@ namespace Player
 
         public void UseTool()
         {
+            Debug.Log(CurrentItem);
             _equipmentActions[currIndex]?.Invoke();
         }
 
@@ -80,7 +85,12 @@ namespace Player
         private void OnUpdateTools(int index_, Item item_)
         {
             _equipmentActions[index_] = null;
-            if(item_ == null) return;
+            
+            if (item_ == null)
+            {
+                _equipmentActions[index_] = Interact;
+                return;
+            }
             
             switch (item_.ItemType)
             {
@@ -100,7 +110,8 @@ namespace Player
                     var _seed = (ItemSeed) item_;
                     _equipmentActions[index_] = () =>
                     {
-                        farmTools.PlantSeed(_seed);
+                        if(farmTools.PlantSeed(_seed)) return;
+                        Interact();
                     };
                     break;
                 }
@@ -109,15 +120,23 @@ namespace Player
                     var _toolData = (ToolData) item_.Data;
                     _equipmentActions[index_] = () =>
                     {
-                        _toolData.UseTool(this);
+                        if(_toolData.UseTool(this)) return;
+                        Interact();
                     };
                     break;
                 }
                 default:
-                    _equipmentActions[index_] = null;
+                    _equipmentActions[index_] = Interact;
                     break;
             }
-
         }
+
+        private void Interact()
+        {
+            Debug.Log("Interact");
+            interactDetector.Interact(); 
+            
+        }
+        
     }
 }

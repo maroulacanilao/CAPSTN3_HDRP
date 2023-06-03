@@ -54,7 +54,6 @@ namespace BattleSystem
                 default:
                     throw new Exception("NO TYPE");
             }
-            return null;
         }
 
         public IEnumerator NextTurnState()

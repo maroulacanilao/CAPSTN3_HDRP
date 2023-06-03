@@ -21,6 +21,7 @@ public class FarmSceneManager : Singleton<FarmSceneManager>
     protected void OnEnable()
     {
         eventQueueData.ExecuteAllEvents();
+        Cursor.visible = false;
         if(InputManager.Instance.IsEmptyOrDestroyed()) return;
         InputManager.Instance.enabled = false;
     }

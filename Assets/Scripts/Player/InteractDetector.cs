@@ -62,7 +62,7 @@ namespace Player
 
             if(nearestInteractable != null && nearestInteractable.gameObject == _obj) return;
 
-            if (!nearestInteractable.IsUnityValid())
+            if (nearestInteractable.IsValid())
             {
                 InteractableObject.OnExit.Invoke(nearestInteractable);
             }
@@ -73,7 +73,7 @@ namespace Player
 
         private void OnNull()
         {
-            if (!nearestInteractable.IsUnityNull())
+            if (nearestInteractable.IsValid())
             {
                 InteractableObject.OnExit.Invoke(nearestInteractable);
             }

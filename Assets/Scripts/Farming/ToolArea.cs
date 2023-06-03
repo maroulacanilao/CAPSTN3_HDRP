@@ -67,7 +67,7 @@ namespace Farming
         #endregion
 
 
-        public void UpdatePosition(Vector3 direction_,Vector3 playerPosition_)
+        public void UpdatePosition(Vector3 direction_,Vector3 playerPosition_, bool IsGrounded_)
         {
             playerPosition = playerPosition_ + direction_ * distanceToPlayer;
             
@@ -77,6 +77,7 @@ namespace Farming
             
             var _groundPosY = _isOnGround ? _groundHit.point.y : playerPosition.y;
             SnapToPosition(_groundPosY);
+            lineRenderer.enabled = _isOnGround;
             //if(_isOnGround) DrawLine();
         }
 

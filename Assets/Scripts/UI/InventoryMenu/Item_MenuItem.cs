@@ -10,8 +10,10 @@ using UnityEngine.UI;
 
 namespace UI.InventoryMenu
 {
+    public enum DragState { BeginDrag, Dragging, EndDrag }
+    
     [RequireComponent(typeof(Button))]
-    public class Item_MenuItem : SelectableMenuButton
+    public class Item_MenuItem : SelectableMenuButton, IDragHandler, IEndDragHandler, IBeginDragHandler
     {
         public enum InventoryItemType { storage = 0, toolBar = 1, weaponBar = 2, armorBar = 3  }
         
@@ -24,6 +26,7 @@ namespace UI.InventoryMenu
         [field: SerializeField] public InventoryItemType inventoryItemType { get; private set; }
         
         public static readonly Evt OnItemClick = new Evt();
+        public static readonly Evt<PointerEventData,DragState> OnDragStateChange = new Evt<PointerEventData, DragState>();
         private bool isHighlighting;
 
         public int index { get; private set; }
@@ -52,8 +55,9 @@ namespace UI.InventoryMenu
         public static Item_MenuItem selectedItem { get; set; }
 
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             UpdateDisplay();
         }
 
@@ -153,6 +157,29 @@ namespace UI.InventoryMenu
             isHighlighting = false;
             if(selectedItem == this) return;
             outline.effectColor = Color.clear;
+        }
+        
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            selectedItem = this;
+            ghostIcon.transform.SetParent(inventoryMenu.ghostIconParent);
+            ghostIcon.gameObject.SetActive(true);
+            OnDragStateChange.Invoke(eventData, DragState.BeginDrag);
+        }
+        
+        public void OnDrag(PointerEventData eventData)
+        {
+            if(item == null) return;
+            ghostIcon.transform.position = Input.mousePosition;
+            OnDragStateChange.Invoke(eventData, DragState.Dragging);
+        }
+        
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            ghostIcon.gameObject.SetActive(false);
+            ghostIcon.transform.SetParent(transform);
+            ghostIcon.transform.position = transform.position;
+            OnDragStateChange.Invoke(eventData, DragState.EndDrag);
         }
     }
 }

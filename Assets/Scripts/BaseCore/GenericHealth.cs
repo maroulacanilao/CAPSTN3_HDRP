@@ -1,4 +1,5 @@
 using CustomEvent;
+using UnityEngine;
 
 namespace BaseCore
 {
@@ -11,8 +12,9 @@ namespace BaseCore
         public int CurrentHealth => currentHealth;
 
         public int MaxHealth => maxHealth;
+        public float HealthPercentage => (float)currentHealth / maxHealth;
         
-        public readonly Evt<GenericHealth> onHealthChanged = new Evt<GenericHealth>();
+        public readonly Evt<GenericHealth> OnHealthChanged = new Evt<GenericHealth>();
 
         public GenericHealth(int maxHealth_)
         {
@@ -25,7 +27,8 @@ namespace BaseCore
             currentHealth += amount_;
             if (currentHealth > maxHealth) currentHealth = maxHealth;
             if(currentHealth < 0) currentHealth = 0;
-            onHealthChanged?.Invoke(this);
+            Debug.Log($"HP: {currentHealth}");
+            OnHealthChanged.Invoke(this);
         }
         
         public void SetHealth(int amount_)
@@ -33,7 +36,13 @@ namespace BaseCore
             currentHealth = amount_;
             if (currentHealth > maxHealth) currentHealth = maxHealth;
             if(currentHealth < 0) currentHealth = 0;
-            onHealthChanged?.Invoke(this);
+            OnHealthChanged.Invoke(this);
+        }
+        
+        public void RefillHealth()
+        {
+            currentHealth = maxHealth;
+            OnHealthChanged.Invoke(this);
         }
     }
 }

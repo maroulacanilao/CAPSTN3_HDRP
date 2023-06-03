@@ -76,13 +76,14 @@ namespace Managers
             if(!BattleData.currentEnemyData) return;
         
             var _lootTable = BattleData.currentEnemyData.LootTable;
+            
             void SpawnLoot()
             {
                 var _exp = _lootTable.possibleExperienceDrop.GetRandomInRange();
                 
                 PlayerData.playerLevelData.AddExp(_exp);
                 LootSpawner.OnSpawnLoot.Invoke(_lootTable, _pos);
-                Destroy(currentEnemy.gameObject);
+                EnemySpawner.Instance.RemoveEnemy(currentEnemy);
             }
             EventQueueData.AddEvent(SpawnLoot);
 
