@@ -21,7 +21,7 @@ public static class ItemHelper
     {
         GameDataBase = gameDataBase_;
         ItemDatabase = GameDataBase.itemDatabase;
-        PlayerLevel = GameDataBase.playerData.playerLevelData;
+        PlayerLevel = GameDataBase.playerData.LevelData;
         GoldData = ItemDatabase.GoldItemData;
     }
 

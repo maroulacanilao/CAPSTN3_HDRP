@@ -56,6 +56,7 @@ namespace UI.Battle
         {
             base.SelectButton();
             if(!button.interactable) return;
+            BattleCharacter.OnSelectMenu.Invoke(battleCharacter);
             OnTargetSelectButton.Invoke(this);
         }
 

@@ -231,9 +231,9 @@ MonoBehaviour:
   <spells>k__BackingField:
   - {fileID: 11400000, guid: b22f92b76607be84687aed469f2d87c4, type: 2}
   - {fileID: 11400000, guid: b92c384fd780bb4459f1e07e4e8fbdb0, type: 2}
-  <playerInventory>k__BackingField: {fileID: 11400000, guid: 2e52e9402952ab649b5a934475b711d1,
+  <inventory>k__BackingField: {fileID: 11400000, guid: 2e52e9402952ab649b5a934475b711d1,
     type: 2}
-  <playerLevelData>k__BackingField:
+  <LevelData>k__BackingField:
     <expLvlCurve>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -242,10 +242,19 @@ MonoBehaviour:
         value: 0
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 136
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
@@ -259,7 +268,11 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <LevelCap>k__BackingField: 10
-    <ExperienceCap>k__BackingField: 15000
+    <ExperienceCap>k__BackingField: 10000
   <alliesData>k__BackingField: []
   <blessingMeter>k__BackingField:
     maxBlessing: 100
+  <health>k__BackingField:
+    <character>k__BackingField: {fileID: 0}
+  <mana>k__BackingField:
+    <character>k__BackingField: {fileID: 0}

@@ -4,6 +4,7 @@ using CustomHelpers;
 using Items;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.LootMenu
@@ -33,9 +34,21 @@ namespace UI.LootMenu
             trashBtn.onClick.AddListener((() => lootMenu_.RemoveMenuItem(currLootMenuItem)));
         }
 
+        private void OnEnable()
+        {
+            UI_LootMenu.OnItemClick.AddListener(OnClick);
+        }
+
         private void OnDisable()
         {
+            UI_LootMenu.OnItemClick.RemoveListener(OnClick);
             currLootMenuItem = null;
+        }
+
+        private void OnClick(UI_LootMenuItem lootMenuItem_)
+        {
+            ShowItemDetail(lootMenuItem_);
+            EventSystem.current.SetSelectedGameObject(lootBtn.gameObject);
         }
 
         public void ShowItemDetail(UI_LootMenuItem lootMenuItem_)

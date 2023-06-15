@@ -21,7 +21,6 @@ namespace CustomHelpers
         public static bool RandomBool(float probability_)
         {
             var _rng = Random.value;
-            Debug.Log($"Probability: {probability_} | RNG: {_rng}| Result: {_rng < probability_}");
             return _rng < probability_;
         }
     }

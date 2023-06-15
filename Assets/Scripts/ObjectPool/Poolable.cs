@@ -20,12 +20,7 @@ namespace ObjectPool
             poolables = GetComponentsInChildren<IPoolable>(true);
             isInitialized = true;
         }
-        
-        private void OnDestroy()
-        {
-            pool.Release(this);
-        }
-        
+
         public void SetPool(Pool pool_) => pool = pool_;
 
         public void OnSpawn()

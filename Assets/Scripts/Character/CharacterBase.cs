@@ -12,9 +12,9 @@ namespace Character
         
         #region Core Components
         
-        public CharacterHealth health { get; protected set; }
-        public CharacterMana mana { get; protected set; }
-        public StatusEffectReceiver statusEffectReceiver { get; protected set; }
+        public virtual CharacterHealth health { get; protected set; }
+        public virtual CharacterMana mana { get; protected set; }
+        public virtual StatusEffectReceiver statusEffectReceiver { get; protected set; }
 
         #endregion
 

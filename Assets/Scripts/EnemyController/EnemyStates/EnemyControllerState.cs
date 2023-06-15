@@ -28,6 +28,14 @@ namespace EnemyController.EnemyStates
             isStateActive = true;
         }
         
+        public virtual void AnimationUpdate()
+        {
+            var _vel = controller.aiPath.velocity;
+            bool _isIdle = _vel.magnitude < 0.1f;
+            controller.animator.SetBool(controller.IsIdleHash, _isIdle);
+            controller.animator.SetFloat(controller.xSpeedHash, controller.aiPath.velocity.x);
+        }
+        
         public virtual void Exit()
         {
             isStateActive = false;

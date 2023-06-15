@@ -8,12 +8,13 @@ using Items;
 using Items.ItemData;
 using Managers;
 using NaughtyAttributes;
+using ObjectPool;
 using UI.Farming;
 using UnityEngine;
 
 namespace Farming
 {
-    public class FarmTile : MonoBehaviour, IDamagable, IHealable
+    public class FarmTile : MonoBehaviour, IDamagable, IHealable, IPoolable
     {
         [field: SerializeField] public SpriteRenderer soilRenderer { get; private set; }
         [field: SerializeField] public SpriteRenderer plantRenderer { get; private set; }
@@ -63,14 +64,17 @@ namespace Farming
         [SerializeReference] private FarmTileState currentState;
 
         public readonly Evt<TileState> OnChangeState = new Evt<TileState>();
+        private IPoolable poolableImplementation;
+
+        private void Awake()
+        {
+            health = new GenericHealth(maxHealth);
+            defaultSoilSprite = soilRenderer.sprite;
+            defaultPlantSprite = plantRenderer.sprite;
+        }
 
         public FarmTile Initialize()
         {
-            defaultSoilSprite = soilRenderer.sprite;
-            defaultPlantSprite = plantRenderer.sprite;
-
-            health = new GenericHealth(maxHealth);
-            
             emptyTileState = new EmptyTileState(this);
             plantedTileState = new PlantedTileState(this);
             growingTileState = new GrowingTileState(this);
@@ -92,6 +96,7 @@ namespace Farming
         public void OnWaterPlant()
         {
             currentState?.WaterPlant();
+            Heal(new HealInfo(10));
         }
         
         public void OnPlantSeed(SeedData seedData_)
@@ -117,6 +122,16 @@ namespace Farming
         public void Heal(HealInfo healInfo_, bool isOverHeal_ = false)
         {
             health.AddHealth(healInfo_.HealAmount);
+        }
+        
+        public void OnSpawn()
+        {
+            health.RefillHealth();
+        }
+        
+        public void OnDeSpawn()
+        {
+            
         }
     }
 }

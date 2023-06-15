@@ -1,16 +1,18 @@
 using System.Linq;
 using BaseCore;
-using Managers;
+using Player;
+using UI.TabMenu;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
-namespace UI
+namespace UI.Farming
 {
     public class FarmUIManager : Singleton<FarmUIManager>
     {
         [SerializeField] private FarmUI[] farmUIs;
         [SerializeField] private FarmUI[] NonMenuUI;
-        
+        [SerializeField] private TabGroup tabGroup;
+        [SerializeField] private PlayerInputController playerController;
         public FarmUI lastOpenMenu { get; set; }
 
         protected override void Awake()
@@ -21,11 +23,25 @@ namespace UI
             {
                 _ui.Initialize();
             }
+            SceneManager.activeSceneChanged += OnSceneChanged;
+        }
+
+        private void OnDestroy()
+        {
+            SceneManager.activeSceneChanged += OnSceneChanged;
+        }
+        
+        private void OnSceneChanged(Scene arg0_, Scene arg1_)
+        {
+            CloseAllUI();
         }
 
         public void CloseAllUI()
         {
             if(!IsMenuOpen()) return;
+            
+            tabGroup.gameObject.SetActive(false);
+            
             foreach (var _ui in farmUIs)
             {
                 _ui.gameObject.SetActive(false);
@@ -33,18 +49,17 @@ namespace UI
             Cursor.visible = false;
             Time.timeScale = 1;
         }
-
+        
         public void OpenMenu()
         {
+            Debug.Log("OpenMenu");
             if (IsMenuOpen())
             {
                 CloseAllUI();
                 return;
             }
 
-            var _menu = lastOpenMenu != null ? lastOpenMenu : farmUIs[0]; 
-            _menu.gameObject.SetActive(true);
-            _menu.OpenMenu();
+            tabGroup.gameObject.SetActive(true);
             Cursor.visible = true;
             Time.timeScale = 0;
         }

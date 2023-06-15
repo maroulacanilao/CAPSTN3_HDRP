@@ -29,7 +29,7 @@ namespace Spells
                 battleCharacter.battleStation.projectilePosition, 
                 Quaternion.identity);
 
-            yield return _projectile.StartProjectile(target.transform.position);
+            yield return _projectile.StartProjectile(target.transform.position.SetY(1));
             Destroy(_projectile.gameObject);
             
             target.Hit(_atkResult);
@@ -45,6 +45,7 @@ namespace Spells
             battleCharacter.animator.SetTrigger(battleCharacter.moveAnimationHash);
             yield return CoroutineHelper.GetWait(0.2f);
         }
+        
         protected override IEnumerator OnDeactivate()
         {
             yield break;

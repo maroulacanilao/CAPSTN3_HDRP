@@ -12,6 +12,7 @@ namespace Managers
     {
         [Header("Time Values (24hr format)")]
         [SerializeField] private int endingHour = 24;
+        [SerializeField] private bool isEndingHourNextDay = true;
         [SerializeField] private int startingHour = 6;
         [SerializeField] private int nightHour = 19;
         [SerializeField] private float timeScale = 1; // 1 second in real time = 1 minute in game
@@ -30,7 +31,6 @@ namespace Managers
         private int dayCounter = 0;
         private bool didDayStart = false;
         private DateTime dateTime;
-        private bool isTimeLoopRunning;
         private CancellationTokenSource timerCTS; // CTS = CancellationTokenSource
 
         #region Getters and Setters
@@ -157,7 +157,6 @@ namespace Managers
         private void EndDay()
         {
             isTimePaused = true;
-            isTimeLoopRunning = false;
 
             didDayStart = false;
 
@@ -166,17 +165,19 @@ namespace Managers
         }
 
         [NaughtyAttributes.Button("Pause Time")]
-        public void PauseTime()
+        public void PauseTime(bool pauseTimeScale_ = true)
         {
-            timerCTS.Cancel();
+            timerCTS?.Cancel();
             isTimePaused = true;
-            isTimeLoopRunning = false;
             OnPauseTime.Invoke(Instance.isTimePaused);
+
+            if (pauseTimeScale_) Time.timeScale = 0;
+            
             PlayerInputController.OnPlayerCanMove.Invoke(false);
         }
 
         [NaughtyAttributes.Button("Resume Time")]
-        public void ResumeTime()
+        public void ResumeTime(bool resumeTimeScale_ = true)
         {
             if(!isTimePaused) return;
             isTimePaused = false;
@@ -186,6 +187,9 @@ namespace Managers
             timerCTS?.Cancel();
             timerCTS?.Dispose();
             timerCTS = new CancellationTokenSource();
+            
+            if (resumeTimeScale_) Time.timeScale = 1;
+            
             PlayerInputController.OnPlayerCanMove.Invoke(true);
             StartMainTimeLoop();
         }
@@ -195,7 +199,6 @@ namespace Managers
             try
             {
                 int _delay = Mathf.RoundToInt(timeScale * 1000);
-            
                 while (!timerCTS.Token.IsCancellationRequested)
                 {
                     await Task.Delay(_delay, timerCTS.Token);

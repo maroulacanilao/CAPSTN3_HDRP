@@ -1,4 +1,3 @@
-using System;
 using Items;
 using Items.Inventory;
 using Player;
@@ -6,13 +5,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Toolbar
 {
     public class ToolUI : MonoBehaviour
     {
         [SerializeField] private Outline outline;
         [SerializeField] private Image toolIcon;
-        [SerializeField] private TextMeshProUGUI count_TXT;
+        [SerializeField] private TextMeshProUGUI count_TXT, hotKey_TXT;
         [SerializeField] private Color selectColor, deselectColor;
 
         private PlayerInventory inventory;
@@ -30,6 +29,7 @@ namespace UI
             InventoryEvents.OnUpdateStackable.AddListener(UpdateStackable);
             currItem = inventory.ItemTools[index];
             UpdateToolBar(index, inventory.ItemTools[index]);
+            hotKey_TXT.text = $"{index + 1}";
         }
 
         private void OnDestroy()
@@ -42,6 +42,7 @@ namespace UI
         private void ChangeItem(int index_)
         {
             outline.effectColor = index == index_ ? selectColor : deselectColor;
+            hotKey_TXT.color = index == index_ ? selectColor : Color.black;
         }
         
         private void UpdateToolBar(int index_, Item item_)

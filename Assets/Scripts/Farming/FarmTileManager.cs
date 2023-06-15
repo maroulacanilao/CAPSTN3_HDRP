@@ -4,6 +4,7 @@ using System.Linq;
 using BaseCore;
 using CustomEvent;
 using CustomHelpers;
+using ObjectPool;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -34,9 +35,10 @@ namespace Farming
             var _tile = SpawnTileAtToolArea();
             var _size = _tile.GetComponent<Collider>().bounds.size;
             
-            toolArea.Instantiate(new Vector2(_size.x,_size.y), farmTileLayerMask, farmGroundLayerMask);
+            Debug.Log(_size);
+            toolArea.Initialize(new Vector2(_size.x,_size.z), farmTileLayerMask, farmGroundLayerMask);
             
-            Destroy(_tile.gameObject);
+            _tile.gameObject.ReturnInstance();
         }
 
         private void OnDestroy()
@@ -101,13 +103,18 @@ namespace Farming
             
             Instance.farmTiles.Remove(farmTile_);
             OnRemoveTile.Invoke(farmTile_);
-            Destroy(farmTile_.gameObject);
+            farmTile_.gameObject.ReturnInstance();
         }
 
         public FarmTile SpawnTileAtToolArea()
         {
             var _yPos = toolArea.GetGround().point.y + 0.01f;
-            var _tile = Instantiate(farmTilePrefab, ToolArea.Instance.transform.position.SetY(_yPos), Quaternion.identity);
+
+            var _tile = farmTilePrefab.gameObject
+                .GetInstance<FarmTile>(ToolArea.Instance.transform.position.SetY(_yPos), Quaternion.identity)
+                .Initialize();
+            
+            //Instantiate(farmTilePrefab, ToolArea.Instance.transform.position.SetY(_yPos), Quaternion.identity);
             _tile.Initialize();
             _tile.transform.rotation = Quaternion.Euler(90, 0, 0);
             return _tile;

@@ -27,9 +27,21 @@ namespace Managers
         
         public PlayerData PlayerData => GameDataBase.playerData;
         
-        public PlayerCharacter playerOnFarm { get; private set;}
-        public GameObject currentEnemy { get; private set; }
-        
+        private PlayerCharacter mPlayerOnFarm;
+        private EnemyCharacter mCurrentEnemy;
+        public PlayerCharacter PlayerOnFarm
+        {
+            get
+            {
+                if(mPlayerOnFarm == null)
+                {
+                    mPlayerOnFarm = SceneHelper.FindComponentInActiveScene<PlayerCharacter>();
+                }
+                return mPlayerOnFarm;
+            }
+        }
+        public EnemyCharacter CurrentEnemy => mCurrentEnemy.IsEmptyOrDestroyed() ? null : mCurrentEnemy;
+
         public static readonly Evt<EnemyCharacter> OnEnterBattle = new Evt<EnemyCharacter>();
         public static readonly Evt<bool> OnExitBattle = new Evt<bool>();
 
@@ -40,8 +52,11 @@ namespace Managers
             GameDataBase.Initialize();
             OnEnterBattle.AddListener(EnterBattle);
             OnExitBattle.AddListener(ExitBattle);
+
+            var _player = GameObject.FindWithTag("Player");
             
-            playerOnFarm = GameObject.FindWithTag("Player").GetComponent<PlayerCharacter>();
+            if(_player == null) return;
+            mPlayerOnFarm = _player.GetComponent<PlayerCharacter>();
         }
 
         protected void OnDestroy()
@@ -56,7 +71,7 @@ namespace Managers
             if(enemyCharacter_.IsEmptyOrDestroyed()) return;
             
             BattleData.EnterBattle(enemyCharacter_);
-            currentEnemy = enemyCharacter_.gameObject;
+            mCurrentEnemy = enemyCharacter_;
             //Load Scene Battle
             Debug.Log("ENTER BATTLE");
             Time.timeScale = 0;
@@ -71,7 +86,7 @@ namespace Managers
 
         private void OnBattleWon()
         {
-            var _pos = currentEnemy.transform.position;
+            var _pos = CurrentEnemy.transform.position;
 
             if(!BattleData.currentEnemyData) return;
         
@@ -79,11 +94,10 @@ namespace Managers
             
             void SpawnLoot()
             {
-                var _exp = _lootTable.possibleExperienceDrop.GetRandomInRange();
+                GameDataBase.enemyDataBase.AddKills(CurrentEnemy.characterData as EnemyData);
                 
-                PlayerData.playerLevelData.AddExp(_exp);
                 LootSpawner.OnSpawnLoot.Invoke(_lootTable, _pos);
-                EnemySpawner.Instance.RemoveEnemy(currentEnemy);
+                EnemySpawner.Instance.RemoveEnemy(CurrentEnemy.gameObject);
             }
             EventQueueData.AddEvent(SpawnLoot);
 

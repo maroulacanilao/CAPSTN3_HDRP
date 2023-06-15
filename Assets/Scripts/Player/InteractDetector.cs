@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BaseCore;
 using CustomHelpers;
 using Managers;
@@ -51,8 +52,9 @@ namespace Player
                 OnNull();
                 return;
             }
-            
-            var _obj =_colliders.GetNearestGameObject(_pos);
+
+
+            var _obj = _colliders.GetNearestGameObject(transform.position);
 
             if (_obj == null)
             {

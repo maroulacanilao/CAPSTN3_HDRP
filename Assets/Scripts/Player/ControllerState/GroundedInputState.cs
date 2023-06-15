@@ -10,8 +10,9 @@ namespace Player.ControllerState
     public class GroundedInputState : PlayerInputState
     {
         private bool canInput;
-        public GroundedInputState(PlayerInputStateMachine stateMachine_, int animNameHash_) : base(stateMachine_, animNameHash_) { }
-
+        public GroundedInputState(PlayerInputStateMachine stateMachine_, int animNameHash_) : base(stateMachine_, animNameHash_)
+        { }
+        
         public override void Enter()
         {
             base.Enter();
@@ -27,11 +28,6 @@ namespace Player.ControllerState
             if (InputManager.InteractAction.triggered)
             {
                 player.playerEquipment.UseTool();
-                return;
-            }
-            if(InputUIManager.MenuAction.triggered)
-            {
-                FarmUIManager.Instance.OpenMenu();
                 return;
             }
             if (CanJump())
@@ -59,6 +55,7 @@ namespace Player.ControllerState
             player.StopAllCoroutines();
             player.animator.ResetTrigger(player.groundedHash);
             StateMachine.velocityOnExit = rb.velocity;
+            canInput = false;
         }
         
         private IEnumerator InputDelay()

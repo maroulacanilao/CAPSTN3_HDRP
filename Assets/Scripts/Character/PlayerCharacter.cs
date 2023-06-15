@@ -3,6 +3,7 @@ using Character.CharacterComponents;
 using CustomEvent;
 using Items.Inventory;
 using Player;
+using ScriptableObjectData.CharacterData;
 using UnityEngine;
 
 namespace Character
@@ -11,17 +12,22 @@ namespace Character
     {
         [field: SerializeField] public PlayerInventory playerInventory { get; private set; }
 
+        private PlayerData playerData;
+        public override CharacterHealth health => playerData.health;
+        public override CharacterMana mana => playerData.mana;
+        public override StatusEffectReceiver statusEffectReceiver => playerData.statusEffectReceiver;
+
         protected override void Awake()
         {
-            health = new PlayerCharacterHealth(this);
-            mana = new PlayerCharacterMana(this);
             statusEffectReceiver = new StatusEffectReceiver(this);
+            playerData = characterData as PlayerData;
         }
 
         private void OnEnable()
         {
             health.OnCharacterEnable();
             mana.OnCharacterEnable();
+            playerData.statusEffectReceiver.SetCharacter(this);
         }
     }
 }

@@ -12,7 +12,6 @@ namespace UI.Battle
 {
     public class SpellBtnItemUI : SelectableMenuButton, ISelectHandler, IPointerEnterHandler
     {
-        [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI buttonTXT;
         private BattleActionUI mainPanel;
         public int spellIndex { get; private set; }

@@ -12,13 +12,14 @@ namespace Items
     public enum ItemType
     {
         None = 0,
-        Weapon = 1,
-        Armor = 2,
+        Gold = 1,
+        Seed = 2,
         Consumable = 3,
         QuestItem = 4,
         Tool = 5,
-        Gold = 6,
-        Seed = 7,
+        Armor = 6,
+        Weapon = 7,
+        Craftable = 8,
     }
 
     public enum RarityType
@@ -201,6 +202,7 @@ namespace Items
             RemoveStack();
             return HasStack;
         }
+        
         public override Item Clone()
         {
             var _clone = new ItemConsumable(data, stackCount);
@@ -283,6 +285,26 @@ namespace Items
         public override Item Clone()
         {
             var _clone = new ItemTool(data)
+            {
+                isToolable = true,
+                isDiscardable = false,
+            };
+            return _clone;
+        }
+    }
+    
+    [Serializable]
+    public class ItemCraftable : ItemStackable
+    {
+        
+        public ItemCraftable(ItemData.ItemData data_, int count_) : base(data_, count_)
+        {
+            isToolable = true;
+        }
+        
+        public override Item Clone()
+        {
+            var _clone = new ItemCraftable(data, stackCount)
             {
                 isToolable = true,
                 isDiscardable = false,

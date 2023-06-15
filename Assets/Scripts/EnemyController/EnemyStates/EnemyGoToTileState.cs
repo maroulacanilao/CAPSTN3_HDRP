@@ -56,6 +56,7 @@ namespace EnemyController.EnemyStates
             }
             
             controller.animator.SetTrigger(controller.GroundedHash);
+            controller.animator.SetBool(controller.IsIdleHash, false);
             controller.aiPath.destination = stateMachine.targetDestination;
             controller.StartCoroutine(Co_IsWithinRange());
         }

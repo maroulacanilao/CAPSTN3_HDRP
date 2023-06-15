@@ -8,7 +8,7 @@ namespace BaseCore
         public static void Execute()
         {
             // Instantiate Game Manager Before First Scene Is Loaded
-            //Object.DontDestroyOnLoad(Object.Instantiate(Resources.Load("PersistentData/GameManager")));
+            Object.DontDestroyOnLoad(Object.Instantiate(Resources.Load("Prefabs/GameManager")));
         }
     }
 }

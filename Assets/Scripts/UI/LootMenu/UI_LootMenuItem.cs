@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace UI.LootMenu
 {
-    public class UI_LootMenuItem : SelectableMenuButton, IPointerClickHandler, ISelectHandler
+    public class UI_LootMenuItem : SelectableMenuButton
     {
         [SerializeField] private TextMeshProUGUI itemName_TXT;
         [SerializeField] private TextMeshProUGUI num_TXT;
@@ -17,7 +17,7 @@ namespace UI.LootMenu
         
         public UI_LootMenuItem Initialize(Item item_, Sprite typeSprite_)
         {
-
+            button.onClick.AddListener(OnPointerClick);
             item = item_;
             typeIcon.sprite = typeSprite_;
             itemName_TXT.SetText(item.Data.ItemName);
@@ -45,9 +45,11 @@ namespace UI.LootMenu
             return this;
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public void OnPointerClick()
         {
             button.Select();
+            OnSelect(null);
+            UI_LootMenu.OnItemClick.Invoke(this);
         }
 
         public override void SelectButton()

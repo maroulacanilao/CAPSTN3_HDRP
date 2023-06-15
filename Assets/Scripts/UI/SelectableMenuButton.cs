@@ -21,6 +21,7 @@ namespace UI
         {
             button = GetComponent<Button>();
             outline = GetComponent<Outline>();
+            outlineColor = new Color(outlineColor.r, outlineColor.g, outlineColor.b, 1);
         }
 
         private void Awake()
@@ -29,6 +30,7 @@ namespace UI
             if(outline == null) outline = GetComponent<Outline>();
 
             outline.effectDistance = outlineSize;
+            outline.effectColor = Color.clear;
         }
 
         protected virtual void OnEnable()
@@ -44,7 +46,6 @@ namespace UI
 
         public void OnSelect(BaseEventData eventData)
         {
-            Debug.Log("Select");
             OnSelectButton.Invoke(this);
         }
         
@@ -56,6 +57,7 @@ namespace UI
 
         public virtual void SelectButton()
         {
+            Debug.Log("Change Color");
             outline.effectColor = outlineColor;
         }
 

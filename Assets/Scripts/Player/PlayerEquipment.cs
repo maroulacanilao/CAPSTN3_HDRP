@@ -1,7 +1,9 @@
 using System;
+using BaseCore;
 using Character;
 using CustomEvent;
 using Farming;
+using Fungus;
 using Items;
 using Items.Inventory;
 using Items.ItemData;
@@ -11,16 +13,16 @@ using UnityEngine;
 
 namespace Player
 {
+    public enum EquipmentAction { Interact, Till, Water, Plant, Harvest, UnTill, Consume, None }
+    
     public class PlayerEquipment : MonoBehaviour
     {
         [field: SerializeField] public PlayerCharacter player { get; private set; }
-        [field: SerializeField] public FarmTools farmTools { get; private set; }
         [field: SerializeField] public InteractDetector interactDetector { get; private set; }
 
         private PlayerInventory playerInventory;
-
-        private Action[] _equipmentActions;
         
+        private ToolArea toolArea;
         public int currIndex { get; private set; }
         public Item CurrentItem => playerInventory.ItemTools[currIndex];
         
@@ -30,16 +32,9 @@ namespace Player
         {
             playerInventory = player.playerInventory;
             currIndex = 0;
-            _equipmentActions = new Action[4];
-            
-            if(interactDetector == null) interactDetector = farmTools.GetComponent<InteractDetector>();
-            
-            InventoryEvents.OnItemOnHandUpdate.AddListener(OnUpdateTools);
 
-            for (int i = 0; i < playerInventory.ItemTools.Length; i++)
-            {
-                OnUpdateTools(i, playerInventory.ItemTools[i]);
-            }
+            toolArea = ToolArea.Instance;
+            
             OnChangeItemOnHand.Invoke(0);
         }
 
@@ -58,7 +53,9 @@ namespace Player
         public void UseTool()
         {
             Debug.Log(CurrentItem);
-            _equipmentActions[currIndex]?.Invoke();
+            // _equipmentActions[currIndex]?.Invoke();
+            var _action = GetEquipmentAction();
+            DoEquipmentAction(_action);
         }
 
         public void CycleTool(bool isNext_)
@@ -78,65 +75,130 @@ namespace Player
 
         private void ClampIndex()
         {
-            currIndex %= _equipmentActions.Length;
-            if (currIndex < 0) currIndex = _equipmentActions.Length - 1;
+            currIndex %= playerInventory.ItemTools.Length;
+            if (currIndex < 0) currIndex = playerInventory.ItemTools.Length - 1;
         }
 
-        private void OnUpdateTools(int index_, Item item_)
+        public EquipmentAction GetEquipmentAction()
         {
-            _equipmentActions[index_] = null;
+            if(CurrentItem == null) return CanInteract() ? EquipmentAction.Interact : EquipmentAction.None;
             
-            if (item_ == null)
+            if (CurrentItem.Data is HoeData)
             {
-                _equipmentActions[index_] = Interact;
-                return;
-            }
-            
-            switch (item_.ItemType)
-            {
-                case ItemType.Consumable:
+                var _farmTile = toolArea.GetFarmTile();
+
+                if (_farmTile != null)
                 {
-                    var _consumable = (ItemConsumable) item_;
-                    _equipmentActions[index_] = () =>
+                    if (_farmTile.tileState == TileState.ReadyToHarvest)
                     {
-                        _consumable.Consume(player.statusEffectReceiver);
-                        InventoryEvents.OnUpdateStackable.Invoke(_consumable);
-                    };
-                    break;
+                        return EquipmentAction.Harvest;
+                    }
+                    return _farmTile.tileState == TileState.Empty ? EquipmentAction.UnTill : EquipmentAction.None;
                 }
                 
-                case ItemType.Seed:
+                if (!toolArea.IsTillable())
                 {
-                    var _seed = (ItemSeed) item_;
-                    _equipmentActions[index_] = () =>
-                    {
-                        if(farmTools.PlantSeed(_seed)) return;
-                        Interact();
-                    };
-                    break;
+                    return CanInteract() ? EquipmentAction.Interact : EquipmentAction.None;
                 }
-                case ItemType.Tool:
+
+                return EquipmentAction.Till;
+
+            }
+            
+            if (CurrentItem.Data is WateringCanData)
+            {
+                var _farmTile = toolArea.GetFarmTile();
+
+                if (_farmTile == null)
                 {
-                    var _toolData = (ToolData) item_.Data;
-                    _equipmentActions[index_] = () =>
-                    {
-                        if(_toolData.UseTool(this)) return;
-                        Interact();
-                    };
-                    break;
+                    return CanInteract() ? EquipmentAction.Interact : EquipmentAction.None;
                 }
-                default:
-                    _equipmentActions[index_] = Interact;
+            
+                if(_farmTile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
+
+                return EquipmentAction.Water;
+            }
+
+            if (CurrentItem is ItemSeed)
+            {
+                var _farmTile = toolArea.GetFarmTile();
+
+                if (_farmTile == null || _farmTile.tileState != TileState.Empty)
+                {
+                    return CanInteract() ? EquipmentAction.Interact : EquipmentAction.None;
+                }
+
+                return EquipmentAction.Plant;
+            }
+            
+            if (CurrentItem is ItemConsumable) return EquipmentAction.Consume;
+            
+            return CanInteract() ? EquipmentAction.Interact : EquipmentAction.None;
+        }
+
+        private void DoEquipmentAction(EquipmentAction action_)
+        {
+            switch (action_)
+            {
+                case EquipmentAction.None:
+                    break;
+                case EquipmentAction.Till:
+                    FarmTileManager.AddFarmTileAtToolLocation();
+                    break;
+                case EquipmentAction.Interact:
+                    if(CanInteract()) interactDetector.Interact();
+                    break;
+                case EquipmentAction.Water:
+                    Water();
+                    break;
+                case EquipmentAction.Plant:
+                    Plant();
+                    break;
+                case EquipmentAction.Harvest:
+                    Harvest();
+                    break;
+                case EquipmentAction.UnTill:
+                    FarmTileManager.RemoveTileAtToolLocation();
                     break;
             }
         }
 
-        private void Interact()
+        private void Water()
         {
-            Debug.Log("Interact");
-            interactDetector.Interact(); 
+            var _farmTile = toolArea.GetFarmTile();
             
+            if(_farmTile == null) return;
+            
+            _farmTile.OnWaterPlant();
+            _farmTile.Heal(new HealInfo(10));
+        }
+
+        private void Plant()
+        {
+            if(CurrentItem is not {Data: SeedData}) return;
+            var _tile = toolArea.GetFarmTile();
+            if (_tile == null) return;
+            
+            _tile.OnPlantSeed(CurrentItem.Data as SeedData);
+            var _itemSeed = (ItemSeed) CurrentItem;
+            _itemSeed.RemoveStack();
+            InventoryEvents.OnUpdateStackable.Invoke(_itemSeed);
+        }
+
+        private void Harvest()
+        {
+            var _tile = toolArea.GetFarmTile();
+            if (_tile == null) return;
+            
+            if(_tile.tileState != TileState.ReadyToHarvest) return;
+            if(_tile.seedData == null) return;
+            
+            _tile.OnInteract();
         }
         
+        private bool CanInteract()
+        {
+            return interactDetector.nearestInteractable != null && interactDetector.nearestInteractable.canInteract;
+        }
     }
 }

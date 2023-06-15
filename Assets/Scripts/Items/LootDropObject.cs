@@ -36,7 +36,6 @@ namespace Items
 
         protected override void Interact()
         {
-            Debug.Log("Interact");
             OnLootInteract.Invoke(this);
         }
 

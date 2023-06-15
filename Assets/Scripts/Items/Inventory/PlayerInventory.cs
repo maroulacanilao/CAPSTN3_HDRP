@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using AYellowpaper.SerializedCollections;
 using CustomEvent;
 using CustomHelpers;
 using Items.ItemData;
 using Items.ItemData.Tools;
 using NaughtyAttributes;
+using SaveSystem;
 using ScriptableObjectData;
 using ScriptableObjectData.CharacterData;
 using UnityEngine;
@@ -24,7 +27,7 @@ namespace Items.Inventory
     }
 
     [CreateAssetMenu(menuName = "ScriptableObjects/InventoryData", fileName = "PlayerInventoryData")]
-    public class PlayerInventory : ScriptableObject
+    public class PlayerInventory : ScriptableObject, IScriptableObjectSaveHandler
     {
         [SerializeField] private ItemDatabase itemDatabase;
         [SerializeField] private PlayerData playerData;
@@ -55,6 +58,7 @@ namespace Items.Inventory
         public Item[] ItemTools => itemTools;
         public int GoldAmount => gold.GoldAmount;
         public SerializedDictionary<ItemData.ItemData, List<Item>> itemsLookup => lookupDictionary;
+        public SerializedDictionary<int, Item> ItemStorage => itemStorageDictionary;
 
         #endregion
 
@@ -447,27 +451,73 @@ namespace Items.Inventory
         // By Item Type
         public void ReOrganizeInventory()
         {
-            var _temp = itemStorageDictionary
-                .OrderBy(x => x.Key)
-                .ThenBy(x => x.Value.ItemType)
-                .ToDictionary(x => x.Key, x => x.Value);
+            var _itemList = itemStorageDictionary.Values.OrderBy(i => i?.ItemType).ToList();
+            itemStorageDictionary.Clear();
 
-            itemStorageDictionary = new SerializedDictionary<int, Item>();
-            
-            int _newIndex = 0;
-            for (int i = 0; i < maxInventorySize; i++)
+            for (int i = 0; i < _itemList.Count; i++)
             {
-                if(!_temp.ContainsKey(i)) continue;
-                itemStorageDictionary.Add(_newIndex, _temp[i]);
-                _newIndex++;
+                if(_itemList[i] == null) continue;
+                itemStorageDictionary.Add(i, _itemList[i]);
             }
-            InventoryEvents.OrganizeInventory.Invoke();
+            
+            InventoryEvents.OnUpdateInventory.Invoke(this);
         }
 
         public Item GetItemInStorage(int index_)
         {
             Initialize();
             return itemStorageDictionary.TryGetValue(index_, out var _value) ? _value : null;
+        }
+        
+        [Button("Save")]
+        public void SaveData()
+        {
+            var data = new InventorySaveData()
+            {
+                weapon = this.weaponEquipped,
+                armor = this.armorEquipped
+            };
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            string filePath = Application.persistentDataPath + "/inventoryData.dat";
+            Debug.Log(filePath);
+            FileStream fileStream = File.Create(filePath);
+
+            binaryFormatter.Serialize(fileStream, data);
+            fileStream.Close();
+        }
+        
+        [Button("Load")]
+        public bool LoadData()
+        {
+            string filePath = Application.persistentDataPath + "/inventoryData.dat";
+
+            if (!File.Exists(filePath))
+            {
+                Debug.LogWarning("Save file not found. Returning default data.");
+                return false;
+            }
+
+            try
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                FileStream fileStream = File.Open(filePath, FileMode.Open);
+
+                var loadedData = (InventorySaveData) binaryFormatter.Deserialize(fileStream);
+                fileStream.Close();
+
+                gold = loadedData.gold;
+                weaponEquipped = loadedData.weapon;
+                armorEquipped = loadedData.armor;
+                
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+
+            return false;
         }
     }
 }

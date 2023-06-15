@@ -27,7 +27,6 @@ namespace BaseCore
             currentHealth += amount_;
             if (currentHealth > maxHealth) currentHealth = maxHealth;
             if(currentHealth < 0) currentHealth = 0;
-            Debug.Log($"HP: {currentHealth}");
             OnHealthChanged.Invoke(this);
         }
         

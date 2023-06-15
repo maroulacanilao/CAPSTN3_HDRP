@@ -6,21 +6,23 @@ using UnityEngine.UI;
 
 namespace UI.Farming
 {
+    [DefaultExecutionOrder(2)]
     public class TileHealthUI : MonoBehaviour
     {
         [SerializeField] FarmTile farmTile;
         [SerializeField] private GameObject barPanel;
         [SerializeField] Image healthBar;
 
-        private void Start()
+        private void OnEnable()
         {
-            farmTile.health.OnHealthChanged.AddListener(UpdateBar);
+            if(farmTile.health == null) return;
+            farmTile.health?.OnHealthChanged.AddListener(UpdateBar);
             UpdateBar(farmTile.health);
         }
 
         private void OnDestroy()
         {
-            farmTile.health.OnHealthChanged.AddListener(UpdateBar);
+            farmTile.health?.OnHealthChanged.AddListener(UpdateBar);
         }
 
         private void UpdateBar(GenericHealth health_)

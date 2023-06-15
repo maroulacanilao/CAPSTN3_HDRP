@@ -27,6 +27,14 @@ namespace Trading
         
         
         #region public
+
+        public int OrderID => orderID;
+        public string OrderTitle => orderTitle;
+        public string RequesterName => requesterName;
+        public string OrderDescription => orderDescription;
+        public DateTime OrderDate => orderDate;
+        public SerializedDictionary<ItemData, RequestItem> RequestedItems => requestedItems;
+        public LootDrop Reward => reward;
         #endregion
         
         

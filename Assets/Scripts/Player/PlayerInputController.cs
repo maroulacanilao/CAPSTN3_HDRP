@@ -4,6 +4,8 @@ using CustomHelpers;
 using Farming;
 using NaughtyAttributes;
 using Player.ControllerState;
+using UI;
+using UI.Farming;
 using UnityEngine;
 
 namespace Player
@@ -98,12 +100,13 @@ namespace Player
             cameraTransform = gameObject.scene.GetFirstMainCameraInScene().transform;
             toolArea = ToolArea.Instance;
             StateMachine = new PlayerInputStateMachine(this);
-
+            InputUIManager.OnMenu.AddListener(OpenMenuWrapper);
         }
 
         private void OnDestroy()
         {
             OnPlayerCanMove.RemoveListener(CanMove);
+            InputUIManager.OnMenu.RemoveListener(OpenMenuWrapper);
         }
 
         private void OnEnable()
@@ -114,6 +117,12 @@ namespace Player
         private void OnDisable()
         {
             rb.velocity = Vector3.zero;
+        }
+        
+        private void OpenMenuWrapper()
+        {
+            if(playerState != PlayerSate.Grounded) return;
+            FarmUIManager.Instance.OpenMenu();
         }
 
         private void Update()

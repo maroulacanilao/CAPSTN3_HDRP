@@ -10,10 +10,10 @@ namespace BattleSystem
     {
         public PlayerData PlayerData => characterData as PlayerData;
 
-        public override BattleCharacter Initialize(BattleStation battleStation_, int level_)
+        public override BattleCharacter Initialize(BattleStation battleStation_, int level_, float xOffset_)
         {
-            base.Initialize(battleStation_, level_);
-            Level = PlayerData.playerLevelData.CurrentLevel;
+            base.Initialize(battleStation_, level_, xOffset_);
+            Level = PlayerData.LevelData.CurrentLevel;
             return this;
         }
     }

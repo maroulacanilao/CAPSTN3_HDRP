@@ -6,14 +6,15 @@ using UnityEngine.EventSystems;
 
 namespace UI.HUD
 {
+    [DefaultExecutionOrder(2)]
     public class BattleBarUI : HealthBarUI, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField] private BattleStation battleStation;
-        [SerializeField] private TextMeshProUGUI name_TXT;
-        [SerializeField] private GameObject selectIndicator;
+        [SerializeField] protected BattleStation battleStation;
+        [SerializeField] protected TextMeshProUGUI name_TXT;
+        [SerializeField] protected GameObject selectIndicator;
         
         protected BattleCharacter battleCharacter;
-        
+
         protected override void Start()
         {
             if (battleStation != null)
@@ -26,6 +27,7 @@ namespace UI.HUD
                 
                 battleCharacter = battleStation.battleCharacter;
                 character = battleCharacter.character;
+                BattleCharacter.OnSelectMenu.AddListener(OnSelectMenuHandler);
             }
             
             base.Start();
@@ -40,20 +42,26 @@ namespace UI.HUD
 
         protected virtual void OnDisable()
         {
-            if(battleCharacter != null) BattleCharacter.OnSelectMenu.RemoveListener(OnSelectMenuHandler);
+            BattleCharacter.OnSelectMenu.RemoveListener(OnSelectMenuHandler);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            BattleCharacter.OnSelectMenu.RemoveListener(OnSelectMenuHandler);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            Debug.Log("enter UI on" + character.gameObject.name);
+            BattleCharacter.OnSelectMenu.Invoke(battleCharacter);
         }
         
         public void OnPointerExit(PointerEventData eventData)
         {
-            Debug.Log("exit UI on" + character.gameObject.name);
+            BattleCharacter.OnSelectMenu.Invoke(null);
         }
         
-        private void OnSelectMenuHandler(BattleCharacter battleCharacter_)
+        protected virtual void OnSelectMenuHandler(BattleCharacter battleCharacter_)
         {
             if(battleCharacter == null) return;
             selectIndicator.SetActive(battleCharacter_ == battleCharacter);

@@ -52,7 +52,7 @@ namespace Farming
 
             farmTile.soilRenderer.color = farmTile.tilledColor;
             farmTile.soilRenderer.sprite = farmTile.defaultSoilSprite;
-            
+
             farmTile.health.RefillHealth();
         }
 

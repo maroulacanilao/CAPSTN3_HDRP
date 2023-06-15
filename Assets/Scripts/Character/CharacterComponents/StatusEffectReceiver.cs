@@ -15,17 +15,19 @@ namespace Character.CharacterComponents
     [System.Serializable]
     public class StatusEffectReceiver : CharacterCore
     {
-        private Transform container;
+        protected Transform container;
         
         public string CharacterName => character.characterData.characterName;
 
         public Evt<StatusEffectBase, StatusEffectReceiver> OnApply = new Evt<StatusEffectBase, StatusEffectReceiver>();
         public Evt<StatusEffectBase, StatusEffectReceiver> OnRemove = new Evt<StatusEffectBase, StatusEffectReceiver>();
         
-        private SerializedDictionary<int, StatusEffectBase> StatusEffectsDictionary;
+        protected SerializedDictionary<int, StatusEffectBase> StatusEffectsDictionary;
 
         public StatusEffectReceiver(CharacterBase character_) : base(character_)
         {
+            if(character_ == null) return;
+            
             StatusEffectsDictionary = new SerializedDictionary<int, StatusEffectBase>();
             container = new GameObject("StatusEffect Container").transform;
             container.parent = character.transform;

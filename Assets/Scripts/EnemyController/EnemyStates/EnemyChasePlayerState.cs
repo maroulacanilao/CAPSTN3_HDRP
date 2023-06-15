@@ -12,7 +12,7 @@ namespace EnemyController.EnemyStates
         public EnemyChasePlayerState(EnemyAIController aiController_, EnemyStateMachine stateMachine_) : base(aiController_, stateMachine_)
         {
             stateName = "Chase Player";
-            playerTransform = GameManager.Instance.playerOnFarm.transform;
+            playerTransform = GameManager.Instance.PlayerOnFarm.transform;
         }
         
         public override void Enter()
@@ -22,6 +22,7 @@ namespace EnemyController.EnemyStates
             controller.aiPath.whenCloseToDestination = CloseToDestinationMode.ContinueToExactDestination;
             controller.StartCoroutine(controller.RefreshDestination(playerTransform, 0.5f));
             controller.animator.SetTrigger(controller.GroundedHash);
+            controller.animator.SetBool(controller.IsIdleHash, false);
         }
         
         public override void Exit()

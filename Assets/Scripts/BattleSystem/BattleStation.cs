@@ -7,6 +7,7 @@ namespace BattleSystem
     public class BattleStation : MonoBehaviour
     {
         [SerializeField] private Transform attackerTargetPos, projectileTargetPos, evadeTargetPos;
+        [field: SerializeField] public float defaultXOffset { get; private set; } = 1f;
 
         public Vector3 attackPosition => attackerTargetPos.position;
         public Vector3 projectilePosition => projectileTargetPos.position;
@@ -19,7 +20,7 @@ namespace BattleSystem
         public BattleCharacter Initialize(CharacterData characterData_, int level_)
         {
             // Instantiate
-            battleCharacter = Instantiate(characterData_.battlePrefab).Initialize(this, level_);
+            battleCharacter = Instantiate(characterData_.battlePrefab).Initialize(this, level_, defaultXOffset);
                 //characterData_.SpawnBattleCharacter(level_);
             
             Transform _transform = battleCharacter.transform;

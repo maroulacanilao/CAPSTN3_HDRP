@@ -39,11 +39,11 @@ namespace BaseCore
         [MinMaxSlider(0, 1000)] [SerializeField] private Vector2Int possibleMoneyDrop;
         [MinMaxSlider(0, 10)] [SerializeField] private Vector2Int possibleItemCount;
     
-        [InfoBox("Guaranteed Items are always dropped.")]
+        [BoxGroup("Guaranteed Items are always dropped.")]
         [SerializedDictionary("Item Data", "Amount")] 
         [SerializeField] private SerializedDictionary<ItemData, int> guaranteedItemDrop;
         
-        [InfoBox("Possible Items are randomly dropped.")]
+        [BoxGroup("Possible Items are randomly dropped.")]
         [SerializeField] private WeightedDictionary<ItemData> itemProbability = new WeightedDictionary<ItemData>();
 
         private ItemDatabase itemDatabase;

@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 namespace UI.HUD
 {
+    [DefaultExecutionOrder(2)]
     public class PlayerBattleBarUI : BattleBarUI
     {
         [SerializeField] private Image manaBar;
@@ -31,8 +32,9 @@ namespace UI.HUD
             ManuallyUpdateManaBar(characterMana);
         }
         
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             characterHealth.OnManuallyUpdateHealth.RemoveListener(ManuallyUpdateHealthBar);
             characterMana.OnManuallyUpdateMana.RemoveListener(ManuallyUpdateManaBar);
             characterMana.OnUseMana.RemoveListener(UpdateMana);
@@ -58,14 +60,14 @@ namespace UI.HUD
 
         private void ManuallyUpdateHealthBar(CharacterHealth characterHealth_)
         {
-            hpBar.fillAmount = (float) playerData.CurrentHp / characterHealth.MaxHp;
-            hpText.text = $"Health: {playerData.CurrentHp}/{characterHealth.MaxHp}";
+            hpBar.fillAmount = (float) playerData.health.CurrentHp / playerData.health.MaxHp;
+            hpText.text = $"Health: {playerData.health.CurrentHp}/{playerData.health.MaxHp}";
         }
         
         private void ManuallyUpdateManaBar(CharacterMana characterMana_)
         {
-            manaBar.fillAmount = (float) playerData.CurrentMana / characterMana.MaxMana;
-            mana_TXT.text = $"Mana: {playerData.CurrentMana}/{characterMana.MaxMana}";
+            manaBar.fillAmount = (float) playerData.mana.CurrentMana / playerData.mana.MaxMana;
+            mana_TXT.text = $"Mana: {playerData.mana.CurrentMana}/{playerData.mana.MaxMana}";
         }
     }
 }

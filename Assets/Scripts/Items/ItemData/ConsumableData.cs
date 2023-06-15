@@ -15,6 +15,9 @@ namespace Items.ItemData
 
         [field: SerializeField] [field: MinValue(1)] [field: ShowIf("IsStackable")]
         public int maxPossibleDropCount { get; private set; } = 1;
+        
+        [field: BoxGroup("Description")]
+        [field: SerializeField] public EncyclopediaInfo encyclopediaInfo { get; private set; }
 
         private void Reset()
         {

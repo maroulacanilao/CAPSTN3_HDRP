@@ -1,46 +1,75 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Button))]
-public class ButtonSelectFirst : MonoBehaviour
+namespace UI
 {
-    private Button button;
-    private SelectableMenuButton selectableMenuButton;
+    [RequireComponent(typeof(Button))]
+    public class ButtonSelectFirst : MonoBehaviour
+    {
+        private Button button;
+        private SelectableMenuButton selectableMenuButton;
 
-    private void Reset()
-    {
-        button = GetComponent<Button>();
-    }
-    private void Awake()
-    {
-        if(button == null) button = GetComponent<Button>();
-        TryGetComponent(out selectableMenuButton);
-        EventSystem.current.firstSelectedGameObject = button.gameObject;
-    }
+        private void Reset()
+        {
+            button = GetComponent<Button>();
+            selectableMenuButton = GetComponent<SelectableMenuButton>();
+        }
 
-    private void OnEnable()
-    {
-        button.Select();
-        if(selectableMenuButton != null) selectableMenuButton.button.Select();
-        InputUIManager.OnMove.AddListener(Move);
-        Canvas.ForceUpdateCanvases();
-    }
+        private void OnValidate()
+        {
+            button = GetComponent<Button>();
+            selectableMenuButton = GetComponent<SelectableMenuButton>();
+        }
 
-    private void OnDisable()
-    {
-        InputUIManager.OnMove.RemoveListener(Move);
-    }
+        private void Awake()
+        {
+            if(button == null) button = GetComponent<Button>();
+        
+            if (gameObject.TryGetComponent(out SelectableMenuButton _s))
+            {
+                selectableMenuButton = _s;
+                selectableMenuButton.SelectButton();
+            }
+            EventSystem.current.firstSelectedGameObject = button.gameObject;
+            EventSystem.current.SetSelectedGameObject(button.gameObject);
+            button.Select();
+        }
 
-    private void Move(InputAction.CallbackContext context_)
-    {
-        if(!gameObject.activeSelf) return;
-        if(EventSystem.current.currentSelectedGameObject !=null) return;
-        button.Select();
+        private void OnEnable()
+        {
+            EventSystem.current.firstSelectedGameObject = button.gameObject;
+            EventSystem.current.SetSelectedGameObject(button.gameObject);
+            button.Select();
+            if (selectableMenuButton != null)
+            {
+                Debug.Log("Selectable Button Active");
+                selectableMenuButton.SelectButton();
+            }
+            InputUIManager.OnMove.AddListener(Move);
+        }
+
+        private void OnDisable()
+        {
+            InputUIManager.OnMove.RemoveListener(Move);
+        }
+
+        private void Move(InputAction.CallbackContext context_)
+        {
+            if(!gameObject.activeInHierarchy) return;
+            var _selected = EventSystem.current.currentSelectedGameObject;
+            if(_selected != null && _selected.activeInHierarchy) return;
+        
+            Debug.Log("Select");
+            EventSystem.current.SetSelectedGameObject(button.gameObject);
+            button.Select();
+            Debug.Log(EventSystem.current.currentSelectedGameObject);
+            if (selectableMenuButton != null)
+            {
+                selectableMenuButton.SelectButton();
+            }
+            Canvas.ForceUpdateCanvases();
+        }
     }
 }

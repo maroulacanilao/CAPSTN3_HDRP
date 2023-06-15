@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab2bc082a35423d45a82555249286019, type: 3}
   m_Name: SampleEnemyData
   m_EditorClassIdentifier: 
-  <characterName>k__BackingField: Enemy
+  <characterName>k__BackingField: Tikbalang
   <farmPrefab>k__BackingField: {fileID: 8592459772990040416, guid: 6070b7894ba2633458b741046bef0fe4,
     type: 3}
   <battlePrefab>k__BackingField: {fileID: 5490923670729881753, guid: e0eb19c6e533dd24a8280562032ea9ab,
@@ -230,7 +230,7 @@ MonoBehaviour:
       m_RotationOrder: 4
   <spells>k__BackingField: []
   <LootTable>k__BackingField:
-    <possibleExperienceDrop>k__BackingField: {x: 0, y: 0}
+    <possibleExperienceDrop>k__BackingField: {x: 30, y: 50}
     possibleMoneyDrop: {x: 20, y: 50}
     possibleItemCount: {x: 2, y: 4}
     guaranteedItemDrop:
@@ -254,11 +254,7 @@ MonoBehaviour:
           Value: 1
         - Key: 1
           Value: 0.5
-        - Key: 2
-          Value: 0.5
         - Key: 3
-          Value: 0.1
-        - Key: 4
           Value: 0.1
     <spells>k__BackingField:
     - {fileID: 11400000, guid: b22f92b76607be84687aed469f2d87c4, type: 2}
@@ -267,3 +263,13 @@ MonoBehaviour:
   <alliesDictionary>k__BackingField:
     itemDictionary:
       _serializedList: []
+  <encyclopediaInfo>k__BackingField:
+    description: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
+      finibus justo in nisl tristique, eu venenatis ligula luctus. Maecenas id faucibus
+      nisi. Quisque id tristique mi, ut hendrerit dolor. Nulla facilisi. Cras a volutpat
+      est, eget pretium dui. Sed sed tincidunt ipsum, nec iaculis mi. Nunc tincidunt
+      ante non suscipit viverra. Integer id lacus nisi. Pellentesque habitant morbi
+      tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus
+      mollis iaculis pharetra. Proin sit amet ultricies justo."'
+    sprite: {fileID: -5051535973938906240, guid: a0cb87dd5abaa13499f7b5ac33483e4e,
+      type: 3}

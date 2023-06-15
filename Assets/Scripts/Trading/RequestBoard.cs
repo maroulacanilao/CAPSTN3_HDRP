@@ -15,29 +15,15 @@ namespace Trading
 {
     public class RequestBoard : Singleton<RequestBoard>
     {
-        [SerializeField] private GameDataBase gameDataBase;
+        [field: SerializeField] public RequestBoardData RequestBoardData { get; private set; }
         [SerializeField] private int tickRate = 6; // in game minutes
-        
-        [Range(0,1)] [SerializeField] 
-        private float requestBaseChance = 0.5f;
 
         private PlayerInventory inventory;
-
-        [field: SerializeField] private List<RequestOrder> requestOrders;
-        
-        public static readonly Evt<RequestOrder> OnRequestOrderAdded = new Evt<RequestOrder>();
-        public static readonly Evt<RequestOrder> OnRequestOrderCompleted = new Evt<RequestOrder>();
 
         protected override void Awake()
         {
             base.Awake();
             // TimeManager.OnMinuteTick.AddListener(MinuteTick);
-        }
-
-        private void Start()
-        {
-            inventory = gameDataBase.playerInventory;
-            requestOrders = new List<RequestOrder>();
         }
 
         private void OnDestroy()
@@ -50,64 +36,11 @@ namespace Trading
             var _willUpdate = TimeManager.CurrentMinute % tickRate == 0;
             if(!_willUpdate) return;
             
-            var _willReceive = CustomHelpers.RandomHelper.RandomBool(GetOrderChance());
+            var _willReceive = CustomHelpers.RandomHelper.RandomBool(RequestBoardData.GetOrderChance(TimeManager.ScaledGameTime));
             
             if(!_willReceive) return;
-        
-            AddRandomOrder();
-        }
-        
-        [NaughtyAttributes.Button("Add Random Order")]
-        public void AddRandomOrder()
-        {
-            var _newOrder = GetRandomOrder();
             
-            if(_newOrder == null) return;
-            
-            PurgeNulls();
-            requestOrders.Add(_newOrder);
-            OnRequestOrderAdded.Invoke(_newOrder);
+            RequestBoardData.ReceiveRandomOrder();
         }
-        
-        public void CompleteOrder(RequestOrder requestOrder_)
-        {
-            if(!requestOrders.Remove(requestOrder_)) return;
-        
-            //TODO: get rewards
-            
-            OnRequestOrderCompleted.Invoke(requestOrder_);
-            PurgeNulls();
-            
-        }
-        
-        
-        #region Private Methods
-        
-        private RequestOrder GetRandomOrder()
-        {
-            var _level = gameDataBase.playerData.playerLevelData.CurrentLevel;
-            
-            return gameDataBase
-                .requestOrderTemplates
-                .Where(r => r.minLevel <= _level)
-                .ToArray()
-                .GetRandomItem()
-                .GetRequestOrder(gameDataBase);
-        }
-        
-        private void PurgeNulls()
-        {
-            if(requestOrders.Count == 0) return;
-            
-            requestOrders?.RemoveAll(r => r == null);
-        }
-        
-        private float GetOrderChance()
-        {
-            //TODO: get chance based on level
-            return requestBaseChance;
-        }
-        
-        #endregion
     }
 }

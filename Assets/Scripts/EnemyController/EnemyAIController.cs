@@ -60,6 +60,9 @@ namespace EnemyController
         [field: BoxGroup("Animation Parameter")] [field: AnimatorParam("animator")] [field: SerializeField]
         public int DeathHash { get; private set; }
 
+        [field: BoxGroup("Animation Parameter")] [field: AnimatorParam("animator")] [field: SerializeField]
+        public int IsIdleHash { get; private set; }
+
         #endregion
         
         #region Animation Events
@@ -86,7 +89,7 @@ namespace EnemyController
 
         private void FixedUpdate()
         {
-            animator.SetFloat(xSpeedHash, aiPath.velocity.magnitude);
+            stateMachine.AnimationUpdate();
         }
 
         public IEnumerator RefreshDestination(Transform target_, float refreshRate_ = 1f)

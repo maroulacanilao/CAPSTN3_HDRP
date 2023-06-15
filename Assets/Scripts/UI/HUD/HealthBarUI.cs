@@ -1,13 +1,16 @@
 using BaseCore;
 using Character;
 using Character.CharacterComponents;
+using CustomHelpers;
 using DG.Tweening;
+using Fungus;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.HUD
 {
+    [DefaultExecutionOrder(2)]
     public class HealthBarUI : MonoBehaviour
     {
         [SerializeField] protected CharacterBase character;
@@ -30,24 +33,25 @@ namespace UI.HUD
             hpBar.fillAmount = characterHealth.HpPercentage;
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             if(characterHealth == null) return;
+            
             characterHealth.OnTakeDamage.RemoveListener(DamageEffect);
             characterHealth.OnHeal.RemoveListener(HealEffect);
         }
 
-        private async void DamageEffect(CharacterHealth hp_, DamageInfo damageInfo_)
+        protected async virtual void DamageEffect(CharacterHealth hp_, DamageInfo damageInfo_)
         {
             transform.DOShakePosition(0.25f, 10f);
             hpBar.color = damageColor;
             var _percentage = hp_.HpPercentage;
             UpdateHpText();
             await hpBar.DOFillAmount(_percentage, effectDuration).SetUpdate(true).AsyncWaitForCompletion();
-            if(_percentage> 0.2f) hpBar.color = originalColor;
+            if(_percentage > 0.2f) hpBar.color = originalColor;
         }
     
-        private async void HealEffect(CharacterHealth hp_, HealInfo healInfo_)
+        protected async virtual void HealEffect(CharacterHealth hp_, HealInfo healInfo_)
         {
             hpBar.color = healColor;
             UpdateHpText();
@@ -55,7 +59,7 @@ namespace UI.HUD
             hpBar.color = originalColor;
         }
     
-        private void UpdateHpText()
+        protected virtual void UpdateHpText()
         {
             var _prevVal = Mathf.FloorToInt(characterHealth.MaxHp * hpBar.fillAmount);
             int _targetVal = characterHealth.CurrentHp;
@@ -65,5 +69,7 @@ namespace UI.HUD
                 hpText.text = $"Health: {_prevVal}/{characterHealth.MaxHp}";
             });
         }
+        
+        
     }
 }

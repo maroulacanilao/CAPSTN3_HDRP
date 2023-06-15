@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using Managers;
 using TMPro;
+using UI.Farming;
 using UnityEngine;
 using UnityEngine.UI;
 

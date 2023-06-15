@@ -25,6 +25,11 @@ namespace EnemyController
             ChangeState(new EnemyPatrolState(aiController, this));
         }
 
+        public void AnimationUpdate()
+        {
+            currentState?.AnimationUpdate();
+        }
+
         public void ChangeState(EnemyControllerState newState_)
         {
             currentState?.Exit();

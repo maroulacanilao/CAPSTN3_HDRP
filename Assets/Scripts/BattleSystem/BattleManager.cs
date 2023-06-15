@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using BaseCore;
 using CustomEvent;
+using CustomHelpers;
+using ScriptableObjectData.CharacterData;
 using UnityEngine;
 
 namespace BattleSystem
@@ -70,7 +72,7 @@ namespace BattleSystem
             playerParty = new List<BattleCharacter>();
             enemyParty = new List<BattleCharacter>();
             
-            var _level = battleData.playerData.playerLevelData.CurrentLevel;
+            var _level = battleData.playerData.LevelData.CurrentLevel;
             var _player = playerPartyStation[0].Initialize(battleData.playerData, _level);
             playerParty.Add(_player);
             
@@ -101,6 +103,19 @@ namespace BattleSystem
                 enemyParty.Add(_enemy);
                 _index++;
             }
+        }
+
+        public int GetTotalExp()
+        {
+            var _totalExp = 0;
+            
+            foreach (var _enemyData in enemyParty.Select(e => e.characterData as EnemyData))
+            {
+                if(_enemyData == null) continue;
+                _totalExp += _enemyData.LootTable.possibleExperienceDrop.GetRandomInRange();
+            }
+
+            return _totalExp;
         }
     }
 }

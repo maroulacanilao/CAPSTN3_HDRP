@@ -20,7 +20,7 @@ public class PlayerDataEditor : Editor
         PlayerData _playerData = target as PlayerData;
         if (_playerData == null) return;
 
-        PlayerLevel _levelData = _playerData.playerLevelData;
+        PlayerLevel _levelData = _playerData.LevelData;
         StatsGrowth _statsGrowthData = _playerData.statsData;
 
         EditorGUIUtility.labelWidth = 200;

@@ -35,10 +35,22 @@ namespace EnemyController.EnemyStates
                 DefaultState();
                 return;
             }
+
+            var _x = targetTile.transform.position.x > controller.transform.position.x ? 1f : -1f;
+            
+            controller.animator.SetFloat(controller.xSpeedHash, _x);
+            controller.animator.SetBool(controller.IsIdleHash, true);
             controller.aiPath.isStopped = true;
             controller.StartCoroutine(Co_AttackTile());
         }
-        
+
+        public override void AnimationUpdate()
+        {
+            var _x = targetTile.transform.position.x > controller.transform.position.x ? 1f : -1f;
+            controller.animator.SetBool(controller.IsIdleHash, true);
+            controller.animator.SetFloat(controller.xSpeedHash, _x);
+        }
+
         public override void Exit()
         {
             base.Exit();

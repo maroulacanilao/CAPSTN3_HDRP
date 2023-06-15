@@ -15,13 +15,14 @@ namespace Character.CharacterComponents
 
         public bool IsInvincible { get; set; }
         public bool CanOverHeal { get; set; }
-        public int MaxHp => character.stats.maxHp;
+        public virtual int MaxHp => character.stats.maxHp;
         public int CurrentHp { get; protected set; }
         public float HpPercentage => (float) CurrentHp / MaxHp;
         public bool IsAlive => CurrentHp > 0;
 
         public CharacterHealth(CharacterBase character_) : base(character_)
         {
+            if(character_ == null) return;
             CurrentHp = MaxHp;
         }
 
@@ -58,19 +59,5 @@ namespace Character.CharacterComponents
             //
             // OnHealthUpdate.Invoke(this);
         }
-        
-        #if UNITY_EDITOR
-        
-        [NaughtyAttributes.Button("Take Damage")]
-        public void TestTakeDamage()
-        {
-            var _info = new DamageInfo()
-            {
-                DamageAmount = 20,
-            };
-            TakeDamage(_info);
-        }
-        
-        #endif
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UI
+namespace UI.Farming
 {
     public abstract class FarmUI : MonoBehaviour
     {

@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(EnemyData))]
-public class StatsDataEditor : Editor
+public class EnemyDataEditor : Editor
 {
     private Vector2 scroll;
     private bool showStatsSection = true; // Toggle to show or hide the stats section
@@ -22,6 +22,11 @@ public class StatsDataEditor : Editor
         StatsGrowth _statsGrowthDataData = _enemyData.statsData;
         
         EditorGUIUtility.labelWidth = 200;
+        
+        // Expandable text box for the 'description' property
+        EditorGUILayout.LabelField("Encyclopedia Description");
+        _enemyData.encyclopediaInfo.description = EditorGUILayout.TextArea(_enemyData.encyclopediaInfo.description, GUILayout.Height(100));
+        
         // Toggle for showing or hiding the stats section
         showStatsSection = EditorGUILayout.Toggle("Show Stats Per Level", showStatsSection);
         
@@ -33,8 +38,7 @@ public class StatsDataEditor : Editor
             float totalWidth = EditorGUIUtility.labelWidth * 9f;
 
             scroll = EditorGUILayout.BeginScrollView(scroll, GUILayout.MaxHeight(200), GUILayout.Width(EditorGUIUtility.currentViewWidth - 20));
-
-            EditorGUILayout.BeginHorizontal();
+            
             EditorGUILayout.BeginHorizontal(GUILayout.Width(totalWidth));
 
             EditorGUILayout.BeginVertical();
@@ -59,7 +63,6 @@ public class StatsDataEditor : Editor
             }
 
             EditorGUILayout.EndVertical();
-            EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.EndScrollView();

@@ -80,5 +80,10 @@ namespace CustomHelpers
         {
             return SceneManager.GetSceneByName(sceneName).GetFirstMainCameraInScene(includeInActive);
         }
+        
+        public static T FindComponentInActiveScene<T>(bool includeInactive = true)
+        {
+            return SceneManager.GetActiveScene().FindFirstComponentInScene<T>(includeInactive);
+        }
     }
 }

@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Player.ControllerState
 {
-    
     public enum PlayerSate { Grounded, Jumping, Falling, Swimming, Climbing, Dashing, Attacking, UsingTool, Interacting, Menu }
     
     [System.Serializable]

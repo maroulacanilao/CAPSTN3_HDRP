@@ -16,6 +16,8 @@ namespace ScriptableObjectData
 
         [field: SerializeField] public AnimationCurve enemySpawnRate { get; private set; }
 
+        public SerializedDictionary<EnemyData, int> enemyKillsStats;
+        
         public List<EnemyData> GetEligibleEnemies(int level_)
         {
             return (from _enemyData in enemyDataDictionary where _enemyData.Value.minLevel <= level_ select _enemyData.Value).ToList();
@@ -25,6 +27,18 @@ namespace ScriptableObjectData
         {
             var _eligibleEnemies = GetEligibleEnemies(level_);
             return _eligibleEnemies.GetRandomItem();
+        }
+        
+        public void AddKills(EnemyData enemyData_)
+        {
+            if (enemyKillsStats.TryGetValue(enemyData_, out var _kills))
+            {
+                enemyKillsStats[enemyData_] = _kills + 1;
+            }
+            else
+            {
+                enemyKillsStats.Add(enemyData_, 1);
+            }
         }
         
         #if UNITY_EDITOR

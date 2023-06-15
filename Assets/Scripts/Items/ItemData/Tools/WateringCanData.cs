@@ -8,7 +8,8 @@ namespace Items.ItemData.Tools
     {
         public override bool UseTool(PlayerEquipment playerEquipment_)
         {
-            return playerEquipment_.farmTools.WaterTile();
+            // return playerEquipment_.farmTools.WaterTile();
+            return true;
         }
 
         protected override void OnValidate()

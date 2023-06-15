@@ -3,7 +3,7 @@ using CustomEvent;
 using Items;
 using Items.Inventory;
 using ObjectPool;
-using CustomHelpers;
+using UI.Farming;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +22,7 @@ namespace UI.LootMenu
         [SerializeField] private Button lootAllBtn, trashAllBtn;
 
         public static readonly Evt<UI_LootMenuItem> OnShowItemDetail = new Evt<UI_LootMenuItem>();
-
+        public static readonly Evt<UI_LootMenuItem> OnItemClick = new Evt<UI_LootMenuItem>();
         private List<UI_LootMenuItem> lootMenuItemList;
         private LootDropObject lootDropObject;
 
@@ -61,7 +61,6 @@ namespace UI.LootMenu
                 }
             });
         }
-        
         public override void OpenMenu()
         {
             
@@ -89,6 +88,7 @@ namespace UI.LootMenu
         private void ShowLootMenu(LootDropObject lootDropObject_)
         {
             FarmUIManager.Instance.CloseAllUI();
+            RemoveAllItemOnly();
             
             lootDropObject = lootDropObject_;
             var _lootDrop = lootDropObject_.lootDrop;
@@ -97,13 +97,15 @@ namespace UI.LootMenu
         
             var _menuItem = Instantiate(lootMenuItemPrefab, itemParent).Initialize(_lootDrop.moneyDrop, null);
             lootMenuItemList.Add(_menuItem);
+            
+            
         
             foreach (var _item in _lootDrop.itemsDrop)
             {
                 var _uiLootMenuItem = Instantiate(lootMenuItemPrefab, itemParent).Initialize(_item, null);
                 lootMenuItemList.Add(_uiLootMenuItem);
             }
-            lootMenuItemList[0].GetComponent<Button>().Select();
+            lootMenuItemList[0].gameObject.AddComponent<ButtonSelectFirst>();
             gameObject.SetActive(true);
         }
 
@@ -136,8 +138,20 @@ namespace UI.LootMenu
         public void ClosePanel()
         {
             lootDropObject = null;
-            if(lootMenuItemList.Count > 0) lootMenuItemList.DestroyComponents();
             FarmUIManager.Instance.CloseAllUI();
+            RemoveAllItemOnly();
+        }
+        
+        public void RemoveAllItemOnly()
+        {
+            if(lootMenuItemList == null) return;
+            if(lootMenuItemList.Count <= 0) return;
+            
+            for (int i = lootMenuItemList.Count - 1; i >= 0; i--)
+            {
+                Destroy(lootMenuItemList[i].gameObject);
+            }
+            lootMenuItemList.Clear();
         }
     }
 }

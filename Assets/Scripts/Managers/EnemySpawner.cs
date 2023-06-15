@@ -18,7 +18,7 @@ namespace Managers
         [SerializeField] private int maxEnemyCount = 3;
         
         private EnemyDataBase enemyDataBase => gameDataBase.enemyDataBase;
-        private int playerLevel => gameDataBase.playerData.playerLevelData.CurrentLevel;
+        private int playerLevel => gameDataBase.playerData.LevelData.CurrentLevel;
 
         private List<EnemyAIController> enemyControllers = new List<EnemyAIController>();
         private Dictionary<FarmTile, EnemyAIController> targetTileDictionary;

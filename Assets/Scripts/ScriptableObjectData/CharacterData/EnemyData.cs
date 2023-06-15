@@ -20,7 +20,8 @@ namespace ScriptableObjectData.CharacterData
         [field: SerializeField] public int minLevel { get; private set; }
         
         [field: SerializeField] public WeightedDictionary<EnemyData> alliesDictionary { get; private set; }
-
+        
+        [field: SerializeField] public EncyclopediaInfo encyclopediaInfo { get; private set; }
         [ContextMenu("Sort Spells")]
         public void SortSpells() => combatTendency.SortSpells();
         

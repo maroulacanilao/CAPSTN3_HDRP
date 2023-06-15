@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CustomHelpers;
 using UnityEngine;
+using System.Linq;
 
 namespace ObjectPool
 {
@@ -36,13 +37,13 @@ namespace ObjectPool
 
         public GameObject Get()
         {
+            PurgeNulls();
             while (true)
             {
-                var _obj = standbyQueue.Count > 0 ? standbyQueue.Dequeue() : Object.Instantiate(prefab, root);
+                var _obj = standbyQueue.TryDequeue(out var _res) ? _res : Object.Instantiate(prefab, root);
 
-                if (_obj == null) continue;
-                if (_obj.IsDestroyed()) continue;
-                
+                if (_obj.IsEmptyOrDestroyed()) continue;
+
                 activeSet.Add(_obj);
                 _obj.OnSpawn();
                 return _obj.gameObject;
@@ -95,8 +96,14 @@ namespace ObjectPool
 
         public void Release(Poolable poolableObject_)
         {
-            if(poolableObject_.IsEmptyOrDestroyed()) return;
+            if (poolableObject_.IsEmptyOrDestroyed())
+            {
+                PurgeNulls();
+                return;
+            }
+            
             if (!activeSet.Contains(poolableObject_)) return;
+            
             activeSet.Remove(poolableObject_);
             poolableObject_.OnDeSpawn();
             standbyQueue.Enqueue(poolableObject_);
@@ -105,7 +112,11 @@ namespace ObjectPool
         
         public void Release(GameObject poolableObject_)
         {
-            if(poolableObject_ == null) return;
+            if (poolableObject_.IsEmptyOrDestroyed())
+            {
+                PurgeNulls();
+                return;
+            }
             Release(poolableObject_.GetComponent<Poolable>());
         }
 
@@ -128,9 +139,12 @@ namespace ObjectPool
                 if (_obj.IsEmptyOrDestroyed()) continue;
                 Object.Destroy(_obj.gameObject);
             }
-            activeSet.Clear();
+            activeSet?.Clear();
         }
-        
-        
+
+        private void PurgeNulls()
+        {
+            activeSet?.RemoveWhere(_obj => _obj.IsEmptyOrDestroyed());
+        }
     }
 }

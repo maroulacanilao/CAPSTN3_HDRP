@@ -6,11 +6,24 @@ using UnityEngine;
 
 public class LookAtCamera : MonoBehaviour
 {
-    private Camera cam;
+    private Camera mCam;
+    private Camera cam
+    {
+        get
+        {
+            if(mCam == null) mCam = Camera.main;
+            
+            if (!mCam.transform.gameObject.activeInHierarchy)
+            {
+                mCam = gameObject.scene.GetFirstMainCameraInScene(false);
+            }
+            return mCam;
+        }
+    }
 
     private void Awake()
     {
-        cam = gameObject.scene.GetFirstMainCameraInScene();
+        mCam = Camera.main;
     }
     
     private void LateUpdate()

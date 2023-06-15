@@ -9,6 +9,7 @@ using DG.Tweening;
 using NaughtyAttributes;
 using ObjectPool;
 using ScriptableObjectData.CharacterData;
+using UI.Battle;
 using UnityEngine;
 
 namespace BattleSystem
@@ -64,6 +65,12 @@ namespace BattleSystem
         
         [field: BoxGroup("Animation Parameters")] [field: AnimatorParam("animator")]
         [field: SerializeField] public int deathAnimationHash { get; private set; }
+        
+        [field: BoxGroup("Animation Parameters")] [field: AnimatorParam("animator")]
+        [field: SerializeField] public int isIdleHash { get; private set; }
+        
+        [field: BoxGroup("Animation Parameters")] [field: AnimatorParam("animator")]
+        [field: SerializeField] public int groundedHash { get; private set; }
 
         #endregion
 
@@ -92,7 +99,9 @@ namespace BattleSystem
         public virtual CombatStats TotalStats => character.stats;
         public virtual CombatStats BaseStats => character.statsData.baseCombatStats;
 
-        public virtual BattleCharacter Initialize(BattleStation battleStation_, int level_)
+        private float xOffset;
+
+        public virtual BattleCharacter Initialize(BattleStation battleStation_, int level_, float xOffset_)
         {
             battleStation = battleStation_;
             Level = level_;
@@ -103,6 +112,9 @@ namespace BattleSystem
             
             defaultPosition = transform.position;
             spellUser = new SpellUser(character);
+            xOffset = xOffset_;
+            animator.SetFloat(xSpeedAnimationHash, xOffset);
+            animator.SetBool(isIdleHash, true); 
             return this;
         }
 
@@ -126,32 +138,29 @@ namespace BattleSystem
         public float GetHorizontalVelocity()
         {
             Vector2 _velocity = new Vector2(controller.velocity.x, controller.velocity.y);
-            return _velocity.magnitude;
+            //return _velocity.magnitude;
+            return _velocity.x;
         }
-
-        public void UpdateMoveAnim()
-        {
-            if (GetHorizontalVelocity().IsApproximatelyTo(0))
-            {
-                animator.SetFloat(xSpeedAnimationHash, 0);
-            }
-            
-            animator.SetFloat(xSpeedAnimationHash, 1);
-        }
-
+        
         public IEnumerator GoToPosition(Vector3 position_, float duration_ = 0.5f)
         {
+            var _x = position_.x > transform.position.x ? 1 : -1;
+            
             transform.SetY(defaultPosition.y);
             animator.SetTrigger(moveAnimationHash);
+            animator.SetBool(isIdleHash, false);
             
             var _moveTween = transform.DOMove(position_.SetY(defaultPosition.y), duration_);
             
-            _moveTween.onUpdate += UpdateMoveAnim;
-            
+            _moveTween.onUpdate += () =>
+            {
+                animator.SetFloat(xSpeedAnimationHash, _x);
+            };
+
             yield return _moveTween.WaitForCompletion();
             
-            animator.SetFloat(xSpeedAnimationHash, 0);
             animator.ResetTrigger(moveAnimationHash);
+            animator.SetBool(isIdleHash, true);
         }
 
         public IEnumerator BasicAttack(BattleCharacter target_)
@@ -160,14 +169,15 @@ namespace BattleSystem
             DamageInfo _tempDamageInfo = new DamageInfo(TotalStats.physicalDamage, gameObject, DamageType.Weapon);
             AttackResult _attackResult = this.DamageTarget(target_, _tempDamageInfo);
             
+            animator.SetFloat(xSpeedAnimationHash,xOffset);
             animator.SetTrigger(attackAnimationHash);
-            yield return animator.WaitForAnimationEvent(AnimEvent_AttackHit, 2);
+            yield return animator.WaitForAnimationEvent(AnimEvent_AttackHit, 0.5f);
             
             Debug.Log(_attackResult.attackResultType);
             
             target_.Hit(_attackResult);
 
-            yield return animator.WaitForAnimationEvent(AnimEvent_AnimEnd, 1);
+            yield return animator.WaitForAnimationEvent(AnimEvent_AnimEnd, 0.1f);
             
             animator.ResetTrigger(attackAnimationHash);
             yield return CoroutineHelper.GetWait(0.2f);
@@ -179,6 +189,8 @@ namespace BattleSystem
             yield return GoToPosition(target_.battleStation.attackPosition);
             yield return BasicAttack(target_);
             yield return GoToPosition(battleStation.stationPosition);
+            
+            animator.SetFloat(xSpeedAnimationHash, xOffset);
         }
 
         public IEnumerator EvadeAnimation()
@@ -198,6 +210,7 @@ namespace BattleSystem
             {
                 character.TakeDamage(atkResult_.damageInfo);
                 var _trigger = characterHealth.IsAlive ? hurtAnimationHash : deathAnimationHash;
+                animator.SetFloat(xSpeedAnimationHash, xOffset);
                 animator.SetTrigger(_trigger);
                 if(characterHealth.IsAlive) transform.DoHitEffect();
                 var _damage = -atkResult_.damageInfo.DamageAmount;
@@ -213,6 +226,7 @@ namespace BattleSystem
         public IEnumerator PlayDeathAnim()
         {
             animator.SetTrigger(deathAnimationHash);
+            animator.SetFloat(xSpeedAnimationHash, xOffset);
             yield return animator.WaitForAnimationEvent(AnimEvent_AnimEnd, 2);
             animator.ResetTrigger(deathAnimationHash);
         }
@@ -220,8 +234,9 @@ namespace BattleSystem
         public IEnumerator PlaySpellCastAnim()
         {
             if(!character.IsAlive) yield break;
+            animator.SetFloat(xSpeedAnimationHash, xOffset);
             animator.SetTrigger(spellAnimationHash);
-            yield return animator.WaitForAnimationEvent(AnimEvent_SpellCast, 2);
+            yield return animator.WaitForAnimationEvent(AnimEvent_SpellCast, 0.5f);
             animator.ResetTrigger(spellAnimationHash);
         }
         

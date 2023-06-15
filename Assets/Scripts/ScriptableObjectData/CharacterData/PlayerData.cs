@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BaseCore;
 using Character;
+using Character.CharacterComponents;
 using Items.Inventory;
 using Spells.Base;
 using UnityEngine;
@@ -10,15 +11,17 @@ namespace ScriptableObjectData.CharacterData
     [CreateAssetMenu(fileName = "PlayerData", menuName = "ScriptableObjects/CharacterData/PlayerData", order = 0)]
     public class PlayerData : CharacterData
     {
-        [field: SerializeField] public PlayerInventory playerInventory { get; private set; }
-        [field: SerializeField] public PlayerLevel playerLevelData { get; private set; }
+        [field: SerializeField] public PlayerInventory inventory { get; private set; }
+        [field: SerializeField] public PlayerLevel LevelData { get; private set; }
 
         [field: SerializeField] public List<AllyData> alliesData { get; private set; }
         [field: SerializeField] public BlessingMeter blessingMeter { get; private set; }
+        [field: SerializeField] public PlayerHealth health { get; private set; }
+        [field: SerializeField] public PlayerMana mana { get; private set; }
+        [field: SerializeField] public PlayerStatusEffectReceiver statusEffectReceiver { get; private set; }
         
-        public int CurrentHp { get; set; }
-        public int CurrentMana { get; set; }
-        
+        public CombatStats totalStats => statsData.GetTotalStats(LevelData.CurrentLevel);
+
         public void AddAlly(AllyData allyData_)
         {
             alliesData.Add(allyData_);
@@ -26,32 +29,29 @@ namespace ScriptableObjectData.CharacterData
 
         public void Initialize(GameDataBase gameDataBase)
         {
-            playerInventory.Initialize();
-            playerLevelData.ResetExperience();
+            inventory.Initialize();
             statsData.ClearAdditionalStats();
+            health = new PlayerHealth(this);
+            mana = new PlayerMana(this);
+            statusEffectReceiver = new PlayerStatusEffectReceiver(this);
         }
         
         public void DeInitialize()
         {
-            playerInventory.DeInitializeInventory();
+            inventory.DeInitializeInventory();
             statsData.ClearAdditionalStats();
         }
         
         public CombatStats GetStats()
         {
-            return statsData.GetTotalStats(playerLevelData.CurrentLevel);
+            return statsData.GetTotalStats(LevelData.CurrentLevel);
         }
 
 
-#if UNITY_EDITOR
-
-        [NaughtyAttributes.Button("Reset HP & Mana")]
-        [ContextMenu("Reset HP & Mana")]
-        private void ResetHpAndMana()
+        [ContextMenu("Reset Data")]
+        private void ResetData()
         {
-            CurrentHp = 0;
-            CurrentMana = 0;
+            LevelData.ResetExperience();
         }
-#endif
     }
 }

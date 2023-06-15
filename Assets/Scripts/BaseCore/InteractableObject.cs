@@ -1,17 +1,18 @@
 using CustomEvent;
+using CustomHelpers;
 using UnityEngine;
 
 namespace BaseCore
 {
     public abstract class InteractableObject : MonoBehaviour
     {
-        [field: SerializeField] public bool showIcon { get; protected set; } = true;
+        [field: SerializeField] public bool canInteract { get; protected set; } = true;
         public static readonly Evt<InteractableObject> OnInteract = new Evt<InteractableObject>();
         public static readonly Evt<InteractableObject> OnEnter = new Evt<InteractableObject>();
         public static readonly Evt<InteractableObject> OnExit = new Evt<InteractableObject>();
 
         protected bool isEfectActive;
-        
+
         protected virtual void OnEnable()
         {
             OnInteract.AddListener(InteractWrapper);
@@ -28,12 +29,14 @@ namespace BaseCore
     
         private void InteractWrapper(InteractableObject obj_)
         {
+            if(IsNull()) return;
             if(obj_ != this) return;
             Interact();
         }
     
         private void EnterWrapper(InteractableObject obj_)
         {
+            if(IsNull()) return;
             if (obj_ != this)
             {
                 if(isEfectActive) Exit();
@@ -46,6 +49,7 @@ namespace BaseCore
 
         private void ExitWrapper(InteractableObject obj_)
         {
+            if(IsNull()) return;
             if(obj_ != this) return;
             isEfectActive = false;
             Exit();
@@ -54,5 +58,15 @@ namespace BaseCore
         protected abstract void Interact();
         protected abstract void Enter();
         protected abstract void Exit();
+
+        protected bool IsNull()
+        {
+            if (gameObject.IsValid()) return false;
+            
+            OnInteract.RemoveListener(InteractWrapper);
+            OnEnter.RemoveListener(EnterWrapper);
+            OnExit.RemoveListener(ExitWrapper);
+            return true;
+        }
     }
 }

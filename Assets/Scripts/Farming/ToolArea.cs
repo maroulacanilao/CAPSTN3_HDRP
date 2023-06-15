@@ -26,12 +26,12 @@ namespace Farming
         private Vector2 size = Vector2.one;
         private Vector3 playerPosition;
 
-        public void Instantiate(Vector2 size_, LayerMask farmTileLayer_, LayerMask farmGroundLayer_)
+        public void Initialize(Vector2 size_, LayerMask farmTileLayer_, LayerMask farmGroundLayer_)
         {
             size = size_;
             farmTileLayer = farmTileLayer_;
             farmGroundLayer = farmGroundLayer_;
-            inventory = GameManager.Instance.PlayerData.playerInventory;
+            inventory = GameManager.Instance.PlayerData.inventory;
             
             lineRenderer.startWidth = lineWidth;
             lineRenderer.endWidth = lineWidth;
@@ -112,9 +112,9 @@ namespace Farming
         {
             if (!lineRenderer.enabled) return null;
             
-            var _ray = new Ray(transform.position.AddY(1f), Vector3.down);
+            var _ray = new Ray(transform.position.AddY(0.5f), Vector3.down);
             
-            return Physics.Raycast(_ray, out var _hit, 1.1f, farmTileLayer) 
+            return Physics.Raycast(_ray, out var _hit, .7f, farmTileLayer) 
                 ? _hit.transform.GetComponent<FarmTile>() : null;
         }
         

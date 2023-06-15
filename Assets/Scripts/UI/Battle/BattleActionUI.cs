@@ -1,22 +1,28 @@
 using System;
 using System.Collections;
+using BaseCore;
 using BattleSystem;
 using CustomHelpers;
+using Items;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Battle
 {
     public enum BattleAction { BasicAttack = 1, Spell = 2, Item = 3, Skip = 4, }
     
-    public class BattleActionUI : MonoBehaviour
+    public class BattleActionUI : Singleton<BattleActionUI>
     {
     
         [BoxGroup("Panels")] [SerializeField] private GameObject mainPanel;
         [BoxGroup("Panels")] [SerializeField] private GameObject actionPanel;
         [BoxGroup("Panels")] [SerializeField] private SpellActionPanelUI spellPanel;
+        [BoxGroup("Panels")] [SerializeField] private UseItemActionUI itemPanel;
         [BoxGroup("Panels")] [SerializeField] private TargetPanel enemyTargetPanel;
         [BoxGroup("Panels")] [SerializeField] private TargetPanel playerTargetPanel;
+        
+        [BoxGroup("Buttons")] [SerializeField] private Button itemsBtn;
         
         public BattleManager battleManager { get; private set; }
         public BattleCharacter player { get; private set; }
@@ -31,6 +37,7 @@ namespace UI.Battle
             battleManager = BattleManager.Instance;
             enemyTargetPanel.Initialize(this, battleManager.enemyParty);
             playerTargetPanel.Initialize(this, battleManager.playerParty);
+            itemPanel.Initialize(this);
         }
 
         private void OnDestroy()
@@ -44,6 +51,7 @@ namespace UI.Battle
         
         private void ShowActionMenu(BattleCharacter playerCharacter_)
         {
+            itemsBtn.interactable = itemPanel.HasItems();
             player = playerCharacter_;
             currentAction = BattleAction.BasicAttack;
             currentTarget = battleManager.GetFirstAliveEnemy();
@@ -57,6 +65,7 @@ namespace UI.Battle
             spellPanel.gameObject.SetActive(false);
             enemyTargetPanel.gameObject.SetActive(false);
             playerTargetPanel.gameObject.SetActive(false);
+            itemPanel.gameObject.SetActive(false);
         }
 
         public void BackToActionPanel()
@@ -81,6 +90,12 @@ namespace UI.Battle
         {
             CloseOtherPanels();
             playerTargetPanel.gameObject.SetActive(true);
+        }
+
+        public void ShowItemMenu()
+        {
+            CloseOtherPanels();
+            itemPanel.gameObject.SetActive(true);
         }
         
         #endregion
@@ -108,6 +123,7 @@ namespace UI.Battle
                     UseSpell(target_);
                     break;
                 case BattleAction.Item:
+                    UseItem(target_);
                     break;
                 case BattleAction.Skip:
                     SkipTurn();
@@ -116,7 +132,7 @@ namespace UI.Battle
                     throw new ArgumentOutOfRangeException();
             }
         }
-        
+
         private void Attack(BattleCharacter target_)
         {
             if (player == null)
@@ -155,6 +171,33 @@ namespace UI.Battle
             BattleManager.OnPlayerEndDecide.Invoke();
         }
         
+        private void UseItem(BattleCharacter target_)
+        {
+            if (UseItemActionUI.CurrentItemBtn == null ||
+                UseItemActionUI.CurrentItemBtn.item == null)
+            {
+                itemPanel.UpdateInventory(null);
+                ShowActionMenu(player);
+                return;
+            }
+            
+            CloseOtherPanels();
+            mainPanel.SetActive(false);
+            
+            StartCoroutine(Co_Item(target_));
+        }
+        
+        private IEnumerator Co_Item(BattleCharacter target_)
+        {
+            var currentItem = UseItemActionUI.CurrentItemBtn.item;
+            
+            currentItem.Consume(target_.character.statusEffectReceiver);
+            
+            yield return CoroutineHelper.GetWait(1f);
+            yield return null;
+            BattleManager.OnPlayerEndDecide.Invoke();
+        }
+        
         public void SkipTurn()
         {
             mainPanel.SetActive(false);
@@ -167,7 +210,7 @@ namespace UI.Battle
             yield return CoroutineHelper.GetWait(0.2f);
             BattleManager.OnPlayerEndDecide.Invoke();
         }
-        
+
         #endregion
     }
 }

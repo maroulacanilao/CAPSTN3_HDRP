@@ -59,7 +59,9 @@ MonoBehaviour:
   <attackAnimationHash>k__BackingField: 1080829965
   <spellAnimationHash>k__BackingField: 1080829965
   <hurtAnimationHash>k__BackingField: 1654612129
-  <deathAnimationHash>k__BackingField: 646380074
+  <deathAnimationHash>k__BackingField: 1654612129
+  <isIdleHash>k__BackingField: 2058724655
+  <groundedHash>k__BackingField: 862969536
   <AnimEvent_AttackHit>k__BackingField: AttackHit
   <AnimEvent_AnimEnd>k__BackingField: AnimEnd
   <AnimEvent_SpellCast>k__BackingField: AttackHit
@@ -126,7 +128,7 @@ Transform:
   m_GameObject: {fileID: 5490923671276259403}
   m_LocalRotation: {x: 0.13052616, y: -0, z: -0, w: 0.9914449}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5490923670729881758}
@@ -173,7 +175,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 4723107735738678597, guid: c1cdd26cc09ad224884556bc4d8296ae,
+  m_Sprite: {fileID: -5051535973938906240, guid: a0cb87dd5abaa13499f7b5ac33483e4e,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -195,7 +197,7 @@ Animator:
   m_GameObject: {fileID: 5490923671276259403}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f671657883e6df64c9f6a909d281dd2c, type: 2}
+  m_Controller: {fileID: 9100000, guid: ee8adfeef9a33a243a63ade99b8a0719, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
