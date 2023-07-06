@@ -15,9 +15,11 @@ namespace ScriptableObjectData.CharacterData
         [field: SerializeField] [field: ShowAssetPreview()] public CharacterBase farmPrefab { get; protected set; }
         
         [field: SerializeField] [field: ShowAssetPreview()] public BattleCharacter battlePrefab { get; protected set; }
-        [field: SerializeField] [field: BoxGroup("Stats")] public StatsGrowth statsData { get; protected set; } = new StatsGrowth();
+        [field: SerializeField] [field: BoxGroup("Stats")] public virtual StatsGrowth statsData { get; protected set; } = new StatsGrowth();
         
-        [field: SerializeField] public List<SpellData> spells { get; private set; }
+        [field: SerializeField] public List<SpellData> spells { get; protected set; }
+        
+        [field: SerializeField] public List<string> weaknessTags { get; protected set; }
 
         public int characterID { get; private set; }
 

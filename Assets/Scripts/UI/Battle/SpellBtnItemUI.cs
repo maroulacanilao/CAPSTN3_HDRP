@@ -29,7 +29,7 @@ namespace UI.Battle
             {
                 mainPanel.currentAction = BattleAction.Spell;
                 currIndex = spellIndex;
-                if(spellData.spellType is SpellType.Magical or SpellType.Physical) mainPanel.ShowEnemyTargetPanel();
+                if(spellData.spellType is SpellType.Damage or SpellType.DeBuff) mainPanel.ShowEnemyTargetPanel();
                 else mainPanel.ShowPlayerTargetPanel();
             });
         }

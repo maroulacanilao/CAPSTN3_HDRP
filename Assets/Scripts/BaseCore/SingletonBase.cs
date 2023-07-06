@@ -1,3 +1,4 @@
+using CustomHelpers;
 using UnityEngine;
 
 namespace BaseCore
@@ -36,7 +37,7 @@ namespace BaseCore
                     for (var i = objs.Length - 1; i > -1; --i)
                     {
                         if (_instance == objs[i]) continue;
-                        Destroy(objs[i]);
+                        Destroy(objs[i].gameObject);
                     }
                 }
 
@@ -52,8 +53,18 @@ namespace BaseCore
         
             else if (Instance != null && Instance != this)
             {
-                Destroy(this);
+                Destroy(this.gameObject);
             }
+        }
+
+        public static bool IsInstanceValid()
+        {
+            return _instance.IsValid();
+        }
+        
+        public static bool IsInstanceNull()
+        {
+            return _instance.IsEmptyOrDestroyed();
         }
     }
 

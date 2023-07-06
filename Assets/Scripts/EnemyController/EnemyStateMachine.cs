@@ -1,5 +1,7 @@
+using CustomHelpers;
 using EnemyController.EnemyStates;
 using Farming;
+using Player;
 using UnityEngine;
 
 namespace EnemyController
@@ -7,33 +9,70 @@ namespace EnemyController
     [System.Serializable]
     public class EnemyStateMachine
     {
-        public bool isTileOnRight { get; set; }
-        
-        public Vector3 targetDestination { get; set; }
-        
+
         private EnemyAIController aiController;
+
+        #region States
         
+        public EnemyPatrolState patrolState { get; private set; }
+        public EnemyChasePlayer chasePlayerState { get; private set; }
+        public EnemyAttackState attackState { get; private set; }
+        public EnemyGoToStationState goToStationState { get; private set; }
+
+        #endregion
+
+        public Transform playerTransform => playerController.transform;
+
+        public PlayerInputController playerController
+        {
+            get
+            {
+                if(mPlayerController.IsValid()) return mPlayerController;
+                mPlayerController = PlayerInputController.Instance;
+                return mPlayerController;
+            }
+        }
+        
+        private PlayerInputController mPlayerController;
+
         [SerializeReference] private EnemyControllerState currentState;
         
         public EnemyStateMachine(EnemyAIController aiController_)
         {
             aiController = aiController_;
+
         }
         
         public void Initialize()
         {
-            ChangeState(new EnemyPatrolState(aiController, this));
+            patrolState = new EnemyPatrolState(aiController, this);
+            chasePlayerState = new EnemyChasePlayer(aiController, this);
+            attackState = new EnemyAttackState(aiController, this);
+            goToStationState = new EnemyGoToStationState(aiController, this);
+            
+            ChangeState(patrolState);
         }
 
-        public void AnimationUpdate()
+        public void Enable()
+        {
+            if (aiController.station.IsEmptyOrDestroyed())
+            {
+                UnityEngine.Object.Destroy(aiController.gameObject);
+                return;
+            }
+            
+            currentState?.Enable();
+        }
+
+        public void FixedUpdate()
         {
             currentState?.AnimationUpdate();
+            currentState?.FixedUpdate();
         }
 
         public void ChangeState(EnemyControllerState newState_)
         {
             currentState?.Exit();
-            Debug.Log(newState_.stateName);
             currentState = newState_;
             currentState?.Enter();
         }

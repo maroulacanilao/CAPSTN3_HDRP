@@ -4,6 +4,5 @@ namespace Character
 {
     public class EnemyCharacter : CharacterBase
     {
-        
     }
 }

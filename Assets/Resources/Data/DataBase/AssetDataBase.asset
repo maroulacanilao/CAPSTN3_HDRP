@@ -12,17 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d985be94d895b744f9a2266efa0ae951, type: 3}
   m_Name: AssetDataBase
   m_EditorClassIdentifier: 
-  <healthIcon>k__BackingField: {fileID: 0}
-  <manaIcon>k__BackingField: {fileID: 0}
+  <vitalityIcon>k__BackingField: {fileID: 0}
   <phyDmgIcon>k__BackingField: {fileID: 0}
-  <armIcon>k__BackingField: {fileID: 0}
-  <magDmgIcon>k__BackingField: {fileID: 0}
-  <magResIcon>k__BackingField: {fileID: 0}
+  <intelligenceIcon>k__BackingField: {fileID: 0}
+  <defIcon>k__BackingField: {fileID: 0}
   <spdIcon>k__BackingField: {fileID: 0}
-  <accIcon>k__BackingField: {fileID: 0}
   <goldIcon>k__BackingField: {fileID: 0}
   <weaponIcon>k__BackingField: {fileID: 0}
   <armorIcon>k__BackingField: {fileID: 0}
   <consumableIcon>k__BackingField: {fileID: 0}
   <seedIcon>k__BackingField: {fileID: 0}
   <toolIcon>k__BackingField: {fileID: 0}
+  <poolObjects>k__BackingField:
+    _serializedList:
+    - Key: {fileID: 8189976617550584776, guid: 1f683a5ee46817443b82b5511597556b, type: 3}
+      Value: 20
+    - Key: {fileID: 6152143835800837769, guid: 915fa6e3c1772874c93865b17939dc5e, type: 3}
+      Value: 1
+  <prefabs>k__BackingField:
+    _serializedList:
+    - Key: FarmTile
+      Value: {fileID: 8189976617550584776, guid: 1f683a5ee46817443b82b5511597556b,
+        type: 3}
+    - Key: FireBall
+      Value: {fileID: 6152143835800837769, guid: 915fa6e3c1772874c93865b17939dc5e,
+        type: 3}

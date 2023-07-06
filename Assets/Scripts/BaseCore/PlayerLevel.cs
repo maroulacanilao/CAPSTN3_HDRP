@@ -9,13 +9,28 @@ namespace BaseCore
     [System.Serializable]
     public class PlayerLevel
     {
+        public struct AddExpInfo
+        {
+            public int prevExp;
+            public int newExp;
+            public bool leveledUp;
+            public int prevLevel;
+            public int newLevel;
+            public int addedExp;
+            public int prevScaledLvlExp;
+            public int prevScaledLvlExpNeeded;
+            public int prevNeededExp;
+        }
+        
         [field: CurveRange(0, 0, 1, 1, EColor.Red)]
         [field: SerializeField] public AnimationCurve expLvlCurve { get; private set; }
         [field: SerializeField] public int LevelCap { get; private set; } = 100;
         [field: SerializeField] public int ExperienceCap { get; private set; } = 10000;
 
         private int level = 1;
-        private int totalExperience;
+        
+        //Remove this later
+        [SerializeField] private int totalExperience;
 
         public int CurrentLevel => level;
         public int TotalExperience => totalExperience;
@@ -24,8 +39,10 @@ namespace BaseCore
         public int CurrentLevelExperience => totalExperience - PrevLevelExperience;
         public int ExperienceNeededToLevelUp => NextLevelExperience - TotalExperience;
         
-        public static readonly Evt<PlayerLevel> OnLevelUp = new Evt<PlayerLevel>();
+        public int CurrentExperienceNeeded => EvaluateExperience(CurrentLevel + 1) - EvaluateExperience(CurrentLevel);
         
+        public static readonly Evt<AddExpInfo> OnExperienceChanged = new Evt<AddExpInfo>();
+
         public PlayerLevel Initialize(int totalExperience_)
         {
             totalExperience = totalExperience_;
@@ -40,16 +57,37 @@ namespace BaseCore
         /// <returns></returns>
         public bool AddExp(int expAmount_)
         {
+            var _prevNeededExp = NextLevelExperience;
+            var _prevExpScaled = CurrentLevelExperience;
+            var _prevExpNeededScaled = CurrentExperienceNeeded;
+            
+            var _prevExp = totalExperience;
             var _prevLevel = level;
             totalExperience += expAmount_;
             totalExperience = Mathf.Clamp(totalExperience, 0, ExperienceCap);
-
+            
+            
             level = EvaluateLevel(totalExperience);
             
-            if (_prevLevel == level) return false;
+            var _didLevelUp = _prevLevel < level;
+
+            var _info = new AddExpInfo
+            {
+                prevExp = _prevExp,
+                newExp = totalExperience,
+                leveledUp = _didLevelUp,
+                prevLevel = _prevLevel,
+                newLevel = level,
+                addedExp = expAmount_,
+                prevScaledLvlExp = _prevExpScaled,
+                prevScaledLvlExpNeeded = _prevExpNeededScaled,
+                prevNeededExp = _prevNeededExp
+            };
             
-            OnLevelUp.Invoke(this);
-            return true;
+            Debug.Log($"prevExp: {_prevExp} | newExp: {totalExperience} | leveledUp: {_didLevelUp} | prevLevel: {_prevLevel} | newLevel: {level} | addedExp: {expAmount_} | prevScaledLvlExp: {_prevExpScaled} | prevScaledLvlExpNeeded: {_prevExpNeededScaled} | prevNeededExp: {_prevNeededExp}");
+            
+            OnExperienceChanged.Invoke(_info);
+            return _didLevelUp;
         }
 
         public int EvaluateExperience(int level_)

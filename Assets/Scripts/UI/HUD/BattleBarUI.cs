@@ -10,8 +10,10 @@ namespace UI.HUD
     public class BattleBarUI : HealthBarUI, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] protected BattleStation battleStation;
+        [SerializeField] protected StatusEffectHUD statusEffectHUD;
         [SerializeField] protected TextMeshProUGUI name_TXT;
         [SerializeField] protected GameObject selectIndicator;
+
         
         protected BattleCharacter battleCharacter;
 
@@ -32,7 +34,8 @@ namespace UI.HUD
             
             base.Start();
             
-            name_TXT.text = character.characterData.characterName;
+            name_TXT.text = $"{character.characterData.characterName} Lv.{character.level}";
+            if(statusEffectHUD != null) statusEffectHUD.Initialize(character.statusEffectReceiver);
         }
 
         protected virtual void OnEnable()

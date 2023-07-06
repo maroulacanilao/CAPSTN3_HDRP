@@ -7,6 +7,7 @@ namespace BaseCore
     public abstract class InteractableObject : MonoBehaviour
     {
         [field: SerializeField] public bool canInteract { get; protected set; } = true;
+        [field: SerializeField] public string interactText { get; protected set; } = "Interact";
         public static readonly Evt<InteractableObject> OnInteract = new Evt<InteractableObject>();
         public static readonly Evt<InteractableObject> OnEnter = new Evt<InteractableObject>();
         public static readonly Evt<InteractableObject> OnExit = new Evt<InteractableObject>();

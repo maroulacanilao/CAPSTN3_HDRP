@@ -26,7 +26,7 @@ namespace CustomHelpers
             }
             else
             {
-                Debug.LogError("AnimationEventReceiver component not found on animator " + animator.name);
+                // Debug.LogError("AnimationEventReceiver component not found on animator " + animator.name);
             }
         }
 
@@ -37,7 +37,7 @@ namespace CustomHelpers
                 elapsedTime += Time.deltaTime;
                 if (!eventTriggered && elapsedTime >= timeout)
                 {
-                    Debug.LogWarningFormat("Animation event '{0}' not triggered within {1} seconds on {2}", eventName, timeout, animator.name);
+                    // Debug.LogWarningFormat("Animation event '{0}' not triggered within {1} seconds on {2}", eventName, timeout, animator.name);
                     eventTriggered = true;
                 }
                 return !eventTriggered;

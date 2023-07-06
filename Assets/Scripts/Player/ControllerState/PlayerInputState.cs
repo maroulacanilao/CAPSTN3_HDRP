@@ -2,6 +2,7 @@ using System.Collections;
 using BaseCore;
 using CustomHelpers;
 using Managers;
+using UI.Farming;
 using UnityEngine;
 
 namespace Player.ControllerState
@@ -18,9 +19,8 @@ namespace Player.ControllerState
         protected bool isStateActive;
         public PlayerSate playerState { get; protected set; }
 
-        protected PlayerInputState(PlayerInputStateMachine stateMachine_, int animEndEventHash_)
+        protected PlayerInputState(PlayerInputStateMachine stateMachine_)
         {
-            animEndEventHash = animEndEventHash_;
             player = stateMachine_.player;
             rb = player.rb;
             StateMachine = stateMachine_;
@@ -64,6 +64,8 @@ namespace Player.ControllerState
         
         protected void AnimParamUpdate()
         {
+            if(PlayerMenu.OpenedMenu.IsValid() && PlayerMenu.OpenedMenu.isActiveAndEnabled) return;
+            
             Vector2 _input = InputManager.MoveDelta;
             var _isIdle = _input.magnitude.IsApproximatelyTo(0);
             player.animator.SetBool(player.isIdleHash, _isIdle);
@@ -75,14 +77,14 @@ namespace Player.ControllerState
                 var _val = Mathf.Sign(_input.y);
                 player.animator.SetFloat(player.ySpeedHash, _val);
                 player.animator.SetFloat(player.xSpeedHash, 0);
-                StateMachine.direction = new Vector3(0,0,_val);
+                player.moveDirection = new Vector3(0,0,_val);
             }
             else
             {
                 var _val = Mathf.Sign(_input.x);
                 player.animator.SetFloat(player.xSpeedHash, _val);
                 player.animator.SetFloat(player.ySpeedHash, 0);
-                StateMachine.direction = new Vector3(_val,0,0);
+                player.moveDirection = new Vector3(_val,0,0);
             }
         }
 

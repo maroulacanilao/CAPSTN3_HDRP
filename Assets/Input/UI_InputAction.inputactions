@@ -130,6 +130,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Inventory",
+                    "type": "Button",
+                    "id": "10fc47d2-f328-4b73-936c-8dfbde639f38",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CharacterInfo",
+                    "type": "Button",
+                    "id": "f27495bf-462c-4c11-a32e-5168cb11bea9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Codex",
+                    "type": "Button",
+                    "id": "b08caee9-1fb5-4c7e-a00a-08621f45b080",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -630,6 +657,17 @@
                 },
                 {
                     "name": "",
+                    "id": "6b3bbfcb-ad4a-45de-9361-3160320b8ca6",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8ad935d0-d830-4987-8701-5c3ad7f28c89",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -669,6 +707,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Prev",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2bb0a6ef-3e86-4772-bca8-f2e0ae5f8186",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f1e15522-6da1-4438-b95b-2ccc8f95db41",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CharacterInfo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "898ad025-aaf0-4af7-91f6-d0ea8c6dfdc3",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Codex",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

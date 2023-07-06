@@ -27,7 +27,7 @@ namespace Items.Inventory
     }
 
     [CreateAssetMenu(menuName = "ScriptableObjects/InventoryData", fileName = "PlayerInventoryData")]
-    public class PlayerInventory : ScriptableObject, IScriptableObjectSaveHandler
+    public class PlayerInventory : ScriptableObject
     {
         [SerializeField] private ItemDatabase itemDatabase;
         [SerializeField] private PlayerData playerData;
@@ -59,6 +59,7 @@ namespace Items.Inventory
         public int GoldAmount => gold.GoldAmount;
         public SerializedDictionary<ItemData.ItemData, List<Item>> itemsLookup => lookupDictionary;
         public SerializedDictionary<int, Item> ItemStorage => itemStorageDictionary;
+        public SerializedDictionary<ItemData.ItemData, ItemStackable> StackableDictionary => stackableDictionary;
 
         #endregion
 
@@ -83,6 +84,8 @@ namespace Items.Inventory
             weaponEquipped = null;
             InventoryEvents.OnUpdateStackable.AddListener(UpdateStackable);
             hasInitialized = true;
+            
+            Debug.Log(itemTools.Length);
         }
 
         public void DeInitializeInventory()
@@ -155,6 +158,12 @@ namespace Items.Inventory
         public bool IsAnyOpenSlot(out int index_)
         {
             index_ = GetFirstEmptySlotIndex();
+            return index_ != -1;
+        }
+        
+        public bool IsAnyOpenSlot()
+        {
+            var index_ = GetFirstEmptySlotIndex();
             return index_ != -1;
         }
 
@@ -265,7 +274,11 @@ namespace Items.Inventory
             Initialize();
             if (!stackableDictionary.TryGetValue(stackableItem_.Data, out var _stackable)) return;
 
-            if (!_stackable.RemoveStack(count_)) return;
+            if (_stackable.RemoveStack(count_))
+            {
+                InventoryEvents.OnUpdateInventory.Invoke(this);
+                return;
+            }
             RemoveItemInStorage(stackableItem_);
         }
 
@@ -290,6 +303,7 @@ namespace Items.Inventory
             Initialize();
             if (!itemStorageDictionary.TryGetValue(storageIndex_, out var _item)) return;
             if(_item is not ItemWeapon _itemWeapon) return;
+            if(_itemWeapon.Level > playerData.LevelData.CurrentLevel) return;
 
             weaponEquipped?.OnUnEquip(playerData.statsData);
             var _prevWpn = weaponEquipped;
@@ -301,6 +315,33 @@ namespace Items.Inventory
             if (_prevWpn == null) itemStorageDictionary.Remove(storageIndex_);
             else itemStorageDictionary[storageIndex_] = _prevWpn;
             
+            InventoryEvents.OnWeaponEquip.Invoke(weaponEquipped);
+            InventoryEvents.OnUpdateInventory.Invoke(this);
+        }
+        
+        public void EquipWeapon(Item item_)
+        {
+            Initialize();
+            
+            if(item_ is not ItemWeapon _itemWeapon) return;
+            if(_itemWeapon.Level > playerData.LevelData.CurrentLevel) return;
+            
+            if(_itemWeapon.Level > playerData.LevelData.CurrentLevel) return;
+
+            weaponEquipped?.OnUnEquip(playerData.statsData);
+            var _prevWeapon = weaponEquipped;
+            _prevWeapon?.OnUnEquip(playerData.statsData);
+            
+            weaponEquipped = _itemWeapon;
+            weaponEquipped?.OnEquip(playerData.statsData);
+            
+            var _index = itemStorageDictionary.FirstOrDefault(x => x.Value == _itemWeapon).Key;
+            if (itemStorageDictionary.TryGetValue(_index, out var _storageItem) && _storageItem == _itemWeapon)
+            {
+                if (_prevWeapon == null) itemStorageDictionary.Remove(_index);
+                else itemStorageDictionary[_index] = _prevWeapon;
+            }
+
             InventoryEvents.OnWeaponEquip.Invoke(weaponEquipped);
             InventoryEvents.OnUpdateInventory.Invoke(this);
         }
@@ -325,10 +366,10 @@ namespace Items.Inventory
 
         public void EquipArmor(int storageIndex_)
         {
-            Debug.Log(storageIndex_);
             Initialize();
             if (!itemStorageDictionary.TryGetValue(storageIndex_, out var _item)) return;
             if(_item is not ItemArmor _itemArmor) return;
+            if(_itemArmor.Level > playerData.LevelData.CurrentLevel) return;
 
             armorEquipped?.OnUnEquip(playerData.statsData);
             var _prevArm = armorEquipped;
@@ -344,6 +385,34 @@ namespace Items.Inventory
             InventoryEvents.OnUpdateInventory.Invoke(this);
         }
 
+        public void EquipArmor(Item item_)
+        {
+            Initialize();
+            
+            if(item_ is not ItemArmor _itemArmor) return;
+            if(_itemArmor.Level > playerData.LevelData.CurrentLevel) return;
+            
+            if(_itemArmor.Level > playerData.LevelData.CurrentLevel) return;
+
+            armorEquipped?.OnUnEquip(playerData.statsData);
+            var _prevArm = armorEquipped;
+            _prevArm?.OnUnEquip(playerData.statsData);
+            
+            armorEquipped = _itemArmor;
+            armorEquipped?.OnEquip(playerData.statsData);
+            
+            var _index = itemStorageDictionary.FirstOrDefault(x => x.Value == _itemArmor).Key;
+            if (itemStorageDictionary.TryGetValue(_index, out var _storageItem) && _storageItem == _itemArmor)
+            {
+                if (_prevArm == null) itemStorageDictionary.Remove(_index);
+                else itemStorageDictionary[_index] = _prevArm;
+            }
+
+
+            InventoryEvents.OnArmorEquip.Invoke(armorEquipped);
+            InventoryEvents.OnUpdateInventory.Invoke(this);
+        }
+
         public void EquipTool(int index_)
         {
             if(!itemStorageDictionary.TryGetValue(index_, out Item _item)) return;
@@ -354,6 +423,16 @@ namespace Items.Inventory
             
             if(_indexSlot == -1) return;
             SwapItemsInToolBarAndStorage(_indexSlot, index_);
+        }
+
+        public void UnEquipToolInToolbar(int index_)
+        {
+            if(!IsAnyOpenSlot(out int _openSlot)) return;
+            
+            var _temp = itemTools[index_];
+            itemTools[index_] = null;
+            itemStorageDictionary.Add(_openSlot, _temp);
+            InventoryEvents.OnUpdateInventory.Invoke(this);
         }
         
         public bool UnEquipArmor()
@@ -468,56 +547,39 @@ namespace Items.Inventory
             Initialize();
             return itemStorageDictionary.TryGetValue(index_, out var _value) ? _value : null;
         }
-        
-        [Button("Save")]
-        public void SaveData()
-        {
-            var data = new InventorySaveData()
-            {
-                weapon = this.weaponEquipped,
-                armor = this.armorEquipped
-            };
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-            string filePath = Application.persistentDataPath + "/inventoryData.dat";
-            Debug.Log(filePath);
-            FileStream fileStream = File.Create(filePath);
 
-            binaryFormatter.Serialize(fileStream, data);
-            fileStream.Close();
+        public List<Item> GetItemsInStorageByType(ItemType type_)
+        {
+            return itemStorageDictionary.Values.Where(i => i !=  null && i?.ItemType == type_).ToList();
         }
         
-        [Button("Load")]
-        public bool LoadData()
+        public List<Item> GetItemsInStorageByType(ItemType[] types_)
         {
-            string filePath = Application.persistentDataPath + "/inventoryData.dat";
+            return itemStorageDictionary.Values.Where(i => i != null && types_.Contains(i.ItemType)).ToList();
+        }
 
-            if (!File.Exists(filePath))
+
+        public void Load(SaveSystem.InventoryLoadData loadData_)
+        {
+            Initialize();
+            itemStorageDictionary.Clear();
+            itemTools = loadData_.toolItems;
+            Gold.SetAmount(loadData_.gold);
+            
+            foreach (var _item in loadData_.storageItems)
             {
-                Debug.LogWarning("Save file not found. Returning default data.");
-                return false;
+                itemStorageDictionary.Add(_item.slot, _item.item);
             }
+            
+            armorEquipped?.OnUnEquip(playerData.statsData);
+            armorEquipped = loadData_.armorItem as ItemArmor;
+            armorEquipped?.OnEquip(playerData.statsData);
 
-            try
-            {
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                FileStream fileStream = File.Open(filePath, FileMode.Open);
-
-                var loadedData = (InventorySaveData) binaryFormatter.Deserialize(fileStream);
-                fileStream.Close();
-
-                gold = loadedData.gold;
-                weaponEquipped = loadedData.weapon;
-                armorEquipped = loadedData.armor;
-                
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return false;
-            }
-
-            return false;
+            weaponEquipped?.OnUnEquip(playerData.statsData);
+            weaponEquipped = loadData_.weaponItem as ItemWeapon;
+            weaponEquipped?.OnEquip(playerData.statsData);
+            
+            InventoryEvents.OnUpdateInventory.Invoke(this);
         }
     }
 }

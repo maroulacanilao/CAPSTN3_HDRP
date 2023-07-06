@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace CustomHelpers
 {
@@ -8,6 +10,11 @@ namespace CustomHelpers
         public static bool IsApproximatelyTo(this float a, float b)
         {
             return Mathf.Approximately(a, b);
+        }
+        
+        public static bool IsApproximately0(this float a)
+        {
+            return Mathf.Approximately(a, 0);
         }
 
         /// <summary>
@@ -22,6 +29,14 @@ namespace CustomHelpers
         public static int GetRandomInRange(this Vector2Int source)
         {
             return Random.Range(source.x, source.y + 1);
+        }
+
+        public static int GetRandomInRange(this Vector2Int source, float modifier)
+        {
+            float min = source.x * modifier;
+            float max = source.y * modifier;
+            var _val = Random.Range(min, max);
+            return Mathf.RoundToInt(_val);
         }
 
         public static int EvaluateScaledCurve(this AnimationCurve curve_, int xToEvaluate_, int maxX_, int maxY_)
@@ -43,6 +58,30 @@ namespace CustomHelpers
         public static Color SetAlpha(this Color source, float alpha_)
         {
             return new Color(source.r, source.g, source.b, alpha_);
+        }
+        
+        public static DateTime RoundToFive(this DateTime source)
+        {
+            var _clampedMinutes = (int)Math.Round((double)source.Minute / 5) * 5;
+            return new DateTime(source.Year, 
+                source.Month, 
+                source.Day, 
+                source.Hour, 
+                _clampedMinutes, 
+                0);
+        }
+        
+        public static TimeSpan RoundToFive(this TimeSpan source)
+        {
+            int clampedMinutes = (int)Math.Round((double)source.Minutes / 5) * 5;
+            
+            return new TimeSpan(
+                source.Days,
+                source.Hours,
+                clampedMinutes,
+                0,
+                0
+            );
         }
     }
 }

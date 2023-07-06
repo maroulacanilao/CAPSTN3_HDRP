@@ -97,7 +97,6 @@ namespace BattleSystem
         public CharacterHealth characterHealth => character.health;
         public CharacterMana characterMana => character.mana;
         public virtual CombatStats TotalStats => character.stats;
-        public virtual CombatStats BaseStats => character.statsData.baseCombatStats;
 
         private float xOffset;
 
@@ -115,6 +114,7 @@ namespace BattleSystem
             xOffset = xOffset_;
             animator.SetFloat(xSpeedAnimationHash, xOffset);
             animator.SetBool(isIdleHash, true); 
+            character.SetLevel(level_);
             return this;
         }
 
@@ -166,18 +166,16 @@ namespace BattleSystem
         public IEnumerator BasicAttack(BattleCharacter target_)
         {
             if(!character.IsAlive) yield break;
-            DamageInfo _tempDamageInfo = new DamageInfo(TotalStats.physicalDamage, gameObject, DamageType.Weapon);
-            AttackResult _attackResult = this.DamageTarget(target_, _tempDamageInfo);
+            DamageInfo _tempDamageInfo = new DamageInfo(TotalStats.strength, gameObject);
+            AttackResult _attackResult = this.AttackTarget(target_, _tempDamageInfo);
             
             animator.SetFloat(xSpeedAnimationHash,xOffset);
             animator.SetTrigger(attackAnimationHash);
             yield return animator.WaitForAnimationEvent(AnimEvent_AttackHit, 0.5f);
-            
-            Debug.Log(_attackResult.attackResultType);
-            
+
             target_.Hit(_attackResult);
 
-            yield return animator.WaitForAnimationEvent(AnimEvent_AnimEnd, 0.1f);
+            yield return animator.WaitForAnimationEvent(AnimEvent_AnimEnd, 0.5f);
             
             animator.ResetTrigger(attackAnimationHash);
             yield return CoroutineHelper.GetWait(0.2f);
@@ -205,6 +203,9 @@ namespace BattleSystem
         public void Hit(AttackResult atkResult_)
         {
             if(!character.IsAlive) return;
+            DamageTextUI.ShowDamageText.Invoke(transform.position,atkResult_);
+            animator.ResetTrigger(hurtAnimationHash);
+            animator.ResetTrigger(deathAnimationHash);
             
             if (atkResult_.attackResultType != AttackResultType.Miss)
             {
@@ -214,11 +215,9 @@ namespace BattleSystem
                 animator.SetTrigger(_trigger);
                 if(characterHealth.IsAlive) transform.DoHitEffect();
                 var _damage = -atkResult_.damageInfo.DamageAmount;
-                DamageTextUI.ShowDamageText.Invoke(transform.position,_damage.ToString());
             }
             else
             {
-                DamageTextUI.ShowDamageText.Invoke(transform.position,"Miss");
                 StartCoroutine(EvadeAnimation());
             }
         }

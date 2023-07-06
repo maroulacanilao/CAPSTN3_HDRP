@@ -5,7 +5,7 @@
 
         public override void ShowCodex(int index_)
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

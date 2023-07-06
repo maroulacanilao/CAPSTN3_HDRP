@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using BattleSystem.BattleState;
 using CustomEvent;
 using UnityEngine;
@@ -30,14 +31,20 @@ public abstract class StatusEffectBase : MonoBehaviour
     [field: SerializeField] public int Damage { get; private set; }
     
     [field: BoxGroup("Base Properties")]
-    [field: SerializeField] public bool HasDuration { get; private set; }
+    [field: SerializeField] public int executionOrder { get; private set; }
     
+    [field: BoxGroup("Base Properties")]
+    [field: SerializeField] public bool HasDuration { get; private set; }
+
     [field: BoxGroup("Base Properties")] [field: ShowIf("HasDuration")]
     [field: SerializeField] public int turnDuration { get; private set; }
     
     [field: BoxGroup("Base Properties")] [field: ShowAssetPreview()]
     [field: SerializeField] public Sprite Icon { get; private set; }
     
+    [field: BoxGroup("Base Properties")]
+    [field: SerializeField] public List<string> effectTags { get; private set; }
+
     public StatusEffectReceiver Target { get; private set; }
     public GameObject Source { get; protected set; }
     public int turnsLeft { get; protected set; }
@@ -46,7 +53,8 @@ public abstract class StatusEffectBase : MonoBehaviour
     
     protected string characterName => Target.character.characterData.characterName;
 
-    public Evt<StatusEffectBase, StatusEffectReceiver> OnEffectEnd = new Evt<StatusEffectBase, StatusEffectReceiver>();
+    public readonly Evt<StatusEffectBase, StatusEffectReceiver> OnEffectEnd = new Evt<StatusEffectBase, StatusEffectReceiver>();
+    public readonly Evt<int> OnTurnsLeftChange = new Evt<int>();
 
     protected abstract void OnActivate();
     protected abstract void OnDeactivate();
@@ -78,7 +86,7 @@ public abstract class StatusEffectBase : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void RefreshStatusEffect() { turnsLeft = turnDuration; }
+    public void RefreshStatusEffect() { SetDurationLeft(turnDuration); }
 
     public IEnumerator BeforeTurnTick(TurnBaseState ownerTurnState_)
     {
@@ -99,16 +107,38 @@ public abstract class StatusEffectBase : MonoBehaviour
         Target.RemoveStatusEffect(this);
     }
     
-    public void HasStillTurns()
+    public bool HasStillTurns()
     {
-        if (turnsLeft > 0) return;
+        if (turnsLeft > 0) return false;
         
         SelfRemove();
+        return true;
     }
     
     public void StackEffect(StatusEffectBase newEffect_)
     {
         if(this == newEffect_) return;
         OnStackEffect(newEffect_);
+    }
+    
+    public void SetDurationLeft(int durationLeft_)
+    {
+        turnsLeft = durationLeft_;
+        OnTurnsLeftChange?.Invoke(turnsLeft);
+    }
+
+    public void RemoveTurn()
+    {
+        SetDurationLeft(turnsLeft - 1);
+    }
+    
+    public void AddTurn()
+    {
+        SetDurationLeft(turnsLeft + 1);
+    }
+    
+    public void SetDuration(int duration_)
+    {
+        turnsLeft = duration_;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
+using UnityEngine;
 
 namespace BaseCore
 {
@@ -112,10 +113,22 @@ namespace BaseCore
             itemDictionary[itemToChange] = newWeight;
             RecalculateChances();
         }
+        
+        public void ChangeWeightOfItems(Dictionary<T,float> itemsToChance_)
+        {
+            foreach (var _itemsPair in itemsToChance_)
+            {
+                if (itemDictionary.ContainsKey(_itemsPair.Key)) itemDictionary[_itemsPair.Key] = _itemsPair.Value;
+                else itemDictionary.Add(_itemsPair.Key, _itemsPair.Value);
+            }
+            
+            RecalculateChances();
+        }
 
         public WeightedDictionary<T> Clone()
         {
             var _copy = new WeightedDictionary<T>(this.itemDictionary);
+            _copy.ForceInitialize();
             return _copy;
         }
         

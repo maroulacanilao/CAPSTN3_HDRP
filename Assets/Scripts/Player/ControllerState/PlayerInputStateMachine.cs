@@ -13,24 +13,28 @@ namespace Player.ControllerState
         public GroundedInputState GroundedState { get; private set; }
         public JumpInputState JumpState { get; private set; }
         public FallingPlayerInputState FallingState { get; private set; }
+        public TillInputState TillState { get; private set; }
+        public WateringInputState WateringState { get; private set; }
+        public UnTillInputState UnTillState { get; private set; }
+        public AttackInputState AttackState { get; private set; }
 
         #endregion
         
         public PlayerInputController player { get; private set; }
+        public bool canMove { get; set; }
         
         public Vector3 playerVel
         {
             get => player.rb.velocity;
             set => player.rb.velocity = value;
         }
-        
-        public Vector3 direction;
 
         public Vector2 input;
 
         public Vector3 velocityOnExit { get; set; }
         
         public float timeLastJumpPressed { get; private set; }
+        public float timeLastAttack { get; set; }
         // public float currentAcceleration { get; private set; }
         // public float currentMoveSpeed { get; private set; }
         public bool IsInputIdle { get; private set; }
@@ -42,9 +46,13 @@ namespace Player.ControllerState
 
         public override void Initialize()
         {
-            GroundedState = new GroundedInputState(this, 0);
-            JumpState = new JumpInputState(this, player.JumpStartEvent.ToHash());
-            FallingState = new FallingPlayerInputState(this, 0);
+            GroundedState = new GroundedInputState(this);
+            JumpState = new JumpInputState(this);
+            FallingState = new FallingPlayerInputState(this);
+            TillState = new TillInputState(this);
+            WateringState = new WateringInputState(this);
+            UnTillState = new UnTillInputState(this);
+            AttackState = new AttackInputState(this);
             timeLastJumpPressed = -1;
             
             CurrentState = GroundedState;
@@ -73,6 +81,8 @@ namespace Player.ControllerState
 
         private void InputUpdate()
         {
+            if(!canMove) return;
+            
             input = InputManager.MoveDelta;
 
             // input smoothing x

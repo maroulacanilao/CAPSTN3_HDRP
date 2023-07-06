@@ -1,5 +1,6 @@
 using System;
 using NaughtyAttributes;
+using UI.StatShop;
 using UnityEngine;
 
 namespace Items.ItemData

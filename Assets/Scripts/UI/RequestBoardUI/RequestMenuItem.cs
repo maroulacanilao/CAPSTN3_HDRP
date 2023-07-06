@@ -8,7 +8,6 @@ namespace UI.RequestBoardUI
     public class RequestMenuItem : SelectableMenuButton
     {
         [SerializeField] TextMeshProUGUI requestNameTxt;
-        [field: SerializeField] public ButtonSelectFirst selectFirst { get; private set; }
         public RequestOrder order { get; private set; }
         private RequestMenu requestMenu;
         

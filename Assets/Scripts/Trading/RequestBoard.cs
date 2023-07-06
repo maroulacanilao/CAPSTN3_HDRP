@@ -36,7 +36,7 @@ namespace Trading
             var _willUpdate = TimeManager.CurrentMinute % tickRate == 0;
             if(!_willUpdate) return;
             
-            var _willReceive = CustomHelpers.RandomHelper.RandomBool(RequestBoardData.GetOrderChance(TimeManager.ScaledGameTime));
+            var _willReceive = CustomHelpers.RandomHelper.RandomBool(RequestBoardData.GetOrderChance(TimeManager.GameTime));
             
             if(!_willReceive) return;
             

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace UI.TabMenu.Codex
 {
-    public abstract class CodexMenu : FarmUI
+    public abstract class CodexMenu : MonoBehaviour
     {
         [SerializeField] protected CodexItem codexItemPrefab;
         [SerializeField] protected Transform contentParent;
@@ -15,25 +15,20 @@ namespace UI.TabMenu.Codex
         protected List<CodexItem> codexItems = new List<CodexItem>();
         
         protected GameDataBase dataBase;
-        
-        public override void Initialize()
+
+        public void Awake()
         {
             dataBase = GameManager.Instance.GameDataBase;
         }
 
-        protected virtual void OnEnable()
+        private void OnEnable()
         {
             CodexItem.OnClickEvent.AddListener(ShowCodex);
         }
 
-        protected void OnDisable()
+        private void OnDisable()
         {
             CodexItem.OnClickEvent.RemoveListener(ShowCodex);
-        }
-
-        public override void OpenMenu()
-        {
-            
         }
         
         public abstract void ShowCodex(int index_);

@@ -12,17 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68c8ba257ced42e1a97af5d0af2ef3a4, type: 3}
   m_Name: CarrotSeedData
   m_EditorClassIdentifier: 
-  <ItemType>k__BackingField: 7
+  <ItemType>k__BackingField: 2
   <ItemID>k__BackingField: carrotSeed
   <ItemName>k__BackingField: Carrot Seed
-  <RarityType>k__BackingField: 0
-  <IsSellable>k__BackingField: 0
-  <ItemBaseValue>k__BackingField: 1
+  <RarityType>k__BackingField: 1
+  <BuyValue>k__BackingField: 1
+  <IsSellable>k__BackingField: 1
+  <SellValue>k__BackingField: 1
+  <IsShippable>k__BackingField: 0
+  <ShippingValue>k__BackingField: 1
   <Description>k__BackingField: seed to grow carrot
+  <IsStackable>k__BackingField: 1
   <Icon>k__BackingField: {fileID: 21300000, guid: e438662c47f4d0a448dee7b8f6b3cfbf,
     type: 3}
   <Prefab>k__BackingField: {fileID: 0}
-  <minutesToGrow>k__BackingField: 100
+  <minutesToGrow>k__BackingField: 40
   <producePossibleCount>k__BackingField: {x: 1, y: 3}
   <produceData>k__BackingField: {fileID: 11400000, guid: e88b3c2ffdb5fca4380a54db620ffbea,
     type: 2}
@@ -30,5 +34,6 @@ MonoBehaviour:
     type: 3}
   <plantSprite>k__BackingField: {fileID: 21300000, guid: 499fb4c0364ab1842a230ba3b82b3f0b,
     type: 3}
-  <harvestSprite>k__BackingField: {fileID: 21300000, guid: 499fb4c0364ab1842a230ba3b82b3f0b,
+  <readyToHarvestSprite>k__BackingField: {fileID: 21300000, guid: 499fb4c0364ab1842a230ba3b82b3f0b,
     type: 3}
+  <expReward>k__BackingField: 100

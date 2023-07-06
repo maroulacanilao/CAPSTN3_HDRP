@@ -17,6 +17,16 @@ namespace Player
         [SerializeField] private float tickRate = 0.25f;
         
         public InteractableObject nearestInteractable { get; private set; }
+        public string interactText
+        {
+            get
+            {
+                if(nearestInteractable == null) return string.Empty;
+                return !nearestInteractable.canInteract ? string.Empty : nearestInteractable.interactText;
+            }
+        }
+        public Vector3 boxPos => transform.position + offset;
+        public Vector3 Size => size;
 
         private void OnEnable()
         {
@@ -41,10 +51,9 @@ namespace Player
 
         private void GetNearestInteractable()
         {
-            var _pos = player.position;
             Collider[] _colliders = new Collider[3];
             
-            int _count = Physics.OverlapBoxNonAlloc(_pos + offset, size, 
+            int _count = Physics.OverlapBoxNonAlloc(boxPos, size, 
                 _colliders, Quaternion.identity, interactableLayer);
 
             if (_count <= 0)
@@ -52,8 +61,19 @@ namespace Player
                 OnNull();
                 return;
             }
-
-
+            
+            // var _validObjects = _colliders.Where(x =>
+            // {
+            //     if(x.IsEmptyOrDestroyed()) return false;
+            //     return x.TryGetComponent(out InteractableObject _interactable) && _interactable.canInteract;
+            // }).ToArray();
+            //
+            // if (_validObjects.Length <= 0)
+            // {
+            //     OnNull();
+            //     return;
+            // }
+            
             var _obj = _colliders.GetNearestGameObject(transform.position);
 
             if (_obj == null)
@@ -84,7 +104,7 @@ namespace Player
         
         public void Interact()
         {
-            if (nearestInteractable == null) return;
+            if (!CanInteract()) return;
             InteractableObject.OnInteract.Invoke(nearestInteractable);
         }
         
@@ -93,5 +113,11 @@ namespace Player
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(transform.position + offset, size);
         }
+
+        public bool CanInteract()
+        {
+            return nearestInteractable != null && nearestInteractable.canInteract;
+        }
+        
     }
 }

@@ -5,8 +5,8 @@ namespace BattleSystem.BattleState
 {
     public abstract class BattleStateBase
     {
-        protected BattleManager BattleManager;
-        protected BattleStateMachine StateMachine;
+        public BattleManager BattleManager { get; protected set; } 
+        public BattleStateMachine StateMachine { get; protected set; } 
 
         public BattleStateBase(BattleStateMachine stateMachine_)
         {

@@ -13,6 +13,10 @@ public class TestMainMenu : MonoBehaviour
 
     bool hasFaded;
 
+    public Camera mainCamera;
+    public float speed = 1.0f;
+    bool playClicked = false;
+
     void LateUpdate()
     {
         if (hasFaded != true)
@@ -21,6 +25,14 @@ public class TestMainMenu : MonoBehaviour
             {
                 black.enabled = false;
                 hasFaded = true;
+            }
+        }
+
+        if(playClicked != false)
+        {
+            if(mainCamera.fieldOfView >= 45)
+            {
+                mainCamera.fieldOfView -= 1;
             }
         }
     }
@@ -32,6 +44,7 @@ public class TestMainMenu : MonoBehaviour
 
     public void OnClickBattle()
     {
+        playClicked = true;
         black.enabled = true;
         StartCoroutine(Fading());
     }

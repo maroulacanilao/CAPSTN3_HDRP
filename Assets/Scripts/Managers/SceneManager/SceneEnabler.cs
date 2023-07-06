@@ -2,12 +2,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Managers.SceneManager
+namespace Managers.SceneLoader
 {
     public class SceneEnabler : MonoBehaviour
     {
-        public Scene scene { get; private set; }
+        private Transform mInstanceParent;
         
+        public Transform InstanceParent
+        {
+            get
+            {
+                if (mInstanceParent != null) return mInstanceParent;
+                
+                mInstanceParent = new GameObject("Instance Parent").transform;
+                return mInstanceParent;
+            }
+        }
+        
+        public Scene scene { get; private set; }
+
         private List<GameObject> rootObjects;
         
         private void Awake()
@@ -33,6 +46,26 @@ namespace Managers.SceneManager
             {
                 o.SetActive(willEnable);
             }
+        }
+        
+        public static SceneEnabler FindSceneEnabler(string sceneName)
+        {
+            var _scene = UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName);
+            
+            if(!_scene.IsValid()) return null;
+            
+            var _enablers = FindObjectsOfType<SceneEnabler>(true);
+            
+            foreach (var _enabler in _enablers)
+            {
+                if (_enabler.scene != _scene) continue;
+                
+                return _enabler;
+            }
+            
+            var _newEnabler = new GameObject($"SceneEnabler").AddComponent<SceneEnabler>();
+            UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(_newEnabler.gameObject, _scene);
+            return null;
         }
     }
 }

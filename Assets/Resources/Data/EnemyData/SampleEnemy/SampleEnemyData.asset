@@ -19,23 +19,17 @@ MonoBehaviour:
     type: 3}
   <statsData>k__BackingField:
     <baseCombatStats>k__BackingField:
-      maxHp: 40
-      maxMana: 40
-      physicalDamage: 10
-      armor: 10
-      magicDamage: 10
-      magicResistance: 10
-      accuracy: 17
-      speed: 12
+      vitality: 40
+      strength: 10
+      intelligence: 5
+      defense: 10
+      speed: 5
     <maxLevelCombatStats>k__BackingField:
-      maxHp: 80
-      maxMana: 80
-      physicalDamage: 20
-      armor: 20
-      magicDamage: 20
-      magicResistance: 20
-      accuracy: 30
-      speed: 25
+      vitality: 120
+      strength: 75
+      intelligence: 25
+      defense: 75
+      speed: 40
     healthGrowthCurve:
       serializedVersion: 2
       m_Curve:
@@ -60,114 +54,60 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    manaGrowthCurve:
+    intelligenceGrowthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 5
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 1.1111112
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    weaponDamageGrowthCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    armorGrowthCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
+        inSlope: 1.1111112
+        outSlope: 1.1111112
         tangentMode: 34
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
+        inWeight: 0.33333334
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    magicDamageGrowthCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    magicResistanceGrowthCurve:
+    strengthGrowthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0
         inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
+        outSlope: 0
+        tangentMode: 65
+        weightedMode: 2
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 1.7917824
+        tangentMode: 5
+        weightedMode: 1
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
@@ -180,23 +120,32 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    accuracyGrowthCurve:
+    defenseGrowthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 0
+        inSlope: 2
         outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
+        tangentMode: 65
+        weightedMode: 2
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 1.7917824
+        tangentMode: 5
+        weightedMode: 1
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 2
-        outSlope: 2
+        inSlope: 0
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -212,15 +161,24 @@ MonoBehaviour:
         value: 0
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 65
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 0.09954314
+        tangentMode: 5
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 0
-        outSlope: 0
+        inSlope: 2
+        outSlope: 2
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
@@ -229,6 +187,9 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   <spells>k__BackingField: []
+  <weaknessTags>k__BackingField:
+  - Fire
+  - Burn
   <LootTable>k__BackingField:
     <possibleExperienceDrop>k__BackingField: {x: 30, y: 50}
     possibleMoneyDrop: {x: 20, y: 50}
@@ -254,12 +215,16 @@ MonoBehaviour:
           Value: 1
         - Key: 1
           Value: 0.5
+        - Key: 2
+          Value: 0.25
         - Key: 3
-          Value: 0.1
+          Value: 0
+        - Key: 4
+          Value: 0
     <spells>k__BackingField:
     - {fileID: 11400000, guid: b22f92b76607be84687aed469f2d87c4, type: 2}
     - {fileID: 11400000, guid: b92c384fd780bb4459f1e07e4e8fbdb0, type: 2}
-  <minLevel>k__BackingField: 0
+  <levelRange>k__BackingField: {x: 0, y: 0}
   <alliesDictionary>k__BackingField:
     itemDictionary:
       _serializedList: []

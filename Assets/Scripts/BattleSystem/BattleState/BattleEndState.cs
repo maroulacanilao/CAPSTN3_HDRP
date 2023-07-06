@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Linq;
+using Character;
 using CustomHelpers;
 using UnityEngine;
 
@@ -15,9 +17,12 @@ namespace BattleSystem.BattleState
         
         public override IEnumerator Enter()
         {
-            var _txt = didPlayerWon ? "Player Won" : "Player Lost";
+            var _player = BattleManager.playerParty.FirstOrDefault(c => c.character is PlayerCharacter);
+            if (_player != null) _player.character.statusEffectReceiver.RemoveAllStatusEffect();
+            
             yield return CoroutineHelper.GetWait(1f);
             BattleManager.End(didPlayerWon);
+            
             yield break;
         }
 

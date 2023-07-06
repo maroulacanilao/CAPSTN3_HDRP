@@ -12,10 +12,13 @@ namespace EnemyController.EnemyStates
     {
         public readonly EnemyAIController controller;
         public readonly EnemyStateMachine stateMachine;
-        public bool isStateActive; 
         
-        protected FarmTile targetTile;
+        public bool isStateActive;
         public string stateName;
+        
+        protected Transform player => stateMachine.playerTransform;
+        protected Transform station => controller.station.transform;
+        protected Rigidbody playerRb => stateMachine.playerController.rb;
 
         public EnemyControllerState(EnemyAIController aiController_, EnemyStateMachine stateMachine_)
         {
@@ -36,6 +39,16 @@ namespace EnemyController.EnemyStates
             controller.animator.SetFloat(controller.xSpeedHash, controller.aiPath.velocity.x);
         }
         
+        public virtual void FixedUpdate()
+        {
+            
+        }
+
+        public virtual void Enable()
+        {
+            
+        }
+
         public virtual void Exit()
         {
             isStateActive = false;
@@ -45,16 +58,7 @@ namespace EnemyController.EnemyStates
         
         protected void DefaultState()
         {
-            if(EnemySpawner.Instance.IsEmptyOrDestroyed()) return;
-            var _newTarget = EnemySpawner.Instance.GetNewTileTarget(controller, targetTile);
-
-            if (_newTarget == null)
-            {
-                stateMachine.ChangeState(new EnemyChasePlayerState(controller,stateMachine));
-                return;
-            }
             
-            stateMachine.ChangeState(new EnemyGoToTileState(controller,stateMachine,_newTarget));
         }
 
         protected bool IsWithinAttackRange(Collider targetCol_)
@@ -62,15 +66,32 @@ namespace EnemyController.EnemyStates
             return !targetCol_.IsEmptyOrDestroyed() && controller.attackRangeCollider.bounds.Intersects(targetCol_.bounds);
         }
         
-        protected IEnumerator Co_Attack(Action attackAction_)
+        protected bool IsWithinAttackRange(Transform target_)
         {
-            Debug.Log("ATTACK Coroutine");
-            controller.animator.SetTrigger(controller.AttackHash);
-            yield return controller.animator.WaitForAnimationEvent(controller.AttackHitEvent, 1f);
-            attackAction_?.Invoke();
+            return !target_.IsEmptyOrDestroyed() && Vector3.Distance(controller.transform.position, target_.position) <= controller.attackRange;
+        }
 
-            yield return new WaitForSeconds(controller.attackCooldown);
-            controller.animator.ResetTrigger(controller.AttackHash);
+        protected void GoToDefaultState()
+        {
+            stateMachine.ChangeState(stateMachine.patrolState);
+        }
+        
+        protected bool IsWithinAlertRange(Transform target_)
+        {
+            return !target_.IsEmptyOrDestroyed() && controller.alertRange.IsPlayerNearby();
+        }
+
+        protected void FleeFromPlayer()
+        {
+            var _controllerPos = controller.transform.position;
+            
+            Vector3 _fleeDir = (player.position + playerRb.velocity) - _controllerPos;
+            controller.aiPath.destination = _controllerPos - _fleeDir;
+        }
+        
+        protected void ChasePlayer()
+        {
+            controller.aiPath.destination = player.position + playerRb.velocity;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Character.CharacterComponents
     public class PlayerMana : CharacterMana
     {
         private PlayerData playerData;
-        public override int MaxMana => playerData.statsData.GetTotalStats(playerData.LevelData.CurrentLevel).maxMana;
+        public override int MaxMana => playerData.statsData.GetTotalStats(playerData.LevelData.CurrentLevel).mana;
 
         public PlayerMana(PlayerData data_) : base(null)
         {
@@ -32,6 +32,12 @@ namespace Character.CharacterComponents
         private void OnUpdateInventory(PlayerInventory inventory)
         {
             SetCurrentMana(CurrentMana);
+            OnManuallyUpdateMana.Invoke(this);
+        }
+
+        public override void RefreshMana()
+        {
+            base.RefreshMana();
             OnManuallyUpdateMana.Invoke(this);
         }
     }

@@ -66,8 +66,18 @@ namespace UI.TabMenu.InventoryMenu
 
         private void OnSwap()
         {
-            if(!enabled) return;
-            Debug.Log($"Selected Item: {selectedItem.item}");
+            Debug.Log("Swap");
+            if (!enabled)
+            {
+                // Debug.Log("Not Enabled");
+                return;
+            }
+            if (selectedItem.IsEmptyOrDestroyed())
+            {
+                // Debug.Log(selectedItem.gameObject);
+                return;
+            }
+            // Debug.Log($"Selected Item: {selectedItem.item}");
             if(!isSwapping) SelectItem();
             else SwapItem();
         }
@@ -148,6 +158,8 @@ namespace UI.TabMenu.InventoryMenu
         {
             var _item = swappingItem.item;
             if(_item == null) return false;
+            var _itemName = $"<color=orange>{_item.Data.ItemName}</color>";
+            var _level = inventoryMenu.playerData.LevelData.CurrentLevel;
             
             switch (selectedItem.inventoryItemType)
             {
@@ -155,8 +167,7 @@ namespace UI.TabMenu.InventoryMenu
                     if (!_item.IsToolable)
                     {
                         errorTxt.gameObject.SetActive(true);
-                        errorTxt.SetText("Item cannot be equipped to tool bar");
-                        Debug.Log("Item cannot be equipped to tool bar");
+                        errorTxt.SetText(_itemName + " cannot be equipped to tool bar");
                         return false;
                     }
                     break;
@@ -165,20 +176,40 @@ namespace UI.TabMenu.InventoryMenu
                     if (_item.ItemType != ItemType.Weapon)
                     {
                         errorTxt.gameObject.SetActive(true);
-                        errorTxt.SetText("Item cannot be equipped as Weapon");
-                        Debug.Log("Item cannot be equipped to Weapon");
+                        errorTxt.SetText(_itemName + " cannot be equipped as Weapon");
                         return false;
                     }
+                    else if (_item is ItemWeapon weapon_)
+                    {
+                        if (weapon_.Level > _level)
+                        {
+                            errorTxt.gameObject.SetActive(true);
+                            errorTxt.SetText("Your level is too low to equip " + _itemName);
+                            Debug.Log($"Weapon Level: {weapon_.Level} | Player Level: {_level}");
+                            return false;
+                        }
+                    }
                     break;
+                
                 case armorBar:
                     if (_item.ItemType != ItemType.Armor)
                     {
                         errorTxt.gameObject.SetActive(true);
-                        errorTxt.SetText("Item cannot be equipped as Armor");
-                        Debug.Log("Item cannot be equipped to Armor");
+                        errorTxt.SetText(_itemName + " cannot be equipped as Armor");
                         return false;
                     }
+                    else if (_item is ItemArmor armor_)
+                    {
+                        if (armor_.Level > _level)
+                        {
+                            errorTxt.gameObject.SetActive(true);
+                            Debug.Log($"Armor Level: {armor_.Level} | Player Level: {_level}");
+                            errorTxt.SetText("Your level is too low to equip " + _itemName);
+                            return false;
+                        }
+                    }
                     break;
+                
                 case storage:
                 default:
                     break;
@@ -229,9 +260,11 @@ namespace UI.TabMenu.InventoryMenu
 
                 case DragState.EndDrag:
                 {
+                    if(swappingItem == null) return;
+                    
                     var _res = eventData_.pointerCurrentRaycast;
                     if(_res.gameObject == null) return;
-                    Debug.Log(_res.gameObject.name);
+
                     var _menuEndItem = _res.gameObject.GetComponent<Item_MenuItem>();
                     
                     if(_menuEndItem == null) return;

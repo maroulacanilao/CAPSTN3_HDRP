@@ -18,12 +18,12 @@ public class Projectile : MonoBehaviour, IPoolable
     public IEnumerator StartProjectile(Vector3 targetPos_, float duration_ = 0.5f, Ease ease_ = Ease.Linear)
     {
         var _tween = this.transform.DOMove(targetPos_, duration_).SetEase(ease_);
-        AdditionalEffects(duration_, ease_);
+        yield return AdditionalEffects(targetPos_, duration_, ease_);
         yield return _tween.WaitForCompletion();
     }
 
-    protected virtual void AdditionalEffects(float duration_ = 0.5f, Ease ease_ = Ease.Linear)
+    protected virtual IEnumerator AdditionalEffects(Vector3 targetPos_, float duration_ = 0.5f, Ease ease_ = Ease.Linear)
     {
-        return;
+        yield break;
     }
 }

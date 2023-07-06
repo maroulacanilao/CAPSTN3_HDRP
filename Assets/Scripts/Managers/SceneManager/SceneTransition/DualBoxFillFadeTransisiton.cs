@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Managers.SceneManager.SceneTransition
+namespace Managers.SceneLoader.SceneTransition
 {
     public class DualBoxFillFadeTransisiton : FadeTransition_Base
     {

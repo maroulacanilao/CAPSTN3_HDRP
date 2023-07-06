@@ -17,7 +17,7 @@ namespace UI.Battle
         [SerializeField] private ItemActionBtn itemBtnPrefab;
     
         [SerializeField] private List<ItemActionBtn> itemBtnList;
-        [SerializeField] private ItemDetailsPanel itemDetailsPanel;
+        [SerializeField] private BattleItemDetailsPanel battleItemDetailsPanel;
         
         public static readonly Evt<ItemActionBtn> OnItemBtnSelect = new Evt<ItemActionBtn>();
         
@@ -28,7 +28,7 @@ namespace UI.Battle
         {
             CreateItemButtons();
             battleActionUI = battleActionUI_;
-            itemDetailsPanel.Initialize();
+            battleItemDetailsPanel.Initialize();
         }
         
         public void OnDisable()
@@ -63,11 +63,11 @@ namespace UI.Battle
                 Object.Destroy(_itemBtn);
             }
 
-            itemDetailsPanel.gameObject.SetActive(CurrentItemBtn != null);
+            battleItemDetailsPanel.gameObject.SetActive(CurrentItemBtn != null);
             
-            if (!itemDetailsPanel.gameObject.activeSelf) return;
+            if (!battleItemDetailsPanel.gameObject.activeSelf) return;
             
-            itemDetailsPanel.DisplayItemDetails(CurrentItemBtn);
+            battleItemDetailsPanel.DisplayItemDetails(CurrentItemBtn);
         }
 
         private void CreateItemButtons()

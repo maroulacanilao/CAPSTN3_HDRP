@@ -24,10 +24,10 @@ namespace Items
 
     public enum RarityType
     {
-        Common = 0,
-        Uncommon = 1,
-        Rare = 2,
-        Epic = 3,
+        Common = 1,
+        Uncommon = 2,
+        Rare = 3,
+        Epic = 4,
     }
 
     [Serializable]
@@ -38,18 +38,21 @@ namespace Items
         protected CombatStats stats;
         protected bool isGearEquipped;
         protected bool isGear;
+        protected int level = 1;
         protected int stackCount;
         protected bool isStackable;
         protected bool isToolable;
         protected bool isDiscardable = true;
+        protected RarityType rarityType;
 
         public ItemData.ItemData Data => data;
         public ItemType ItemType => Data.ItemType;
-        public RarityType RarityType => Data.RarityType;
+        public RarityType RarityType => rarityType;
 
         public CombatStats Stats => stats;
         public bool IsGearEquipped => isGearEquipped;
         public bool IsDiscardable => isDiscardable;
+        public int Level => level;
         
         /// <summary>
         /// If the class is a child of ItemGear, ItemWeapon, or ItemArmor
@@ -64,16 +67,32 @@ namespace Items
         /// </summary>
         public bool IsToolable => isToolable;
 
-        protected Item(ItemData.ItemData data_)
+        protected Item(ItemData.ItemData data_, RarityType rarityType_ = RarityType.Common)
         {
             data = data_;
             dataID = data_.ItemID;
+            rarityType = rarityType_;
         }
         
         public virtual void OnEquip(StatsGrowth statsData_) {}
         public virtual void OnUnEquip(StatsGrowth statsData_) {}
         public virtual bool Consume(StatusEffectReceiver statusEffectReceiver_) { return false; }
         public virtual void UseTool(PlayerEquipment playerEquipment_) {}
+        
+        public virtual void SetStats(CombatStats stats_)
+        {
+            stats = stats_;
+        }
+        
+        public virtual void SetLevel(int level_)
+        {
+            level = level_;
+        }
+        
+        public virtual void SetStack(int amount_)
+        {
+            stackCount = amount_;
+        }
 
         public abstract Item Clone();
     }
@@ -81,10 +100,11 @@ namespace Items
     [Serializable]
     public abstract class ItemGear : Item
     {
-        protected ItemGear(ItemData.ItemData data_, CombatStats stats_) : base(data_)
+        protected ItemGear(ItemData.ItemData data_, CombatStats stats_, int level_ = 1, RarityType rarityType_ = RarityType.Common) : base(data_, rarityType_)
         {
             data = data_;
             isGearEquipped = false;
+            level = level_;
             stats = stats_;
         }
 
@@ -131,6 +151,7 @@ namespace Items
             return HasStack;
         }
 
+        // returns true if there is still stack
         public bool RemoveStack(int amount_)
         {
             stackCount -= amount_;
@@ -146,8 +167,10 @@ namespace Items
     [Serializable]
     public class ItemWeapon : ItemGear
     {
-        public ItemWeapon(ItemData.ItemData data_, CombatStats stats_) : base(data_, stats_)
+        public ItemWeapon(ItemData.ItemData data_, CombatStats stats_, int level_ = 1, RarityType rarityType_ = RarityType.Common) 
+            : base(data_, stats_, level_, rarityType_)
         {
+            
         }
         public override Item Clone()
         {
@@ -155,7 +178,9 @@ namespace Items
             {
                 data = this.data,
                 isGearEquipped = this.isGearEquipped,
-                stats = this.stats
+                stats = this.stats,
+                level = this.level,
+                rarityType = this.rarityType
             };
             return _clone;
         }
@@ -164,17 +189,21 @@ namespace Items
     [Serializable]
     public class ItemArmor : ItemGear
     {
-        public ItemArmor(ItemData.ItemData data_, CombatStats stats_) : base(data_, stats_)
+        public ItemArmor(ItemData.ItemData data_, CombatStats stats_, int level_ = 1, RarityType rarityType_ = RarityType.Common) 
+            : base(data_, stats_, level_, rarityType_)
         {
             
         }
+        
         public override Item Clone()
         {
             var _clone = new ItemArmor(data, stats)
             {
                 data = this.data,
                 isGearEquipped = this.isGearEquipped,
-                stats = this.stats
+                stats = this.stats,
+                level = this.level,
+                rarityType = this.rarityType
             };
             return _clone;
         }
@@ -262,7 +291,7 @@ namespace Items
         
         public override Item Clone()
         {
-            var _clone = new ItemConsumable(data, stackCount);
+            var _clone = new ItemSeed(data, stackCount);
             return _clone;
         }
     }

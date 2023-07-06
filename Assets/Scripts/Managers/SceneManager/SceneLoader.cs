@@ -1,16 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using CustomHelpers;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseCore;
 using CustomEvent;
-using CustomHelpers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Managers;
-using Managers.SceneManager.SceneTransition;
+using Managers.SceneLoader.SceneTransition;
 
-namespace Managers.SceneManager
+namespace Managers.SceneLoader
 {
     
     public enum LoadSceneType
@@ -20,6 +19,26 @@ namespace Managers.SceneManager
         Unload = 3,
         ReloadSingle = 4,
         ReloadAdditive = 5,
+        UnloadAllExcept = 6,
+    }
+
+    [Serializable]
+    public struct LoadSceneParameters
+    {
+        public LoadSceneType loadSceneType;
+        public string sceneName;
+        public string sceneToActivate;
+        public bool randomTransition;
+        public int transitionIndex;
+        
+        public LoadSceneParameters(LoadSceneType loadSceneType_, string sceneName_, string sceneToActivate_, bool randomTransition_ = true, int transitionIndex_ = -1)
+        {
+            loadSceneType = loadSceneType_;
+            sceneName = sceneName_;
+            sceneToActivate = sceneToActivate_;
+            randomTransition = randomTransition_;
+            transitionIndex = transitionIndex_;
+        }
     }
     
     public class SceneLoader : SingletonPersistent<SceneLoader>
@@ -33,21 +52,23 @@ namespace Managers.SceneManager
         // sceneEnablers
         private List<SceneEnabler> sceneEnablerList = new List<SceneEnabler>();
         private SceneEnabler currentSceneEnabler;
+        
+        private bool isOperating = false;
 
-        public static readonly Evt<string, LoadSceneType> OnLoadScene = new Evt<string, LoadSceneType>();
+        public static readonly Evt<LoadSceneParameters> OnLoadScene = new Evt<LoadSceneParameters>();
 
         protected override void Awake()
         {
             OnLoadScene.AddListener(ManageScene);
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnOpeningTransition;
-            UnityEngine.SceneManagement.SceneManager.sceneUnloaded += OnClosingTransition;
+            SceneManager.sceneLoaded += OnOpeningTransition;
+            SceneManager.sceneUnloaded += OnClosingTransition;
             
             foreach (var transition in _transitionsList)
             {
                 transition.Initialize();
             }
             
-            SceneEnabler sceneEnabler = GetSceneEnabler(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+            SceneEnabler sceneEnabler = GetSceneEnabler(SceneManager.GetActiveScene().name);
             
             sceneEnablerList.Add(sceneEnabler);
 
@@ -57,126 +78,181 @@ namespace Managers.SceneManager
         private void OnDestroy()
         {
             OnLoadScene.RemoveListener(ManageScene);
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnOpeningTransition;
-            UnityEngine.SceneManagement.SceneManager.sceneUnloaded -= OnClosingTransition;
+            SceneManager.sceneLoaded -= OnOpeningTransition;
+            SceneManager.sceneUnloaded -= OnClosingTransition;
         }
 
         private SceneEnabler GetSceneEnabler(string sceneName)
         {
-            return UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName).FindFirstComponentInScene<SceneEnabler>(true);
+            return SceneManager.GetSceneByName(sceneName).FindFirstComponentInScene<SceneEnabler>(true);
         }
 
-        private void ManageScene(string sceneName, LoadSceneType type)
+        private void ManageScene(LoadSceneParameters loadSceneParameters_)
         {
-            switch (type)
+            switch (loadSceneParameters_.loadSceneType)
             {
                 case LoadSceneType.LoadAdditive:
                 {
-                    LoadScene(sceneName, true);
+                    LoadScene(loadSceneParameters_);
                     break;
                 }
                 case LoadSceneType.LoadSingle:
                 {
-                    LoadScene(sceneName, false);
+                    LoadScene(loadSceneParameters_);
                     break;
                 }
                 case LoadSceneType.Unload:
                 {
-                    UnloadScene(sceneName);
+                    UnloadScene(loadSceneParameters_);
                     break;
                 }
                 case LoadSceneType.ReloadAdditive:
                 {
-                    ReloadScene(sceneName, true);
+                    ReloadScene(loadSceneParameters_);
                     break;
                 }
                 case LoadSceneType.ReloadSingle:
                 {
-                    ReloadScene(sceneName, false);
+                    ReloadScene(loadSceneParameters_);
                     break;
                 }
-                
+                case LoadSceneType.UnloadAllExcept:
+                {
+                    UnloadAllExcept(loadSceneParameters_);
+                    break;
+                }
             }
         }
 
-        private async void LoadScene(string sceneToLoad, bool isAdditive)
+        private async void LoadScene(LoadSceneParameters sceneParameters_)
         {
+            var _isAdditive = sceneParameters_.loadSceneType == LoadSceneType.LoadAdditive;
+            if(_isAdditive && IsSceneAlreadyActive(sceneParameters_.sceneName)) return;
+            if(_isAdditive && isOperating) return;
+            
+            RemoveNullEnablers();
+            
+            isOperating = true;
+            
             Time.timeScale = 0;
 
-            LoadSceneMode mode = isAdditive ? LoadSceneMode.Additive : LoadSceneMode.Single;
+            LoadSceneMode mode = _isAdditive ? LoadSceneMode.Additive : LoadSceneMode.Single;
 
-            AsyncOperation load = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneToLoad, mode);
+            AsyncOperation load = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneParameters_.sceneName, mode);
             
             load.allowSceneActivation = false;
 
-            currentFade = GetRandomFade();
+            if(sceneParameters_.randomTransition) currentFade = GetRandomFade();
+            else
+            {
+                currentFade = sceneParameters_.transitionIndex >= _transitionsList.Length ? 
+                    GetRandomFade() :
+                    _transitionsList[sceneParameters_.transitionIndex];
+            }
             
             currentFade.gameObject.SetActive(true);
 
             await currentFade.StartTransition(false);
 
             load.allowSceneActivation = true;
+            isOperating = false;
         }
 
-        private async void UnloadScene(string sceneToUnload)
+        private async void UnloadScene(LoadSceneParameters sceneParameters_)
         {
+            if(isOperating) return;
+            
+            isOperating = true;
+            
             Time.timeScale = 0;
 
-            SceneEnabler enablerToRemove = sceneEnablerList.FirstOrDefault(s => s.scene.name == sceneToUnload);
-
-            sceneEnablerList.Remove(enablerToRemove);
-            
-            if (sceneEnablerList.Count == 0)
+            try
             {
-                // if no other scene is loaded, but this shouldn't happen
-                LoadScene(fallbackScene, false);
-                return;
+                RemoveNullEnablers();
+                SceneEnabler enablerToRemove = sceneEnablerList.FirstOrDefault(s => s.scene.name == sceneParameters_.sceneName);
+
+                sceneEnablerList.Remove(enablerToRemove);
+            
+                if (sceneEnablerList.Count == 0)
+                {
+                    // if no other scene is loaded, but this shouldn't happen
+                    sceneParameters_.sceneName = fallbackScene;
+                    sceneParameters_.loadSceneType = LoadSceneType.LoadSingle;
+                    LoadScene(sceneParameters_);
+                    return;
+                }
+            
+                if(sceneParameters_.randomTransition) currentFade = GetRandomFade();
+                else
+                {
+                    currentFade = sceneParameters_.transitionIndex >= _transitionsList.Length ? 
+                        GetRandomFade() :
+                        _transitionsList[sceneParameters_.transitionIndex];
+                }
+                
+            
+                currentFade.gameObject.SetActive(true);
+
+                await currentFade.StartTransition(false);
+
+
+                var _sceneToActivate = !string.IsNullOrEmpty(sceneParameters_.sceneToActivate) ? 
+                    SceneManager.GetSceneByName(sceneParameters_.sceneToActivate) : 
+                    sceneEnablerList.Last().scene;
+
+                if (_sceneToActivate.IsValid() && _sceneToActivate.isLoaded)
+                {
+                    SceneManager.SetActiveScene(_sceneToActivate);
+                }
+                else
+                {
+                    SceneManager.SetActiveScene(sceneEnablerList.Last().scene);
+                }
+                
+                AsyncOperation unload = SceneManager.UnloadSceneAsync(sceneParameters_.sceneName, UnloadSceneOptions.None);
+
+                isOperating = false;
             }
-            
-
-            currentFade = GetRandomFade();
-            
-            currentFade.gameObject.SetActive(true);
-            
-            string prevScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-
-            await currentFade.StartTransition(false);
-
-            AsyncOperation unload = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(
-                sceneToUnload,
-                UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
-
-            foreach (SceneEnabler sceneEnabler in sceneEnablerList)
+            catch (Exception e)
             {
-                UnityEngine.SceneManagement.SceneManager.SetActiveScene(sceneEnabler.scene);
+                isOperating = false;
+                sceneParameters_.sceneName = fallbackScene;
+                sceneParameters_.loadSceneType = LoadSceneType.LoadSingle;
+                LoadScene(sceneParameters_);
             }
         }
 
-        private async void ReloadScene(string sceneToReload, bool isAdditive)
+        private async void ReloadScene(LoadSceneParameters sceneParameters_)
         {
-            Time.timeScale = 0;
+            if(isOperating) return;
             
-            var enablerToRemove = sceneEnablerList.FirstOrDefault(s => s.scene.name == sceneToReload);
+            isOperating = true;
+            Time.timeScale = 0;
+            RemoveNullEnablers();
+            
+            var enablerToRemove = sceneEnablerList.FirstOrDefault(s => s.scene.name == sceneParameters_.sceneName);
             sceneEnablerList.Remove(enablerToRemove);
 
             try
             {
-                AsyncOperation unload = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(
-                    sceneToReload,
+                AsyncOperation unload = SceneManager.UnloadSceneAsync(
+                    sceneParameters_.sceneName,
                     UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
 
                 while (!unload.isDone)
                 {
                     await Task.Delay(50);
                 }
-                LoadScene(sceneToReload, isAdditive);
+                LoadScene(sceneParameters_);
             }
             catch (Exception e)
             {
                 print(e);
-                LoadScene(sceneToReload, false);
+                sceneParameters_.loadSceneType = LoadSceneType.LoadSingle;
+                LoadScene(sceneParameters_);
             }
 
+            isOperating = false;
             // LoadScene(sceneToReload, isAdditive);
         }
 
@@ -237,6 +313,61 @@ namespace Managers.SceneManager
         private FadeTransition_Base GetRandomFade()
         {
             return _transitionsList.GetRandomItem();
+        }
+        
+        private bool IsSceneAlreadyActive(string sceneNameToLoad_)
+        {
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var _sceneName = SceneManager.GetSceneAt(i).name;
+                if (_sceneName == sceneNameToLoad_) return true;
+            }
+            return false;
+        }
+
+        private void RemoveNullEnablers()
+        {
+            sceneEnablerList.RemoveAll(s => s.IsEmptyOrDestroyed());
+        }
+
+        private async void UnloadAllExcept(LoadSceneParameters sceneParameters_)
+        {
+            var _sceneToActivate = SceneManager.GetSceneByName(sceneParameters_.sceneToActivate);
+            if(!_sceneToActivate.IsValid()) _sceneToActivate = SceneManager.GetSceneAt(0);
+            
+            if (!_sceneToActivate.isLoaded)
+            {
+                sceneParameters_.loadSceneType = LoadSceneType.LoadSingle;
+                sceneParameters_.sceneName = _sceneToActivate.name;
+                LoadScene(sceneParameters_);
+                return;
+            }
+            
+            Time.timeScale = 0;
+            currentFade = GetRandomFade();
+            
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var _sceneToUnload = SceneManager.GetSceneAt(i);
+                if(_sceneToUnload.name == _sceneToActivate.name) continue;
+                
+                
+                SceneEnabler enablerToRemove = sceneEnablerList.FirstOrDefault(s => s.scene.name == _sceneToUnload.name);
+
+                sceneEnablerList.Remove(enablerToRemove);
+                
+                AsyncOperation unload = SceneManager.UnloadSceneAsync(
+                    _sceneToUnload,
+                    UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
+
+                unload.allowSceneActivation = true;
+            }
+
+            currentFade.gameObject.SetActive(true);
+
+            await currentFade.StartTransition(false);
+            
+            SceneManager.SetActiveScene(_sceneToActivate);
         }
     }
 }

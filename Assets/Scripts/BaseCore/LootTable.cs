@@ -15,17 +15,13 @@ namespace BaseCore
     public struct LootDrop
     {
         public int expDrop { get; private set; }
-    
-        [field: SerializeReference]
-        public ItemGold moneyDrop { get; private set; }
 
         [field: SerializeReference]
         public List<Item> itemsDrop { get; private set; }
 
-        public LootDrop(int expDrop_, ItemGold moneyDrop_, List<Item> items_)
+        public LootDrop(int expDrop_, List<Item> items_)
         {
             expDrop = expDrop_;
-            moneyDrop = moneyDrop_;
             itemsDrop = items_;
         }
     }
@@ -35,8 +31,6 @@ namespace BaseCore
     {
         [field: MinMaxSlider(0, 1000)] [field: SerializeField] 
         public Vector2Int possibleExperienceDrop { get; private set; }
-        
-        [MinMaxSlider(0, 1000)] [SerializeField] private Vector2Int possibleMoneyDrop;
         [MinMaxSlider(0, 10)] [SerializeField] private Vector2Int possibleItemCount;
     
         [BoxGroup("Guaranteed Items are always dropped.")]
@@ -47,35 +41,20 @@ namespace BaseCore
         [SerializeField] private WeightedDictionary<ItemData> itemProbability = new WeightedDictionary<ItemData>();
 
         private ItemDatabase itemDatabase;
-        [ContextMenu("Force Initialize")]
-        private void OnEnable()
+
+        public LootDrop GetDrop(ItemDatabase itemDatabase_, int level_)
         {
             itemProbability.ForceInitialize();
-        }
-
-        private void OnValidate()
-        {
-            itemProbability.ForceInitialize();
-        }
-
-        public LootDrop GetDrop(ItemDatabase itemDatabase_)
-        {
             itemDatabase = itemDatabase_;
             int _exp = possibleExperienceDrop.GetRandomInRange();
-            int _moneyAmount = possibleMoneyDrop.GetRandomInRange();
 
-            var _moneyDrop = new ItemGold(itemDatabase_.GoldItemData, _moneyAmount);
+            var _itemDrops = new List<Item>();
 
-            var _itemDrops = GetGuaranteedItems();
-            
-            _itemDrops.AddRange(GetRandomItems());  
+            _itemDrops.AddRange(GetGuaranteedItems(level_));
 
-            return new LootDrop(_exp, _moneyDrop, _itemDrops);
-        }
+            _itemDrops.AddRange(GetRandomItems(level_));  
 
-        private Item InitializeItem(ItemData itemData_)
-        {
-            return itemData_.GetItem();
+            return new LootDrop(_exp, _itemDrops);
         }
 
         private List<Item> Organize(List<Item> itemList_)
@@ -107,7 +86,7 @@ namespace BaseCore
             return itemList_;
         }
 
-        private List<Item> GetGuaranteedItems()
+        private List<Item> GetGuaranteedItems(int level_)
         {
             var _items = new List<Item>();
             foreach (var _itemDataPair in guaranteedItemDrop)
@@ -132,7 +111,7 @@ namespace BaseCore
                     {
                         for (int i = 0; i < _itemDataPair.Value; i++)
                         {
-                            _items.Add(_itemDataPair.Key.GetItem());
+                            _items.Add(_itemDataPair.Key.GetItem(level_));
                         }
                         break;
                     }
@@ -141,14 +120,14 @@ namespace BaseCore
             return _items;
         }
 
-        private List<Item> GetRandomItems()
+        private List<Item> GetRandomItems(int level_)
         {
             int _itemsCount = possibleItemCount.GetRandomInRange();
             var _items = new List<Item>();
             
             for (var i = 0; i < _itemsCount; i++)
             {
-                var _item = InitializeItem(itemProbability.GetWeightedRandom());
+                var _item = itemProbability.GetWeightedRandom().GetItem(level_);
             
                 if (_item is not ItemStackable)
                 {

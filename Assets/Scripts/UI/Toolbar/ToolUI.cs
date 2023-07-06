@@ -1,3 +1,4 @@
+using CustomHelpers;
 using Items;
 using Items.Inventory;
 using Player;
@@ -27,6 +28,7 @@ namespace UI.Toolbar
             PlayerEquipment.OnChangeItemOnHand.AddListener(ChangeItem);
             InventoryEvents.OnItemOnHandUpdate.AddListener(UpdateToolBar);
             InventoryEvents.OnUpdateStackable.AddListener(UpdateStackable);
+            InventoryEvents.OnUpdateInventory.AddListener(UpdateInventory);
             currItem = inventory.ItemTools[index];
             UpdateToolBar(index, inventory.ItemTools[index]);
             hotKey_TXT.text = $"{index + 1}";
@@ -37,6 +39,7 @@ namespace UI.Toolbar
             PlayerEquipment.OnChangeItemOnHand.RemoveListener(ChangeItem);
             InventoryEvents.OnItemOnHandUpdate.RemoveListener(UpdateToolBar);
             InventoryEvents.OnUpdateStackable.RemoveListener(UpdateStackable);
+            InventoryEvents.OnUpdateInventory.RemoveListener(UpdateInventory);
         }
 
         private void ChangeItem(int index_)
@@ -47,6 +50,7 @@ namespace UI.Toolbar
         
         private void UpdateToolBar(int index_, Item item_)
         {
+            if(this.IsEmptyOrDestroyed()) return;
             if (index_ != index) return;
             if (item_ is {IsStackable: true})
             {
@@ -62,6 +66,12 @@ namespace UI.Toolbar
         {
             if(currItem != StackableItem_ as Item) return;
             UpdateToolBar(index, currItem);
+        }
+
+        private void UpdateInventory(PlayerInventory inventory_)
+        {
+            currItem = inventory.ItemTools[index];
+            UpdateToolBar(index, inventory.ItemTools[index]);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace StatusEffect
         
         protected override void OnStackEffect(StatusEffectBase newEffect_)
         {
-            turnsLeft += turnDuration;
+            SetDurationLeft(turnsLeft + turnDuration);
         }
         
         protected override IEnumerator OnBeforeTurnTick(TurnBaseState ownerTurnState_)
@@ -33,9 +33,9 @@ namespace StatusEffect
             var _hpCom = Target.character.health;
             var _amount = Mathf.RoundToInt(_hpCom.MaxHp * damagePercentage);
             
-            turnsLeft--;
+            RemoveTurn();
             
-            DamageInfo _damageInfo = new DamageInfo(_amount, Source);
+            DamageInfo _damageInfo = new DamageInfo(_amount, Source, effectTags);
             AttackResult _attackResult = new AttackResult()
             {
                 attackResultType = AttackResultType.Hit,

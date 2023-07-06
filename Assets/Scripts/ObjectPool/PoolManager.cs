@@ -1,24 +1,25 @@
-using System;
 using System.Collections.Generic;
-using AYellowpaper.SerializedCollections;
 using BaseCore;
 using CustomHelpers;
+using ScriptableObjectData;
 using UnityEngine;
 
 namespace ObjectPool
 {
     public class PoolManager : Singleton<PoolManager>
     {
-        [SerializedDictionary("Prefab", "Pool Size")]
         [SerializeField]
-        private SerializedDictionary<GameObject, int> poolDictionary;
+        private AssetDataBase assetDatabase;
 
         private Dictionary<GameObject, Pool> pools = new Dictionary<GameObject, Pool>();
         
         protected override void Awake()
         {
             base.Awake();
-            foreach (var _pair in poolDictionary)
+            if(assetDatabase == null) assetDatabase = Resources.Load<AssetDataBase>("Data");
+            Debug.Log(gameObject.scene.name + " " + transform.parent);
+            Debug.Log((assetDatabase.poolObjects != null));
+            foreach (var _pair in assetDatabase.poolObjects)
             {
                 var _poolable = _pair.Key.GetOrAddComponent<Poolable>();
                 pools.Add(_pair.Key, new Pool(_poolable, transform, _pair.Value));

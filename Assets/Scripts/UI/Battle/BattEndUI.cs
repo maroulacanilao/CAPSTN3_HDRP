@@ -1,8 +1,10 @@
+using System;
 using System.Threading.Tasks;
 using BattleSystem;
 using DG.Tweening;
 using Managers;
 using ScriptableObjectData;
+using ScriptableObjectData.CharacterData;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,20 +15,30 @@ namespace UI.Battle
     {
         [SerializeField] private GameDataBase gameDataBase;
         [SerializeField] private GameObject panel;
-        [SerializeField] private TextMeshProUGUI ResultTXT;
-        [SerializeField] private Button returnBTN;
-        [SerializeField] private TextMeshProUGUI expTXT, LevelTXT;
-        [SerializeField] private Image expBar;
+        [SerializeField] private GameObject levelPanel;
         [SerializeField] private GameObject levelUpEffect;
+        [SerializeField] private TextMeshProUGUI expTXT, LevelTXT;
+        [SerializeField] private TextMeshProUGUI ResultTXT;
+        [SerializeField] private Image expBar;
+        [SerializeField] private StatsInfo statsInfo;
+        [SerializeField] private Button returnBTN;
+
     
-        private bool playerWon;
+        private bool didPlayerWon;
+        private PlayerData playerData;
     
         private void Awake()
         {
             BattleManager.OnBattleEnd.AddListener(ShowResult);
             returnBTN.onClick.AddListener(ReturnToFarmScene);
+            playerData = gameDataBase.playerData;
         }
-    
+
+        private void OnEnable()
+        {
+            panel.SetActive(false);
+        }
+
         private void OnDestroy()
         {
             BattleManager.OnBattleEnd.RemoveListener(ShowResult);
@@ -36,27 +48,29 @@ namespace UI.Battle
         private void ShowResult(bool playerWon_)
         {
             Time.timeScale = 0f;
-            playerWon = playerWon_;
+            didPlayerWon = playerWon_;
 
             panel.SetActive(true);
         
             if (playerWon_) DisplayVictoryScreen();
+            else DisplayLoseScreen();
         
             ResultTXT.text = playerWon_ ? "Victory!" : "You Lost!";
         }
 
         private void ReturnToFarmScene()
         {
-            GameManager.OnExitBattle.Invoke(playerWon);
+            GameManager.OnExitBattle.Invoke(didPlayerWon);
         }
 
         private async void DisplayVictoryScreen()
         {
             levelUpEffect.SetActive(false);
             returnBTN.gameObject.SetActive(false);
+            statsInfo.gameObject.SetActive(false);
 
             var _exp = BattleManager.Instance.GetTotalExp();
-            var _lvlData = gameDataBase.playerData.LevelData;
+            var _lvlData = playerData.LevelData;
             var _prevExp = _lvlData.TotalExperience;
 
             ResultTXT.text = "Victory!";
@@ -93,14 +107,42 @@ namespace UI.Battle
                 {
                     expTXT.text = $"{_prevExp:0}/{_lvlData.NextLevelExperience:0}";
                 }).SetUpdate(true);
+                
+                ShowStatIncrease();
             
-                await expBar.DOFillAmount((float) _lvlData.CurrentLevelExperience / _lvlData.NextLevelExperience, 1f)
+                await expBar.DOFillAmount((float) _lvlData.CurrentLevelExperience / _lvlData.CurrentExperienceNeeded, 1f)
                     .SetUpdate(true).AsyncWaitForCompletion();
-            
+
+                await Task.Delay(500);
+
                 _txtTween.Kill();
             }
         
             returnBTN.gameObject.SetActive(true);
+        }
+
+        private async void DisplayLoseScreen()
+        {
+            levelPanel.SetActive(false);
+            statsInfo.gameObject.SetActive(false);
+            
+            returnBTN.gameObject.SetActive(false);
+            
+            await Task.Delay(1000);
+            
+            returnBTN.gameObject.SetActive(true);
+        }
+
+        private void ShowStatIncrease()
+        {
+            statsInfo.gameObject.SetActive(false);
+            var _level = playerData.LevelData.CurrentLevel;
+            var _prevStats = playerData.statsData.GetLeveledStats(_level - 1);
+            var _currentStats = playerData.statsData.GetLeveledStats(_level);
+            
+            var _difference = _currentStats - _prevStats;
+            
+            statsInfo.DisplayIncreaseDynamic(_difference,true);
         }
     }
 }

@@ -3,6 +3,7 @@ using BaseCore;
 using Character;
 using Character.CharacterComponents;
 using Items.Inventory;
+using NaughtyAttributes;
 using Spells.Base;
 using UnityEngine;
 
@@ -18,9 +19,11 @@ namespace ScriptableObjectData.CharacterData
         [field: SerializeField] public BlessingMeter blessingMeter { get; private set; }
         [field: SerializeField] public PlayerHealth health { get; private set; }
         [field: SerializeField] public PlayerMana mana { get; private set; }
-        [field: SerializeField] public PlayerStatusEffectReceiver statusEffectReceiver { get; private set; }
-        
-        public CombatStats totalStats => statsData.GetTotalStats(LevelData.CurrentLevel);
+        public PlayerStatusEffectReceiver statusEffectReceiver { get; private set; }
+
+        public int level => LevelData.CurrentLevel;
+        public CombatStats totalStats => statsData.GetTotalStats(level);
+        public CombatStats baseStats => statsData.GetTotalNonBonusStats(level);
 
         public void AddAlly(AllyData allyData_)
         {
@@ -49,9 +52,10 @@ namespace ScriptableObjectData.CharacterData
 
 
         [ContextMenu("Reset Data")]
-        private void ResetData()
+        public void ResetData()
         {
             LevelData.ResetExperience();
+            spells.Clear();
         }
     }
 }

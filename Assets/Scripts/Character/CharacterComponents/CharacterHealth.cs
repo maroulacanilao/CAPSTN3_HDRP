@@ -15,7 +15,7 @@ namespace Character.CharacterComponents
 
         public bool IsInvincible { get; set; }
         public bool CanOverHeal { get; set; }
-        public virtual int MaxHp => character.stats.maxHp;
+        public virtual int MaxHp => character.stats.vitality;
         public int CurrentHp { get; protected set; }
         public float HpPercentage => (float) CurrentHp / MaxHp;
         public bool IsAlive => CurrentHp > 0;
@@ -58,6 +58,12 @@ namespace Character.CharacterComponents
             // if (CurrentHp < MaxHp) return;
             //
             // OnHealthUpdate.Invoke(this);
+        }
+        
+        public virtual void RefillHealth()
+        {
+            SetCurrentHp(MaxHp);
+            OnManuallyUpdateHealth.Invoke(this);
         }
     }
 }

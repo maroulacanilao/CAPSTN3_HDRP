@@ -6,55 +6,14 @@ using Fungus;
 
 namespace UI.FungusWrapper
 {
-    // Copy of DialogInput from Fungus with the new InputSystem instead of StandaloneInputModule
-    
-    /// <summary>
-    /// Supported modes for clicking through a Say Dialog.
-    /// </summary>
-    public enum ClickMode
-    {
-        /// <summary> Clicking disabled. </summary>
-        Disabled,
-        /// <summary> Click anywhere on screen to advance. </summary>
-        ClickAnywhere,
-        /// <summary> Click anywhere on Say Dialog to advance. </summary>
-        ClickOnDialog,
-        /// <summary> Click on continue button to advance. </summary>
-        ClickOnButton
-    }
-
     /// <summary>
     /// Input handler for say dialogs.
     /// </summary>
-    public sealed class DialogInputSystem : MonoBehaviour
+    public sealed class DialogInputSystem : DialogInput
     {
-        [Tooltip("Click to advance story")]
-        [SerializeField]
-        private ClickMode clickMode;
-
-        [Tooltip("Delay between consecutive clicks. Useful to prevent accidentally clicking through story.")]
-        [SerializeField]
-        private float nextClickDelay = 0f;
-
-        [Tooltip("Allow holding Cancel to fast forward text")]
-        [SerializeField]
-        private bool cancelEnabled = true;
-
-        [Tooltip("Ignore input if a Menu dialog is currently active")]
-        [SerializeField]
-        private bool ignoreMenuClicks = true;
-
-        private bool dialogClickedFlag;
-
-        private bool nextLineInputFlag;
-
-        private float ignoreClickTimer;
-
         private InputSystemUIInputModule uiInput;
 
-        private Writer writer;
-
-        private void Awake()
+        protected override void Awake()
         {
             writer = GetComponent<Writer>();
 
@@ -63,12 +22,12 @@ namespace UI.FungusWrapper
 
         // There must be an Event System in the scene for Say and Menu input to work.
         // This method will automatically instantiate one if none exists.
-        private void CheckEventSystem()
+        protected override void CheckEventSystem()
         {
             uiInput = gameObject.scene.FindFirstComponentInScene<InputSystemUIInputModule>(true);
         }
 
-        private void Update()
+        protected override void Update()
         {
             if (EventSystem.current == null)
             {
@@ -143,7 +102,7 @@ namespace UI.FungusWrapper
         /// <summary>
         /// Trigger next line input event from script.
         /// </summary>
-        public void SetNextLineFlag()
+        public override void SetNextLineFlag()
         {
             if(writer.IsWaitingForInput || writer.IsWriting)
             {
@@ -153,7 +112,7 @@ namespace UI.FungusWrapper
         /// <summary>
         /// Set the ClickAnywhere click flag.
         /// </summary>
-        public void SetClickAnywhereClickedFlag()
+        public override void SetClickAnywhereClickedFlag()
         {
             if (ignoreClickTimer > 0f)
             {
@@ -170,7 +129,7 @@ namespace UI.FungusWrapper
         /// <summary>
         /// Set the dialog clicked flag (usually from an Event Trigger component in the dialog UI).
         /// </summary>
-        public void SetDialogClickedFlag()
+        public override void SetDialogClickedFlag()
         {
             // Ignore repeat clicks for a short time to prevent accidentally clicking through the character dialogue
             if (ignoreClickTimer > 0f)
@@ -189,7 +148,7 @@ namespace UI.FungusWrapper
         /// <summary>
         /// Sets the button clicked flag.
         /// </summary>
-        public void SetButtonClickedFlag()
+        public override void SetButtonClickedFlag()
         {
             // Only applies if clicking is not disabled
             if (clickMode != ClickMode.Disabled)

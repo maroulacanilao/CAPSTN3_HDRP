@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using BaseCore;
 using CustomEvent;
+using CustomHelpers;
 using Items;
+using Managers.SceneLoader;
 using UnityEngine;
 using ObjectPool;
 using ScriptableObjectData;
@@ -8,6 +11,13 @@ using ScriptableObjectData.CharacterData;
 
 namespace Managers
 {
+    public struct LootDropData
+    {
+        public LootTable lootTable;
+        public Vector3 position;
+        public int level;
+    }
+    
     public class LootSpawner : MonoBehaviour
     {
         [SerializeField] private LootDropObject lootPrefab;
@@ -17,36 +27,53 @@ namespace Managers
         [SerializeField] private EnemyData enemyData;
         [SerializeField] private Vector3 lootPosition;
 
-        public static readonly Evt<LootTable, Vector3> OnSpawnLoot = new Evt<LootTable, Vector3>();
+        public static readonly Evt<LootDropData> OnSpawnLoot = new Evt<LootDropData>();
+        public static readonly Evt RemoveAllLoots = new Evt();
 
-        private LootDropObject lootObj;
+        private Transform mParent;
+        private Transform parent
+        {
+            get
+            {
+                var _activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+                if (mParent.IsValid() && mParent.gameObject.scene == _activeScene) return mParent;
+                mParent = SceneEnabler.FindSceneEnabler(_activeScene.name).InstanceParent;
+                return mParent;
+            }
+        }
+        
+        private HashSet<LootDropObject> lootDropObjects = new HashSet<LootDropObject>();
+        
         private void Awake()
         {
             OnSpawnLoot.AddListener(SpawnLoot);
+            RemoveAllLoots.AddListener(RemoveAll);
         }
         
-        private void OnDestroy()
+        private void OnApplicationQuit()
         {
             OnSpawnLoot.RemoveListener(SpawnLoot);
+            RemoveAllLoots.RemoveListener(RemoveAll);
         }
 
-        private void SpawnLoot(LootTable lootTable_, Vector3 lootPosition_)
+        private void SpawnLoot(LootDropData lootDropData_)
         {
-            lootObj = lootPrefab.gameObject
-                .GetInstance<LootDropObject>(lootPosition_, Quaternion.identity, transform)
-                .Initialize(lootTable_.GetDrop(itemDatabase));
-        }
-
-        [ContextMenu("TestSpawn")]
-        private void TestSpawn()
-        {
-            SpawnLoot(enemyData.LootTable, lootPosition);
+            var _lootObj = lootPrefab.gameObject
+                .GetInstance<LootDropObject>(lootDropData_.position, Quaternion.identity, parent)
+                .Initialize(lootDropData_.lootTable.GetDrop(itemDatabase,lootDropData_.level));
+            
+            lootDropObjects.Add(_lootObj);
         }
         
-        [ContextMenu("DeSpawn Test")]
-        private void TestDeSpawn()
+        private void RemoveAll()
         {
-            lootObj.gameObject.ReturnInstance();
+            foreach (var _lootObj in lootDropObjects)
+            {
+                if(_lootObj.IsEmptyOrDestroyed()) continue;
+                _lootObj.gameObject.ReturnInstance();
+            }
+            
+            lootDropObjects.Clear();
         }
     }
 }

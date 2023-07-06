@@ -19,6 +19,11 @@ namespace Items.ItemData
 
         [field: MinValue(0)] [field: ShowIf("IsSellable")] [field: InfoBox("base value when sold on shop")]
         [field: SerializeField] public int SellValue { get; private set; } = 1;
+        
+        [field: SerializeField] public bool IsShippable { get; private set; }
+        
+        [field: MinValue(0)] [field: ShowIf("IsShippable")] [field: InfoBox("base value when shipped")]
+        [field: SerializeField] public int ShippingValue { get; private set; } = 1;
 
         [field: ResizableTextArea]
         [field: SerializeField] public string Description { get; private set; }

@@ -5,27 +5,22 @@ namespace Character
     [Serializable]
     public struct CombatStats
     {
-        public int maxHp;
-        public int maxMana;
-        public int physicalDamage;
-        public int armor;
-        public int magicDamage;
-        public int magicResistance;
-        public int accuracy;
+        public int vitality;
+        public int mana => this.GetMana();
+        public int strength;
+        public int intelligence;
+        public int defense;
         public int speed;
 
         public static CombatStats operator +(CombatStats a_, CombatStats b_)
         {
             return new CombatStats
             {
-                maxHp = a_.maxHp + b_.maxHp,
-                maxMana = a_.maxMana + b_.maxMana,
-                physicalDamage = a_.physicalDamage + b_.physicalDamage,
-                armor = a_.armor + b_.armor,
-                magicDamage = a_.magicDamage + b_.magicDamage,
-                magicResistance = a_.magicResistance + b_.magicResistance,
-                accuracy = a_.accuracy + b_.accuracy,
-                speed = a_.speed + b_.speed
+                vitality = a_.vitality + b_.vitality,
+                strength = a_.strength + b_.strength,
+                intelligence = a_.intelligence + b_.intelligence,
+                defense = a_.defense + b_.defense,
+                speed = a_.speed + b_.speed,
             };
         }
 
@@ -33,14 +28,11 @@ namespace Character
         {
             return new CombatStats
             {
-                maxHp = a_.maxHp - b_.maxHp,
-                maxMana = a_.maxMana - b_.maxMana,
-                physicalDamage = a_.physicalDamage - b_.physicalDamage,
-                armor = a_.armor - b_.armor,
-                magicDamage = a_.magicDamage - b_.magicDamage,
-                magicResistance = a_.magicResistance - b_.magicResistance,
-                accuracy = a_.accuracy - b_.accuracy,
-                speed = a_.speed - b_.speed
+                vitality = a_.vitality - b_.vitality,
+                strength = a_.strength - b_.strength,
+                intelligence = a_.intelligence - b_.intelligence,
+                defense = a_.defense - b_.defense,
+                speed = a_.speed - b_.speed,
             };
         }
         
@@ -48,14 +40,11 @@ namespace Character
         {
             return new CombatStats
             {
-                maxHp = a_.maxHp * b_.maxHp,
-                maxMana = a_.maxMana * b_.maxMana,
-                physicalDamage = a_.physicalDamage * b_.physicalDamage,
-                armor = a_.armor * b_.armor,
-                magicDamage = a_.magicDamage * b_.magicDamage,
-                magicResistance = a_.magicResistance * b_.magicResistance,
-                accuracy = a_.accuracy * b_.accuracy,
-                speed = a_.speed * b_.speed
+                vitality = UnityEngine.Mathf.RoundToInt(a_.vitality * b_.defense),
+                strength = UnityEngine.Mathf.RoundToInt(a_.strength * b_.strength),
+                intelligence = UnityEngine.Mathf.RoundToInt(a_.intelligence * b_.intelligence),
+                defense = UnityEngine.Mathf.RoundToInt(a_.defense * b_.defense),
+                speed = UnityEngine.Mathf.RoundToInt(a_.speed * b_.speed),
             };
         }
         
@@ -63,38 +52,39 @@ namespace Character
         {
             return new CombatStats
             {
-                maxHp = UnityEngine.Mathf.RoundToInt(a_.maxHp * b_),
-                maxMana = UnityEngine.Mathf.RoundToInt(a_.maxMana * b_),
-                physicalDamage = UnityEngine.Mathf.RoundToInt(a_.physicalDamage * b_),
-                armor = UnityEngine.Mathf.RoundToInt(a_.armor * b_),
-                magicDamage = UnityEngine.Mathf.RoundToInt(a_.magicDamage * b_),
-                magicResistance = UnityEngine.Mathf.RoundToInt(a_.magicResistance * b_),
-                accuracy = UnityEngine.Mathf.RoundToInt(a_.accuracy * b_),
-                speed = UnityEngine.Mathf.RoundToInt(a_.speed * b_)
+                vitality = UnityEngine.Mathf.RoundToInt(a_.vitality * b_),
+                strength = UnityEngine.Mathf.RoundToInt(a_.strength * b_),
+                intelligence = UnityEngine.Mathf.RoundToInt(a_.intelligence * b_),
+                defense = UnityEngine.Mathf.RoundToInt(a_.defense * b_),
+                speed = UnityEngine.Mathf.RoundToInt(a_.speed * b_),
             };
         }
-        
+
         public static CombatStats operator /(CombatStats a_, CombatStats b_)
         {
             return new CombatStats
             {
-                maxHp = a_.maxHp / b_.maxHp,
-                maxMana = a_.maxMana / b_.maxMana,
-                physicalDamage = a_.physicalDamage / b_.physicalDamage,
-                armor = a_.armor / b_.armor,
-                magicDamage = a_.magicDamage / b_.magicDamage,
-                magicResistance = a_.magicResistance / b_.magicResistance,
-                accuracy = a_.accuracy / b_.accuracy,
-                speed = a_.speed / b_.speed
+                vitality = a_.vitality / b_.vitality,
+                strength = a_.strength / b_.strength,
+                intelligence = a_.intelligence / b_.intelligence,
+                defense = a_.defense / b_.defense,
+                speed = a_.speed / b_.speed,
             };
         }
     }
 
-    public static class CombatStatsHelper
+    public static class StatsHelper
     {
+        public static float intelToManaMultiplier = 1f;
+        
         public static bool IsEmpty(this CombatStats source)
         {
-            return source is {maxHp: 0, maxMana: 0, physicalDamage: 0, accuracy: 0, magicResistance: 0, armor: 0, magicDamage: 0, speed: 0};
+            return source is {vitality: 0, mana: 0, strength: 0, defense: 0};
+        }
+
+        public static int GetMana(this CombatStats source)
+        {
+            return UnityEngine.Mathf.RoundToInt(source.intelligence * intelToManaMultiplier);
         }
     }
 }

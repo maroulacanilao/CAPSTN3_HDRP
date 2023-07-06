@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace UI.TabMenu
 {
-    public class TabGroup : FarmUI
+    public class TabGroup : MonoBehaviour
     {
         [SerializeField] private TabButton[] tabButtons;
-        [SerializeField] private FarmUI[] farmUIs;
+        [SerializeField] private GameObject[] menus;
         [SerializeField] private bool canControlWithKeys = true;
 
         public TabButton selectedTab { get; private set; }
@@ -26,17 +26,17 @@ namespace UI.TabMenu
 
         public void SelectTab(int index_)
         {
-            for (int i = 0; i < farmUIs.Length; i++)
+            for (int i = 0; i < menus.Length; i++)
             {
                 if (i == index_)
                 {
-                    farmUIs[i].gameObject.SetActive(true);
-                    farmUIs[i].OpenMenu();
-                    tabButtons[i].Select();
+                    selectedTab = tabButtons[i];
+                    selectedTab.Select();
+                    menus[i].SetActive(true);
                 }
                 else
                 {
-                    farmUIs[i].gameObject.SetActive(false);
+                    menus[i].SetActive(false);
                     tabButtons[i].Deselect();
                 }
             }
@@ -54,7 +54,6 @@ namespace UI.TabMenu
             {
                 selectedTab = tabButtons[0];
             }
-            Debug.Log(selectedTab.gameObject);
             OnSelectNewTab(selectedTab);
         }
 
@@ -67,21 +66,6 @@ namespace UI.TabMenu
             }
         }
         
-        public override void Initialize()
-        {
-            selectedTab = tabButtons[0];
-
-            for (var _index = 0; _index < tabButtons.Length; _index++)
-            {
-                var _button = tabButtons[_index];
-                _button.Initialize(this, _index);
-            }
-        }
-        public override void OpenMenu()
-        {
-            
-        }
-
         public void Next()
         {
             var _index = Mathf.Clamp(currentIndex + 1, 0, tabButtons.Length - 1);

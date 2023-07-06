@@ -14,14 +14,16 @@ namespace Managers
     {
         [SerializeField] private Transform[] enemySpawnPoints;
         [SerializeField] private GameDataBase gameDataBase;
-        [SerializeField] private int tickRate = 3;
         [SerializeField] private int maxEnemyCount = 3;
+        [SerializeField] private int minuteJump = 5;
         
         private EnemyDataBase enemyDataBase => gameDataBase.enemyDataBase;
         private int playerLevel => gameDataBase.playerData.LevelData.CurrentLevel;
 
         private List<EnemyAIController> enemyControllers = new List<EnemyAIController>();
         private Dictionary<FarmTile, EnemyAIController> targetTileDictionary;
+        
+        public int MinuteJump => minuteJump;
 
         protected override void Awake()
         {
@@ -60,13 +62,9 @@ namespace Managers
 
         private void Tick()
         {
-            if(TimeManager.EndingHour - 1 <= TimeManager.CurrentHour) return;
-            if(TimeManager.CurrentMinute % tickRate != 0) return;
             if(enemyControllers.Count >= maxEnemyCount) return;
-            
-            
 
-            var _spawnRate = enemyDataBase.enemySpawnRate.Evaluate(TimeManager.ScaledGameTime);
+            var _spawnRate = enemyDataBase.enemySpawnRate.Evaluate(TimeManager.GameTime/10f);
             if(!RandomHelper.RandomBool(_spawnRate)) return;
             
             SpawnEnemy();
@@ -83,7 +81,7 @@ namespace Managers
             var _enemyInstance = Instantiate(_enemy.farmPrefab, _spawnPoint.position, Quaternion.identity).GetComponent<EnemyAIController>();
             
             enemyControllers.Add(_enemyInstance);
-            _enemyInstance.SetTileTarget(_target);
+            // _enemyInstance.SetTileTarget(_target);
         }
 
         private FarmTile GetViableTile()

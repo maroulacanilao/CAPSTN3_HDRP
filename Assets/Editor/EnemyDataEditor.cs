@@ -51,14 +51,11 @@ public class EnemyDataEditor : Editor
                 EditorGUILayout.BeginHorizontal();
                 CombatStats _lvlStats = _statsGrowthDataData.GetLeveledStats(i, 10);
                 EditorGUILayout.LabelField("Level " + (i), GUILayout.Width(EditorGUIUtility.labelWidth));
-                EditorGUILayout.LabelField("HP: " + _lvlStats.maxHp);
-                EditorGUILayout.LabelField("Mana: " + _lvlStats.maxMana);
-                EditorGUILayout.LabelField("WpnDmg: " + _lvlStats.physicalDamage);
-                EditorGUILayout.LabelField("Armor: " + _lvlStats.armor);
-                EditorGUILayout.LabelField("MagDmg: " + _lvlStats.magicDamage);
-                EditorGUILayout.LabelField("MagRes: " + _lvlStats.magicResistance);
-                EditorGUILayout.LabelField("Acc: " + _lvlStats.accuracy);
-                EditorGUILayout.LabelField("Speed: " + _lvlStats.speed);
+                EditorGUILayout.LabelField("HP: " + _lvlStats.vitality);
+                EditorGUILayout.LabelField("Str: " + _lvlStats.strength);
+                EditorGUILayout.LabelField("Int: " + _lvlStats.intelligence);
+                EditorGUILayout.LabelField("Def: " + _lvlStats.defense);
+                EditorGUILayout.LabelField("Spd: " + _lvlStats.speed);
                 EditorGUILayout.EndHorizontal();
             }
 

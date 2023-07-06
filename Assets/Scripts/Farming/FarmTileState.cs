@@ -1,3 +1,5 @@
+using System;
+using CustomHelpers;
 using Items.ItemData;
 using Managers;
 using Unity.Burst;
@@ -43,15 +45,15 @@ namespace Farming
             //TODO: Add mat to farmtile
             farmTile.seedData = null;
             farmTile.datePlanted = default;
-
-            farmTile.minutesRemaining = 0;
             farmTile.isWatered = false;
+            farmTile.timeRemaining = default;
 
             farmTile.plantRenderer.gameObject.SetActive(false);
             farmTile.plantRenderer.sprite = farmTile.defaultPlantSprite;
 
-            farmTile.soilRenderer.color = farmTile.tilledColor;
-            farmTile.soilRenderer.sprite = farmTile.defaultSoilSprite;
+            // ToDO: Add mat to farmtile
+            // farmTile.soilRenderer.color = farmTile.tilledColor;
+            // farmTile.soilRenderer.sprite = farmTile.defaultSoilSprite;
 
             farmTile.health.RefillHealth();
         }
@@ -59,7 +61,8 @@ namespace Farming
         public override void WaterPlant()
         {
             farmTile.isWatered = true;
-            farmTile.soilRenderer.color = farmTile.wateredColor;
+            // ToDO: Add mat to farmtile
+            // farmTile.soilRenderer.color = farmTile.wateredColor;
         }
 
         public override void PlantSeed(SeedData seedData_)
@@ -81,65 +84,16 @@ namespace Farming
 
         public override void EnterLogic()
         {
-            farmTile.soilRenderer.sprite = farmTile.seedData.soilSprite;
+            // ToDO: Add mat to farmtile
+            // farmTile.soilRenderer.sprite = farmTile.seedData.soilSprite;
         }
 
         public override void WaterPlant()
         {
             farmTile.isWatered = true;
-            farmTile.soilRenderer.color = farmTile.wateredColor;
+            // ToDO: Add mat to farmtile
+            // farmTile.soilRenderer.color = farmTile.wateredColor;
             farmTile.ChangeState(farmTile.growingTileState);
-        }
-    }
-
-    [System.Serializable]
-    public class GrowingTileState : FarmTileState
-    {
-        private bool IsNextPhase = false;
-        public GrowingTileState(FarmTile farmTile_) : base(farmTile_)
-        {
-            tileState = TileState.Growing;
-        }
-
-        public override void EnterLogic()
-        {
-            IsNextPhase = false;
-
-            farmTile.datePlanted = TimeManager.DateTime;
-            farmTile.minutesRemaining = farmTile.totalMinutesDuration;
-
-            farmTile.soilRenderer.sprite = farmTile.seedData.soilSprite;
-            farmTile.soilRenderer.color = farmTile.wateredColor;
-            TimeManager.OnMinuteTick.AddListener(UpdateTimeRemaining);
-        }
-
-        public override void ExitLogic()
-        {
-            TimeManager.OnMinuteTick.RemoveListener(UpdateTimeRemaining);
-        }
-
-        private void UpdateTimeRemaining()
-        {
-            if (!farmTile.isWatered) return;
-            if (farmTile.minutesRemaining <= 0)
-            {
-                farmTile.ChangeState(farmTile.readyToHarvestTileState);
-                return;
-            }
-
-            farmTile.minutesRemaining--;
-
-            if (IsNextPhase) return;
-
-            // var _progress = farmTile.timeRemaining.Hours / (float) farmTile.seedData.minutesToGrow;
-
-            if (farmTile.progress >= 0.3f)
-            {
-                IsNextPhase = true;
-                farmTile.plantRenderer.gameObject.SetActive(true);
-                farmTile.soilRenderer.sprite = farmTile.defaultSoilSprite;
-                farmTile.plantRenderer.sprite = farmTile.seedData.plantSprite;
-            }
         }
     }
 
@@ -153,15 +107,16 @@ namespace Farming
 
         public override void EnterLogic()
         {
-            farmTile.minutesRemaining = 0;
-            farmTile.plantRenderer.sprite = farmTile.seedData.harvestSprite;
+            farmTile.timeRemaining = default;
+            farmTile.plantRenderer.sprite = farmTile.seedData.readyToHarvestSprite;
             // farmTile.meshRenderer.material = farmTile.seedData.readyToHarvestMaterial;
         }
 
         public override void Interact()
         {
-            var _item = farmTile.seedData.produceData.GetConsumableItem(1);
-            GameManager.Instance.GameDataBase.playerInventory.AddItem(_item);
+            // var _item = farmTile.seedData.produceData.GetConsumableItem(1);
+            // GameManager.Instance.GameDataBase.playerInventory.AddItem(_item);
+            FarmTileManager.OnHarvestCrop.Invoke(farmTile.seedData);
             farmTile.ChangeState(farmTile.emptyTileState);
             farmTile.health.RefillHealth();
         }

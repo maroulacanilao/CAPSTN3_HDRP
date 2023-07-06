@@ -26,14 +26,7 @@ namespace UI
         private void Awake()
         {
             if(button == null) button = GetComponent<Button>();
-        
-            if (gameObject.TryGetComponent(out SelectableMenuButton _s))
-            {
-                selectableMenuButton = _s;
-                selectableMenuButton.SelectButton();
-            }
-            EventSystem.current.firstSelectedGameObject = button.gameObject;
-            EventSystem.current.SetSelectedGameObject(button.gameObject);
+            
             button.Select();
         }
 
@@ -44,7 +37,6 @@ namespace UI
             button.Select();
             if (selectableMenuButton != null)
             {
-                Debug.Log("Selectable Button Active");
                 selectableMenuButton.SelectButton();
             }
             InputUIManager.OnMove.AddListener(Move);

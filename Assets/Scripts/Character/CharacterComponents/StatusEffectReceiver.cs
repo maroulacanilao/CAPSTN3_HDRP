@@ -19,10 +19,10 @@ namespace Character.CharacterComponents
         
         public string CharacterName => character.characterData.characterName;
 
-        public Evt<StatusEffectBase, StatusEffectReceiver> OnApply = new Evt<StatusEffectBase, StatusEffectReceiver>();
-        public Evt<StatusEffectBase, StatusEffectReceiver> OnRemove = new Evt<StatusEffectBase, StatusEffectReceiver>();
+        public Evt<StatusEffectBase> OnApply = new Evt<StatusEffectBase>();
+        public Evt<StatusEffectBase> OnRemove = new Evt<StatusEffectBase>();
         
-        protected SerializedDictionary<int, StatusEffectBase> StatusEffectsDictionary;
+        public SerializedDictionary<int, StatusEffectBase> StatusEffectsDictionary { get; protected set; }
 
         public StatusEffectReceiver(CharacterBase character_) : base(character_)
         {
@@ -57,7 +57,7 @@ namespace Character.CharacterComponents
             StatusEffectsDictionary.Add(effect_.ID, effect_);
 
             effect_.Activate(this, source_);
-            OnApply?.Invoke(effect_, this);
+            OnApply?.Invoke(effect_);
             return true;
         }
 
@@ -71,15 +71,20 @@ namespace Character.CharacterComponents
         {
             StatusEffectsDictionary.Remove(effect_.ID);
             effect_.Deactivate();
-            OnRemove?.Invoke(effect_, this);
+            OnRemove?.Invoke(effect_);
         }
         
         public IEnumerator BeforeTurnTick(TurnBaseState ownerTurnState_)
         {
+            PurgeNulls();
             if(StatusEffectsDictionary.Count <= 0) yield break;
-            // PurgeNulls();
+
+            var _effectList = StatusEffectsDictionary.Values.OrderBy(e => e.executionOrder).ToList();
+
             yield return null;
-            foreach (var _effect in StatusEffectsDictionary.Values.ToList())
+            yield return null;
+            
+            foreach (var _effect in _effectList)
             {
                 yield return _effect.BeforeTurnTick(ownerTurnState_);
             }
@@ -87,10 +92,15 @@ namespace Character.CharacterComponents
         
         public IEnumerator AfterTurnTick(TurnBaseState ownerTurnState_)
         {
-            if(StatusEffectsDictionary.Count <= 0) yield break;
             PurgeNulls();
+            if(StatusEffectsDictionary.Count <= 0) yield break;
+
+            var _effectList = StatusEffectsDictionary.Values.OrderBy(e => e.executionOrder).ToList();
+
             yield return null;
-            foreach (var _effect in StatusEffectsDictionary.Values.ToList())
+            yield return null;
+            
+            foreach (var _effect in _effectList)
             {
                 yield return _effect.AfterTurnTick(ownerTurnState_);
             }
@@ -98,7 +108,12 @@ namespace Character.CharacterComponents
         
         private void PurgeNulls()
         {
-            var _nulls = StatusEffectsDictionary.Where(x => x.Value == null || x.Value.IsDestroyed()).ToList();
+            if(StatusEffectsDictionary.Count <= 0) return;
+            
+            var _nulls = StatusEffectsDictionary
+                .Where(x => x.Value == null || x.Value.IsEmptyOrDestroyed())
+                .ToList();
+            
             foreach (var _null in _nulls)
             {
                 StatusEffectsDictionary.Remove(_null.Key);

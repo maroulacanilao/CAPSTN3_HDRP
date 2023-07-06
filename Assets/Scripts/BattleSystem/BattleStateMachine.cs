@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using BattleSystem.BattleState;
 using ScriptableObjectData.CharacterData;
 using System.Linq;
+using CustomHelpers;
+using UnityEngine;
 
 namespace BattleSystem
 {
@@ -28,9 +30,29 @@ namespace BattleSystem
             enemyTurn = new EnemyTurnState(this, battleManager.enemyParty[0]);
 
             turnQueue = new Queue<TurnBaseState>();
-            BattleCharacter[] _characters = battleManager.playerParty.Concat(battleManager.enemyParty).ToArray();
+            var _characters = battleManager.playerParty.Concat(battleManager.enemyParty).ToList();
+
+            _characters.Shuffle();
             
-            _characters = _characters.OrderByDescending(c => c.character.stats.speed).ToArray();
+            Debug.Log(battleManager.battleData.isPlayerFirst);
+            
+            if (battleManager.battleData.isPlayerFirst)
+            {
+                var _player = _characters.Find(c => c.character.characterData is PlayerData);
+                
+                _characters.Remove(_player);
+                _characters.Insert(0, _player);
+            }
+
+            else
+            {
+                var _enemy = _characters.Find(c => c.character.characterData is EnemyData);
+                
+                _characters.Remove(_enemy);
+                _characters.Insert(0, _enemy);
+            }
+
+            yield return CoroutineHelper.GetWait(.5f);
             
             var _startPhase = new BattleStartState(this);
             foreach (var _character in _characters)

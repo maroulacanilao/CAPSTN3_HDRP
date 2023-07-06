@@ -17,17 +17,11 @@ namespace ScriptableObjectData.CharacterData
 
         [field: SerializeField] public EnemyCombatTendency combatTendency { get; private set; }
         
-        [field: SerializeField] public int minLevel { get; private set; }
+        [field: SerializeField] [field: MinMaxSlider(1,10)]
+        public Vector2Int levelRange { get; private set; }
         
         [field: SerializeField] public WeightedDictionary<EnemyData> alliesDictionary { get; private set; }
         
         [field: SerializeField] public EncyclopediaInfo encyclopediaInfo { get; private set; }
-        [ContextMenu("Sort Spells")]
-        public void SortSpells() => combatTendency.SortSpells();
-        
-        private void OnValidate()
-        {
-            combatTendency?.SortSpells();
-        }
     }
 }

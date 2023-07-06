@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BaseCore
@@ -14,16 +15,14 @@ namespace BaseCore
         public int DamageAmount;
         public GameObject Source;
         public DamageType DamageType;
-        public RaycastHit HitInfo;
-        public Vector3 Position;
+        public List<string> tags;
 
-        public DamageInfo(int damageAmount_, GameObject source_, DamageType damageType_ = DamageType.Weapon, RaycastHit hitInfo_ = default, Vector3 position_ = default)
+        public DamageInfo(int damageAmount_, GameObject source_, List<string> tags_ = null ,DamageType damageType_ = DamageType.Weapon)
         {
             DamageAmount = damageAmount_;
             Source = source_;
             DamageType = damageType_;
-            HitInfo = hitInfo_;
-            Position = position_;
+            tags = tags_;
         }
     }
 }

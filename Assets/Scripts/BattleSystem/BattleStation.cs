@@ -8,13 +8,15 @@ namespace BattleSystem
     {
         [SerializeField] private Transform attackerTargetPos, projectileTargetPos, evadeTargetPos;
         [field: SerializeField] public float defaultXOffset { get; private set; } = 1f;
+        
+        [field: SerializeField] public bool isForEnemy { get; private set; }
 
         public Vector3 attackPosition => attackerTargetPos.position;
         public Vector3 projectilePosition => projectileTargetPos.position;
         public Vector3 stationPosition => transform.position;
         
         public Vector3 evadePosition => evadeTargetPos.position;
-        
+
         public BattleCharacter battleCharacter { get; private set; }
 
         public BattleCharacter Initialize(CharacterData characterData_, int level_)

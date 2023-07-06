@@ -8,7 +8,6 @@ namespace UI.TabMenu.Codex
 {
     public class CodexItem : SelectableMenuButton
     {
-        [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI nameText;
         
         public static readonly Evt<int> OnClickEvent = new Evt<int>();

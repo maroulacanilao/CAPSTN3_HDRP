@@ -3,6 +3,8 @@ using System.Collections;
 using BattleSystem;
 using Character;
 using Character.CharacterComponents;
+using Managers;
+using UI.Battle;
 using UnityEngine;
 
 namespace Spells.Base
@@ -21,15 +23,10 @@ namespace Spells.Base
 			{
 				switch (spellData.spellType)
 				{
-					case SpellType.Physical:
+					case SpellType.Damage:
 					{
-						var _phyDmg = character.stats.physicalDamage;
-						return Mathf.RoundToInt(_phyDmg * spellData.physicalDamageModifier);
-					}
-					case SpellType.Magical:
-					{
-						var _magDmg = character.stats.magicDamage;
-						return Mathf.RoundToInt(_magDmg * spellData.magicDamageModifier);
+						var _magDmg = character.stats.strength;
+						return Mathf.RoundToInt(_magDmg * spellData.damageModifier);
 					}
 						
 					default:
@@ -79,6 +76,25 @@ namespace Spells.Base
 		{
 			OnRemoveSkill();
 			Destroy(gameObject);
+		}
+		
+		protected IEnumerator Co_StunTarget(AttackResult _atkResult)
+		{
+			if(target == null) yield break;
+			if (_atkResult.attackResultType != AttackResultType.Weakness) yield break;
+
+			var _stunPrefab = GameManager.Instance.GameDataBase.battleData.skipTurnSE;
+
+			var _effectInstance = Instantiate(_stunPrefab, Vector3.zero, Quaternion.identity);
+                
+			var _dif = character.level - target.character.level;
+			_dif = Mathf.Clamp(_dif, 1, 3);
+			_effectInstance.SetDuration(_dif);
+                
+			target.character.statusEffectReceiver.ApplyStatusEffect(_effectInstance, character.gameObject);
+                
+			var _txt = $"{target.character.characterData.characterName} is stunned for {_dif} turn(s)!";
+			yield return BattleTextManager.DoWrite(_txt);
 		}
 	}
 }

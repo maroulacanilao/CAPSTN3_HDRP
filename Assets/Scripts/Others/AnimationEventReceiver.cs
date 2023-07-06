@@ -7,8 +7,6 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Animator))]
 public class AnimationEventReceiver : MonoBehaviour
 {
-    public readonly Evt<string> OnAnimEvent = new Evt<string>();
-
     private Dictionary<string, UnityEvent> eventDictionary;
 
     private void Awake()
@@ -40,6 +38,7 @@ public class AnimationEventReceiver : MonoBehaviour
 
     public void TriggerEvent(string eventName)
     {
+        
         if (eventDictionary.TryGetValue(eventName, out UnityEvent unityEvent))
         {
             unityEvent.Invoke();

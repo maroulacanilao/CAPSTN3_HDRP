@@ -20,6 +20,7 @@ namespace UI.HUD
         
         protected override void Start()
         {
+            if(character == null) character = FindObjectOfType<PlayerCharacter>();
             base.Start();
             characterMana = character.mana;
             playerData = character.characterData as PlayerData;
@@ -35,10 +36,10 @@ namespace UI.HUD
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            characterHealth.OnManuallyUpdateHealth.RemoveListener(ManuallyUpdateHealthBar);
-            characterMana.OnManuallyUpdateMana.RemoveListener(ManuallyUpdateManaBar);
-            characterMana.OnUseMana.RemoveListener(UpdateMana);
-            characterMana.OnAddMana.RemoveListener(UpdateMana);
+            characterHealth?.OnManuallyUpdateHealth.RemoveListener(ManuallyUpdateHealthBar);
+            characterMana?.OnManuallyUpdateMana.RemoveListener(ManuallyUpdateManaBar);
+            characterMana?.OnUseMana.RemoveListener(UpdateMana);
+            characterMana?.OnAddMana.RemoveListener(UpdateMana);
         }
 
         private void UpdateMana(CharacterMana characterMana_)

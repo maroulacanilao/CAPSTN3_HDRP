@@ -57,7 +57,6 @@ namespace UI
 
         public virtual void SelectButton()
         {
-            Debug.Log("Change Color");
             outline.effectColor = outlineColor;
         }
 

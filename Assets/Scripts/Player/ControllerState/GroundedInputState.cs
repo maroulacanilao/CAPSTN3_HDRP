@@ -2,6 +2,7 @@ using System.Collections;
 using CustomHelpers;
 using Managers;
 using UI;
+using UI.Farming;
 using UnityEngine;
 
 namespace Player.ControllerState
@@ -10,8 +11,14 @@ namespace Player.ControllerState
     public class GroundedInputState : PlayerInputState
     {
         private bool canInput;
-        public GroundedInputState(PlayerInputStateMachine stateMachine_, int animNameHash_) : base(stateMachine_, animNameHash_)
-        { }
+        private PlayerEquipment farmEquipment;
+        private InteractDetector interactDetector;
+
+        public GroundedInputState(PlayerInputStateMachine stateMachine_) : base(stateMachine_)
+        {
+            farmEquipment = player.playerEquipment;
+            interactDetector = player.interactDetector;
+        }
         
         public override void Enter()
         {
@@ -20,16 +27,32 @@ namespace Player.ControllerState
             canInput = false;
             player.StartCoroutine(InputDelay());
             playerState = PlayerSate.Grounded;
+            PlayerEquipment.OnTillAction.AddListener(Till);
+            PlayerEquipment.OnWaterAction.AddListener(Watering);
+            PlayerEquipment.OnUnTillAction.AddListener(UnTill);
+            StateMachine.canMove = true;
         }
 
         public override void HandleInput()
         {
             if(!canInput) return;
-            if (InputManager.InteractAction.triggered)
+            if(PlayerMenu.OpenedMenu.IsValid() && PlayerMenu.OpenedMenu.isActiveAndEnabled) return;
+
+            if (InputManager.UseToolAction.triggered)
             {
-                player.playerEquipment.UseTool();
+                if(player.CanUseFarmTools) farmEquipment.UseTool();
+                
+                else StateMachine.ChangeState(StateMachine.AttackState);
+                
                 return;
             }
+            
+            if(interactDetector.CanInteract() && InputManager.InteractAction.triggered)
+            {
+                interactDetector.Interact();
+                return;
+            }
+            
             if (CanJump())
             {
                 StateMachine.ChangeState(StateMachine.JumpState);
@@ -56,6 +79,9 @@ namespace Player.ControllerState
             player.animator.ResetTrigger(player.groundedHash);
             StateMachine.velocityOnExit = rb.velocity;
             canInput = false;
+            PlayerEquipment.OnTillAction.RemoveListener(Till);
+            PlayerEquipment.OnWaterAction.RemoveListener(Watering);
+            PlayerEquipment.OnUnTillAction.RemoveListener(UnTill);
         }
         
         private IEnumerator InputDelay()
@@ -63,6 +89,21 @@ namespace Player.ControllerState
             canInput = false;
             yield return new WaitForSeconds(0.1f);
             canInput = true;
+        }
+
+        private void Till()
+        {
+            StateMachine.ChangeState(StateMachine.TillState);
+        }
+        
+        private void UnTill()
+        {
+            StateMachine.ChangeState(StateMachine.UnTillState);
+        }
+
+        private void Watering()
+        {
+            StateMachine.ChangeState(StateMachine.WateringState);
         }
     }
 }

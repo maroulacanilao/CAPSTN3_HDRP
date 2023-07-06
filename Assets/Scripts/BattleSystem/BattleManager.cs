@@ -4,6 +4,7 @@ using System.Linq;
 using BaseCore;
 using CustomEvent;
 using CustomHelpers;
+using Managers;
 using ScriptableObjectData.CharacterData;
 using UnityEngine;
 
@@ -16,8 +17,6 @@ namespace BattleSystem
         [field: SerializeField] public BattleData battleData { get; private set; }
         [field: SerializeField] public List<BattleStation> playerPartyStation { get; private set; }
         [field: SerializeField] public List<BattleStation> enemyPartyStation { get; private set; }
-        
-        [SerializeField] private GameObject eventSystem;
 
         public BattleStateMachine BattleStateMachine { get; private set; }
 
@@ -35,9 +34,7 @@ namespace BattleSystem
         
         private IEnumerator Start()
         {
-            eventSystem.SetActive(false);
             yield return null;
-            eventSystem.SetActive(true);
             yield return BattleStateMachine.Initialize();
         }
 
@@ -72,25 +69,19 @@ namespace BattleSystem
             playerParty = new List<BattleCharacter>();
             enemyParty = new List<BattleCharacter>();
             
-            var _level = battleData.playerData.LevelData.CurrentLevel;
-            var _player = playerPartyStation[0].Initialize(battleData.playerData, _level);
+            var _playerLevel = battleData.playerData.LevelData.CurrentLevel;
+            var _player = playerPartyStation[0].Initialize(battleData.playerData, _playerLevel);
             playerParty.Add(_player);
+
+            var _enemyLevel = battleData.currentEnemyLevel;
             
-            var _index = 1;
-            foreach (var _allyData in battleData.playerData.alliesData)
-            {
-                if(_allyData == null) continue;
-                
-                var _ally = playerPartyStation[_index].Initialize(_allyData, _level);
-                playerParty.Add(_ally);
-                _index++;
-            }
-            
-            var _mainEnemy = enemyPartyStation[0].Initialize(battleData.currentEnemyData, _level);
+            var _mainEnemy = enemyPartyStation[0].Initialize(battleData.currentEnemyData, _enemyLevel);
             enemyParty.Add(_mainEnemy);
 
-            var _count = UnityEngine.Random.Range(0, 3);
-            _index = 1;
+            var _count = Random.Range(0, 3);
+            var _index = 1;
+            
+
             for (var i = 0; i < _count; i++)
             {
                 var _enemyAllyData = battleData.currentEnemyData.alliesDictionary.GetWeightedRandom();
@@ -98,7 +89,10 @@ namespace BattleSystem
                 
                 if(enemyPartyStation.Count <= _index) break;
                 
-                var _enemy = enemyPartyStation[_index].Initialize(_enemyAllyData, _level);
+                var _lvl = _enemyAllyData.levelRange.GetRandomInRange();
+                _lvl = Mathf.Clamp(_lvl, 1, _playerLevel);
+
+                var _enemy = enemyPartyStation[_index].Initialize(_enemyAllyData, _lvl);
                 
                 enemyParty.Add(_enemy);
                 _index++;

@@ -17,8 +17,18 @@ namespace BattleSystem.BattleState
         {
             yield return null;
 
-            yield return BattleTextManager.DoWrite("Battle Start!");
+            var _text = $"You encountered {BattleManager.enemyParty[0].characterData.characterName.SurroundWithColor(Color.red)}!";
+
+            yield return BattleTextManager.DoWrite(_text);
             
+            yield return new WaitForSeconds(0.5f);
+
+            var _advantage = BattleManager.battleData.isPlayerFirst ? $"{"You".SurroundWithColor(Color.green)} have" : $"{"Enemy".SurroundWithColor(Color.red)} has";
+            
+            _text = $"{_advantage} the advantage!";
+            
+            yield return BattleTextManager.DoWrite(_text);
+
             yield return StateMachine.NextTurnState();
         }
 

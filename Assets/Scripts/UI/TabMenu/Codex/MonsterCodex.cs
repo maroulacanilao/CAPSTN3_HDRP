@@ -3,6 +3,7 @@ using System.Linq;
 using CustomHelpers;
 using ScriptableObjectData;
 using ScriptableObjectData.CharacterData;
+using UI.Farming;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,13 +14,7 @@ namespace UI.TabMenu.Codex
         [SerializeField] private EnemyDataBase enemyDataBase;
         private List<KeyValuePair<EnemyData,int>> enemyKillsStatsList = new List<KeyValuePair<EnemyData, int>>();
 
-
-        public override void Initialize()
-        {
-            base.Initialize();
-        }
-        
-        public override void OpenMenu()
+        public void OnEnable()
         {
             RemoveItems();
             if(enemyDataBase == null) enemyDataBase = dataBase.enemyDataBase;
@@ -42,6 +37,7 @@ namespace UI.TabMenu.Codex
             }
 
             codexItems[0].GetOrAddComponent<ButtonSelectFirst>();
+            
             ShowCodex(0);
         }
         

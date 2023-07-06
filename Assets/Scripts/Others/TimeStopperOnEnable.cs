@@ -7,12 +7,12 @@ public class TimeStopperOnEnable : MonoBehaviour
     private void OnEnable()
     {
         if(TimeManager.Instance.IsEmptyOrDestroyed()) return;
-        TimeManager.Instance.PauseTime();
+        TimeManager.PauseTime();
     }
 
     private void OnDisable()
     {
         if(TimeManager.Instance.IsEmptyOrDestroyed()) return;
-        TimeManager.Instance.ResumeTime();
+        TimeManager.ResumeTime();
     }
 }

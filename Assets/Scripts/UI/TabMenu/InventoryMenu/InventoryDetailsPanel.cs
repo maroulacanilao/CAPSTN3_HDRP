@@ -1,4 +1,5 @@
 using System;
+using CustomHelpers;
 using Items;
 using Items.Inventory;
 using TMPro;
@@ -7,31 +8,19 @@ using UnityEngine.UI;
 
 namespace UI.TabMenu.InventoryMenu
 {
-    public class InventoryDetailsPanel : MonoBehaviour
+    public class InventoryDetailsPanel : ItemDetailsPanel
     {
         [NaughtyAttributes.BoxGroup("Panels")]
-        [SerializeField] private GameObject namePanel, statsPanel, descriptionPanel, valuePanel;
-        
-        [NaughtyAttributes.BoxGroup("Panels")]
-        [SerializeField] private InventoryActionButtonGroup actionButtonGroup; 
-
-        [NaughtyAttributes.BoxGroup("Info Text")]
-        [SerializeField] private TextMeshProUGUI nameTxt, typeTxt, rarityTxt, valueTxt, descriptionTxt;
-        
-        [NaughtyAttributes.BoxGroup("Stats Text")]
-        [SerializeField] private TextMeshProUGUI maxHpTxt, maxMpTxt, wpnDmgTxt, armValTxt, magDmgTxt, magResTxt, accTxt, speedTxt;
+        [SerializeField] private InventoryActionButtonGroup actionButtonGroup;
 
         [NaughtyAttributes.BoxGroup("Buttons")]
-        [SerializeField] private Button consumeBtn, equipBtn, unequipBTN,discardBtn;
-
-        [NaughtyAttributes.BoxGroup("Icon")]
-        [SerializeField] private Image itemIcon;
+        [SerializeField] private Button consumeBtn, equipBtn, unequipBtn,discardBtn;
         
-        [SerializeField] [NaughtyAttributes.Tag] private string inventoryItemTag;
+        [NaughtyAttributes.BoxGroup("Error Text")] 
+        [SerializeField] protected TextMeshProUGUI errorTxt;
         
         private Item_MenuItem currMenuItem;
-        private Item currItem;
-        
+
         private InventoryMenu inventoryMenu;
         private PlayerInventory inventory;
 
@@ -40,96 +29,66 @@ namespace UI.TabMenu.InventoryMenu
             inventoryMenu = inventoryMenu_;
             inventory = inventoryMenu.Inventory;
             actionButtonGroup.Initialize();
-            
-            InventoryMenu.OnInventoryItemSelect.AddListener(ShowItemDetail);
-            InventoryEvents.OnUpdateInventory.AddListener(UpdateInventoryWrapper);
-            
+
             consumeBtn.onClick.AddListener(ConsumedItem);
             equipBtn.onClick.AddListener(EquipItem);
             discardBtn.onClick.AddListener(DiscardItem);
-            unequipBTN.onClick.AddListener(UnEquipItem);
+            unequipBtn.onClick.AddListener(UnEquipItem);
+        }
+
+        private void OnDisable()
+        {
+            if(!inventoryMenu.gameObject.activeInHierarchy) return;
+            
+            inventoryMenu.SelectLastSelectable();
         }
 
         public void OnDestroy()
         {
-            InventoryMenu.OnInventoryItemSelect.RemoveListener(ShowItemDetail);
-            InventoryEvents.OnUpdateInventory.RemoveListener(UpdateInventoryWrapper);
+            consumeBtn.onClick.RemoveListener(ConsumedItem);
+            equipBtn.onClick.RemoveListener(EquipItem);
+            discardBtn.onClick.RemoveListener(DiscardItem);
+            unequipBtn.onClick.RemoveListener(UnEquipItem);
         }
 
-        private void UpdateInventoryWrapper(PlayerInventory inventory_) => ShowItemDetail(null);
-
-        public void ShowItemDetail(SelectableMenuButton selectedObject_)
+        public void ShowItemDetail(Item_MenuItem selectedMenuItem_)
         {
-            if (selectedObject_ == null)
+            if (this.IsEmptyOrDestroyed())
+            {
+                return;
+            }
+            
+            if(selectedMenuItem_ == null) return;
+            
+            currMenuItem = selectedMenuItem_;
+            currItem = currMenuItem.item;
+            
+            if (currItem == null)
             {
                 gameObject.SetActive(false);
                 return;
             }
             
-            actionButtonGroup.gameObject.SetActive(false);
-
-            if(!selectedObject_.TryGetComponent(out Item_MenuItem _menuItem)) return;
-
-            if (_menuItem == null || _menuItem.item == null)
-            {
-                gameObject.SetActive(false);
-                return;
-            }
+            DisplayItem(currItem);
             
-            currMenuItem = _menuItem;
-            currItem = _menuItem.item;
-            var _data = currItem.Data;
-        
-            namePanel.SetActive(currItem.ItemType != ItemType.Gold);
-            statsPanel.SetActive(currItem.ItemType != ItemType.Gold);
-            descriptionPanel.SetActive(currItem.ItemType != ItemType.Gold);
-            valuePanel.SetActive(currItem.Data.IsSellable);
 
-            if (currItem.ItemType == ItemType.Gold)
-            {
-                var gold = (ItemGold) currItem;
-                valueTxt.SetText($"Value: {gold.GoldAmount}");
-                return;
-            }
-        
-            valueTxt.SetText($"Value: {_data.SellValue} gold");
-            nameTxt.SetText(_data.ItemName);
-            typeTxt.SetText(currItem.ItemType.ToString());
-            rarityTxt.SetText(currItem.RarityType.ToString());
-            descriptionTxt.SetText(_data.Description);
-            itemIcon.sprite = _data.Icon;
-
-            if (currItem is ItemGear _gear) SetStatsText(_gear);
-            else statsPanel.SetActive(false);
-            
             consumeBtn.gameObject.SetActive(currItem is ItemConsumable);
             
             var _canEquip = (currItem is ItemGear && !currItem.IsGearEquipped) ||
                             (currItem.IsToolable && currMenuItem.inventoryItemType == Item_MenuItem.InventoryItemType.storage 
                              && inventory.HasFreeSlotInToolBar());
-
+            
             equipBtn.gameObject.SetActive(_canEquip);
             
-            unequipBTN.gameObject.SetActive(currItem is ItemGear && currItem.IsGearEquipped);
+            var _canUnEquip = (currItem is ItemGear && currItem.IsGearEquipped) ||
+                             (currItem.IsToolable && currMenuItem.inventoryItemType == Item_MenuItem.InventoryItemType.toolBar && inventory.IsAnyOpenSlot());
+            
+            unequipBtn.gameObject.SetActive(_canUnEquip);
             discardBtn.gameObject.SetActive(currItem.IsDiscardable);
             
             actionButtonGroup.gameObject.SetActive(true);
-            
-            gameObject.SetActive(true);
         }
-        
-        private void SetStatsText(ItemGear item_)
-        {
-            maxHpTxt.SetText($"Add HP: {item_.Stats.maxHp}");
-            maxMpTxt.SetText($"Add MP: {item_.Stats.maxMana}");
-            wpnDmgTxt.SetText($"Wpn: {item_.Stats.physicalDamage}");
-            armValTxt.SetText($"Arm: {item_.Stats.armor}");
-            magDmgTxt.SetText($"Mag: {item_.Stats.magicDamage}");
-            magResTxt.SetText($"Res: {item_.Stats.magicResistance}");
-            accTxt.SetText($"Acc: {item_.Stats.accuracy}");
-            speedTxt.SetText($"Spd: {item_.Stats.speed}");
-        }
-        
+
         private void DiscardItem()
         {
             if(currItem == null) return;
@@ -156,26 +115,46 @@ namespace UI.TabMenu.InventoryMenu
                     throw new ArgumentOutOfRangeException();
             }
             currMenuItem.UpdateDisplay();
+            ShowItemDetail(currMenuItem);
         }
         
         private void EquipItem()
         {
             if(currMenuItem.inventoryItemType is not Item_MenuItem.InventoryItemType.storage) return;
-
-            switch (currItem.ItemType)
+            
+            var _level = inventoryMenu.playerData.LevelData.CurrentLevel;
+            var _itemName = $"<color=orange>{currItem.Data.ItemName}</color>";
+            
+            if(currItem is ItemWeapon _weapon)
             {
-                case ItemType.Weapon:
-                    inventory.EquipWeapon(currMenuItem.index);
+                if (_weapon.Level > _level)
+                {
+                    errorTxt.gameObject.SetActive(true);
+                    errorTxt.SetText("Your level is too low to equip " + _itemName);
+                    Debug.Log($"Weapon Level: {_weapon.Level} | Player Level: {_level}");
                     return;
-                case ItemType.Armor:
-                    inventory.EquipArmor(currMenuItem.index);
+                }
+                else inventory.EquipWeapon(currMenuItem.index);
+            }
+            if(currItem is ItemArmor _armor)
+            {
+                if (_armor.Level > _level)
+                {
+                    errorTxt.gameObject.SetActive(true);
+                    errorTxt.SetText("Your level is too low to equip " + _itemName);
+                    Debug.Log($"Weapon Level: {_armor.Level} | Player Level: {_level}");
                     return;
+                }
+                else inventory.EquipArmor(currMenuItem.index);
             }
 
             if (currItem.IsToolable)
             {
                 inventory.EquipTool(currMenuItem.index);
             }
+            
+            currMenuItem.UpdateDisplay();
+            ShowItemDetail(currMenuItem);
         }
 
         private void UnEquipItem()
@@ -189,8 +168,16 @@ namespace UI.TabMenu.InventoryMenu
                     inventory.UnEquipArmor();
                     break;
                 default:
+                    if (currMenuItem.inventoryItemType == Item_MenuItem.InventoryItemType.toolBar)
+                    {
+                        if(!inventory.IsAnyOpenSlot()) break;
+                        inventory.UnEquipToolInToolbar(currMenuItem.index);
+                    }
                     break;
             }
+            
+            currMenuItem.UpdateDisplay();
+            ShowItemDetail(currMenuItem);
         }
         
         private void ConsumedItem()
@@ -200,9 +187,11 @@ namespace UI.TabMenu.InventoryMenu
                 consumeBtn.gameObject.SetActive(false);
                 return;
             }
-            _consumable.Consume(inventoryMenu.player.statusEffectReceiver);
+            _consumable.Consume(inventoryMenu.playerData.statusEffectReceiver);
             InventoryEvents.OnUpdateStackable.Invoke(_consumable);
+            
             currMenuItem.UpdateDisplay();
+            ShowItemDetail(currMenuItem);
         }
     }
 }

@@ -16,10 +16,20 @@ namespace Character
         public virtual CharacterMana mana { get; protected set; }
         public virtual StatusEffectReceiver statusEffectReceiver { get; protected set; }
 
+        public virtual StatsGrowth statsData
+        {
+            get
+            {
+                return mStatsData ??= characterData.statsData.Clone();
+            }
+        }
+
         #endregion
 
-        public int level { get; private set; }
-        public StatsGrowth statsData => characterData.statsData;
+        public virtual int level { get; protected set; }
+        
+        private StatsGrowth mStatsData;
+
         public CombatStats stats => statsData.GetTotalStats(level);
         public bool IsAlive => health.IsAlive;
 
@@ -38,6 +48,13 @@ namespace Character
         public void Heal(HealInfo healInfo_, bool isOverHeal_ = false)
         {
             health.ReceiveHeal(healInfo_, isOverHeal_);
+        }
+        
+        public virtual void SetLevel(int level_)
+        {
+            level = level_;
+            health.RefillHealth();
+            mana.RefreshMana();
         }
     }
 }

@@ -3,8 +3,10 @@ using BaseCore;
 using BattleSystem;
 using Character;
 using CustomHelpers;
+using Managers;
 using Spells.Base;
 using StatusEffect;
+using UI.Battle;
 using UnityEngine;
 
 namespace Spells
@@ -20,8 +22,8 @@ namespace Spells
         protected override IEnumerator OnActivate()
         {
             if(target == null) throw new System.NotImplementedException();
-            DamageInfo _tempDamageInfo = new DamageInfo(damage, character.gameObject, DamageType.Magical);
-            var _atkResult = battleCharacter.DamageTarget(target, _tempDamageInfo);
+            DamageInfo _tempDamageInfo = new DamageInfo(damage, character.gameObject, spellData.tags, DamageType.Magical);
+            var _atkResult = battleCharacter.AttackTarget(target, _tempDamageInfo);
 
             yield return battleCharacter.PlaySpellCastAnim();
             
@@ -37,12 +39,15 @@ namespace Spells
             if (_atkResult.attackResultType != AttackResultType.Miss)
             {
                 var _effectInstance = Instantiate(spellData.statusEffect, Vector3.zero, Quaternion.identity) as BurnFixedDamage_SE;
-                var _burnDmg = Mathf.RoundToInt(character.stats.magicDamage * magicDmgBurnScale);
+                var _burnDmg = Mathf.RoundToInt(character.stats.strength * magicDmgBurnScale);
                 
                 _effectInstance.SetDamage(_burnDmg);
                 target.character.statusEffectReceiver.ApplyStatusEffect(_effectInstance, character.gameObject);
             }
             battleCharacter.animator.SetTrigger(battleCharacter.moveAnimationHash);
+            
+            if(_atkResult.attackResultType == AttackResultType.Weakness) yield return Co_StunTarget(_atkResult);
+
             yield return CoroutineHelper.GetWait(0.2f);
         }
         

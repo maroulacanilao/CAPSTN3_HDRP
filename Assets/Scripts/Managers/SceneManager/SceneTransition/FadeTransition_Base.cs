@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Managers.SceneManager.SceneTransition
+namespace Managers.SceneLoader.SceneTransition
 {
     public abstract class FadeTransition_Base : MonoBehaviour
     {

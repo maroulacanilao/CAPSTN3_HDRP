@@ -19,35 +19,38 @@ MonoBehaviour:
     type: 3}
   <statsData>k__BackingField:
     <baseCombatStats>k__BackingField:
-      maxHp: 80
-      maxMana: 60
-      physicalDamage: 20
-      armor: 20
-      magicDamage: 15
-      magicResistance: 12
-      accuracy: 20
+      vitality: 60
+      strength: 15
+      intelligence: 10
+      defense: 13
       speed: 20
     <maxLevelCombatStats>k__BackingField:
-      maxHp: 175
-      maxMana: 150
-      physicalDamage: 50
-      armor: 50
-      magicDamage: 75
-      magicResistance: 60
-      accuracy: 80
-      speed: 75
+      vitality: 120
+      strength: 20
+      intelligence: 16
+      defense: 20
+      speed: 23
     healthGrowthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 0
+        inSlope: 2
         outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
+        tangentMode: 65
+        weightedMode: 2
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 1.7917824
+        tangentMode: 5
+        weightedMode: 1
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
@@ -60,7 +63,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    manaGrowthCurve:
+    intelligenceGrowthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -68,10 +71,19 @@ MonoBehaviour:
         value: 0
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 65
         weightedMode: 0
         inWeight: 0
         outWeight: 0
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 0.09954314
+        tangentMode: 5
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
@@ -84,31 +96,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    weaponDamageGrowthCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    armorGrowthCurve:
+    strengthGrowthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -116,34 +104,19 @@ MonoBehaviour:
         value: 0
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 65
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    magicDamageGrowthCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
+        time: 0.1
         value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
+        inSlope: -0
+        outSlope: 0.09954314
+        tangentMode: 5
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
@@ -156,7 +129,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    magicResistanceGrowthCurve:
+    defenseGrowthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -164,42 +137,27 @@ MonoBehaviour:
         value: 0
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 5
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 1.1111112
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 2
-        outSlope: 2
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    accuracyGrowthCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
+        inSlope: 1.1111112
+        outSlope: 1.1111112
         tangentMode: 34
         weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
+        inWeight: 0.33333334
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -212,25 +170,33 @@ MonoBehaviour:
         value: 0
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 0.14072455
+        tangentMode: 5
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.045639567
+      - serializedVersion: 3
         time: 1
         value: 1
-        inSlope: 0
-        outSlope: 0
+        inSlope: -0.121079795
+        outSlope: -0.121079795
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.042435262
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  <spells>k__BackingField:
-  - {fileID: 11400000, guid: b22f92b76607be84687aed469f2d87c4, type: 2}
-  - {fileID: 11400000, guid: b92c384fd780bb4459f1e07e4e8fbdb0, type: 2}
+  <spells>k__BackingField: []
+  <weaknessTags>k__BackingField: []
   <inventory>k__BackingField: {fileID: 11400000, guid: 2e52e9402952ab649b5a934475b711d1,
     type: 2}
   <LevelData>k__BackingField:
@@ -269,6 +235,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     <LevelCap>k__BackingField: 10
     <ExperienceCap>k__BackingField: 10000
+    totalExperience: 0
   <alliesData>k__BackingField: []
   <blessingMeter>k__BackingField:
     maxBlessing: 100

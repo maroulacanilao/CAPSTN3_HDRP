@@ -47,9 +47,16 @@ namespace UI.LootMenu
 
         public void OnPointerClick()
         {
-            button.Select();
-            OnSelect(null);
-            UI_LootMenu.OnItemClick.Invoke(this);
+            if (EventSystem.current.currentSelectedGameObject == gameObject)
+            {
+                UI_LootMenu.OnItemClick.Invoke(this);
+            }
+            else
+            {
+                button.Select();
+                OnSelect(null);
+            }
+
         }
 
         public override void SelectButton()

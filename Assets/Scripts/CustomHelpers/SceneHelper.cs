@@ -85,5 +85,16 @@ namespace CustomHelpers
         {
             return SceneManager.GetActiveScene().FindFirstComponentInScene<T>(includeInactive);
         }
+        
+        public static T FindComponentInPersistentScene<T>(bool includeInactive = true)
+        {
+            return Managers.GameManager.Instance.gameObject.scene.FindFirstComponentInScene<T>(includeInactive);
+        }
+        
+        public static Camera GetFirstMainCameraInActiveScene(bool includeInActive = true)
+        {
+            var _activeScene = SceneManager.GetActiveScene();
+            return _activeScene.GetFirstMainCameraInScene(includeInActive);
+        }
     }
 }

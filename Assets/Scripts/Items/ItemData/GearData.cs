@@ -7,43 +7,43 @@ namespace Items.ItemData
 {
     public abstract class GearData : ItemData
     {
-        [field: MinMaxSlider(0, 100)] [field: BoxGroup("Possible Stats")]
-        [field: SerializeField] public Vector2Int PossibleAddToHp { get; private set; }
+        [field: MinMaxSlider(0, 15)] [field: BoxGroup("Possible Stats")]
+        [field: SerializeField] public Vector2Int VitalityRange { get; private set; }
         
-        [field: MinMaxSlider(0, 100)] [field: BoxGroup("Possible Stats")]
-        [field: SerializeField] public Vector2Int PossibleAddToMp { get; private set; }
+        [field: MinMaxSlider(0, 15)] [field: BoxGroup("Possible Stats")]
+        [field: SerializeField] public Vector2Int StrengthRange { get; private set; }
         
-        [field: MinMaxSlider(0, 100)] [field: BoxGroup("Possible Stats")]
-        [field: SerializeField] public Vector2Int PossibleWpnDmg { get; private set; }
+        [field: MinMaxSlider(0, 15)] [field: BoxGroup("Possible Stats")]
+        [field: SerializeField] public Vector2Int IntelligenceRange { get; private set; }
         
-        [field: MinMaxSlider(0, 100)] [field: BoxGroup("Possible Stats")]
-        [field: SerializeField] public Vector2Int PossibleArmVal { get; private set; }
-        
-        [field: MinMaxSlider(0, 100)] [field: BoxGroup("Possible Stats")]
-        [field: SerializeField] public Vector2Int PossibleMagDmg { get; private set; }
-        
-        [field: MinMaxSlider(0, 100)] [field: BoxGroup("Possible Stats")]
-        [field: SerializeField] public Vector2Int PossibleMagRes { get; private set; }
-        
-        [field: MinMaxSlider(0, 100)] [field: BoxGroup("Possible Stats")]
-        [field: SerializeField] public Vector2Int PossibleAcc { get; private set; }
-        
-        [field: MinMaxSlider(0, 100)] [field: BoxGroup("Possible Stats")]
-        [field: SerializeField] public Vector2Int PossibleSpeed { get; private set; }
+        [field: MinMaxSlider(0, 15)] [field: BoxGroup("Possible Stats")]
+        [field: SerializeField] public Vector2Int DefenseRange { get; private set; }
+
+        [field: MinMaxSlider(0, 15)] [field: BoxGroup("Possible Stats")]
+        [field: SerializeField] public Vector2Int SpeedRange { get; private set; }
 
 
         public virtual CombatStats GetRandomStats()
         {
             return new CombatStats()
             {
-                maxHp = PossibleAddToHp.GetRandomInRange(),
-                maxMana = PossibleAddToMp.GetRandomInRange(),
-                physicalDamage = PossibleWpnDmg.GetRandomInRange(),
-                armor = PossibleArmVal.GetRandomInRange(),
-                magicDamage = PossibleMagDmg.GetRandomInRange(),
-                magicResistance = PossibleMagRes.GetRandomInRange(),
-                accuracy = PossibleAcc.GetRandomInRange(),
-                speed = PossibleSpeed.GetRandomInRange()
+                vitality = VitalityRange.GetRandomInRange(),
+                strength = StrengthRange.GetRandomInRange(),
+                intelligence = IntelligenceRange.GetRandomInRange(),
+                defense = DefenseRange.GetRandomInRange(),
+                speed = SpeedRange.GetRandomInRange()
+            };
+        }
+        
+        public virtual CombatStats GetRandomStats(float modifier_)
+        {
+            return new CombatStats()
+            {
+                vitality = VitalityRange.GetRandomInRange(modifier_),
+                strength = StrengthRange.GetRandomInRange(modifier_),
+                intelligence = IntelligenceRange.GetRandomInRange(modifier_),
+                defense = DefenseRange.GetRandomInRange(modifier_),
+                speed = SpeedRange.GetRandomInRange(modifier_)
             };
         }
     }

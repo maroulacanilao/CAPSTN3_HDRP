@@ -21,6 +21,7 @@ namespace CustomHelpers
         public static bool RandomBool(float probability_)
         {
             var _rng = Random.value;
+            
             return _rng < probability_;
         }
     }

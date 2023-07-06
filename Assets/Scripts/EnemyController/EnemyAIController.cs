@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using Character;
+using Dungeon;
 using EnemyController.EnemyStates;
 using Farming;
 using NaughtyAttributes;
@@ -24,23 +26,38 @@ namespace EnemyController
         
         [field: BoxGroup("Components")] [field: SerializeField] 
         public Collider attackRangeCollider { get; private set; }
+        
+        [field: BoxGroup("Components")] [field: SerializeField]
+        public EnemyAlertRange alertRange { get; private set; }
+        
+        [field: BoxGroup("Components")] [field: SerializeField] 
+        public EnemyCharacter enemyCharacter { get; private set; }
+        
+        
 
         #endregion
 
         #region Attack And Movement properties
 
         [field: BoxGroup("Movement")] [field: SerializeField] 
-        public float movementSpeed { get; private set; }
+        public float chaseSpeed { get; private set; }
         
         [field: BoxGroup("Movement")] [field: SerializeField] 
-        public float chaseSpeed { get; private set; }
+        public float patrolSpeed { get; private set; }
+        
+        [field: BoxGroup("Movement")] [field: SerializeField]
+        public float chaseRange { get; private set; }
         
         [field: BoxGroup("Attack Properties")] [field: SerializeField]
         public float attackRange { get; private set; }
         
         [field: BoxGroup("Attack Properties")] [field: SerializeField]
         public float attackCooldown { get; private set; }
-
+        
+        [field: BoxGroup("Attack Properties")] [field: SerializeField]
+        public float attackSpeed { get; private set; }
+        
+        
         #endregion
 
         #region Animation Parameters
@@ -62,6 +79,9 @@ namespace EnemyController
 
         [field: BoxGroup("Animation Parameter")] [field: AnimatorParam("animator")] [field: SerializeField]
         public int IsIdleHash { get; private set; }
+        
+        [field: BoxGroup("Animation Parameter")] [field: AnimatorParam("animator")] [field: SerializeField]
+        public int attackAnimSpeedHash { get; private set; }
 
         #endregion
         
@@ -76,54 +96,25 @@ namespace EnemyController
         #endregion
 
         [SerializeReference] [ReadOnly] private EnemyStateMachine stateMachine;
-
-        private void Awake()
-        {
-            stateMachine = new EnemyStateMachine(this);
-        }
         
-        private void Start()
+        public EnemyStation station { get; private set; }
+        
+        public void Initialize(EnemyStation station_)
         {
+            station = station_;
+            stateMachine = new EnemyStateMachine(this);
             
+            stateMachine.Initialize();
+        }
+
+        private void OnEnable()
+        {
+            stateMachine?.Enable();
         }
 
         private void FixedUpdate()
         {
-            stateMachine.AnimationUpdate();
-        }
-
-        public IEnumerator RefreshDestination(Transform target_, float refreshRate_ = 1f)
-        {
-            var _waiter = new WaitForSeconds(refreshRate_);
-            while (gameObject.activeSelf)
-            {
-                if(target_ == null) yield break;
-                aiPath.destination = target_.position;
-                aiPath.OnTargetReached();
-                yield return _waiter;
-            }
-        }
-
-        public IEnumerator WaitUntilReachDestination(float refreshRate_ = 1f)
-        {
-            yield return null;
-            var _waiter = new WaitForSeconds(refreshRate_);
-            
-            while (gameObject.activeSelf)
-            {
-                yield return _waiter;
-                if(aiPath.reachedDestination) yield break;
-            }
-        }
-
-        public void SetTileTarget(FarmTile tile_)
-        {
-            if (stateMachine == null)
-            {
-                stateMachine = new EnemyStateMachine(this);
-            }
-            StopAllCoroutines();
-            stateMachine.ChangeState(new EnemyGoToTileState(this, stateMachine, tile_));
+            stateMachine.FixedUpdate();
         }
     }
 }

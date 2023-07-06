@@ -5,7 +5,7 @@ namespace UI.Battle
     public class SpellActionPanelUI : MonoBehaviour
     {
         [SerializeField] private SpellBtnItemUI[] spellBtnItems;
-        [SerializeField] private SpellDetailsPanel spellDetailsPanel;
+        [SerializeField] private BattleSpellDetailsPanel battleSpellDetailsPanel;
         private BattleActionUI mainPanel;
         
         private void Awake()
@@ -29,23 +29,23 @@ namespace UI.Battle
                 spellBtnItems[i].Initialize(mainPanel_,i);
             }
             
-            spellDetailsPanel.gameObject.SetActive(false);
+            battleSpellDetailsPanel.gameObject.SetActive(false);
             gameObject.SetActive(true);
         }
 
         private void OnEnable()
         {
-            spellDetailsPanel.gameObject.SetActive(false);
+            battleSpellDetailsPanel.gameObject.SetActive(false);
         }
 
         private void OnDisable()
         {
-            spellDetailsPanel.gameObject.SetActive(false);
+            battleSpellDetailsPanel.gameObject.SetActive(false);
         }
         
         private void OnSelectSpell(SpellBtnItemUI spellBtn_)
         {
-            spellDetailsPanel.ShowPanel(spellBtn_);
+            battleSpellDetailsPanel.ShowPanel(spellBtn_);
         }
         
         public void OnCancel()

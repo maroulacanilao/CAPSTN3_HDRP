@@ -22,7 +22,7 @@ namespace Character
             if(!other.gameObject.TryGetComponent(out PlayerCharacter playerCharacter)) return;
             
             col.enabled = false;
-            GameManager.OnEnterBattle.Invoke(enemyCharacter);
+            // GameManager.OnEnterBattle.Invoke(enemyCharacter);
         }
     }
 }

@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 
 namespace UI.RequestBoardUI
 {
-    public class RequestMenu : FarmUI
+    public class RequestMenu : MonoBehaviour
     {
         [SerializeField] private RequestBoardData requestBoardData;
         [SerializeField] private RequestMenuDetails requestMenuDetails;
@@ -20,12 +20,12 @@ namespace UI.RequestBoardUI
         public readonly Evt<RequestMenuItem> OnSelectRequest = new Evt<RequestMenuItem>();
         
         public List<RequestMenuItem> requestMenuItems { get; private set; } = new List<RequestMenuItem>();
-        public override void Initialize()
+        
+        public void Awake()
         {
             if (requestBoardData == null) throw new Exception("RequestBoardData is null");
             requestMenuDetails.Initialize(this);
             
-            RequestBoardInteractable.OnOpenRequestBoard.AddListener(OpenMenu);
             RequestBoardData.OnRequestOrderAdded.AddListener(OnNewOrderAdded);
         }
 
@@ -43,14 +43,7 @@ namespace UI.RequestBoardUI
 
         public void OnDestroy()
         {
-            RequestBoardInteractable.OnOpenRequestBoard.RemoveListener(OpenMenu);
             RequestBoardData.OnRequestOrderAdded.RemoveListener(OnNewOrderAdded);
-        }
-
-        public override void OpenMenu()
-        {
-            if(requestBoardData.RequestOrders == null || requestBoardData.RequestOrders.Count == 0) return;
-            gameObject.SetActive(true);
         }
 
         private void OnNewOrderAdded(RequestOrder requestOrder_)

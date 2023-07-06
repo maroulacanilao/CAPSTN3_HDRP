@@ -1,4 +1,5 @@
 ﻿using CustomEvent;
+using CustomHelpers;
 using Items;
 using Items.Inventory;
 using TMPro;
@@ -57,11 +58,16 @@ namespace UI.TabMenu.InventoryMenu
         {
             base.OnEnable();
             UpdateDisplay();
+            ghostIcon.transform.localPosition = Vector3.zero;
+            ghostIcon.gameObject.SetActive(false);
+            isDragging = false;
         }
 
         protected override void OnDisable()
         {
+            base.OnDisable();
             ghostIcon.transform.localPosition = Vector3.zero;
+            ghostIcon.gameObject.SetActive(false);
             isDragging = false;
         }
         
@@ -76,8 +82,9 @@ namespace UI.TabMenu.InventoryMenu
             button.onClick.AddListener(ItemClickWrapper);
             outline.effectDistance = outlineSize;
 
-
             hasInitialized = true;
+            
+            UpdateDisplay();
         }
 
         public void OnDestroy()
@@ -89,8 +96,8 @@ namespace UI.TabMenu.InventoryMenu
 
         private void ItemClickWrapper()
         {
-            InventoryMenu.OnInventoryItemSelect.Invoke(this);
-            button.Select();
+            if(item == null) return;
+
             OnItemClick.Invoke(this);
         }
 
@@ -98,8 +105,13 @@ namespace UI.TabMenu.InventoryMenu
 
         public void UpdateDisplay()
         {
+            if(this.IsEmptyOrDestroyed()) return;
             if(!hasInitialized) return;
             bool _isItemValid = item != null && item.Data != null;
+            
+            if(inventoryItemType == InventoryItemType.storage) icon.color = _isItemValid ? Color.white : Color.gray;
+            else icon.color = Color.white;
+            
             countTxt.gameObject.SetActive(item is {IsStackable: true});
             
             if (_isItemValid)
@@ -112,14 +124,20 @@ namespace UI.TabMenu.InventoryMenu
                 icon.sprite = null;
                 ghostIcon.sprite = null;
             }
+            
             if(countTxt.gameObject.activeSelf) countTxt.SetText($"{item.StackCount}x");
         }
 
         public override void SelectButton()
         {
-            base.SelectButton();
+            SelectOutline();
             InventoryMenu.OnInventoryItemSelect.Invoke(this);
             selectedItem = this;
+        }
+        
+        public void SelectOutline()
+        {
+            outline.effectColor = outlineColor;
         }
         
         public override void DeselectButton()
@@ -134,7 +152,7 @@ namespace UI.TabMenu.InventoryMenu
                 EquipOutline();
                 return;
             }
-            
+
             outline.effectColor = Color.clear;
         }
 
@@ -159,6 +177,8 @@ namespace UI.TabMenu.InventoryMenu
         
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if(item == null) return;
+            
             selectedItem = this;
             ghostIcon.transform.SetParent(inventoryMenu.ghostIconParent);
             ghostIcon.gameObject.SetActive(true);
@@ -168,6 +188,13 @@ namespace UI.TabMenu.InventoryMenu
         public void OnDrag(PointerEventData eventData)
         {
             if(item == null) return;
+            if (swappingItem == null)
+            {
+                ghostIcon.gameObject.SetActive(false);
+                ghostIcon.transform.SetParent(transform);
+                ghostIcon.transform.position = transform.position;
+                return;
+            }
             ghostIcon.transform.position = Input.mousePosition;
             OnDragStateChange.Invoke(eventData, DragState.Dragging);
         }

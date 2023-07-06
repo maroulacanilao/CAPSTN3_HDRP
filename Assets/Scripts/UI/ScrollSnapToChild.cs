@@ -8,8 +8,6 @@ namespace UI
     public class ScrollSnapToChild : MonoBehaviour
     {
         [SerializeField] private ScrollRect scrollRect;
-        [SerializeField]
-        private bool isVertical = true, isHorizontal = false;
 
         private void OnValidate()
         {

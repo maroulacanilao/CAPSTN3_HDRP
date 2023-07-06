@@ -1,4 +1,5 @@
 using System;
+using BaseCore;
 using Character.CharacterComponents;
 using CustomEvent;
 using Items.Inventory;
@@ -16,6 +17,8 @@ namespace Character
         public override CharacterHealth health => playerData.health;
         public override CharacterMana mana => playerData.mana;
         public override StatusEffectReceiver statusEffectReceiver => playerData.statusEffectReceiver;
+        public override int level => playerData.LevelData.CurrentLevel;
+        public override StatsGrowth statsData => playerData.statsData;
 
         protected override void Awake()
         {
@@ -28,6 +31,16 @@ namespace Character
             health.OnCharacterEnable();
             mana.OnCharacterEnable();
             playerData.statusEffectReceiver.SetCharacter(this);
+        }
+
+        public override void SetLevel(int level_)
+        {
+        }
+
+        public void Refill()
+        {
+            health.RefillHealth();
+            mana.RefreshMana();
         }
     }
 }

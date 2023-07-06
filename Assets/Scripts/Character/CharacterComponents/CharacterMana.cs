@@ -11,7 +11,7 @@ namespace Character.CharacterComponents
         public readonly Evt<CharacterMana> OnNotEnoughMana = new Evt<CharacterMana>();
         public readonly Evt<CharacterMana> OnManuallyUpdateMana = new Evt<CharacterMana>();
 
-        public virtual int MaxMana => character.stats.maxMana;
+        public virtual int MaxMana => character.stats.mana;
         public float ManaPercentage => (float) CurrentMana / MaxMana;
         
         public readonly Evt<CharacterMana> OnUseMana = new Evt<CharacterMana>();
@@ -59,6 +59,12 @@ namespace Character.CharacterComponents
         {
             SetCurrentMana(CurrentMana + manaAdd_);
             OnAddMana.Invoke(this);
+        }
+        
+        public virtual void RefreshMana()
+        {
+            SetCurrentMana(MaxMana);
+            OnManuallyUpdateMana.Invoke(this);
         }
     }
 }

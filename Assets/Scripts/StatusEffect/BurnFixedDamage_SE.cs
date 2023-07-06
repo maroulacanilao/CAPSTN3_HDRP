@@ -17,29 +17,27 @@ namespace StatusEffect
         }
         protected override void OnDeactivate()
         {
-        
+            
         }
         
         protected override void OnStackEffect(StatusEffectBase newEffect_)
         {
-            turnsLeft += turnDuration;
+            SetDurationLeft(turnsLeft + turnDuration);
         }
     
         public void SetDamage(int damage_) =>  damage = damage_;
 
         protected override IEnumerator OnBeforeTurnTick(TurnBaseState ownerTurnState_)
         {
-            var _hpCom = Target.character.health;
-            
-            DamageInfo _damageInfo = new DamageInfo(damage, Source);
+            DamageInfo _damageInfo = new DamageInfo(damage, Source, effectTags);
             AttackResult _attackResult = new AttackResult()
             {
                 attackResultType = AttackResultType.Hit,
                 damageInfo = _damageInfo
             };
             Target.battleCharacter.Hit(_attackResult);
-
-            turnsLeft--;
+            
+            RemoveTurn();
             
             var _msg = BattleText
                 .Replace("NAME", characterName)

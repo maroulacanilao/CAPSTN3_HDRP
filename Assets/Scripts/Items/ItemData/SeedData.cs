@@ -14,7 +14,9 @@ namespace Items.ItemData
         
         [field: SerializeField] public Sprite soilSprite { get; private set; }
         [field: SerializeField] public Sprite plantSprite { get; private set; }
-        [field: SerializeField] public Sprite harvestSprite { get; private set; }
+        [field: SerializeField] public Sprite readyToHarvestSprite { get; private set; }
+
+        [field: SerializeField] public int expReward { get; private set; }
 
         private void Reset()
         {

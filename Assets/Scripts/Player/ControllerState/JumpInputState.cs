@@ -10,7 +10,7 @@ namespace Player.ControllerState
     {
         private bool IsHoldingButton => InputManager.JumpAction.phase == InputActionPhase.Performed;
         private float jumpTimer;
-        public JumpInputState(PlayerInputStateMachine stateMachine_, int animNameHash_) : base(stateMachine_, animNameHash_)
+        public JumpInputState(PlayerInputStateMachine stateMachine_) : base(stateMachine_)
         { }
     
         public override void Enter()
@@ -20,6 +20,7 @@ namespace Player.ControllerState
             rb.SetVelocity(StateMachine.velocityOnExit.SetY(player.jumpForce));
             jumpTimer = 0;
             playerState = PlayerSate.Jumping;
+            player.animator.SetTrigger(player.jumpHash);
         }
 
         public override void LogicUpdate()
@@ -52,7 +53,7 @@ namespace Player.ControllerState
         public override void Exit()
         {
             base.Exit();
-            // player.animator.ResetTrigger(player.jumpHash);
+            player.animator.ResetTrigger(player.jumpHash);
             jumpTimer = 0;
         }
     }
@@ -60,7 +61,7 @@ namespace Player.ControllerState
     [System.Serializable]
     public class FallingPlayerInputState : PlayerInputState
     {
-        public FallingPlayerInputState(PlayerInputStateMachine stateMachine_, int animNameHash_) : base(stateMachine_, animNameHash_)
+        public FallingPlayerInputState(PlayerInputStateMachine stateMachine_) : base(stateMachine_)
         { }
     
         public override void Enter()

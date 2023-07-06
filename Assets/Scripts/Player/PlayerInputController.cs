@@ -2,6 +2,7 @@ using System;
 using CustomEvent;
 using CustomHelpers;
 using Farming;
+using Managers;
 using NaughtyAttributes;
 using Player.ControllerState;
 using UI;
@@ -10,8 +11,11 @@ using UnityEngine;
 
 namespace Player
 {
+    [DefaultExecutionOrder(-1)]
     public class PlayerInputController : MonoBehaviour
     {
+        [field: SerializeField] public bool CanUseFarmTools { get; private set; } = true;
+        
         #region Movement Properties
 
 
@@ -48,7 +52,20 @@ namespace Player
         [field: SerializeField] public int xSpeedHash { get; private set; }
         [field: AnimatorParam("animator")] [field: Foldout("Animation Hashes")]
         [field: SerializeField] public int ySpeedHash { get; private set; }
-
+        
+        [field: AnimatorParam("animator")] [field: Foldout("Animation Hashes")]
+        [field: SerializeField] public int hoeHash { get; private set; }
+        
+        [field: AnimatorParam("animator")] [field: Foldout("Animation Hashes")]
+        [field: SerializeField] public int wateringHash { get; private set; }
+        
+        [field: AnimatorParam("animator")] [field: Foldout("Animation Hashes")]
+        [field: SerializeField] public int jumpHash { get; private set; }
+        
+        [field: AnimatorParam("animator")] [field: Foldout("Animation Hashes")]
+        [field: SerializeField] public int attackHash { get; private set; }
+        [field: AnimatorParam("animator")] [field: Foldout("Animation Hashes")]
+        [field: SerializeField] public int attackSpeedHash { get; private set; }
         #endregion
 
         #region Animation Events
@@ -56,6 +73,18 @@ namespace Player
         
         [field: Foldout("Animation Events")]
         [field: SerializeField] public string JumpStartEvent { get; private set; }
+        
+        [field: Foldout("Animation Events")]
+        [field: SerializeField] public string hoeEnd { get; private set; }
+        
+        [field: Foldout("Animation Events")]
+        [field: SerializeField] public string waterEnd { get; private set; }
+        
+        [field: Foldout("Animation Events")]
+        [field: SerializeField] public string attackHitEvent { get; private set; }
+        
+        [field: Foldout("Animation Events")]
+        [field: SerializeField] public string attackEndEvent { get; private set; }
         #endregion
 
         #region OtherComponents
@@ -65,48 +94,107 @@ namespace Player
         [field: SerializeField] public AnimationEventReceiver animationEventReceiver { get; private set; }
         [field: SerializeField] public MovementCollisionDetector collisionDetector { get; private set; }
         [field: SerializeField] public PlayerEquipment playerEquipment { get; private set; }
+        [field: SerializeField] public InteractDetector interactDetector { get; private set; }
+        
+        [field: SerializeField] public Light lanternLight { get; private set; }
 
         #endregion
+
+        #region Attack Properties
         
-        public Rigidbody rb { get; private set; }
-        
-        public Transform cameraTransform { get; private set; }
-        
-        public ToolArea toolArea { get; private set; }
+        [field: Header("Attack Properties")]
+        [field: SerializeField] public float attackCooldown { get; private set; } = 0.5f;
+        [field: SerializeField] public float attackSpeed{ get; private set; } = 3f;
+        [field: SerializeField] public Vector3 attackOffset { get; private set; }
+        [field: SerializeField] public Vector3 attackSize { get; private set; }
+        [field: SerializeField] public LayerMask enemyLayer { get; private set; }
+        [field: SerializeField] [field:Tag] public string enemyTag { get; private set; }
+
+        #endregion
+
+        public Rigidbody rb
+        {
+            get
+            {
+                if(mRb == null) mRb = GetComponent<Rigidbody>();
+                return mRb;
+            }
+        }
+
+        public ToolArea toolArea
+        {
+            get
+            {
+                if(mToolArea == null) mToolArea = ToolArea.Instance;
+                return mToolArea;
+            }
+        }
+
+        public Vector3 moveDirection { get; set; }
     
         private PlayerInputStateMachine StateMachine;
         
         public bool IsGrounded => collisionDetector.isGrounded;
-        
+        private Rigidbody mRb;
+        private ToolArea mToolArea;
+
         public PlayerSate playerState
         {
             get
             {
-                var _state = StateMachine.CurrentState as PlayerInputState;
-                if (_state != null) return _state.playerState;
+                if (StateMachine.CurrentState is PlayerInputState _state) return _state.playerState;
                 return PlayerSate.Grounded;
             }
         }
-        
-        [Header("Components To Disable On Freeze")]
-        [SerializeField] private MonoBehaviour[] scriptsToDisable;
-        
-        public static readonly Evt<bool> OnPlayerCanMove = new Evt<bool>();
+
+        private static PlayerInputController mInstance;
+        public static PlayerInputController Instance
+        {
+            get
+            {
+                if (mInstance) return mInstance;
+                if (!ReferenceEquals(mInstance, null) && mInstance == null) return null;
+
+                // get instances
+                var objs = FindObjectsOfType<PlayerInputController>();
+
+
+                if (objs.Length == 0)
+                {
+                    // create instance if there is none
+                    var _prefab = Resources.LoadAll<PlayerInputController>("Prefabs");
+                    mInstance = Instantiate(_prefab[0], Vector3.zero, Quaternion.identity);
+                }
+
+                else if (objs.Length == 1)
+                {
+                    mInstance = objs[0];
+                }
+
+                else if (objs.Length > 1)
+                {
+                    mInstance = objs[0];
+                    for (var i = objs.Length - 1; i > -1; --i)
+                    {
+                        if (mInstance == objs[i]) continue;
+                        Destroy(objs[i].gameObject);
+                    }
+                }
+
+                return mInstance;
+            }
+
+            protected set => mInstance = value;
+        }
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody>();
-            OnPlayerCanMove.AddListener(CanMove);
-            cameraTransform = gameObject.scene.GetFirstMainCameraInScene().transform;
-            toolArea = ToolArea.Instance;
-            StateMachine = new PlayerInputStateMachine(this);
-            InputUIManager.OnMenu.AddListener(OpenMenuWrapper);
-        }
+            if(Instance == null) Instance = this;
+            else if(Instance != this && this.IsValid() && gameObject.IsValid()) Destroy(gameObject);
+            
+            DontDestroyOnLoad(this);
 
-        private void OnDestroy()
-        {
-            OnPlayerCanMove.RemoveListener(CanMove);
-            InputUIManager.OnMenu.RemoveListener(OpenMenuWrapper);
+            StateMachine = new PlayerInputStateMachine(this);
         }
 
         private void OnEnable()
@@ -118,12 +206,6 @@ namespace Player
         {
             rb.velocity = Vector3.zero;
         }
-        
-        private void OpenMenuWrapper()
-        {
-            if(playerState != PlayerSate.Grounded) return;
-            FarmUIManager.Instance.OpenMenu();
-        }
 
         private void Update()
         {
@@ -133,21 +215,19 @@ namespace Player
         private void FixedUpdate()
         {
             StateMachine.StateFixedUpdate();
-            UpdateToolPosition();
-        }
-        
-        public void CanMove(bool canMove_)
-        {
-            foreach (var _component in scriptsToDisable)
-            {
-                _component.enabled = canMove_;
-            }
         }
 
-        private void UpdateToolPosition()
+        public void SetCanUseFarmTools(bool value_)
         {
-            if(rb.velocity.magnitude.IsApproximatelyTo(0)) return;
-            toolArea.UpdatePosition(StateMachine.direction, transform.position, IsGrounded);
+            CanUseFarmTools = value_;
+
+            playerEquipment.enabled = CanUseFarmTools;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(transform.position + attackOffset, attackSize);
         }
     }
 }

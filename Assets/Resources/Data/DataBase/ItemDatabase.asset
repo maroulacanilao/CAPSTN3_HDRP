@@ -12,19 +12,316 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c94790103cb03459a5851adafae5e4, type: 3}
   m_Name: ItemDatabase
   m_EditorClassIdentifier: 
-  <ItemDataDictionary>k__BackingField:
-    _serializedList: []
-  <ItemIconDictionary>k__BackingField:
-    _serializedList: []
-  <RarityModiferValue>k__BackingField:
-    _serializedList:
-    - Key: 0
-      Value: 0
-    - Key: 1
-      Value: 0.15
-    - Key: 2
-      Value: 0.25
-    - Key: 3
-      Value: 0.5
   <GoldItemData>k__BackingField: {fileID: 11400000, guid: 362d2e6e08f9f094bb9873e5f969f192,
     type: 2}
+  <ItemIconDictionary>k__BackingField:
+    _serializedList: []
+  <ItemDataDictionary>k__BackingField:
+    _serializedList:
+    - Key: Carrot
+      Value: {fileID: 11400000, guid: e88b3c2ffdb5fca4380a54db620ffbea, type: 2}
+    - Key: carrotSeed
+      Value: {fileID: 11400000, guid: 7aec536cc3c3b384fb6e9b7847a3fbf8, type: 2}
+    - Key: SteelArmor
+      Value: {fileID: 11400000, guid: 004ea5c2fe93d494ba69efc34ea86818, type: 2}
+    - Key: SteelSword
+      Value: {fileID: 11400000, guid: a07fb1f81f2f37047a65917abef3a85b, type: 2}
+    - Key: GoldItem
+      Value: {fileID: 11400000, guid: 362d2e6e08f9f094bb9873e5f969f192, type: 2}
+    - Key: HoeTool
+      Value: {fileID: 11400000, guid: edf6a17c74fa7ed4ca859c9914a8a25c, type: 2}
+    - Key: WateringCanTool
+      Value: {fileID: 11400000, guid: dc9d84328ef113347a89e0b1a23804a2, type: 2}
+  <ItemDataByType>k__BackingField:
+    _serializedList:
+    - Key: 3
+      Value:
+      - {fileID: 11400000, guid: e88b3c2ffdb5fca4380a54db620ffbea, type: 2}
+    - Key: 2
+      Value:
+      - {fileID: 11400000, guid: 7aec536cc3c3b384fb6e9b7847a3fbf8, type: 2}
+    - Key: 6
+      Value:
+      - {fileID: 11400000, guid: 004ea5c2fe93d494ba69efc34ea86818, type: 2}
+    - Key: 7
+      Value:
+      - {fileID: 11400000, guid: a07fb1f81f2f37047a65917abef3a85b, type: 2}
+    - Key: 1
+      Value:
+      - {fileID: 11400000, guid: 362d2e6e08f9f094bb9873e5f969f192, type: 2}
+    - Key: 5
+      Value:
+      - {fileID: 11400000, guid: edf6a17c74fa7ed4ca859c9914a8a25c, type: 2}
+      - {fileID: 11400000, guid: dc9d84328ef113347a89e0b1a23804a2, type: 2}
+  <RarityColorDictionary>k__BackingField:
+    _serializedList:
+    - Key: 1
+      Value: {r: 1, g: 1, b: 1, a: 1}
+    - Key: 2
+      Value: {r: 0, g: 0.29781726, b: 0.6603774, a: 1}
+    - Key: 3
+      Value: {r: 0.46226418, g: 0, b: 0.027989754, a: 1}
+    - Key: 4
+      Value: {r: 0.4528302, g: 0, b: 0.44115657, a: 1}
+  <RarityModiferValue>k__BackingField:
+    _serializedList:
+    - Key: 1
+      Value: 1
+    - Key: 2
+      Value: 1.15
+    - Key: 3
+      Value: 1.3
+    - Key: 4
+      Value: 1.5
+  <RarityChanceMinMaxValue>k__BackingField:
+    _serializedList:
+    - Key: 1
+      Value: {x: 3, y: 3}
+    - Key: 2
+      Value: {x: 0.5, y: 5}
+    - Key: 3
+      Value: {x: 0.1, y: 4}
+    - Key: 4
+      Value: {x: 0.01, y: 1.5}
+  <RarityChanceCurve>k__BackingField:
+    _serializedList:
+    - Key: 1
+      Value:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    - Key: 2
+      Value:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 2
+          outSlope: 2
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    - Key: 3
+      Value:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.001159668
+          inSlope: Infinity
+          outSlope: Infinity
+          tangentMode: 103
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.3
+          value: 0.05
+          inSlope: Infinity
+          outSlope: 0
+          tangentMode: 7
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 3.5088668
+          outSlope: 3.5088668
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.014809012
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+    - Key: 4
+      Value:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 65
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.5
+          value: 0
+          inSlope: -0
+          outSlope: 0.088030875
+          tangentMode: 5
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 4.4497027
+          outSlope: 4.4497027
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.021823883
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+  <RarityChance>k__BackingField:
+    _serializedList:
+    - Key: 1
+      Value:
+        itemDictionary:
+          _serializedList:
+          - Key: 1
+            Value: 3
+          - Key: 2
+            Value: 0.545
+          - Key: 3
+            Value: 0.104522705
+          - Key: 4
+            Value: 0.01
+    - Key: 2
+      Value:
+        itemDictionary:
+          _serializedList:
+          - Key: 1
+            Value: 3
+          - Key: 2
+            Value: 0.68
+          - Key: 3
+            Value: 0.104522705
+          - Key: 4
+            Value: 0.01
+    - Key: 3
+      Value:
+        itemDictionary:
+          _serializedList:
+          - Key: 1
+            Value: 3
+          - Key: 2
+            Value: 0.90500003
+          - Key: 3
+            Value: 0.29500002
+          - Key: 4
+            Value: 0.01
+    - Key: 4
+      Value:
+        itemDictionary:
+          _serializedList:
+          - Key: 1
+            Value: 3
+          - Key: 2
+            Value: 1.22
+          - Key: 3
+            Value: 0.33266693
+          - Key: 4
+            Value: 0.01
+    - Key: 5
+      Value:
+        itemDictionary:
+          _serializedList:
+          - Key: 1
+            Value: 3
+          - Key: 2
+            Value: 1.625
+          - Key: 3
+            Value: 0.47096458
+          - Key: 4
+            Value: 0.01
+    - Key: 6
+      Value:
+        itemDictionary:
+          _serializedList:
+          - Key: 1
+            Value: 3
+          - Key: 2
+            Value: 2.1200001
+          - Key: 3
+            Value: 0.7478384
+          - Key: 4
+            Value: 0.067273736
+    - Key: 7
+      Value:
+        itemDictionary:
+          _serializedList:
+          - Key: 1
+            Value: 3
+          - Key: 2
+            Value: 2.705
+          - Key: 3
+            Value: 1.2012331
+          - Key: 4
+            Value: 0.22568122
+    - Key: 8
+      Value:
+        itemDictionary:
+          _serializedList:
+          - Key: 1
+            Value: 3
+          - Key: 2
+            Value: 3.38
+          - Key: 3
+            Value: 1.8690951
+          - Key: 4
+            Value: 0.50445193
+    - Key: 9
+      Value:
+        itemDictionary:
+          _serializedList:
+          - Key: 1
+            Value: 3
+          - Key: 2
+            Value: 4.1449995
+          - Key: 3
+            Value: 2.7893682
+          - Key: 4
+            Value: 0.9228149
+    - Key: 10
+      Value:
+        itemDictionary:
+          _serializedList:
+          - Key: 1
+            Value: 3
+          - Key: 2
+            Value: 5
+          - Key: 3
+            Value: 4
+          - Key: 4
+            Value: 1.5

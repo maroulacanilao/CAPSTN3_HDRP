@@ -1,10 +1,9 @@
-using System;
-using System.Collections;
 using BaseCore;
 using CustomHelpers;
 using Items;
 using Items.Inventory;
 using Managers;
+using ObjectPool;
 using Player;
 using UnityEngine;
 
@@ -12,25 +11,29 @@ namespace Farming
 {
     public class ToolArea : Singleton<ToolArea>
     {
+        [SerializeField] private GameObject farmTilePrefab;
+        [SerializeField] private LayerMask farmTileLayer;
+        [SerializeField] private LayerMask farmGroundLayer;
         [SerializeField] private LineRenderer lineRenderer;
         [SerializeField] private float distanceToPlayer = 2f;
         [SerializeField] private float distanceToGround = 0.01f;
         [SerializeField] private float lineWidth = 0.01f;
 
-        private bool ShowLine = true;
+        private PlayerInputController playerController;
         private PlayerInventory inventory;
-        private LayerMask farmTileLayer;
-        private LayerMask farmGroundLayer;
-        
         private Vector3[] vertices;
-        private Vector2 size = Vector2.one;
         private Vector3 playerPosition;
+        private bool ShowLine = true;
+        
+        public Vector3 size { get; private set; } = Vector3.one;
 
-        public void Initialize(Vector2 size_, LayerMask farmTileLayer_, LayerMask farmGroundLayer_)
+        public void Start()
         {
-            size = size_;
-            farmTileLayer = farmTileLayer_;
-            farmGroundLayer = farmGroundLayer_;
+            var _tile = farmTilePrefab.GetInstance();
+            size = _tile.GetComponent<Collider>().bounds.size;
+
+            _tile.ReturnInstance();
+            
             inventory = GameManager.Instance.PlayerData.inventory;
             
             lineRenderer.startWidth = lineWidth;
@@ -45,6 +48,7 @@ namespace Farming
             playerPosition = transform.position;
             PlayerEquipment.OnChangeItemOnHand.AddListener(ChangeItem);
             InventoryEvents.OnItemOnHandUpdate.AddListener(ItemOnHandUpdate);
+            playerController = PlayerInputController.Instance;
         }
         
         #region Event Listeners
@@ -66,8 +70,18 @@ namespace Farming
 
         #endregion
 
+        private void LateUpdate()
+        {
+            if (!playerController.CanUseFarmTools)
+            {
+                if(lineRenderer.enabled) lineRenderer.enabled = false;
+            }
+            
+            UpdatePosition(playerController.moveDirection, playerController.transform.position);
+        }
 
-        public void UpdatePosition(Vector3 direction_,Vector3 playerPosition_, bool IsGrounded_)
+
+        public void UpdatePosition(Vector3 direction_,Vector3 playerPosition_)
         {
             playerPosition = playerPosition_ + direction_ * distanceToPlayer;
             
@@ -84,7 +98,7 @@ namespace Farming
         private void SnapToPosition(float groundElevation_)
         {
             var _xPos = Mathf.Round(playerPosition.x / size.x) * size.x;
-            var _zPos = Mathf.Round(playerPosition.z / size.y) * size.y;
+            var _zPos = Mathf.Round(playerPosition.z / size.z) * size.z;
             var _yPos = groundElevation_ + distanceToGround;
             transform.position = new Vector3(_xPos, _yPos, _zPos);
         }
@@ -97,10 +111,10 @@ namespace Farming
 
             vertices = new []
             {
-                new Vector3(-_scaledSize.x, 0f, -_scaledSize.y),
-                new Vector3(_scaledSize.x, 0f, -_scaledSize.y),
-                new Vector3(_scaledSize.x, 0f, _scaledSize.y),
-                new Vector3(-_scaledSize.x, 0f, _scaledSize.y),
+                new Vector3(-_scaledSize.x, 0f, -_scaledSize.z),
+                new Vector3(_scaledSize.x, 0f, -_scaledSize.z),
+                new Vector3(_scaledSize.x, 0f, _scaledSize.z),
+                new Vector3(-_scaledSize.x, 0f, _scaledSize.z),
             };
         
             lineRenderer.SetPositions(vertices);

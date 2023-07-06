@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine.UI;
 
-namespace Managers.SceneManager.SceneTransition
+namespace Managers.SceneLoader.SceneTransition
 {
     public class BoxFadeTransition : FadeTransition_Base
     {

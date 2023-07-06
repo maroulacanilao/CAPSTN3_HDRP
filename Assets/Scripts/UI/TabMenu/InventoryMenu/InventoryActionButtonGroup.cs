@@ -8,7 +8,7 @@ namespace UI.TabMenu.InventoryMenu
     {
         [SerializeField] private SelectableMenuButton[] buttons;
 
-        private bool HasValidButton() => buttons.Any(b => b.gameObject.activeSelf);
+        private bool HasValidButton() => buttons.Any(b => b.IsValid() && b.gameObject.activeSelf);
         
         private SelectableMenuButton GetValidButton() => buttons.FirstOrDefault(b => b.gameObject.activeSelf);
 

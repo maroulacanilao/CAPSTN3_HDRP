@@ -12,9 +12,8 @@ namespace Items
     public class LootDropObject : InteractableObject, IPoolable
     {
         [SerializeField] GameObject ghostObject;
+        [SerializeField] private UI_LootMenu lootMenu;
         public LootDrop lootDrop { get; protected set; }
-        
-        public static readonly Evt<LootDropObject> OnLootInteract = new Evt<LootDropObject>();
 
         public LootDropObject Initialize(LootDrop lootDrop_)
         {
@@ -36,7 +35,7 @@ namespace Items
 
         protected override void Interact()
         {
-            OnLootInteract.Invoke(this);
+            lootMenu.ShowLootMenu(this);
         }
 
         protected override void Enter()
@@ -52,6 +51,11 @@ namespace Items
         private void OnDestroy()
         {
             OnExit.Invoke(this);
+        }
+        
+        public virtual void ReturnToPool()
+        {
+            gameObject.ReturnInstance();
         }
     }
 }

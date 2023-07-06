@@ -4,7 +4,7 @@ namespace BaseCore
 {
     public abstract class UnitState
     {
-        protected int animEndEventHash;
+        protected string animEndEvent;
     
         public virtual void Enter() { }
 
@@ -15,15 +15,5 @@ namespace BaseCore
         public virtual void PhysicsUpdate() { }
 
         public virtual void Exit() { }
-        
-        protected virtual void OnAnimationEnd() {}
-
-
-        protected void AnimationEnd(string animEventId_)
-        {
-            if(animEventId_.ToHash() != animEndEventHash) return;
-
-            OnAnimationEnd();
-        }
     }
 }

@@ -47,7 +47,7 @@ namespace Trading
             orderDate = DateTime.Now;
             requestedItems = new SerializedDictionary<ItemData, RequestItem>();
             
-            reward = requestOrderTemplate_.rewardTable.GetDrop(gameDataBase_.itemDatabase);
+            reward = requestOrderTemplate_.rewardTable.GetDrop(gameDataBase_.itemDatabase, gameDataBase_.playerData.LevelData.CurrentLevel);
 
             SetRequests(requestOrderTemplate_);
         }
@@ -73,7 +73,9 @@ namespace Trading
             }
 
             _totalPrice = (int) (_totalPrice * requestOrderTemplate_.sellModifier * 5);
-            reward.moneyDrop.SetAmount(_totalPrice);
+            // reward.moneyDrop.SetAmount(_totalPrice);
+            // var _money = 
+            // reward.itemsDrop.Add();
         }
     }
 

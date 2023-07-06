@@ -7,7 +7,6 @@ using UnityEngine.InputSystem.UI;
 [RequireComponent(typeof(InputSystemUIInputModule))]
 public class InputUIManager : MonoBehaviour
 {
-    [SerializeField] private PlayerInput playerInput;
     public static InputSystemUIInputModule inputSystemUi { get; private set; }
     
     public static readonly Evt OnCancel = new Evt();
@@ -18,68 +17,76 @@ public class InputUIManager : MonoBehaviour
     public static readonly Evt OnMenu = new Evt();
     public static readonly Evt OnNext = new Evt();
     public static readonly Evt OnPrev = new Evt();
+    public static readonly Evt OnInventoryMenu = new Evt();
+    public static readonly Evt OnCharacterInfo = new Evt();
+    public static readonly Evt OnCodexMenu = new Evt();
+    
 
-    public static InputAction MenuAction { get; private set; }
-    public static InputAction SwapAction { get; private set; }
-
-    private void OnEnable()
+    public void OnEnable()
     {
         inputSystemUi = GetComponent<InputSystemUIInputModule>();
         
         inputSystemUi.cancel.ToInputAction().started += this.Cancel;
         inputSystemUi.move.action.performed += this.Move;
-        
-        // for specific UI Buttons
-        if(!playerInput) return;
-        playerInput.actions["Menu"].started += this.Menu;
-        playerInput.actions["Swap"].started += this.Swap;
-        playerInput.actions["Next"].started += this.Next;
-        playerInput.actions["Prev"].started += this.Prev;
-        SwapAction = playerInput.actions["Swap"];
-        MenuAction = playerInput.actions["Menu"];
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         inputSystemUi.cancel.ToInputAction().started -= this.Cancel;
         inputSystemUi.move.action.performed -= this.Move;
-
-        // for specific UI Buttons
-        if(!playerInput) return;
-        playerInput.actions["Menu"].started -= this.Menu;
-        playerInput.actions["Swap"].started -= this.Swap;
     }
 
-    private void Move(InputAction.CallbackContext obj_)
+    public void Move(InputAction.CallbackContext context_)
     {
-        OnMove.Invoke(obj_);
+        if(!context_.started) return;
+        OnMove.Invoke(context_);
     }
 
-    private void Cancel(InputAction.CallbackContext context_)
+    public void Cancel(InputAction.CallbackContext context_)
     {
+        if(!context_.started) return;
         OnCancel.Invoke();
     }
     
-    private void Swap(InputAction.CallbackContext context_)
+    public void Swap(InputAction.CallbackContext context_)
     {
+        if(!context_.started) return;
         OnSwap.Invoke();
     }
     
-    private void Menu(InputAction.CallbackContext context_)
-    {
-        if(context_.phase != InputActionPhase.Started) return;
+    public void Menu(InputAction.CallbackContext context_)
+    { 
+        if(!context_.started) return;
         OnMenu.Invoke();
     }
     
-    private void Next(InputAction.CallbackContext context_)
+    public void Next(InputAction.CallbackContext context_)
     {
-        if(context_.phase != InputActionPhase.Started) return;
+        if(!context_.started) return;
         OnNext.Invoke();
     }
     
-    private void Prev(InputAction.CallbackContext context_)
+    public void Prev(InputAction.CallbackContext context_)
     {
-        if(context_.phase != InputActionPhase.Started) return;
+        if(!context_.started) return;
         OnPrev.Invoke();
+    }
+    
+    public void InventoryMenu(InputAction.CallbackContext context_)
+    {
+        if(!context_.started) return;
+        OnInventoryMenu.Invoke();
+    }
+    
+    public void CharacterInfo(InputAction.CallbackContext context_)
+    {
+        if(!context_.started) return;
+        OnCharacterInfo.Invoke();
+    }
+    
+    public void CodexMenu(InputAction.CallbackContext context_)
+    {
+        if(!context_.started) return;
+        OnCodexMenu.Invoke();
     }
 }

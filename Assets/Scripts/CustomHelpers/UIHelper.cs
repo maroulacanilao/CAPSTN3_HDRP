@@ -79,7 +79,41 @@ namespace CustomHelpers
             var _pos = rectTransform_.transform.position;
             var _minPos = rectTransform_.sizeDelta / 2;
             var _maxPos = _screenSize - _minPos;
-            rectTransform_.transform.position = new Vector2(Mathf.Clamp(_pos.x, _minPos.x, _maxPos.x), Mathf.Clamp(_pos.y, _minPos.y, _maxPos.y));
+            rectTransform_.transform.position = new Vector2(
+                Mathf.Clamp(_pos.x, _minPos.x, _maxPos.x), 
+                Mathf.Clamp(_pos.y, _minPos.y, _maxPos.y));
+        }
+        
+        public static void ClampPositionToCanvas(this RectTransform targetRectTransform, RectTransform canvasRectTransform)
+        {
+            Vector2 canvasSize = canvasRectTransform.sizeDelta;
+            Vector2 targetSize = targetRectTransform.sizeDelta;
+
+            Vector2 minPosition = (targetSize * 0.5f) - (canvasSize * 0.5f);
+            Vector2 maxPosition = (canvasSize * 0.5f) - (targetSize * 0.5f);
+
+            Vector2 clampedPosition = targetRectTransform.anchoredPosition;
+            clampedPosition.x = Mathf.Clamp(clampedPosition.x, minPosition.x, maxPosition.x);
+            clampedPosition.y = Mathf.Clamp(clampedPosition.y, minPosition.y, maxPosition.y);
+
+            targetRectTransform.anchoredPosition = clampedPosition;
+        }
+        
+        public static Canvas GetCanvasOfRectTransform(this RectTransform rectTransform)
+        {
+            Canvas canvas = null;
+            Transform parent = rectTransform.transform.parent;
+
+            while (parent != null)
+            {
+                canvas = parent.GetComponent<Canvas>();
+                if (canvas != null)
+                    break;
+
+                parent = parent.parent;
+            }
+
+            return canvas;
         }
     }
 }

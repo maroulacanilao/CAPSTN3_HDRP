@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace UI.TabMenu.CharacterInfo
 {
-    public class CharacterInfoMenu : FarmUI
+    public class CharacterInfoMenu : MonoBehaviour
     {
         [SerializeField] private PlayerData playerData;
 
@@ -34,30 +34,21 @@ namespace UI.TabMenu.CharacterInfo
         [SerializeField] private StatsInfo armorStatsInfo;
         [BoxGroup("Armor")]
         [SerializeField] private Image armorIcon;
-        
-        
-        
+
         private PlayerInventory inventory => playerData.inventory;
         private PlayerLevel level => playerData.LevelData;
         
-        public override void Initialize()
-        {
-            
-        }
+        private PlayerMenuManager playerMenuManager;
 
-        private void OnEnable()
+        public void OnEnable()
         {
-            
-        }
-
-        public override void OpenMenu()
-        {
+            var _levelNum = level.CurrentLevel;
+            var _currLvlExp = level.CurrentLevelExperience;
             level_TXT.text = $"Level: {level.CurrentLevel}";
             currentExp_TXT.text = $"{level.TotalExperience} / {level.NextLevelExperience}";
-            
-            Debug.Log(level.PrevLevelExperience);
-            Debug.Log(level.CurrentLevelExperience);
-            expBar.fillAmount = (float) level.CurrentLevelExperience/ level.ExperienceNeededToLevelUp;
+
+            var _nextLevelExp = level.EvaluateExperience(_levelNum + 1) - level.EvaluateExperience(_levelNum);
+            expBar.fillAmount = (float) _currLvlExp/ _nextLevelExp;
             nextLevelExp_TXT.text = $"Next Level: {level.ExperienceNeededToLevelUp}";
 
             var _weapon = inventory.WeaponEquipped;
@@ -67,11 +58,11 @@ namespace UI.TabMenu.CharacterInfo
             {
                 weaponName_TXT.text = _weapon.Data.ItemName;
                 weaponIcon.sprite = _weapon.Data.Icon;
-                weaponStatsInfo.SetStats(_weapon.Stats);
+                weaponStatsInfo.DisplayWeapon(_weapon.Stats);
             }
             else
             {
-                weaponStatsInfo.SetStats(new CombatStats());
+                weaponStatsInfo.DisplayWeapon(new CombatStats());
                 weaponIcon.sprite = null;
                 weaponName_TXT.text = "No Weapon Equipped";
             }
@@ -80,16 +71,16 @@ namespace UI.TabMenu.CharacterInfo
             {
                 armor_TXT.text = _armor.Data.ItemName;
                 armorIcon.sprite = _armor.Data.Icon;
-                armorStatsInfo.SetStats(_armor.Stats);
+                armorStatsInfo.DisplayArmor(_armor.Stats);
             }
             else
             {
-                armorStatsInfo.SetStats(new CombatStats());
+                armorStatsInfo.DisplayArmor(new CombatStats());
                 armorIcon.sprite = null;
                 armor_TXT.text = "No Armor Equipped";
             }
             
-            totalStatsInfo.SetStats(playerData.totalStats);
+            totalStatsInfo.Display(playerData.totalStats, false);
         }
         
         

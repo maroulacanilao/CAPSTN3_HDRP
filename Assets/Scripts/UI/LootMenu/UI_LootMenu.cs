@@ -1,20 +1,24 @@
+using System;
 using System.Collections.Generic;
 using CustomEvent;
+using CustomHelpers;
 using Items;
 using Items.Inventory;
 using ObjectPool;
 using UI.Farming;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace UI.LootMenu
 {
-    public class UI_LootMenu : FarmUI
+    public class UI_LootMenu : PlayerMenu
     {
-        [SerializeField] private UI_LootMenuItem lootMenuItemPrefab;
         [SerializeField] private PlayerInventory playerInventory;
+        [SerializeField] private UI_LootMenuItem lootMenuItemPrefab;
         [SerializeField] private UI_LootMenuDetailsPanel detailsPanel;
-
+        
         [Header("Parents")]
         [SerializeField] private Transform itemParent;
 
@@ -26,86 +30,77 @@ namespace UI.LootMenu
         private List<UI_LootMenuItem> lootMenuItemList;
         private LootDropObject lootDropObject;
 
+        private int lastItemIndex;
+
         #region UnityEvents
-        
-        public override void Initialize()
+
+        private void Awake()
         {
-            LootDropObject.OnLootInteract.AddListener(ShowLootMenu);
             detailsPanel.Initialize(this);
-            
-            lootAllBtn.onClick.AddListener(() =>
-            {
-                if (lootMenuItemList.Count <= 0)
-                {
-                    ClosePanel();
-                    return;
-                }
-                
-                for (var i = lootMenuItemList.Count - 1; i > -1; --i)
-                {
-                    Loot(lootMenuItemList[i]);
-                }
-            });
-            
-            trashAllBtn.onClick.AddListener(() =>
-            {
-                if (lootMenuItemList.Count <= 0)
-                {
-                    ClosePanel();
-                    return;
-                }
-                
-                for (var i = lootMenuItemList.Count - 1; i > -1; --i)
-                {
-                    RemoveMenuItem(lootMenuItemList[i]);
-                }
-            });
-        }
-        public override void OpenMenu()
-        {
-            
+            lootAllBtn.onClick.AddListener(LootAll);
+
+            trashAllBtn.onClick.AddListener(TrashAll);
         }
 
-        private void OnDestroy()
+        protected override void OnEnable()
         {
-            LootDropObject.OnLootInteract.RemoveListener(ShowLootMenu);
-        }
-
-        private void OnEnable()
-        {
-            Cursor.visible = true;
+            base.OnEnable();
             OnShowItemDetail.AddListener(ShowItemDetail);
+            SelectableMenuButton.OnSelectButton.AddListener(OnSelect);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
-            Cursor.visible = false;
+            base.OnDisable();
+            
+            lootDropObject = null;
+            RemoveAllItemOnly();
+            
             OnShowItemDetail.RemoveListener(ShowItemDetail);
+            SelectableMenuButton.OnSelectButton.RemoveListener(OnSelect);
         }
 
         #endregion
 
-        private void ShowLootMenu(LootDropObject lootDropObject_)
+        private void OnSelect(SelectableMenuButton selectableMenuButton_)
         {
-            FarmUIManager.Instance.CloseAllUI();
+            if (selectableMenuButton_.IsValid() && selectableMenuButton_ is UI_LootMenuItem _menuItem)
+            {
+                lastItemIndex = lootMenuItemList.IndexOf(_menuItem);
+            }
+        }
+
+        public void ShowLootMenu(LootDropObject lootDropObject_)
+        {
+            if (this.IsEmptyOrDestroyed())
+            {
+                // Debug.LogError("Loot Menu is not initialized");
+                OnShowItemDetail.RemoveListener(ShowItemDetail);
+                return;
+            }
+            
+            PlayerMenuManager.OnCloseAllUI.Invoke();
             RemoveAllItemOnly();
             
             lootDropObject = lootDropObject_;
             var _lootDrop = lootDropObject_.lootDrop;
             
             lootMenuItemList = new List<UI_LootMenuItem>();
-        
-            var _menuItem = Instantiate(lootMenuItemPrefab, itemParent).Initialize(_lootDrop.moneyDrop, null);
-            lootMenuItemList.Add(_menuItem);
-            
-            
-        
+
+            if (_lootDrop.itemsDrop.Count <= 0)
+            {
+                lootDropObject_.ReturnToPool();
+                return;
+            }
+
             foreach (var _item in _lootDrop.itemsDrop)
             {
                 var _uiLootMenuItem = Instantiate(lootMenuItemPrefab, itemParent).Initialize(_item, null);
                 lootMenuItemList.Add(_uiLootMenuItem);
             }
-            lootMenuItemList[0].gameObject.AddComponent<ButtonSelectFirst>();
+            
+            EventSystem.current.SetSelectedGameObject(lootMenuItemList[0].gameObject);
+
             gameObject.SetActive(true);
         }
 
@@ -116,7 +111,6 @@ namespace UI.LootMenu
 
         public void Loot(UI_LootMenuItem lootMenuItem_)
         {
-            // playerInventory.AddItem(lootMenuItem_.item);
             if(!playerInventory.AddItem(lootMenuItem_.item)) return;
             RemoveMenuItem(lootMenuItem_);
         }
@@ -126,20 +120,23 @@ namespace UI.LootMenu
             lootMenuItemList.Remove(lootMenuItem_);
             lootDropObject.lootDrop.itemsDrop.Remove(lootMenuItem_.item);
             Destroy(lootMenuItem_.gameObject);
-            detailsPanel.gameObject.SetActive(false);
+
+            if (lootMenuItemList.Count == 0)
+            {
+                lootDropObject.ReturnToPool();
+                CloseMenu();
+                return;
+            }
             
-            if(lootMenuItemList.Count > 0) return;
-            
-            // if there is no more loot
-            lootDropObject.gameObject.ReturnInstance();
-            ClosePanel();
+            SelectLastSelectable();
+
         }
 
-        public void ClosePanel()
+        protected override void CloseMenu()
         {
             lootDropObject = null;
-            FarmUIManager.Instance.CloseAllUI();
             RemoveAllItemOnly();
+            base.CloseMenu();
         }
         
         public void RemoveAllItemOnly()
@@ -149,9 +146,62 @@ namespace UI.LootMenu
             
             for (int i = lootMenuItemList.Count - 1; i >= 0; i--)
             {
+                if(lootMenuItemList[0].IsEmptyOrDestroyed()) continue;
+                
                 Destroy(lootMenuItemList[i].gameObject);
             }
+            
             lootMenuItemList.Clear();
+        }
+        
+        private void OnMove(InputAction.CallbackContext context_)
+        {
+            var _currentSelected = EventSystem.current.currentSelectedGameObject;
+            if(_currentSelected == null || _currentSelected.activeInHierarchy) return;
+
+            SelectLastSelectable();
+        }
+
+        public void SelectLastSelectable()
+        {
+            if (lootMenuItemList.Count == 0)
+            {
+                lootDropObject.gameObject.ReturnInstance();
+                CloseMenu();
+                return;
+            }
+            
+            lastItemIndex = lastItemIndex <= 0  ? 0 : lastItemIndex;
+            lastItemIndex = lastItemIndex >= lootMenuItemList.Count - 1 ? lootMenuItemList.Count - 1 : lastItemIndex;
+            EventSystem.current.SetSelectedGameObject(lootMenuItemList[lastItemIndex].gameObject);
+        }
+        
+        private void LootAll()
+        {
+            if (lootMenuItemList.Count <= 0)
+            {
+                CloseMenu();
+                return;
+            }
+
+            for (var i = lootMenuItemList.Count - 1; i > -1; --i)
+            {
+                Loot(lootMenuItemList[i]);
+            }
+        }
+
+        private void TrashAll()
+        {
+            if (lootMenuItemList.Count <= 0)
+            {
+                CloseMenu();
+                return;
+            }
+                
+            for (var i = lootMenuItemList.Count - 1; i > -1; --i)
+            {
+                RemoveMenuItem(lootMenuItemList[i]);
+            }
         }
     }
 }
