@@ -13,6 +13,7 @@ namespace Fungus
     [RequireComponent(typeof(MusicManager))]
     [RequireComponent(typeof(EventDispatcher))]
     [RequireComponent(typeof(GlobalVariables))]
+    [RequireComponent(typeof(MainAudioMixer))]
 #if UNITY_5_3_OR_NEWER
     [RequireComponent(typeof(SaveManager))]
     [RequireComponent(typeof(NarrativeLog))]
@@ -23,16 +24,25 @@ namespace Fungus
         static bool applicationIsQuitting = false;
         readonly static object _lock = new object();  // The keyword "readonly" is friendly to the multi-thread.
 
+        public bool useUnscaledTime = false;
+        public float deltaTime => useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+
         void Awake()
         {
+            if (instance == null)
+                instance = this;
+
             CameraManager = GetComponent<CameraManager>();
             MusicManager = GetComponent<MusicManager>();
             EventDispatcher = GetComponent<EventDispatcher>();
             GlobalVariables = GetComponent<GlobalVariables>();
+            MainAudioMixer = GetComponent<MainAudioMixer>();
 #if UNITY_5_3_OR_NEWER
             SaveManager = GetComponent<SaveManager>();
             NarrativeLog = GetComponent<NarrativeLog>();
-            #endif
+#endif
+            MainAudioMixer.Init();
+            MusicManager.Init();
         }
 
         /// <summary>
@@ -69,6 +79,8 @@ namespace Fungus
         /// Gets the global variable singleton instance.
         /// </summary>
         public GlobalVariables GlobalVariables { get; private set; }
+
+        public MainAudioMixer MainAudioMixer { get; private set; }
 
 #if UNITY_5_3_OR_NEWER
         /// <summary>

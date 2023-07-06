@@ -832,10 +832,8 @@ namespace Fungus.EditorUtils
                 Repaint();
             }
 
-#if UNITY_2020_1_OR_NEWER
             //Force exit gui once repainted
             GUIUtility.ExitGUI();
-#endif
         }
 
         protected virtual void DrawOverlay(Event e)
@@ -1424,6 +1422,8 @@ namespace Fungus.EditorUtils
 
             EditorZoomArea.Begin(flowchart.Zoom, scriptViewRect);
 
+            var prevCol = GUI.color;
+
             if (e.type == EventType.Repaint)
             {
                 DrawGrid();
@@ -1469,9 +1469,9 @@ namespace Fungus.EditorUtils
                         (b.ExecutingIconTimer - curRealTime) / FungusConstants.ExecutingIconFadeTime,
                         emptyStyle);
                 }
-                GUI.color = Color.white;
             }
 
+            GUI.color = prevCol;
             EditorZoomArea.End();
         }
 
@@ -2087,7 +2087,7 @@ namespace Fungus.EditorUtils
                 }
             }
 
-            graphics.tint = block.UseCustomTint ? block.Tint : defaultTint;
+            graphics.tint = (block.UseCustomTint ? block.Tint : defaultTint) * FungusEditorPreferences.flowchatBlockTint;
 
             return graphics;
         }
@@ -2183,10 +2183,19 @@ namespace Fungus.EditorUtils
                 if (block._EventHandler != null)
                 {
                     string handlerLabel = "";
-                    EventHandlerInfoAttribute info = EventHandlerEditor.GetEventHandlerInfo(block._EventHandler.GetType());
+                    var eventType = block._EventHandler.GetType();
+                    EventHandlerInfoAttribute info = EventHandlerEditor.GetEventHandlerInfo(eventType);
                     if (info != null)
                     {
-                        handlerLabel = "<" + info.EventHandlerName + "> ";
+                        var obsAttr = eventType.GetCustomAttribute<System.ObsoleteAttribute>();
+                        if (obsAttr != null)
+                        {
+                            handlerLabel = "<" + FungusConstants.UIPrefixForDeprecated_RichText + info.EventHandlerName + "> ";
+                        }
+                        else
+                        {
+                            handlerLabel = "<" + info.EventHandlerName + "> ";
+                        }
                     }
 
                     Rect rect = new Rect(block._NodeRect);
