@@ -1,4 +1,6 @@
 ﻿using System;
+using Items;
+using UI.ShrineUI.OfferEquipment;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +12,7 @@ namespace UI.ShrineUI
         [SerializeField] private Button OfferButton;
         
         [NaughtyAttributes.BoxGroup("Equipment Menu")]
-        [SerializeField] private Shrine_Equipment shrineEquipment;
+        [SerializeField] private ShrineOfferEquipment shrineOfferEquipment;
 
         private void Awake()
         {
@@ -21,11 +23,17 @@ namespace UI.ShrineUI
         {
             if (currItem == null)
             {
-                Debug.LogError("No item selected");
+                DisplayNull();
                 return;
             }
             
-            shrineEquipment.OfferWeapon(currItem);
+            shrineOfferEquipment.OfferWeapon(currItem);
+        }
+
+        public override void DisplayItem(Item item)
+        {
+            OfferButton.interactable = (item != null);
+            base.DisplayItem(item);
         }
     }
 }

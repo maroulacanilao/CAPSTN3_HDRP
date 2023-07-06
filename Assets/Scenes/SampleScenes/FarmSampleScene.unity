@@ -173,11 +173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a6214e08f7958e4b9951eb2fc3f8f77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionPanel: {fileID: 0}
-  interactPanel: {fileID: 0}
+  playerEquipment: {fileID: 1306554167}
   actionText: {fileID: 1301840239}
-  interactText: {fileID: 0}
   tick: 0.2
+  infoPanel: {fileID: 1548646836}
 --- !u!1 &40447132
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +355,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <message>k__BackingField: "A measure of the character or creature's defense against
     physical damage, \nreducing the amount of damage taken from physical attacks."
-  <willShowTip>k__BackingField: 1
 --- !u!114 &42236766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2680,7 +2678,9 @@ MonoBehaviour:
   tabButtons:
   - {fileID: 1391127013}
   - {fileID: 1319145105}
-  menus: []
+  farmUIs:
+  - {fileID: 406504579}
+  - {fileID: 334996185}
   canControlWithKeys: 0
 --- !u!1 &171921510
 GameObject:
@@ -2735,7 +2735,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <message>k__BackingField: "The maximum amount of mana points a character or creature
     possesses, \nindicating their capacity to cast magical spells and abilities."
-  <willShowTip>k__BackingField: 1
 --- !u!114 &171921513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5944,15 +5943,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <farmTilePrefab>k__BackingField: {fileID: 342707701265060525, guid: 1f683a5ee46817443b82b5511597556b,
     type: 3}
+  <toolArea>k__BackingField: {fileID: 9014571295811784188}
   <farmTileLayerMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 256
   <farmGroundLayerMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 8
-  <plantedSeeds>k__BackingField:
-    _serializedList: []
-  gameDataBase: {fileID: 0}
 --- !u!4 &476183746
 Transform:
   m_ObjectHideFlags: 0
@@ -6443,27 +6440,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c1ae3c9043ed240add1230419b131b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vitTXT: {fileID: 0}
-  vitIcon: {fileID: 0}
-  vitPanel: {fileID: 0}
-  strTXT: {fileID: 0}
-  strIcon: {fileID: 0}
-  strPanel: {fileID: 0}
-  intTXT: {fileID: 0}
-  intIcon: {fileID: 0}
-  intPanel: {fileID: 0}
-  defTXT: {fileID: 0}
-  defIcon: {fileID: 0}
-  defPanel: {fileID: 0}
-  spdTXT: {fileID: 0}
-  spdIcon: {fileID: 0}
-  spdPanel: {fileID: 0}
-  showHoverText: 0
-  vitHoverText: 
-  strHoverText: 
-  intHoverText: 
-  defHoverText: 
-  spdHoverText: 
+  maxHpTxt: {fileID: 139413657}
+  maxMpTxt: {fileID: 580529963}
+  dmgTxt: {fileID: 0}
+  armTxt: {fileID: 970075133}
+  hpIcon: {fileID: 0}
+  mpIcon: {fileID: 0}
+  phyIcon: {fileID: 0}
+  armIcon: {fileID: 0}
   assetDatabase: {fileID: 0}
 --- !u!222 &536612862
 CanvasRenderer:
@@ -7260,27 +7244,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c1ae3c9043ed240add1230419b131b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vitTXT: {fileID: 0}
-  vitIcon: {fileID: 0}
-  vitPanel: {fileID: 0}
-  strTXT: {fileID: 0}
-  strIcon: {fileID: 0}
-  strPanel: {fileID: 0}
-  intTXT: {fileID: 0}
-  intIcon: {fileID: 0}
-  intPanel: {fileID: 0}
-  defTXT: {fileID: 0}
-  defIcon: {fileID: 0}
-  defPanel: {fileID: 0}
-  spdTXT: {fileID: 0}
-  spdIcon: {fileID: 0}
-  spdPanel: {fileID: 0}
-  showHoverText: 0
-  vitHoverText: 
-  strHoverText: 
-  intHoverText: 
-  defHoverText: 
-  spdHoverText: 
+  maxHpTxt: {fileID: 1133879740}
+  maxMpTxt: {fileID: 45721910}
+  dmgTxt: {fileID: 0}
+  armTxt: {fileID: 658001923}
+  hpIcon: {fileID: 0}
+  mpIcon: {fileID: 0}
+  phyIcon: {fileID: 0}
+  armIcon: {fileID: 0}
   assetDatabase: {fileID: 0}
 --- !u!222 &574337318
 CanvasRenderer:
@@ -7685,6 +7656,7 @@ MonoBehaviour:
   - {fileID: 1988273655}
   - {fileID: 416891334}
   gameDataBase: {fileID: 11400000, guid: 3d535b235f15be1409dd9834cae2a057, type: 2}
+  tickRate: 3
   maxEnemyCount: 1
   minuteJump: 5
 --- !u!4 &615179963
@@ -7749,14 +7721,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c03a03ddc1592e408d9c429b2d81cb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <player>k__BackingField: {fileID: 1410899300}
   <eventQueueData>k__BackingField: {fileID: 11400000, guid: b48f07cb87219d04095955bb3f966ec8,
     type: 2}
-  sessionData: {fileID: 0}
-  newGameSpawnPoint: {fileID: 0}
-  dungeonEntranceSpawnPoint: {fileID: 0}
-  newDaySpawnPoint: {fileID: 0}
-  loadGameSpawnPoint: {fileID: 0}
-  houseSpawnPoint: {fileID: 0}
 --- !u!1 &619950708
 GameObject:
   m_ObjectHideFlags: 0
@@ -8160,7 +8127,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <message>k__BackingField: "The maximum amount of health points a character or creature
     can have, \nrepresenting their overall vitality and resilience."
-  <willShowTip>k__BackingField: 1
 --- !u!114 &644240312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9637,6 +9603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c3b0698f2b3e824391e93a3f1645f19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 763196105}
 --- !u!114 &763196104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10931,8 +10898,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolTipPanel: {fileID: 2096246178}
   toolTipText: {fileID: 1240469894}
-  textPaddingSize: {x: 10, y: 10}
-  offset: {x: 0, y: 0}
+  textPaddingSize: 4
 --- !u!1 &849313534
 GameObject:
   m_ObjectHideFlags: 0
@@ -13174,7 +13140,6 @@ MonoBehaviour:
   <message>k__BackingField: "A measure of the character or creature's precision and
     likelihood of successfully landing an attack or spell, \nincluding the chance
     of delivering critical hits."
-  <willShowTip>k__BackingField: 1
 --- !u!114 &1029659942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13213,51 +13178,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1029659939}
   m_CullTransparentMesh: 1
---- !u!1 &1033041946
-GameObject:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1033041948}
-  - component: {fileID: 1033041947}
-  m_Layer: 0
-  m_Name: _FungusState
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1033041947
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1033041946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61dddfdc5e0e44ca298d8f46f7f5a915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectedFlowchart: {fileID: 0}
---- !u!4 &1033041948
-Transform:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1033041946}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 22
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1033833591
 GameObject:
   m_ObjectHideFlags: 0
@@ -13467,7 +13387,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5029560603261915144}
         m_TargetAssemblyTypeName: UI.LootMenu.UI_LootMenu, Assembly-CSharp
-        m_MethodName: CloseMenu
+        m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13994,8 +13914,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ae398bee455dc84e90a1dc2daaafd22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Menus: []
-  tabGroup: {fileID: 0}
+  farmUIs:
+  - {fileID: 1690301995}
+  - {fileID: 5029560603261915144}
+  - {fileID: 875663144}
+  - {fileID: 1289822251}
+  - {fileID: 1684873127}
+  NonMenuUI:
+  - {fileID: 5029560603261915144}
+  - {fileID: 875663144}
+  - {fileID: 1684873127}
+  tabGroup: {fileID: 1690301995}
 --- !u!114 &1096382506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15035,7 +14964,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98956b98768a7e94da818de6e30b7e8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  progressionData: {fileID: 0}
   endingHour: 6
   isEndingHourNextDay: 1
   startingHour: 11
@@ -16305,7 +16233,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <message>k__BackingField: " The amount of damage caused by magical spells and abilities,
     \nutilizing mystical energies to harm opponents."
-  <willShowTip>k__BackingField: 1
 --- !u!114 &1253312203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16428,27 +16355,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c1ae3c9043ed240add1230419b131b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vitTXT: {fileID: 0}
-  vitIcon: {fileID: 0}
-  vitPanel: {fileID: 0}
-  strTXT: {fileID: 0}
-  strIcon: {fileID: 0}
-  strPanel: {fileID: 0}
-  intTXT: {fileID: 0}
-  intIcon: {fileID: 0}
-  intPanel: {fileID: 0}
-  defTXT: {fileID: 0}
-  defIcon: {fileID: 0}
-  defPanel: {fileID: 0}
-  spdTXT: {fileID: 0}
-  spdIcon: {fileID: 0}
-  spdPanel: {fileID: 0}
-  showHoverText: 0
-  vitHoverText: 
-  strHoverText: 
-  intHoverText: 
-  defHoverText: 
-  spdHoverText: 
+  maxHpTxt: {fileID: 539129538}
+  maxMpTxt: {fileID: 910104809}
+  dmgTxt: {fileID: 0}
+  armTxt: {fileID: 336881878}
+  hpIcon: {fileID: 0}
+  mpIcon: {fileID: 0}
+  phyIcon: {fileID: 0}
+  armIcon: {fileID: 0}
   assetDatabase: {fileID: 0}
 --- !u!222 &1258599975
 CanvasRenderer:
@@ -16958,11 +16872,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1704f3363c8c4699b37e867533bf612b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <playerData>k__BackingField: {fileID: 0}
   <Inventory>k__BackingField: {fileID: 11400000, guid: 2e52e9402952ab649b5a934475b711d1,
     type: 2}
   <gameDataBase>k__BackingField: {fileID: 11400000, guid: 3d535b235f15be1409dd9834cae2a057,
     type: 2}
+  <player>k__BackingField: {fileID: 1410899305}
   <ghostIconParent>k__BackingField: {fileID: 6268676574142913781}
   <inventoryDetailsPanel>k__BackingField: {fileID: 6268676574140954223}
   <toolBarItems>k__BackingField:
@@ -16997,6 +16911,7 @@ MonoBehaviour:
   - {fileID: 7393218309917400430}
   <weaponBar>k__BackingField: {fileID: 7393218310256464421}
   <armorBar>k__BackingField: {fileID: 7393218309374693266}
+  goldText: {fileID: 1430090493}
 --- !u!1 &1301840237
 GameObject:
   m_ObjectHideFlags: 0
@@ -17132,6 +17047,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1301840237}
   m_CullTransparentMesh: 1
+--- !u!114 &1306554167 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1040642371538190317, guid: e540fe3883ab0714daaa717d5ae296f9,
+    type: 3}
+  m_PrefabInstance: {fileID: 1040642372007700518}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87f4ba2d3f4610748b70e460a54b3376, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1319145103
 GameObject:
   m_ObjectHideFlags: 0
@@ -18177,7 +18104,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <message>k__BackingField: "The amount of damage inflicted by physical attacks and
     abilities, \ntypically utilizing weapons or physical-based spells."
-  <willShowTip>k__BackingField: 1
 --- !u!114 &1396373586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18400,6 +18326,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1404028246}
   m_CullTransparentMesh: 1
+--- !u!1 &1410899300 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1040642371267966274, guid: e540fe3883ab0714daaa717d5ae296f9,
+    type: 3}
+  m_PrefabInstance: {fileID: 1040642372007700518}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1410899303 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1040642371267966273, guid: e540fe3883ab0714daaa717d5ae296f9,
@@ -18412,7 +18344,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1040642372007700518}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1410899300}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ad8f67ccd953d143bf09e2b1463277c, type: 3}
@@ -19177,7 +19109,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <message>k__BackingField: "The level of resistance a character or creature has
     against magical spells, \nreducing the effectiveness of incoming magical damage."
-  <willShowTip>k__BackingField: 1
 --- !u!114 &1437045015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21685,7 +21616,10 @@ MonoBehaviour:
   - {fileID: 1698838732}
   - {fileID: 1266613193}
   - {fileID: 1585453732}
-  menus: []
+  farmUIs:
+  - {fileID: 1289822251}
+  - {fileID: 1748493901}
+  - {fileID: 164197611}
   canControlWithKeys: 1
 --- !u!1 &1698838730
 GameObject:
@@ -22546,7 +22480,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <canInteract>k__BackingField: 1
-  <interactText>k__BackingField: Interact
   data: {fileID: 11400000, guid: ad66e6f51d5b9ec4188e858eeae55eac, type: 2}
 --- !u!1 &1770155714
 GameObject:
@@ -23236,7 +23169,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008b992dd338d7447ba7c01f89cb634f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  assetDatabase: {fileID: 0}
+  poolDictionary:
+    _serializedList: []
 --- !u!114 &1919615104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24351,7 +24285,6 @@ MonoBehaviour:
   <message>k__BackingField: "The agility and quickness of a character or creature,
     influencing their ability \nto dodge or evade incoming attacks and potentially
     take more turns in battle."
-  <willShowTip>k__BackingField: 1
 --- !u!114 &2026303317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25391,164 +25324,9 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: fffd76a16b5f7ed45a161e0f785051a5, type: 2}
-    - target: {fileID: 803364184989339720, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 803364184989339720, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 803364184989339720, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 803364184989339720, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 803364184989339720, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 803364184989339720, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2264939255179790783, guid: e53cb902796f75446a70938654d61aa2,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3488021145392039782, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3488021145392039782, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3488021145392039782, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3488021145392039782, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3488021145392039782, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3488021145392039782, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5545346943955563713, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5578573827360733023, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5578573827360733023, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5578573827360733023, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5578573827360733023, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5578573827360733023, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5578573827360733023, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6626033852883158293, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6626033852883158293, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6626033852883158293, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6626033852883158293, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6626033852883158293, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6626033852883158293, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7322740444172335529, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7322740444172335529, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7322740444172335529, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7322740444172335529, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7322740444172335529, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7322740444172335529, guid: e53cb902796f75446a70938654d61aa2,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -35202,17 +34980,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24b3b0f406ac1d49bebbfc406572cdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lootMenu: {fileID: 5029560603261915144}
   namePanel: {fileID: 5029560604816939678}
-  descriptionPanel: {fileID: 5029560603749530458}
   statsPanel: {fileID: 5029560603585350094}
+  descriptionPanel: {fileID: 5029560603749530458}
   nameTxt: {fileID: 5029560604677396557}
   typeTxt: {fileID: 5029560604473895884}
   rarityTxt: {fileID: 661492115215153286}
+  valueTxt: {fileID: 5029560603584440400}
   descriptionTxt: {fileID: 5029560604570709694}
-  itemIcon: {fileID: 5029560603284029252}
-  lootMenu: {fileID: 5029560603261915144}
+  maxHpTxt: {fileID: 7251700139096973524}
+  maxMpTxt: {fileID: 8862737709675623504}
+  wpnDmgTxt: {fileID: 3791902803871095517}
+  armValTxt: {fileID: 3122893557228429517}
   lootBtn: {fileID: 5029560604075079756}
   trashBtn: {fileID: 5029560603444749167}
+  itemIcon: {fileID: 5029560603284029252}
 --- !u!222 &5029560603075659295
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -35303,9 +35086,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f88cb3a068945a34aa81ec8e5da4c513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInventory: {fileID: 11400000, guid: 2e52e9402952ab649b5a934475b711d1, type: 2}
   lootMenuItemPrefab: {fileID: 8836220090393724406, guid: f1b2304049ff03642b179c000e5893f2,
     type: 3}
+  playerInventory: {fileID: 11400000, guid: 2e52e9402952ab649b5a934475b711d1, type: 2}
   detailsPanel: {fileID: 5029560603075659294}
   itemParent: {fileID: 252667712}
   lootAllBtn: {fileID: 5029560603594350474}
@@ -36270,7 +36053,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5029560603261915144}
         m_TargetAssemblyTypeName: UI.LootMenu.UI_LootMenu, Assembly-CSharp
-        m_MethodName: CloseMenu
+        m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -41833,19 +41616,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   namePanel: {fileID: 6268676574905016598}
-  descriptionPanel: {fileID: 6268676574665222542}
   statsPanel: {fileID: 6268676575471621044}
+  descriptionPanel: {fileID: 6268676574665222542}
+  valuePanel: {fileID: 6268676575035407060}
+  actionButtonGroup: {fileID: 1919615104}
   nameTxt: {fileID: 6268676574686797419}
   typeTxt: {fileID: 6268676573770854034}
   rarityTxt: {fileID: 6268676575517119625}
+  valueTxt: {fileID: 6268676574720860163}
   descriptionTxt: {fileID: 6268676575549939629}
-  itemIcon: {fileID: 6268676573727822663}
-  actionButtonGroup: {fileID: 1919615104}
+  maxHpTxt: {fileID: 6268676574450832071}
+  maxMpTxt: {fileID: 6268676575666145848}
+  wpnDmgTxt: {fileID: 6268676575531164871}
+  armValTxt: {fileID: 6268676574500402194}
   consumeBtn: {fileID: 6268676575266272443}
   equipBtn: {fileID: 6268676574561763398}
-  unequipBtn: {fileID: 0}
+  unequipBTN: {fileID: 6268676573844943358}
   discardBtn: {fileID: 6268676574954741038}
-  errorTxt: {fileID: 0}
+  itemIcon: {fileID: 6268676573727822663}
+  inventoryItemTag: InventoryItemUI
 --- !u!1 &6268676574142913770
 GameObject:
   m_ObjectHideFlags: 0
@@ -49605,13 +49394,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b886b46f084922d4e80b630d300a39ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  farmTilePrefab: {fileID: 0}
-  farmTileLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  farmGroundLayer:
-    serializedVersion: 2
-    m_Bits: 0
   lineRenderer: {fileID: 1224222651}
   distanceToPlayer: 1.5
   distanceToGround: 0.05

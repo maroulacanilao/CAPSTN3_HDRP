@@ -64,7 +64,7 @@ namespace Shop
         public void CreateNewGearOffers()
         {
             gearOffers.Clear();
-            gearOffers = GetGearOffers();
+            gearOffers = GetNewGearOffers();
         }
         
         public OfferingResult OfferGear(ItemGear gear_, out ItemSeed result_)
@@ -154,8 +154,26 @@ namespace Shop
             gearOffers.Remove(gear_);
             return OfferingResult.Success;
         }
+        
+        public Dictionary<ItemGear,OfferRequirement> GetAllGearOffers()
+        {
+            if(gearOffers ==null) gearOffers = GetNewGearOffers();
+            return gearOffers;
+        }
 
-        private Dictionary<ItemGear,OfferRequirement> GetGearOffers()
+        public OfferingResult CanOffer(OfferRequirement offerRequirement_)
+        {
+            if(!inventory.IsAnyOpenSlot()) return OfferingResult.NoOpenSlot;
+            if (!inventory.StackableDictionary.TryGetValue(offerRequirement_.consumableData, out var _consumable))
+            {
+                return OfferingResult.NoRequirementInInventoryStorage;
+            }
+            if(_consumable.StackCount < offerRequirement_.count) return OfferingResult.NotEnoughRequirementsCount;
+            
+            return OfferingResult.Success;
+        }
+
+        private Dictionary<ItemGear,OfferRequirement> GetNewGearOffers()
         {
             var _dict = new Dictionary<ItemGear,OfferRequirement>();
 

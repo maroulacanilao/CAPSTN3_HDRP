@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CustomHelpers;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -30,6 +31,8 @@ namespace Others
         {
             foreach (var _obj in objectsToEnable)
             {
+                if(_obj.IsEmptyOrDestroyed()) continue;
+                
                 _obj.SetActive(willDisable);
             }
         }

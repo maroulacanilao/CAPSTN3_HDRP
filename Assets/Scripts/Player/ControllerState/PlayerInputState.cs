@@ -64,6 +64,13 @@ namespace Player.ControllerState
         
         protected void AnimParamUpdate()
         {
+            if (!InputManager.IsInputEnabled())
+            {
+                player.animator.SetFloat(player.xSpeedHash, 0);
+                player.animator.SetFloat(player.ySpeedHash, 0);
+                player.animator.SetBool(player.isIdleHash, true);
+                return;
+            }
             if(PlayerMenu.OpenedMenu.IsValid() && PlayerMenu.OpenedMenu.isActiveAndEnabled) return;
             
             Vector2 _input = InputManager.MoveDelta;

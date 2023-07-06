@@ -179,6 +179,15 @@ public partial class @UI_InputAction : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CancelSwap"",
+                    ""type"": ""Button"",
+                    ""id"": ""b185590d-7a1d-487b-b3dc-d86591be09a6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -679,17 +688,6 @@ public partial class @UI_InputAction : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""6b3bbfcb-ad4a-45de-9361-3160320b8ca6"",
-                    ""path"": ""<Keyboard>/i"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Menu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""8ad935d0-d830-4987-8701-5c3ad7f28c89"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
@@ -764,6 +762,17 @@ public partial class @UI_InputAction : IInputActionCollection2, IDisposable
                     ""action"": ""Codex"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c4f84156-9e43-466d-ae58-77a65116fb0c"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CancelSwap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -789,6 +798,7 @@ public partial class @UI_InputAction : IInputActionCollection2, IDisposable
         m_UI_Inventory = m_UI.FindAction("Inventory", throwIfNotFound: true);
         m_UI_CharacterInfo = m_UI.FindAction("CharacterInfo", throwIfNotFound: true);
         m_UI_Codex = m_UI.FindAction("Codex", throwIfNotFound: true);
+        m_UI_CancelSwap = m_UI.FindAction("CancelSwap", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -865,6 +875,7 @@ public partial class @UI_InputAction : IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Inventory;
     private readonly InputAction m_UI_CharacterInfo;
     private readonly InputAction m_UI_Codex;
+    private readonly InputAction m_UI_CancelSwap;
     public struct UIActions
     {
         private @UI_InputAction m_Wrapper;
@@ -886,6 +897,7 @@ public partial class @UI_InputAction : IInputActionCollection2, IDisposable
         public InputAction @Inventory => m_Wrapper.m_UI_Inventory;
         public InputAction @CharacterInfo => m_Wrapper.m_UI_CharacterInfo;
         public InputAction @Codex => m_Wrapper.m_UI_Codex;
+        public InputAction @CancelSwap => m_Wrapper.m_UI_CancelSwap;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -946,6 +958,9 @@ public partial class @UI_InputAction : IInputActionCollection2, IDisposable
                 @Codex.started -= m_Wrapper.m_UIActionsCallbackInterface.OnCodex;
                 @Codex.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnCodex;
                 @Codex.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnCodex;
+                @CancelSwap.started -= m_Wrapper.m_UIActionsCallbackInterface.OnCancelSwap;
+                @CancelSwap.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnCancelSwap;
+                @CancelSwap.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnCancelSwap;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -1001,6 +1016,9 @@ public partial class @UI_InputAction : IInputActionCollection2, IDisposable
                 @Codex.started += instance.OnCodex;
                 @Codex.performed += instance.OnCodex;
                 @Codex.canceled += instance.OnCodex;
+                @CancelSwap.started += instance.OnCancelSwap;
+                @CancelSwap.performed += instance.OnCancelSwap;
+                @CancelSwap.canceled += instance.OnCancelSwap;
             }
         }
     }
@@ -1024,5 +1042,6 @@ public partial class @UI_InputAction : IInputActionCollection2, IDisposable
         void OnInventory(InputAction.CallbackContext context);
         void OnCharacterInfo(InputAction.CallbackContext context);
         void OnCodex(InputAction.CallbackContext context);
+        void OnCancelSwap(InputAction.CallbackContext context);
     }
 }

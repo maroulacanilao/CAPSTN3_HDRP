@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using CustomHelpers;
 using DG.Tweening;
 using Items;
 using NaughtyAttributes;
@@ -11,9 +9,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UI.ShrineUI
+namespace UI.ShrineUI.OfferEquipment
 {
-    public class Shrine_Equipment : ShrineMenu
+    public class ShrineOfferEquipment : ShrineMenu
     {
         [SerializeField] private ShrineEquipmentDetailsPanel detailsPanel;
         [SerializeField] private Transform contentParent;
@@ -98,8 +96,6 @@ namespace UI.ShrineUI
             
             uiItemList.RemoveAt(index_);
             equipments.RemoveAt(index_);
-            
-            
         }
 
         public void SetItemPanel(ShrineUI_Item item_)

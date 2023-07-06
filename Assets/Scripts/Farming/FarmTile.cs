@@ -17,7 +17,9 @@ namespace Farming
 {
     public class FarmTile : MonoBehaviour, IDamagable, IHealable, IPoolable
     {
+        [field: SerializeField] public MeshFilter soilMeshFilter { get; private set; }
         [field: SerializeField] public MeshRenderer soilRenderer { get; private set; }
+        [field: SerializeField] public MeshFilter plantMeshFilter { get; private set; }
         [field: SerializeField] public SpriteRenderer plantRenderer { get; private set; }
         [field: SerializeField] public Color tilledColor { get; private set; }
         [field: SerializeField] public Color wateredColor { get; private set; }

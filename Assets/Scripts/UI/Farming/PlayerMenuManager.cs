@@ -125,6 +125,12 @@ namespace UI.Farming
         
         private void Settings()
         {
+            if (IsMenuOpen())
+            {
+                OnCloseAllUI.Invoke();
+                return;
+            }
+            
             if (!CanOpenMenu()) return;
             tabGroup.OpenSettings();
         }

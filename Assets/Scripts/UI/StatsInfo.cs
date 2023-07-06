@@ -126,11 +126,11 @@ namespace UI
         {
             if (assetDatabase == null) assetDatabase = GameManager.Instance.GameDataBase.assetDataBase;
 
-            if (vitIcon != null) vitIcon.sprite = assetDatabase.vitalityIcon;
-            if (strIcon != null) strIcon.sprite = assetDatabase.intelligenceIcon;
-            if (intIcon != null) intIcon.sprite = assetDatabase.phyDmgIcon;
-            if (defIcon != null) defIcon.sprite = assetDatabase.defIcon;
-            if (spdIcon != null) spdIcon.sprite = assetDatabase.spdIcon;
+            if (vitIcon != null) vitIcon.sprite = StatType.Health.GetSpriteIcon();
+            if (strIcon != null) strIcon.sprite = StatType.Strength.GetSpriteIcon();
+            if (intIcon != null) intIcon.sprite = StatType.Intelligence.GetSpriteIcon();
+            if (defIcon != null) defIcon.sprite = StatType.Defense.GetSpriteIcon();
+            if (spdIcon != null) spdIcon.sprite = StatType.Speed.GetSpriteIcon();
             
             // if(!showHoverText) return;
             //

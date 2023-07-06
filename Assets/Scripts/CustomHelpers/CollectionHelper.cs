@@ -277,6 +277,21 @@ namespace CustomHelpers
                 source.Add(_item.Key, _item.Value);
             }
         }
+        
+        public static bool TryGetKey<K, V>(this Dictionary<K,V> source_, V value_, out K key_)
+        {
+            foreach (var _item in source_)
+            {
+                if (_item.Value.Equals(value_))
+                {
+                    key_ = _item.Key;
+                    return true;
+                }
+            }
+
+            key_ = default;
+            return false;
+        }
 
         #endregion
     }

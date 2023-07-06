@@ -4,6 +4,7 @@ using BattleSystem;
 using Character;
 using CustomHelpers;
 using Managers;
+using ObjectPool;
 using Spells.Base;
 using StatusEffect;
 using UI.Battle;
@@ -14,8 +15,8 @@ namespace Spells
     public class FlameThrower_Spell : SpellObject
     {
         [SerializeField]
-        private Projectile projectile;
-        
+        public string projectileAssetName = "FireBall";
+
         [Range(0,1f)] [SerializeField] 
         private float magicDmgBurnScale = .15f;
         
@@ -26,10 +27,10 @@ namespace Spells
             var _atkResult = battleCharacter.AttackTarget(target, _tempDamageInfo);
 
             yield return battleCharacter.PlaySpellCastAnim();
+
+            var _projectile = AssetHelper.GetPrefab(projectileAssetName).GetInstance<Projectile>
+                (battleCharacter.battleStation.projectilePosition, Quaternion.identity);
             
-            var _projectile = Instantiate(projectile, 
-                battleCharacter.battleStation.projectilePosition, 
-                Quaternion.identity);
 
             yield return _projectile.StartProjectile(target.transform.position.SetY(1));
             Destroy(_projectile.gameObject);

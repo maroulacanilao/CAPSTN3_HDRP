@@ -4,6 +4,7 @@ using Farming;
 using Items.Inventory;
 using NaughtyAttributes;
 using ScriptableObjectData.CharacterData;
+using Settings;
 using Shop;
 using Trading;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace ScriptableObjectData
         [field: Header("Data Base")]
         [field: SerializeField] public ItemDatabase itemDatabase { get; private set; }
         [field: SerializeField] public AssetDataBase assetDataBase { get; private set; }
+        [field: SerializeField] public AudioDataBase audioDataBase { get; private set; }
         [field: SerializeField] public EnemyDataBase enemyDataBase { get; private set; }
         [field: SerializeField] public CropDataBase cropDataBase { get; private set; }
         [field: SerializeField] public SpellDataBase spellDataBase { get; private set; }
@@ -30,6 +32,7 @@ namespace ScriptableObjectData
         [field: SerializeField] public ProgressionData progressionData { get; private set; }
         [field: SerializeField] public SessionData sessionData { get; private set; }
         [field: SerializeField] public SettingsData settingsData { get; private set; }
+        [field: SerializeField] public EventQueueData eventQueueData { get; private set; }
 
 
         [field: Header("Player Data")]
@@ -56,6 +59,7 @@ namespace ScriptableObjectData
         public void Initialize()
         {
             if(hasInitialized) return;
+            settingsData.Initialize();
             playerData.Initialize(this);
             sessionData.InitializeSession();
             statShopData.Initialize();

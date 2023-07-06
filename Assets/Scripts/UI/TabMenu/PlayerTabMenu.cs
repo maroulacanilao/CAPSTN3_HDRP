@@ -9,6 +9,7 @@ namespace UI.TabMenu
         
         public void OpenInventory()
         {
+            Debug.Log("OpenInventory");
             tabGroup.SelectTab(0);
             tabGroup.gameObject.SetActive(true);
         }

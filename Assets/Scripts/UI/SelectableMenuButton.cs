@@ -24,7 +24,7 @@ namespace UI
             outlineColor = new Color(outlineColor.r, outlineColor.g, outlineColor.b, 1);
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             if(button == null) button = GetComponent<Button>();
             if(outline == null) outline = GetComponent<Outline>();

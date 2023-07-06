@@ -19,7 +19,7 @@ namespace UI.ShrineUI.GetSpells
         public SpellData spellData { get; private set; }
         public OfferRequirement offerRequirement { get; private set; }
 
-        private void Awake()
+        protected new void Awake()
         {
             button.onClick.AddListener(() =>
             {

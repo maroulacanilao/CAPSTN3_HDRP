@@ -1,5 +1,6 @@
 using System;
 using CustomHelpers;
+using Fungus;
 using UnityEngine;
 
 namespace UI.Farming
@@ -13,6 +14,7 @@ namespace UI.Farming
         {
             OpenedMenu = this;
             PlayerMenuManager.OnCloseAllUI.AddListener(CloseMenu);
+            CloseDialog();
         }
         
         protected virtual void OnDisable()
@@ -24,6 +26,15 @@ namespace UI.Farming
         {
             if(this.IsEmptyOrDestroyed()) return;
             gameObject.SetActive(false);
+        }
+
+        protected virtual void CloseDialog()
+        {
+            var _dialog = FindObjectOfType<SayDialog>();
+            if (_dialog != null)
+            {
+                _dialog.Stop();
+            }
         }
     }
 }

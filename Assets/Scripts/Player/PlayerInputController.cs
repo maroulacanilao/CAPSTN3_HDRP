@@ -1,4 +1,5 @@
 using System;
+using BaseCore;
 using CustomEvent;
 using CustomHelpers;
 using Farming;
@@ -86,7 +87,7 @@ namespace Player
         [field: Foldout("Animation Events")]
         [field: SerializeField] public string attackEndEvent { get; private set; }
         #endregion
-
+        
         #region OtherComponents
         
         [field: Header("Components")]
@@ -152,7 +153,7 @@ namespace Player
         {
             get
             {
-                if (mInstance) return mInstance;
+                if (mInstance.IsValid()) return mInstance;
                 if (!ReferenceEquals(mInstance, null) && mInstance == null) return null;
 
                 // get instances

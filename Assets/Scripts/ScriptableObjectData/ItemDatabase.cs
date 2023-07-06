@@ -14,8 +14,6 @@ namespace ScriptableObjectData
     public class ItemDatabase : ScriptableObject
     {
         [field: SerializeField] public GoldData GoldItemData { get; private set; }
-        
-        [field: SerializeField] [field: BoxGroup("Item Data")] public SerializedDictionary<ItemType, Sprite> ItemIconDictionary { get; private set; }
         [field: SerializeField] [field: BoxGroup("Item Data")] public SerializedDictionary<string, ItemData> ItemDataDictionary { get; private set; }
 
         [field: SerializeField] [field: BoxGroup("Item Data")] public SerializedDictionary<ItemType, List<ItemData>> ItemDataByType { get; private set; }

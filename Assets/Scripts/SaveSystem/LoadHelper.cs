@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
+using CustomHelpers;
 using Farming;
 using Items;
 using Items.ItemData;
@@ -117,6 +118,7 @@ namespace SaveSystem
         {
             LoadInventoryData(saveData_.playerSaveData.inventorySaveData, gameDataBase_);
             LoadPlayStats(saveData_, gameDataBase_);
+            LoadSpells(saveData_, gameDataBase_);
             
             var _statsBought = saveData_.playerSaveData.statsBought;
             gameDataBase_.statShopData.SetBoughtStats(_statsBought);
@@ -125,13 +127,10 @@ namespace SaveSystem
             gameDataBase_.playerData.LevelData.ResetExperience();
             gameDataBase_.playerData.LevelData.AddExp(_exp);
             
-            
-
             var _progressData = gameDataBase_.progressionData;
             
             _progressData.dayCounter = saveData_.dayCounter;
             _progressData.highestDungeonLevel = saveData_.dungeonLevel;
-            // TimeManager.SetDateTime(saveData_.timeOfDay);
         }
         
         public static void LoadFarmTiles(FarmTileSaveData[] farmTileSaveData_, GameDataBase gameDataBase_)
@@ -140,7 +139,7 @@ namespace SaveSystem
 
             foreach (var _tileData in farmTileSaveData_)
             {
-                var _tile = gameDataBase_.assetDataBase.prefabs["FarmTile"].GetInstance<FarmTile>();
+                var _tile = AssetHelper.GetPrefab("FarmTile").GetInstance<FarmTile>();
 
                 var _seedData = _itemDatabase.ItemDataDictionary.TryGetValue(_tileData.seedDataID, out var _itemData) ? _itemData :  null;
                 

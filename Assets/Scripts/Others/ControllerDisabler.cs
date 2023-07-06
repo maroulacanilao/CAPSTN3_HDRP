@@ -8,15 +8,22 @@ using UnityEngine;
 
 public class ControllerDisabler : MonoBehaviour
 {
+    private bool isEnabled;
     private void OnEnable()
     {
-        if(InputManager.Instance.IsEmptyOrDestroyed()) return;
-        InputManager.Instance.gameObject.SetActive(false);
+        isEnabled = true;
+        InputManager.DisableInput();
     }
 
     private void OnDisable()
     {
-        if(InputManager.Instance.IsEmptyOrDestroyed()) return;
-        InputManager.Instance.gameObject.SetActive(true);
+        isEnabled = false;
+        InputManager.EnableInput();
+    }
+
+    private void Update()
+    {
+        if(isEnabled) InputManager.DisableInput();
+        else InputManager.EnableInput();
     }
 }

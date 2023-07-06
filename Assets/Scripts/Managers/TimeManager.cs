@@ -1,10 +1,7 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using BaseCore;
 using CustomEvent;
 using CustomHelpers;
-using Player;
 using ScriptableObjectData;
 using Unity.Burst;
 using Unity.Collections;
@@ -170,10 +167,13 @@ namespace Managers
 
         public static void StartTime(DateTime dateTime_ = default) 
         {
+            if (Instance.timeStarted)
+            {
+                if(dateTime_ == default) Instance.dateTime = new DateTime(2023, 1, 1);
+                return;
+            }
             Instance.timeStarted = true;
-            if(dateTime_ == default) Instance.dateTime = new DateTime(2023, 1, 1);
-            else Instance.dateTime = dateTime_;
-            
+            Instance.dateTime = dateTime_ == default ? new DateTime(2023, 1, 1) : dateTime_;
             BeginDay();
         }
 

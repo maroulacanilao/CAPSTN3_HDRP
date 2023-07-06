@@ -123,41 +123,4 @@ public static class ItemHelper
     //     return dropChance;
     // }
 
-    public static string ToText(this RarityType rarityType_)
-    {
-        string _rarityText = "";
-        switch (rarityType_)
-        {
-            case RarityType.Uncommon:
-                _rarityText = ("Uncommon").SurroundWithColor(ItemDatabase.RarityColorDictionary[RarityType.Uncommon]);
-                break;
-            case RarityType.Rare:
-                _rarityText = ("Rare").SurroundWithColor(ItemDatabase.RarityColorDictionary[RarityType.Rare]);
-                break;
-            case RarityType.Epic:
-                _rarityText = ("Epic").SurroundWithColor(ItemDatabase.RarityColorDictionary[RarityType.Epic]);
-                break;
-            case RarityType.Common:
-            default:
-                _rarityText = ("Common").SurroundWithColor(ItemDatabase.RarityColorDictionary[RarityType.Common]);
-                break;
-        }
-        
-        return _rarityText;
-    }
-    
-    public static StatType GetStatType(this ConsumableData data_)
-    {
-        return GameDataBase.statsDataBase.GetStatTypeByConsumable(data_);
-    }
-
-    public static Sprite ToSprite(this StatType statType_)
-    {
-        return GameDataBase.statsDataBase.statSprites[statType_];
-    }
-
-    public static Sprite ToSprite(this ItemType itemType_)
-    {
-        return null;
-    }
 }

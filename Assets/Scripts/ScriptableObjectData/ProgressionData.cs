@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Globalization;
 using BaseCore;
 using Items.Inventory;
 using NaughtyAttributes;
@@ -6,6 +8,9 @@ using ScriptableObjectData.CharacterData;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
+using Farming;
+using Managers;
 using SaveSystem;
 
 namespace ScriptableObjectData
@@ -16,14 +21,8 @@ namespace ScriptableObjectData
         [SerializeField] private GameDataBase gameDataBase;
         
         [BoxGroup("Save Properties")]
-        [SerializeField] private string saveFileName = "SaveData";
-        
-        [BoxGroup("Save Properties")]
-        [SerializeField] private string saveFileExtension = ".sav";
-        
-        [BoxGroup("Save Properties")]
-        [SerializeField] private string saveFolder = "Save/";
-        
+        [SerializeField] private string saveFileName = "SaveData.sav";
+
 
         private PlayerData playerData => gameDataBase.playerData;
         private PlayerInventory inventory => playerData.inventory;
@@ -36,12 +35,15 @@ namespace ScriptableObjectData
         public SaveData saveData { get; private set; }
         
         public string savePath { get; private set; }
+        
+        public bool isLoadOperationDone { get; private set; }
 
         public void Initialize()
         {
-            savePath = Path.Combine(Application.persistentDataPath, saveFolder+saveFileName+saveFileExtension);
+            isLoadOperationDone = false;
+            savePath = Path.Combine(Application.persistentDataPath, saveFileName);
             ResetProgress();
-            LoadProgress();
+            LoadData();
         }
         
         public void DeInitialize()
@@ -67,37 +69,80 @@ namespace ScriptableObjectData
         }
 
         [Button("Load")]
-        public void LoadProgress()
+        public void LoadData()
         {
-            if (File.Exists(savePath))
+            if (!File.Exists(savePath))
             {
-                try
-                {
-                    // Create a BinaryFormatter to deserialize the data
-                    BinaryFormatter formatter = new BinaryFormatter();
-                
-                    // Open the save file
-                    FileStream fileStream = File.Open(savePath, FileMode.Open);
-                
-                    // Deserialize the data from the file
-                    saveData = (SaveData)formatter.Deserialize(fileStream);
-                
-                    // Close the file stream
-                    fileStream.Close();
-                }
-                catch (Exception e)
-                {
-                    saveData = null;
-                    Debug.LogError($"Failed to load save file: {e.Message}");
-                }
-
+                Debug.Log($"No save file found @ {savePath}");
             }
-            else
+            
+            try
             {
-                Debug.Log("No save file found.");
+                // Create a BinaryFormatter to deserialize the data
+                BinaryFormatter formatter = new BinaryFormatter();
+
+                // Open the save file
+                FileStream fileStream = File.Open(savePath, FileMode.Open);
+
+                // Deserialize the data from the file
+                saveData = (SaveData) formatter.Deserialize(fileStream);
+
+                // Close the file stream
+                fileStream.Close();
+            }
+            catch (Exception e)
+            {
+                saveData = null;
+                Debug.LogError($"Failed to load save file: {e.Message}");
             }
         }
         
+        public IEnumerator LoadProgression()
+        {
+            isLoadOperationDone = false;
+            if (saveData == null)
+            {
+                Debug.Log("No save data found");
+                isLoadOperationDone = true;
+                yield break;
+            }
+
+            gameDataBase.sessionData.farmLoadType = FarmLoadType.LoadGame;
+            var _sceneName = gameDataBase.FarmSceneName;
+            gameDataBase.eventQueueData.AddEvent(_sceneName, InGameLoad);
+
+            try
+            {
+                LoadHelper.LoadData(saveData, gameDataBase);
+                isLoadOperationDone = true;
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+                isLoadOperationDone = true;
+            }
+
+            yield return new WaitForSeconds(1);
+        }
+
+        private void InGameLoad()
+        {
+            try
+            {
+                LoadHelper.LoadFarmTiles(saveData.farmTileSaveData, gameDataBase);
+                
+                if (DateTime.TryParseExact(saveData.timeOfDay, "yyyyMMddHHmmss", 
+                        CultureInfo.InvariantCulture, DateTimeStyles.None, out var _parsedDateTime))
+                {
+                    TimeManager.StartTime(_parsedDateTime);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to load In Game: {e.Message}");
+            }
+        }
+
         [Button("ResetProgress")]
         private void ResetProgress()
         {

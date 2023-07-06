@@ -57,15 +57,22 @@ namespace UI.TabMenu.InventoryMenu
             {
                 return;
             }
+            if(!gameObject.activeInHierarchy) gameObject.SetActive(true);
             
-            if(selectedMenuItem_ == null) return;
+            if (selectedMenuItem_ == null)
+            {
+                DisplayNull();
+                actionButtonGroup.gameObject.SetActive(false);
+                return;
+            }
             
             currMenuItem = selectedMenuItem_;
             currItem = currMenuItem.item;
             
             if (currItem == null)
             {
-                gameObject.SetActive(false);
+                DisplayNull();
+                actionButtonGroup.gameObject.SetActive(false);
                 return;
             }
             

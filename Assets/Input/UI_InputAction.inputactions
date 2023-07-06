@@ -157,6 +157,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CancelSwap",
+                    "type": "Button",
+                    "id": "b185590d-7a1d-487b-b3dc-d86591be09a6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -657,17 +666,6 @@
                 },
                 {
                     "name": "",
-                    "id": "6b3bbfcb-ad4a-45de-9361-3160320b8ca6",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Menu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "8ad935d0-d830-4987-8701-5c3ad7f28c89",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -740,6 +738,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Codex",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c4f84156-9e43-466d-ae58-77a65116fb0c",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CancelSwap",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

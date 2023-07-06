@@ -20,6 +20,7 @@ public class InputUIManager : MonoBehaviour
     public static readonly Evt OnInventoryMenu = new Evt();
     public static readonly Evt OnCharacterInfo = new Evt();
     public static readonly Evt OnCodexMenu = new Evt();
+    public static readonly Evt OnCancelSwap = new Evt();
     
 
     public void OnEnable()
@@ -88,5 +89,11 @@ public class InputUIManager : MonoBehaviour
     {
         if(!context_.started) return;
         OnCodexMenu.Invoke();
+    }
+    
+    public void CancelSwap(InputAction.CallbackContext context_)
+    {
+        if(!context_.started) return;
+        OnCancelSwap.Invoke();
     }
 }

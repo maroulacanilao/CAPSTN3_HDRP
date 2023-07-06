@@ -1,3 +1,5 @@
+using Character;
+using CustomHelpers;
 using Items;
 using TMPro;
 using UnityEngine;
@@ -29,11 +31,11 @@ namespace UI
         
         protected Item currItem;
         
-        public void DisplayItem(Item item)
+        public virtual void DisplayItem(Item item)
         {
             if (item == null)
             {
-                gameObject.SetActive(false);
+                DisplayNull();
                 return;
             }
             currItem = item;
@@ -51,7 +53,7 @@ namespace UI
             
             nameTxt.SetText(_data.ItemName);
             typeTxt.SetText(currItem.ItemType.ToString());
-            rarityTxt.SetText(currItem.RarityType.ToText());
+            rarityTxt.SetText(currItem.RarityType.GetColoredText());
             descriptionTxt.SetText(_data.Description);
             itemIcon.sprite = _data.Icon;
 
@@ -61,8 +63,16 @@ namespace UI
                 nameTxt.SetText($"{_gear.Data.ItemName} - Lv.{_gear.Level}");
             }
             else statsPanel.gameObject.SetActive(false);
-            
-            gameObject.SetActive(true);
+        }
+
+        public void DisplayNull()
+        {
+            nameTxt.SetText("");
+            typeTxt.SetText("");
+            rarityTxt.SetText("");
+            descriptionTxt.SetText("");
+            itemIcon.sprite = null;
+            statsPanel.DisplayDynamic(new CombatStats(), false);
         }
     }
 }

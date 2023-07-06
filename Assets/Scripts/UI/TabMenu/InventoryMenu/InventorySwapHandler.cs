@@ -37,7 +37,7 @@ namespace UI.TabMenu.InventoryMenu
         private void OnEnable()
         {
             InputUIManager.OnSwap.AddListener(OnSwap);
-            InputUIManager.OnCancel.AddListener(OnCancel);
+            InputUIManager.OnCancelSwap.AddListener(OnCancel);
             errorTxt.gameObject.SetActive(false);
             
             Item_MenuItem.OnDragStateChange.AddListener(OnDragStateChange);

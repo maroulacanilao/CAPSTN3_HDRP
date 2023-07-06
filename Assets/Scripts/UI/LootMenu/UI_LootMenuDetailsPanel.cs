@@ -12,9 +12,6 @@ namespace UI.LootMenu
 {
     public class UI_LootMenuDetailsPanel : ItemDetailsPanel
     {
-        [Header("LootMenu")]
-        [SerializeField] private UI_LootMenu lootMenu;
-
         [Header("Buttons")]
         [SerializeField] private Button lootBtn, trashBtn;
 
@@ -48,9 +45,12 @@ namespace UI.LootMenu
         {
             if (lootMenuItem_ == null || lootMenuItem_.item == null)
             {
-                gameObject.SetActive(false);
+                DisplayNull();
+                lootBtn.gameObject.SetActive(false);
+                trashBtn.gameObject.SetActive(false);
                 return;
             }
+            if(!gameObject.activeInHierarchy) gameObject.SetActive(true);
             
             currLootMenuItem = lootMenuItem_;
             currItem = currLootMenuItem.item;
@@ -60,6 +60,9 @@ namespace UI.LootMenu
                 gameObject.SetActive(false);
                 return;
             }
+            
+            lootBtn.gameObject.SetActive(true);
+            trashBtn.gameObject.SetActive(true);
             
             DisplayItem(currItem);
         }

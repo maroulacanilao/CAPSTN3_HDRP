@@ -1,5 +1,6 @@
 using BaseCore;
 using CustomEvent;
+using CustomHelpers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -108,6 +109,24 @@ namespace Managers
         public void OnSprint(InputAction.CallbackContext context)
         {
             OnSprintAction.Invoke(context);
+        }
+
+        public static void DisableInput()
+        {
+            if(Instance.IsEmptyOrDestroyed()) return;
+            Instance.gameObject.SetActive(false);
+        }
+        
+        public static void EnableInput()
+        {
+            if(Instance.IsEmptyOrDestroyed()) return;
+            Instance.gameObject.SetActive(true);
+        }
+        
+        public static bool IsInputEnabled()
+        {
+            if(Instance.IsEmptyOrDestroyed()) return false;
+            return Instance.gameObject.activeInHierarchy;
         }
     }
 }

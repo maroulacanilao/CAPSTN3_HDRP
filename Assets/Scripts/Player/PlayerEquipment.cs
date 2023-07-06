@@ -17,11 +17,11 @@ namespace Player
     public class PlayerEquipment : MonoBehaviour
     {
         [field: SerializeField] public PlayerCharacter player { get; private set; }
+        [SerializeField] private InteractDetector interactDetector;
+        [SerializeField] private ToolArea toolArea;
 
         private PlayerInventory playerInventory => player.playerInventory;
-        
-        public InteractDetector interactDetector { get; private set; }
-        private ToolArea toolArea;
+
         public int currIndex { get; private set; }
         public Item CurrentItem => playerInventory.ItemTools[currIndex];
         
@@ -40,9 +40,6 @@ namespace Player
         {
             InputManager.OnCycleTool.AddListener(CycleTool);
             InputManager.OnSelectTool.AddListener(SelectTool);
-            
-            toolArea = ToolArea.Instance;
-            if (toolArea != null) interactDetector = toolArea.GetComponent<InteractDetector>();
         }
         
         private void OnDisable()
@@ -81,22 +78,27 @@ namespace Player
 
         public EquipmentAction GetEquipmentAction()
         {
+            var _nearestInteractable = interactDetector.nearestInteractable;
+
+            if (_nearestInteractable != null && _nearestInteractable is FarmTileInteractable _farmTileInteractable)
+            {
+                if(_farmTileInteractable.farmTile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
+            }
+            
             if(CurrentItem == null) return EquipmentAction.None;
-            
-            var _farmTile = toolArea.GetFarmTile();
-            
-            if(_farmTile != null && _farmTile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
+
+            var _tile = toolArea.GetFarmTile();
             
             
             if (CurrentItem.Data is HoeData)
             {
-                if (_farmTile != null)
+                if (_tile != null)
                 {
-                    if (_farmTile.tileState == TileState.ReadyToHarvest)
+                    if (_tile.tileState == TileState.ReadyToHarvest)
                     {
                         return EquipmentAction.Harvest;
                     }
-                    return _farmTile.tileState == TileState.Empty ? EquipmentAction.UnTill : EquipmentAction.None;
+                    return _tile.tileState == TileState.Empty ? EquipmentAction.UnTill : EquipmentAction.None;
                 }
                 
                 if (!toolArea.IsTillable())
@@ -110,24 +112,24 @@ namespace Player
             
             if (CurrentItem.Data is WateringCanData)
             {
-                if (_farmTile == null)
+                if (_tile == null)
                 {
                     return EquipmentAction.None;
                 }
             
-                if(_farmTile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
+                if(_tile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
 
                 return EquipmentAction.Water;
             }
 
             if (CurrentItem is ItemSeed)
             {
-                if (_farmTile == null)
+                if (_tile == null)
                 {
                     return EquipmentAction.None;
                 }
 
-                switch (_farmTile.tileState)
+                switch (_tile.tileState)
                 {
                     case TileState.ReadyToHarvest:
                         return EquipmentAction.Harvest;

@@ -725,6 +725,28 @@ MonoBehaviour:
   <waterEnd>k__BackingField: WaterEnd
   <attackHitEvent>k__BackingField: AttackHit
   <attackEndEvent>k__BackingField: AnimEnd
+  <animParam>k__BackingField:
+    <animator>k__BackingField: {fileID: 1359967692}
+    <groundedHash>k__BackingField: 862969536
+    <isIdleHash>k__BackingField: 2058724655
+    <xSpeedHash>k__BackingField: 1584793824
+    <ySpeedHash>k__BackingField: -1792353467
+    <attackHash>k__BackingField: 1080829965
+    <spellAnimationHash>k__BackingField: -2017977412
+    <hurtAnimationHash>k__BackingField: 1654612129
+    <deathAnimationHash>k__BackingField: 646380074
+    <atkSpeedHash>k__BackingField: 0
+    <animEndEvtId>k__BackingField: AnimEnd
+    <atkHitEvtId>k__BackingField: AttackHit
+    <atkEndEvtId>k__BackingField: AnimEnd
+    <castHitEvtId>k__BackingField: CastHit
+    <castEndEvtId>k__BackingField: CastEnd
+    <hoeHash>k__BackingField: 1584793824
+    <wateringHash>k__BackingField: 0
+    <jumpHash>k__BackingField: 0
+    <jumpStartEvtId>k__BackingField: JumpStart
+    <hoeEndEvtId>k__BackingField: HoeEnd
+    <waterEndEvtId>k__BackingField: WaterEnd
   <animator>k__BackingField: {fileID: 1359967692}
   <animationEventReceiver>k__BackingField: {fileID: 7825488674379097175}
   <collisionDetector>k__BackingField: {fileID: 1040642371183458998}
@@ -814,6 +836,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <player>k__BackingField: {fileID: 1040642371267966287}
+  interactDetector: {fileID: 9014571295811784189}
+  toolArea: {fileID: 9014571295811784188}
 --- !u!1 &8917236130486882684
 GameObject:
   m_ObjectHideFlags: 0

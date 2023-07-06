@@ -51,7 +51,7 @@ namespace UI.TabMenu.InventoryMenu
             weaponBar.Initialize(this,0);
             
             inventoryDetailsPanel.Initialize(this);
-            inventoryDetailsPanel.gameObject.SetActive(false);
+            inventoryDetailsPanel.ShowItemDetail(null);
         }
 
         private void OnEnable()

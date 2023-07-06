@@ -24,30 +24,29 @@ namespace Farming
         {
             IsNextPhase = false;
 
-            farmTile.datePlanted = TimeManager.DateTime;
-            farmTile.timeRemaining = TimeSpan.FromMinutes(farmTile.seedData.minutesToGrow).RoundToFive();
-
-            // ToDO: Add mat to farmtile
-            // farmTile.soilRenderer.sprite = farmTile.seedData.soilSprite;
-            // farmTile.soilRenderer.color = farmTile.wateredColor;
+            FarmTile.datePlanted = TimeManager.DateTime;
+            FarmTile.timeRemaining = TimeSpan.FromMinutes(FarmTile.seedData.minutesToGrow).RoundToFive();
+            
+            ChangeRenderer();
+            ChangeMaterial();
             TimeManager.OnMinuteTick.AddListener(UpdateTimeRemaining);
         }
 
         public override void ExitLogic()
         {
-            farmTile.timeRemaining = default;
+            FarmTile.timeRemaining = default;
             TimeManager.OnMinuteTick.RemoveListener(UpdateTimeRemaining);
         }
 
         private void UpdateTimeRemaining()
         {
-            if (!farmTile.isWatered) return;
+            if (!FarmTile.isWatered) return;
 
             var _info = new GrowingJobInfo()
             {
                 currentTime = CustomDateTime.FromDateTime(TimeManager.DateTime),
-                datePlanted = CustomDateTime.FromDateTime(farmTile.datePlanted),
-                minutesToGrow = farmTile.seedData.minutesToGrow,
+                datePlanted = CustomDateTime.FromDateTime(FarmTile.datePlanted),
+                minutesToGrow = FarmTile.seedData.minutesToGrow,
                 timeRemainingArray = new NativeArray<TimeSpan>(1, Allocator.TempJob),
                 isReadyToHarvestArray = new NativeArray<bool>(1, Allocator.TempJob),
                 isNextPhaseArray = new NativeArray<bool>(1, Allocator.TempJob)
@@ -58,7 +57,7 @@ namespace Farming
             var _handle = _job.Schedule();
             _handle.Complete();
             
-            farmTile.timeRemaining = _info.timeRemainingArray[0];
+            FarmTile.timeRemaining = _info.timeRemainingArray[0];
             var _isReadyToHarvest = _info.isReadyToHarvestArray[0];
             var _isNextPhase = _info.isNextPhaseArray[0];
             
@@ -68,7 +67,7 @@ namespace Farming
 
             if (_isReadyToHarvest)
             {
-                farmTile.ChangeState(farmTile.readyToHarvestTileState);
+                FarmTile.ChangeState(FarmTile.readyToHarvestTileState);
                 return;
             }
             
@@ -80,13 +79,14 @@ namespace Farming
 
         public void UpdateAppearance()
         {
-            if (farmTile.progress >= 0.3f)
+            if (FarmTile.progress >= 0.3f)
             {
                 IsNextPhase = true;
-                farmTile.plantRenderer.gameObject.SetActive(true);
+                FarmTile.plantRenderer.gameObject.SetActive(true);
                 // ToDO: Add mat to farmtile
-                // farmTile.soilRenderer.sprite = farmTile.defaultSoilSprite;
-                farmTile.plantRenderer.sprite = farmTile.seedData.plantSprite;
+                // farmTile.soilMeshFilter.sprite = farmTile.defaultSoilSprite;
+                FarmTile.plantRenderer.sprite = FarmTile.seedData.plantSprite;
+                SoilMesh.mesh = TileState.Growing2.GetTileMesh();
             }
         }
     }

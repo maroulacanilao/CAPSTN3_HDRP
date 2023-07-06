@@ -94,6 +94,7 @@ namespace Managers
         {
             base.Awake();
             ItemHelper.Initialize(GameDataBase);
+            AssetHelper.Initialize(GameDataBase);
             GameDataBase.Initialize();
             EventQueueData.InitializeQueue();
             
