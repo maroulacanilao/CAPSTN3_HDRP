@@ -68,7 +68,7 @@ namespace ScriptableObjectData
             Debug.Log($"Game saved @ {savePath}");
         }
 
-        [Button("Load")]
+        [Button("Load Data")]
         public void LoadData()
         {
             if (!File.Exists(savePath))
@@ -96,6 +96,12 @@ namespace ScriptableObjectData
                 Debug.LogError($"Failed to load save file: {e.Message}");
             }
         }
+
+        [Button("LOAD")]
+        private void Load()
+        {
+            GameManager.Instance.StartCoroutine(LoadProgression());
+        }
         
         public IEnumerator LoadProgression()
         {
@@ -109,22 +115,25 @@ namespace ScriptableObjectData
 
             gameDataBase.sessionData.farmLoadType = FarmLoadType.LoadGame;
             var _sceneName = gameDataBase.FarmSceneName;
-            gameDataBase.eventQueueData.AddEvent(_sceneName, InGameLoad);
+            // gameDataBase.eventQueueData.AddEvent(_sceneName, InGameLoad);
 
-            try
-            {
-                LoadHelper.LoadData(saveData, gameDataBase);
-                isLoadOperationDone = true;
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e);
-                isLoadOperationDone = true;
-            }
+            LoadHelper.LoadData(saveData, gameDataBase);
+            isLoadOperationDone = true;
+            
+            // try
+            // {
+            //
+            // }
+            // catch (Exception e)
+            // {
+            //     Debug.Log(e);
+            //     isLoadOperationDone = true;
+            // }
 
             yield return new WaitForSeconds(1);
         }
 
+        [Button("InGameLoad")]
         private void InGameLoad()
         {
             try

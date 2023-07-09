@@ -25,6 +25,7 @@ namespace SaveSystem
             {
                 var _itemValue = inventorySlot.itemSaveData;
                 if(_itemValue == null) continue;
+                if(_itemValue.dataID == string.Empty) continue;
                 
                 Debug.Log("Item Value not null");
                 
@@ -50,6 +51,7 @@ namespace SaveSystem
             {
                 var _toolValue = inventorySaveData_.toolItems[i];
                 if(_toolValue == null) continue;
+                if(string.IsNullOrEmpty(_toolValue.dataID)) continue;
                 
                 if(!_itemDatabase.ItemDataDictionary.TryGetValue(_toolValue.dataID, out var _itemData)) continue;
                 

@@ -315,7 +315,7 @@ namespace Managers.SceneLoader
             return _transitionsList.GetRandomItem();
         }
         
-        private bool IsSceneAlreadyActive(string sceneNameToLoad_)
+        public static bool IsSceneAlreadyActive(string sceneNameToLoad_)
         {
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {

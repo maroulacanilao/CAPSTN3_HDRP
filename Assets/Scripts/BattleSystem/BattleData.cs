@@ -51,8 +51,7 @@ namespace BattleSystem
         
         [field: SerializeField] [field: BoxGroup("On Weak Status Effect")] 
         public SkipTurn_SE skipTurnSE { get; private set; }
-        
-        
+
 
         private void OnEnable()
         {

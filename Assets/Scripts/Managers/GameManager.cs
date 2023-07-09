@@ -116,7 +116,22 @@ namespace Managers
         
         private void EnterBattle(EnemyCharacter enemyCharacter_, bool isPlayerFirst_)
         {
+            if(SceneLoader.SceneLoader.IsSceneAlreadyActive(BattleSceneName)) return;
+            
             StartCoroutine(Co_EnterBattle(enemyCharacter_, isPlayerFirst_));
+            
+            // if(lastTimeBattle + 2f > Time.time) return; 
+            // if(enemyCharacter_.IsEmptyOrDestroyed()) return;
+            //
+            // lastTimeBattle = Time.time;
+            //
+            // BattleData.EnterBattle(enemyCharacter_, isPlayerFirst_);
+            // mCurrentEnemy = enemyCharacter_;
+            //
+            // Time.timeScale = 0;
+            //
+            // var _sceneParameter = new LoadSceneParameters(LoadSceneType.LoadAdditive,BattleSceneName , BattleSceneName, false, 3);
+            // SceneLoader.SceneLoader.OnLoadScene.Invoke(_sceneParameter);
         }
         
         private IEnumerator Co_EnterBattle(EnemyCharacter enemyCharacter_, bool isPlayerFirst_)
@@ -130,6 +145,13 @@ namespace Managers
             mCurrentEnemy = enemyCharacter_;
             Time.timeScale = 0;
             var _transform = Player.transform;
+
+            var _cam = CameraManager.GetActivePlayerCamera();
+
+            if (_cam != null)
+            {
+                yield return _cam.Co_ZoomIn(2f, 30);
+            }
 
             yield return null;
 

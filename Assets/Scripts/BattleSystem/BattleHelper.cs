@@ -71,8 +71,7 @@ namespace BattleSystem
             {
                 _attackResult.damageInfo.DamageAmount = Mathf.RoundToInt(_dmg * battleData.crtDmgMod);
             }
-            
-            
+
             _attackResult.attackResultType = _isCritical ? AttackResultType.Critical : AttackResultType.Hit;
             
             return _attackResult;

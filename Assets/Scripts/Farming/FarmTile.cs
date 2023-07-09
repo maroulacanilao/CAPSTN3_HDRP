@@ -15,23 +15,23 @@ using UnityEngine;
 
 namespace Farming
 {
-    public class FarmTile : MonoBehaviour, IDamagable, IHealable, IPoolable
+    public class FarmTile : MonoBehaviour, IDamagable, IHealable
     {
-        [field: SerializeField] public MeshFilter soilMeshFilter { get; private set; }
-        [field: SerializeField] public MeshRenderer soilRenderer { get; private set; }
-        [field: SerializeField] public MeshFilter plantMeshFilter { get; private set; }
-        [field: SerializeField] public SpriteRenderer plantRenderer { get; private set; }
-        [field: SerializeField] public Color tilledColor { get; private set; }
-        [field: SerializeField] public Color wateredColor { get; private set; }
-        [field: SerializeField] public int maxHealth { get; private set; }
+        #region Serialized Properties
+
+        [field: SerializeField] [field: BoxGroup("Soil")] public MeshFilter soilMeshFilter { get; private set; }
+        [field: SerializeField] [field: BoxGroup("Soil")] public MeshRenderer soilRenderer { get; private set; }
+        [field: SerializeField] [field: BoxGroup("Plant")] public MeshFilter plantMeshFilter { get; private set; }
+        [field: SerializeField] [field: BoxGroup("Plant")] public SpriteRenderer plantRenderer { get; private set; }
+        [field: SerializeField] [field: BoxGroup("Legacy")] public int maxHealth { get; private set; }
+        [field: SerializeField] [field: BoxGroup("UI")] public CropUI cropUI { get; private set; }
+
+        #endregion
 
         public GenericHealth health { get; private set; }
         public DateTime datePlanted { get; set; }
-
         public TimeSpan timeRemaining { get; set; }
-
         public SeedData seedData { get; set; }
-        
         public Sprite defaultPlantSprite { get; private set; }
 
         public bool isWatered { get; set; }
@@ -57,10 +57,10 @@ namespace Farming
 
         #region States
         
-        public EmptyTileState emptyTileState;
-        public PlantedTileState plantedTileState;
-        public GrowingTileState growingTileState;
-        public ReadyToHarvestTileState readyToHarvestTileState;
+        public EmptyTileState emptyTileState { get; private set; }
+        public PlantedTileState plantedTileState { get; private set; }
+        public GrowingTileState growingTileState { get; private set; }
+        public ReadyToHarvestTileState readyToHarvestTileState { get; private set; }
 
         #endregion
         
@@ -95,6 +95,8 @@ namespace Farming
             OnChangeState.Invoke(tileState);
         }
 
+        #region Action
+
         public void OnWaterPlant()
         {
             currentState?.WaterPlant();
@@ -112,29 +114,22 @@ namespace Farming
             
             currentState?.Interact();
         }
-        
-        public void TakeDamage(DamageInfo damageInfo_)
+
+        #endregion
+
+        #region Interaction
+
+        public void Enter()
         {
-            health.AddHealth(-damageInfo_.DamageAmount);
-            
-            if(health.CurrentHealth > 0) return;
-            FarmTileManager.RemoveTile(this);
+            cropUI.gameObject.SetActive(true);
         }
         
-        public void Heal(HealInfo healInfo_, bool isOverHeal_ = false)
+        public void Exit()
         {
-            health.AddHealth(healInfo_.HealAmount);
+            cropUI.gameObject.SetActive(false);
         }
-        
-        public void OnSpawn()
-        {
-            health.RefillHealth();
-        }
-        
-        public void OnDeSpawn()
-        {
-            
-        }
+
+        #endregion
 
         public void Load(SaveSystem.FarmTileSaveData saveData_, SeedData seedData_)
         {
@@ -198,5 +193,22 @@ namespace Farming
                     break;
             }
         }
+        
+        #region Legacy
+
+        public void TakeDamage(DamageInfo damageInfo_)
+        {
+            health.AddHealth(-damageInfo_.DamageAmount);
+            
+            if(health.CurrentHealth > 0) return;
+            FarmTileManager.RemoveTile(this);
+        }
+        
+        public void Heal(HealInfo healInfo_, bool isOverHeal_ = false)
+        {
+            health.AddHealth(healInfo_.HealAmount);
+        }
+
+        #endregion
     }
 }

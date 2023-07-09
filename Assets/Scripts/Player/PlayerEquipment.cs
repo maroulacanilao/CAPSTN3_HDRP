@@ -1,6 +1,8 @@
+using System.Collections;
 using BaseCore;
 using Character;
 using CustomEvent;
+using CustomHelpers;
 using Farming;
 using Items;
 using Items.Inventory;
@@ -29,6 +31,8 @@ namespace Player
         public static readonly Evt OnTillAction = new Evt();
         public static readonly Evt OnWaterAction = new Evt();
         public static readonly Evt OnUnTillAction = new Evt();
+        
+        public FarmTile currTile { get; private set; }
 
         private void Start()
         {
@@ -48,6 +52,7 @@ namespace Player
             InputManager.OnSelectTool.RemoveListener(SelectTool);
         }
 
+        
         public void UseTool()
         {
             // _equipmentActions[currIndex]?.Invoke();
@@ -55,6 +60,8 @@ namespace Player
             DoEquipmentAction(_action);
         }
 
+        #region Tool Selection
+        
         public void CycleTool(bool isNext_)
         {
             if (isNext_) currIndex++;
@@ -76,6 +83,10 @@ namespace Player
             if (currIndex < 0) currIndex = playerInventory.ItemTools.Length - 1;
         }
 
+        #endregion
+
+        #region Action
+
         public EquipmentAction GetEquipmentAction()
         {
             var _nearestInteractable = interactDetector.nearestInteractable;
@@ -88,17 +99,18 @@ namespace Player
             if(CurrentItem == null) return EquipmentAction.None;
 
             var _tile = toolArea.GetFarmTile();
+            SetTile(_tile);
             
             
             if (CurrentItem.Data is HoeData)
             {
-                if (_tile != null)
+                if (currTile != null)
                 {
-                    if (_tile.tileState == TileState.ReadyToHarvest)
+                    if (currTile.tileState == TileState.ReadyToHarvest)
                     {
                         return EquipmentAction.Harvest;
                     }
-                    return _tile.tileState == TileState.Empty ? EquipmentAction.UnTill : EquipmentAction.None;
+                    return currTile.tileState == TileState.Empty ? EquipmentAction.UnTill : EquipmentAction.None;
                 }
                 
                 if (!toolArea.IsTillable())
@@ -112,24 +124,24 @@ namespace Player
             
             if (CurrentItem.Data is WateringCanData)
             {
-                if (_tile == null)
+                if (currTile == null)
                 {
                     return EquipmentAction.None;
                 }
             
-                if(_tile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
+                if(currTile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
 
                 return EquipmentAction.Water;
             }
 
             if (CurrentItem is ItemSeed)
             {
-                if (_tile == null)
+                if (currTile == null)
                 {
                     return EquipmentAction.None;
                 }
 
-                switch (_tile.tileState)
+                switch (currTile.tileState)
                 {
                     case TileState.ReadyToHarvest:
                         return EquipmentAction.Harvest;
@@ -173,6 +185,11 @@ namespace Player
             }
         }
         
+
+        #endregion
+
+        #region Farm Action
+
         public void Till()
         {
             FarmTileManager.AddFarmTileAtToolLocation();
@@ -185,21 +202,18 @@ namespace Player
 
         public void Water()
         {
-            var _farmTile = toolArea.GetFarmTile();
+            if(currTile == null) return;
             
-            if(_farmTile == null) return;
-            
-            _farmTile.OnWaterPlant();
-            _farmTile.Heal(new HealInfo(10));
+            currTile.OnWaterPlant();
+            currTile.Heal(new HealInfo(10));
         }
 
         public void Plant()
         {
             if(CurrentItem is not {Data: SeedData}) return;
-            var _tile = toolArea.GetFarmTile();
-            if (_tile == null) return;
+            if (currTile == null) return;
             
-            _tile.OnPlantSeed(CurrentItem.Data as SeedData);
+            currTile.OnPlantSeed(CurrentItem.Data as SeedData);
             var _itemSeed = (ItemSeed) CurrentItem;
             _itemSeed.RemoveStack();
             InventoryEvents.OnUpdateStackable.Invoke(_itemSeed);
@@ -207,13 +221,40 @@ namespace Player
 
         public void Harvest()
         {
-            var _tile = toolArea.GetFarmTile();
-            if (_tile == null) return;
+            if (currTile == null) return;
             
-            if(_tile.tileState != TileState.ReadyToHarvest) return;
-            if(_tile.seedData == null) return;
+            if(currTile.tileState != TileState.ReadyToHarvest) return;
+            if(currTile.seedData == null) return;
             
-            _tile.OnInteract();
+            currTile.OnInteract();
+        }
+
+        #endregion
+        
+        public void SetTile(FarmTile tile_)
+        {
+            if (currTile.IsValid())
+            {
+                currTile.Exit();
+            }
+            
+            currTile = tile_;
+            
+            if (currTile.IsValid())
+            {
+                currTile.Enter();
+            }
+        }
+
+        private IEnumerator Co_TileSetter()
+        {
+            var _waiter = new WaitForSeconds(0.2f);
+            while (enabled)
+            {
+                var _tile = toolArea.GetFarmTile();
+                SetTile(_tile);
+                yield return _waiter;
+            }
         }
     }
 }

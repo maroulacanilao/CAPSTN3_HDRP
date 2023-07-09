@@ -8,59 +8,69 @@ namespace Managers
 {
     public class CameraManager : Singleton<CameraManager>
     {
-        private readonly Dictionary<string, ICinemachineCamera> playerCameraDict = new Dictionary<string, ICinemachineCamera>();
+        private readonly Dictionary<string, PlayerCamera> playerCameraDict = new Dictionary<string, PlayerCamera>();
         
-        public void RegisterPlayerCamera(string key_, ICinemachineCamera cam_)
+        public static void RegisterPlayerCamera(string key_, PlayerCamera cam_)
         {
-            if (playerCameraDict.ContainsKey(key_))
+            if(IsInstanceNull()) return;
+            
+            if (Instance.playerCameraDict.ContainsKey(key_))
             {
                 Debug.LogError($"Camera with key {key_} already exists!");
                 return;
             }
-            
-            playerCameraDict.Add(key_, cam_);
+
+            Instance.playerCameraDict.Add(key_, cam_);
         }
         
-        public void UnRegisterPlayerCamera(string key_)
+        public static void UnRegisterPlayerCamera(string key_)
         {
-            if (!playerCameraDict.ContainsKey(key_))
+            if(IsInstanceNull()) return;
+            
+            if (!Instance.playerCameraDict.ContainsKey(key_))
             {
                 Debug.LogError($"Camera with key {key_} does not exist!");
                 return;
             }
             
-            playerCameraDict.Remove(key_);
+            Instance.playerCameraDict.Remove(key_);
         }
         
-        public void SetPlayerCameraActive(string key_, bool active_)
+        public static void SetPlayerCameraActive(string key_, bool active_)
         {
-            if (!playerCameraDict.ContainsKey(key_))
+            if(IsInstanceNull()) return;
+            
+            if (!Instance.playerCameraDict.ContainsKey(key_))
             {
                 Debug.LogError($"Camera with key {key_} does not exist!");
                 return;
             }
             
-            playerCameraDict[key_].VirtualCameraGameObject.SetActive(active_);
+            Instance.playerCameraDict[key_].gameObject.SetActive(active_);
         }
         
-        public void ActivePlayerCamera(string key_)
+        public static void ActivePlayerCamera(string key_)
         {
-            if (!playerCameraDict.ContainsKey(key_))
+            if(IsInstanceNull()) return;
+            
+            if (!Instance.playerCameraDict.ContainsKey(key_))
             {
                 Debug.LogError($"Camera with key {key_} does not exist!");
                 return;
             }
             
-            foreach (var _cam in playerCameraDict)
+            foreach (var _cam in Instance.playerCameraDict)
             {
-                _cam.Value.VirtualCameraGameObject.SetActive(_cam.Key == key_);
+                _cam.Value.gameObject.SetActive(_cam.Key == key_);
             }
         }
         
-        public void ActivePlayerCameraOnActiveScene()
+        public static void ActivePlayerCameraOnActiveScene()
         {
+            if(IsInstanceNull()) return;
+            
             var _activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-            if (!playerCameraDict.ContainsKey(_activeScene))
+            if (!Instance.playerCameraDict.ContainsKey(_activeScene))
             {
                 Debug.LogError($"Camera with key {_activeScene} does not exist!");
                 return;
@@ -69,25 +79,31 @@ namespace Managers
             ActivePlayerCamera(_activeScene);
         }
         
-        public ICinemachineCamera GetActivePlayerCamera()
+        public static PlayerCamera GetActivePlayerCamera()
         {
-            return (from _cam in playerCameraDict 
-                where _cam.Value.VirtualCameraGameObject.activeInHierarchy 
+            if(IsInstanceNull()) return null;
+            
+            return (from _cam in Instance.playerCameraDict 
+                where _cam.Value.gameObject.activeInHierarchy 
                 select _cam.Value)
                 .FirstOrDefault();
         }
         
-        public ICinemachineCamera GetPlayerCamera(string key_)
+        public static PlayerCamera GetPlayerCamera(string key_)
         {
-            if (playerCameraDict.TryGetValue(key_, out var _camera)) return _camera;
+            if(IsInstanceNull()) return null;
+            
+            if (Instance.playerCameraDict.TryGetValue(key_, out var _camera)) return _camera;
             Debug.LogError($"Camera with key {key_} does not exist!");
             return null;
         }
         
-        public ICinemachineCamera GetPlayerCameraOnActiveScene()
+        public static PlayerCamera GetPlayerCameraOnActiveScene()
         {
+            if(IsInstanceNull()) return null;
+            
             var _activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-            if (playerCameraDict.TryGetValue(_activeScene, out var _camera)) return _camera;
+            if (Instance.playerCameraDict.TryGetValue(_activeScene, out var _camera)) return _camera;
             Debug.LogError($"Camera with key {_activeScene} does not exist!");
             return null;
         }
