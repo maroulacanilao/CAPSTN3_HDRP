@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 6541.5674, g: 6587.518, b: 6672.826, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -377,6 +377,8 @@ MonoBehaviour:
   portraitsFace: 0
   setSayDialog: {fileID: 0}
   description: 
+  effectAudioSource: {fileID: 0}
+  voiceAudioSource: {fileID: 0}
 --- !u!4 &506581801
 Transform:
   m_ObjectHideFlags: 0
@@ -453,6 +455,7 @@ GameObject:
   - component: {fileID: 692494899}
   - component: {fileID: 692494898}
   - component: {fileID: 692494897}
+  - component: {fileID: 692494900}
   m_Layer: 0
   m_Name: Flowchart
   m_TagString: Untagged
@@ -550,7 +553,7 @@ MonoBehaviour:
   itemId: 0
   blockName: Welcome
   description: 
-  eventHandler: {fileID: 0}
+  eventHandler: {fileID: 692494900}
   commandList:
   - {fileID: 692494896}
   - {fileID: 692494892}
@@ -672,6 +675,21 @@ MonoBehaviour:
   stopVoiceover: 1
   waitForVO: 0
   setSayDialog: {fileID: 0}
+--- !u!114 &692494900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692494890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f6487d21a03404cb21b245f0242e79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentBlock: {fileID: 692494893}
+  suppressBlockAutoSelect: 0
+  waitForFrames: 1
 --- !u!1 &927722360
 GameObject:
   m_ObjectHideFlags: 0
