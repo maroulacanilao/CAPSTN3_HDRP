@@ -20,16 +20,16 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 1699303229371496758, guid: c486b1686d5fe10498f51f6a5925766b,
+      value: {fileID: -5198905920421222931, guid: c486b1686d5fe10498f51f6a5925766b,
         type: 3}
     - time: 0.2
-      value: {fileID: -5040797214650073921, guid: c486b1686d5fe10498f51f6a5925766b,
+      value: {fileID: -3360524685693820180, guid: c486b1686d5fe10498f51f6a5925766b,
         type: 3}
     - time: 0.4
-      value: {fileID: -4949204813973924409, guid: c486b1686d5fe10498f51f6a5925766b,
+      value: {fileID: 5399856301519809487, guid: c486b1686d5fe10498f51f6a5925766b,
         type: 3}
     - time: 0.70000005
-      value: {fileID: -4949204813973924409, guid: c486b1686d5fe10498f51f6a5925766b,
+      value: {fileID: 5399856301519809487, guid: c486b1686d5fe10498f51f6a5925766b,
         type: 3}
     attribute: m_Sprite
     path: 
@@ -41,8 +41,19 @@ AnimationClip:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   m_ClipBindingConstant:
-    genericBindings: []
-    pptrCurveMapping: []
+    genericBindings:
+    - serializedVersion: 2
+      path: 0
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+    pptrCurveMapping:
+    - {fileID: -5198905920421222931, guid: c486b1686d5fe10498f51f6a5925766b, type: 3}
+    - {fileID: -3360524685693820180, guid: c486b1686d5fe10498f51f6a5925766b, type: 3}
+    - {fileID: 5399856301519809487, guid: c486b1686d5fe10498f51f6a5925766b, type: 3}
+    - {fileID: 5399856301519809487, guid: c486b1686d5fe10498f51f6a5925766b, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -67,4 +78,18 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.41
+    functionName: TriggerEvent
+    data: AttackHit
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.71
+    functionName: TriggerEvent
+    data: AnimEnd
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

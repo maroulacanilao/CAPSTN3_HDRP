@@ -1,3 +1,4 @@
+using BaseCore;
 using Items.Inventory;
 using ScriptableObjectData.CharacterData;
 
@@ -13,6 +14,7 @@ namespace Character.CharacterComponents
         {
             playerData = data_;
             InventoryEvents.OnUpdateInventory.AddListener(OnUpdateInventory);
+            PlayerLevel.OnLevelUp.AddListener(RefreshMana);
             
             CurrentMana = MaxMana;
 
@@ -22,6 +24,7 @@ namespace Character.CharacterComponents
         ~PlayerMana()
         {
             InventoryEvents.OnUpdateInventory.RemoveListener(OnUpdateInventory);
+            PlayerLevel.OnLevelUp.RemoveListener(RefreshMana);
         }
 
         public override void OnCharacterEnable()

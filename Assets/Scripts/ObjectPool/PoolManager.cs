@@ -17,8 +17,6 @@ namespace ObjectPool
         {
             base.Awake();
             if(assetDatabase == null) assetDatabase = Resources.Load<AssetDataBase>("Data");
-            Debug.Log(gameObject.scene.name + " " + transform.parent);
-            Debug.Log((assetDatabase.poolObjects != null));
             foreach (var _pair in assetDatabase.poolObjects)
             {
                 var _poolable = _pair.Key.GetOrAddComponent<Poolable>();

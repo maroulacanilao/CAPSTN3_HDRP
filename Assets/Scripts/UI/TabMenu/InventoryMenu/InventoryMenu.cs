@@ -31,6 +31,8 @@ namespace UI.TabMenu.InventoryMenu
         [field: SerializeField] public Item_MenuItem armorBar { get; private set; }
 
         public static readonly Evt<SelectableMenuButton> OnInventoryItemSelect = new Evt<SelectableMenuButton>();
+        public static readonly Evt<InventoryMenu> OnInventoryMenuOpen = new Evt<InventoryMenu>();
+        public static readonly Evt<InventoryMenu> OnInventoryMenuClose = new Evt<InventoryMenu>();
         
         private Item_MenuItem lastSelectedItem;
         
@@ -59,17 +61,19 @@ namespace UI.TabMenu.InventoryMenu
             EventSystem.current.SetSelectedGameObject(storageItems[0].gameObject);
             SelectableMenuButton.OnSelectButton.AddListener(SelectItem);
             InputUIManager.OnMove.AddListener(OnMove);
+            OnInventoryMenuOpen.Invoke(this);
         }
 
         private void OnDisable()
         {
             SelectableMenuButton.OnSelectButton.RemoveListener(SelectItem);
             InputUIManager.OnMove.RemoveListener(OnMove);
+            OnInventoryMenuClose.Invoke(this);
         }
         
         private void SelectItem(SelectableMenuButton button_)
         {
-            if (button_ is Item_MenuItem _itemMenuItem)
+            if (button_.TryGetComponent(out Item_MenuItem _itemMenuItem))
             {
                 lastSelectedItem = _itemMenuItem;
                 inventoryDetailsPanel.ShowItemDetail(_itemMenuItem);
@@ -92,11 +96,6 @@ namespace UI.TabMenu.InventoryMenu
         {
             lastSelectedItem = lastSelectedItem == null ? storageItems[0] : lastSelectedItem;
             if(!eventSystem.alreadySelecting) eventSystem.SetSelectedGameObject(lastSelectedItem.gameObject);
-        }
-        
-        public void ShowItemDetail(Item_MenuItem itemMenuItem_)
-        {
-            inventoryDetailsPanel.ShowItemDetail(itemMenuItem_);
         }
     }
 }

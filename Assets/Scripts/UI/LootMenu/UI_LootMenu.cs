@@ -31,6 +31,7 @@ namespace UI.LootMenu
         private LootDropObject lootDropObject;
 
         private int lastItemIndex;
+        public PlayerInventory inventory => playerInventory;
 
         #region UnityEvents
 
@@ -98,10 +99,12 @@ namespace UI.LootMenu
                 var _uiLootMenuItem = Instantiate(lootMenuItemPrefab, itemParent).Initialize(_item, null);
                 lootMenuItemList.Add(_uiLootMenuItem);
             }
-            
-            EventSystem.current.SetSelectedGameObject(lootMenuItemList[0].gameObject);
+            var _first = lootMenuItemList[0];
+            if(_first == null) return;
+            EventSystem.current.SetSelectedGameObject(_first.gameObject);
 
             gameObject.SetActive(true);
+            detailsPanel.ShowItemDetail(_first);
         }
 
         private void ShowItemDetail(UI_LootMenuItem lootMenuItem_)
@@ -130,6 +133,12 @@ namespace UI.LootMenu
             
             SelectLastSelectable();
 
+        }
+        
+        public void TrashItem(UI_LootMenuItem lootMenuItem_)
+        {
+            if(!lootMenuItem_.item.IsDiscardable) return;
+            RemoveMenuItem(lootMenuItem_);
         }
 
         protected override void CloseMenu()
@@ -200,8 +209,13 @@ namespace UI.LootMenu
                 
             for (var i = lootMenuItemList.Count - 1; i > -1; --i)
             {
-                RemoveMenuItem(lootMenuItemList[i]);
+                TrashItem(lootMenuItemList[i]);
             }
+        }
+        
+        public bool HasFreeSpace()
+        {
+            return playerInventory.hasFreeSlot;
         }
     }
 }

@@ -128,5 +128,15 @@ namespace CustomHelpers
             transform.position = transform.position.SetZ(Z);
             return transform;
         }
+        
+        public static Vector3 GetMiddlePosition(this Transform transform1, Transform transform2)
+        {
+            return (transform1.position + transform2.position) / 2f;
+        }
+        
+        public static Vector3 GetMiddlePosition(this Vector3 pos1, Vector3 pos2)
+        {
+            return (pos1 + pos2) / 2f;
+        }
     }
 }

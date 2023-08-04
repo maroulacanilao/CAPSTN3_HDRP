@@ -3,6 +3,6 @@ using UnityEngine;
 [System.Serializable]
 public class EncyclopediaInfo
 {
-     [NaughtyAttributes.ResizableTextArea] public string description;
+     [TextArea(10,15)] public string description;
      [NaughtyAttributes.ShowAssetPreview()] public Sprite sprite;
 }

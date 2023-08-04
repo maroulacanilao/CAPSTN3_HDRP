@@ -2,6 +2,8 @@ using System.Linq;
 using BaseCore;
 using CustomEvent;
 using CustomHelpers;
+using Fungus;
+using FungusWrapper;
 using Managers;
 using Player;
 using Player.ControllerState;
@@ -27,9 +29,8 @@ namespace UI.Farming
             get => mPlayerController != null ? mPlayerController : mPlayerController = FindObjectOfType<PlayerInputController>();
         }
 
-        protected override void Awake()
+        protected void Start()
         {
-            base.Awake();
             foreach (var _ui in Menus)
             {
                 _ui.Initialize();
@@ -79,7 +80,8 @@ namespace UI.Farming
                 OnOpenMenu.RemoveListener(this.OpenMenu);
                 return;
             }
-            
+
+
             if (IsMenuOpen())
             {
                 OnCloseAllUI.Invoke();
@@ -88,7 +90,7 @@ namespace UI.Farming
             
             if(controller.playerState != PlayerSate.Grounded) return;
             
-            if(!canOpenMenu) return;
+            if(!CanOpenMenu()) return;
 
             tabGroup.gameObject.SetActive(true);
             Cursor.visible = true;
@@ -102,7 +104,12 @@ namespace UI.Farming
 
         bool CanOpenMenu()
         {
-            return this.IsValid() && canOpenMenu && !IsMenuOpen() && controller.playerState == PlayerSate.Grounded;
+            return this.IsValid() && 
+                   canOpenMenu && 
+                   !IsMenuOpen() && 
+                   controller.playerState == PlayerSate.Grounded && 
+                   !FungusFlowchartSetter.IsExecuting() && 
+                   !FungusSetter.IsOpen();
         }
         
         private void CharacterInfo()

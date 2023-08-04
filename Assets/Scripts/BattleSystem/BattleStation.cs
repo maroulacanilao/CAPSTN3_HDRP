@@ -16,6 +16,8 @@ namespace BattleSystem
         public Vector3 stationPosition => transform.position;
         
         public Vector3 evadePosition => evadeTargetPos.position;
+        
+        public Transform projectileTarget => projectileTargetPos;
 
         public BattleCharacter battleCharacter { get; private set; }
 

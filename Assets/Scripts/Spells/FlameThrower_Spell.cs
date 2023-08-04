@@ -22,9 +22,9 @@ namespace Spells
         
         protected override IEnumerator OnActivate()
         {
-            if(target == null) throw new System.NotImplementedException();
+            if(target == null) yield break;
             DamageInfo _tempDamageInfo = new DamageInfo(damage, character.gameObject, spellData.tags, DamageType.Magical);
-            var _atkResult = battleCharacter.AttackTarget(target, _tempDamageInfo);
+            var _atkResult = battleCharacter.GetAttackResult(target, _tempDamageInfo);
 
             yield return battleCharacter.PlaySpellCastAnim();
 
@@ -33,18 +33,21 @@ namespace Spells
             
 
             yield return _projectile.StartProjectile(target.transform.position.SetY(1));
-            Destroy(_projectile.gameObject);
-            
+            _projectile.gameObject.ReturnInstance();
+
             target.Hit(_atkResult);
             
             if (_atkResult.attackResultType != AttackResultType.Miss)
             {
-                var _effectInstance = Instantiate(spellData.statusEffect, Vector3.zero, Quaternion.identity) as BurnFixedDamage_SE;
-                var _burnDmg = Mathf.RoundToInt(character.stats.strength * magicDmgBurnScale);
+                var _effectInstance = Instantiate(spellData.statusEffect, Vector3.zero, Quaternion.identity);
+                var _burnDmg = Mathf.RoundToInt(character.stats.intelligence * magicDmgBurnScale);
+                
+                if(_effectInstance == null)yield break;
                 
                 _effectInstance.SetDamage(_burnDmg);
-                target.character.statusEffectReceiver.ApplyStatusEffect(_effectInstance, character.gameObject);
+                yield return target.character.statusEffectReceiver.ApplyStatusEffect(_effectInstance, character.gameObject);
             }
+            
             battleCharacter.animator.SetTrigger(battleCharacter.moveAnimationHash);
             
             if(_atkResult.attackResultType == AttackResultType.Weakness) yield return Co_StunTarget(_atkResult);

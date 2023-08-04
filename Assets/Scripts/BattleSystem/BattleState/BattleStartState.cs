@@ -17,6 +17,10 @@ namespace BattleSystem.BattleState
         {
             yield return null;
 
+            yield return BattleTutorial.Welcome();
+            
+            yield return new WaitForSeconds(0.1f);
+
             var _text = $"You encountered {BattleManager.enemyParty[0].characterData.characterName.SurroundWithColor(Color.red)}!";
 
             yield return BattleTextManager.DoWrite(_text);

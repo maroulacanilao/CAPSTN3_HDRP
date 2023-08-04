@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using BattleSystem;
+using CustomHelpers;
 using DG.Tweening;
 using Managers;
 using ScriptableObjectData;
@@ -24,7 +25,7 @@ namespace UI.Battle
         [SerializeField] private Button returnBTN;
 
     
-        private bool didPlayerWon;
+        private BattleResultType result;
         private PlayerData playerData;
     
         private void Awake()
@@ -45,22 +46,35 @@ namespace UI.Battle
             returnBTN.onClick.RemoveListener(ReturnToFarmScene);
         }
 
-        private void ShowResult(bool playerWon_)
+        private void ShowResult(BattleResultType battleResult_)
         {
             Time.timeScale = 0f;
-            didPlayerWon = playerWon_;
+            result = battleResult_;
 
             panel.SetActive(true);
-        
-            if (playerWon_) DisplayVictoryScreen();
-            else DisplayLoseScreen();
-        
-            ResultTXT.text = playerWon_ ? "Victory!" : "You Lost!";
+
+            switch (battleResult_)
+            {
+                case BattleResultType.Win:
+                    DisplayVictoryScreen();
+                    break;
+                
+                case BattleResultType.Lose:
+                    DisplayLoseScreen();
+                    break;
+                
+                case BattleResultType.Flee:
+                default:
+                    break;
+            }
+
+            ResultTXT.text = battleResult_ == BattleResultType.Win ? "Victory!" : "You Lost!";
+            ResultTXT.color = battleResult_ == BattleResultType.Win ? Color.green : Color.red;
         }
 
         private void ReturnToFarmScene()
         {
-            GameManager.OnExitBattle.Invoke(didPlayerWon);
+            GameManager.OnExitBattle.Invoke(result);
         }
 
         private async void DisplayVictoryScreen()
@@ -71,21 +85,24 @@ namespace UI.Battle
 
             var _exp = BattleManager.Instance.GetTotalExp();
             var _lvlData = playerData.LevelData;
-            var _prevExp = _lvlData.TotalExperience;
+            var _prevExp = _lvlData.CurrentLevelExperience;
 
             ResultTXT.text = "Victory!";
+            var _addedTxt = $" <color=green>+{_exp}</color>";
         
             LevelTXT.text = $"Level: {_lvlData.CurrentLevel}";
             expTXT.text = $"{_prevExp:0}/{_lvlData.NextLevelExperience:0}";
             expBar.fillAmount = (float) _lvlData.CurrentLevelExperience / _lvlData.NextLevelExperience;
         
-            var _newExp = _lvlData.TotalExperience + _exp;
+            var _newExp = _prevExp + _exp;
+            
+            _newExp = Mathf.Clamp(_newExp, 0, _lvlData.CurrentExperienceNeeded);
 
             await Task.Delay(50);
             var _nxtLvlExp = _lvlData.NextLevelExperience;
             var _txtTween = DOTween.To(() => _prevExp, x => _prevExp = x, _newExp, 1f).OnUpdate(() =>
             {
-                expTXT.text = $"{Mathf.Clamp(_prevExp,0,_nxtLvlExp):0}/{_lvlData.NextLevelExperience:0}";
+                expTXT.text = $"{Mathf.Clamp(_prevExp,0,_nxtLvlExp):0}/{_lvlData.NextLevelExperience:0} {_addedTxt}";
             }).SetUpdate(true);
 
             await expBar.DOFillAmount(((float) _lvlData.CurrentLevelExperience + _exp)/ _lvlData.NextLevelExperience, 1f).SetUpdate(true).AsyncWaitForCompletion();
@@ -101,11 +118,12 @@ namespace UI.Battle
             
                 _txtTween.Kill(true);
             
-                _prevExp = _lvlData.PrevLevelExperience;
+                _prevExp = 0;
+                _newExp = _lvlData.CurrentLevelExperience;
             
                 _txtTween = DOTween.To(() => _prevExp, x => _prevExp = x, _newExp, 1f).OnUpdate(() =>
                 {
-                    expTXT.text = $"{_prevExp:0}/{_lvlData.NextLevelExperience:0}";
+                    expTXT.text = $"{_prevExp:0}/{_lvlData.CurrentExperienceNeeded:0} {_addedTxt}";
                 }).SetUpdate(true);
                 
                 ShowStatIncrease();
@@ -130,7 +148,7 @@ namespace UI.Battle
             
             await Task.Delay(1000);
             
-            returnBTN.gameObject.SetActive(true);
+            if(returnBTN.IsValid()) returnBTN.gameObject.SetActive(true);
         }
 
         private void ShowStatIncrease()

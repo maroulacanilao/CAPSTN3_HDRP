@@ -11,18 +11,6 @@ namespace UI
         private Button button;
         private SelectableMenuButton selectableMenuButton;
 
-        private void Reset()
-        {
-            button = GetComponent<Button>();
-            selectableMenuButton = GetComponent<SelectableMenuButton>();
-        }
-
-        private void OnValidate()
-        {
-            button = GetComponent<Button>();
-            selectableMenuButton = GetComponent<SelectableMenuButton>();
-        }
-
         private void Awake()
         {
             if(button == null) button = GetComponent<Button>();
@@ -32,9 +20,14 @@ namespace UI
 
         private void OnEnable()
         {
-            EventSystem.current.firstSelectedGameObject = button.gameObject;
-            EventSystem.current.SetSelectedGameObject(button.gameObject);
-            button.Select();
+            var _gameObject = button.gameObject;
+            
+            EventSystem.current.firstSelectedGameObject = _gameObject;
+            EventSystem.current.SetSelectedGameObject(_gameObject);
+            if(gameObject.TryGetComponent(out ISelectHandler _selectHandler))
+            {
+                _selectHandler.OnSelect(null);
+            }
             if (selectableMenuButton != null)
             {
                 selectableMenuButton.SelectButton();

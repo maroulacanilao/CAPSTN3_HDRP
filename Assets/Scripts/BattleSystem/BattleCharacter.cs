@@ -6,6 +6,7 @@ using Character.CharacterComponents;
 using CustomEvent;
 using CustomHelpers;
 using DG.Tweening;
+using Managers;
 using NaughtyAttributes;
 using ObjectPool;
 using ScriptableObjectData.CharacterData;
@@ -71,7 +72,7 @@ namespace BattleSystem
         
         [field: BoxGroup("Animation Parameters")] [field: AnimatorParam("animator")]
         [field: SerializeField] public int groundedHash { get; private set; }
-
+        
         #endregion
 
         #region AnimationEvents
@@ -167,16 +168,22 @@ namespace BattleSystem
         {
             if(!character.IsAlive) yield break;
             DamageInfo _tempDamageInfo = new DamageInfo(TotalStats.strength, gameObject);
-            AttackResult _attackResult = this.AttackTarget(target_, _tempDamageInfo);
-            
+            AttackResult _attackResult = this.GetAttackResult(target_, _tempDamageInfo);
+
             animator.SetFloat(xSpeedAnimationHash,xOffset);
             animator.SetTrigger(attackAnimationHash);
             yield return animator.WaitForAnimationEvent(AnimEvent_AttackHit, 0.5f);
 
             target_.Hit(_attackResult);
 
+            if (_attackResult.attackResultType != AttackResultType.Miss)
+            {
+                var _pos = transform.GetMiddlePosition(target_.transform).AddY(1f);
+                AssetHelper.PlayHitEffect(_pos, Quaternion.identity);
+            }
+
             yield return animator.WaitForAnimationEvent(AnimEvent_AnimEnd, 0.5f);
-            
+
             animator.ResetTrigger(attackAnimationHash);
             yield return CoroutineHelper.GetWait(0.2f);
         }
@@ -195,6 +202,7 @@ namespace BattleSystem
         {
             if(!character.IsAlive) yield break;
             var _yPos = transform.position.y;
+            AudioManager.PlayMissSfx();
             yield return transform.DOMove(battleStation.evadePosition.SetY(_yPos), 0.1f);
             yield return CoroutineHelper.GetWait(0.1f);
             yield return transform.DOMove(battleStation.stationPosition.SetY(_yPos), 0.1f);
@@ -214,7 +222,6 @@ namespace BattleSystem
                 animator.SetFloat(xSpeedAnimationHash, xOffset);
                 animator.SetTrigger(_trigger);
                 if(characterHealth.IsAlive) transform.DoHitEffect();
-                var _damage = -atkResult_.damageInfo.DamageAmount;
             }
             else
             {
@@ -226,8 +233,15 @@ namespace BattleSystem
         {
             animator.SetTrigger(deathAnimationHash);
             animator.SetFloat(xSpeedAnimationHash, xOffset);
-            yield return animator.WaitForAnimationEvent(AnimEvent_AnimEnd, 2);
+            yield return new WaitForSecondsRealtime(2f);
             animator.ResetTrigger(deathAnimationHash);
+        }
+        
+        public IEnumerator GoBackToStation()
+        {
+            yield return GoToPosition(battleStation.stationPosition);
+
+            animator.SetFloat(xSpeedAnimationHash, xOffset);
         }
 
         public IEnumerator PlaySpellCastAnim()

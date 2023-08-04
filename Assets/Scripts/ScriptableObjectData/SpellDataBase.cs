@@ -17,15 +17,16 @@ namespace ScriptableObjectData
         [Button("Get All Spell Data")]
         private void GetAllSpellData()
         {
-            spellDataLookup = new SerializedDictionary<string, SpellData>();
-            spellOffers = new SerializedDictionary<SpellData, OfferRequirement>();
+            spellDataLookup ??= new SerializedDictionary<string, SpellData>();
+            spellOffers ??= new SerializedDictionary<SpellData, OfferRequirement>();
             
             var _spellDataList = Resources.LoadAll<SpellData>("Data/SpellData");
 
             foreach (var _spell in _spellDataList)
             {
-                spellDataLookup.Add(_spell.name, _spell);
-                spellOffers.Add(_spell, new OfferRequirement());
+                if(_spell.ForEnemyOnly) continue;
+                spellDataLookup.TryAdd(_spell.name, _spell);
+                spellOffers.TryAdd(_spell, new OfferRequirement());
             }
         }
     }

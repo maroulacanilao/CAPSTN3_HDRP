@@ -26,7 +26,20 @@ namespace BattleSystem.BattleState
 
         public IEnumerator EnemyTurnAction()
         {
-            var _action = enemyData.combatTendency.GetAction(battleCharacter.character);
+            AICombatAction _action = new AICombatAction()
+            {
+                actionType = AIActionType.BasicAttack
+            };
+
+            try
+            {
+                _action = enemyData.combatTendency.GetAction(battleCharacter.character);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+            
             yield return null;
             
             BattleCharacter _target;

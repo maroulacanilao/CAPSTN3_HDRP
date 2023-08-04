@@ -5,7 +5,11 @@ using CustomEvent;
 using UnityEngine;
 using Character;
 using Character.CharacterComponents;
+using CustomHelpers;
+using Managers;
 using NaughtyAttributes;
+using ObjectPool;
+using UnityEngine.VFX;
 
 public abstract class StatusEffectBase : MonoBehaviour
 {
@@ -56,7 +60,7 @@ public abstract class StatusEffectBase : MonoBehaviour
     public readonly Evt<StatusEffectBase, StatusEffectReceiver> OnEffectEnd = new Evt<StatusEffectBase, StatusEffectReceiver>();
     public readonly Evt<int> OnTurnsLeftChange = new Evt<int>();
 
-    protected abstract void OnActivate();
+    protected abstract IEnumerator OnActivate();
     protected abstract void OnDeactivate();
     
     protected virtual void OnStackEffect(StatusEffectBase newEffect_) { }
@@ -65,25 +69,27 @@ public abstract class StatusEffectBase : MonoBehaviour
 
     protected virtual IEnumerator OnAfterTurnTick(TurnBaseState ownerTurnState_) { yield break; }
 
-    public void Activate(StatusEffectReceiver target, GameObject source = null)
+    public IEnumerator Activate(StatusEffectReceiver target, GameObject source = null)
     {
-        if (isActivated) return;
+        if (isActivated) yield break;
         Target = target;
         Source = source;
         isActivated = true;
         if (HasDuration) turnsLeft = turnDuration;
-        OnActivate();
+        yield return OnActivate();
     }
 
     public void Deactivate()
     {
+        if(this.IsEmptyOrDestroyed()) return;
+        
         if (isActivated)
         {
             OnDeactivate();
             OnEffectEnd.Invoke(this, Target);
         }
         isActivated = false;
-        Destroy(gameObject);
+        if(gameObject.IsValid()) Destroy(gameObject);
     }
 
     public void RefreshStatusEffect() { SetDurationLeft(turnDuration); }
@@ -92,14 +98,14 @@ public abstract class StatusEffectBase : MonoBehaviour
     {
         yield return OnBeforeTurnTick(ownerTurnState_);
         HasStillTurns();
-        yield break;
+        yield return null;
     }
     
     public IEnumerator AfterTurnTick(TurnBaseState ownerTurnState_)
     {
         yield return OnAfterTurnTick(ownerTurnState_);
         HasStillTurns();
-        yield break;
+        yield return null;
     }
 
     public void SelfRemove()
@@ -109,10 +115,10 @@ public abstract class StatusEffectBase : MonoBehaviour
     
     public bool HasStillTurns()
     {
-        if (turnsLeft > 0) return false;
+        if (turnsLeft > 0) return true;
         
         SelfRemove();
-        return true;
+        return false;
     }
     
     public void StackEffect(StatusEffectBase newEffect_)
@@ -124,6 +130,11 @@ public abstract class StatusEffectBase : MonoBehaviour
     public void SetDurationLeft(int durationLeft_)
     {
         turnsLeft = durationLeft_;
+        if (turnsLeft <= 0)
+        {
+            turnsLeft = 0;
+            SelfRemove();
+        }
         OnTurnsLeftChange?.Invoke(turnsLeft);
     }
 
@@ -140,5 +151,10 @@ public abstract class StatusEffectBase : MonoBehaviour
     public void SetDuration(int duration_)
     {
         turnsLeft = duration_;
+    }
+    
+    public void SetDamage(int damage_)
+    {
+        Damage = Mathf.Clamp(damage_,1, int.MaxValue);
     }
 }

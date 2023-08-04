@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
+using CustomEvent;
 using UnityEngine;
 
 namespace ScriptableObjectData
@@ -9,10 +10,19 @@ namespace ScriptableObjectData
     public class EventQueueData : ScriptableObject
     {
         private SerializedDictionary<string, Queue<Action>> eventQueues = new SerializedDictionary<string, Queue<Action>>();
+        
+        public static readonly Evt<string, Action> OnAddEvent = new Evt<string, Action>();
 
         public void InitializeQueue()
         {
             eventQueues = new SerializedDictionary<string, Queue<Action>>();
+            OnAddEvent.AddListener(AddEvent);
+        }
+        
+        public void DeInitializeQueue()
+        {
+            eventQueues.Clear();
+            OnAddEvent.RemoveListener(AddEvent);
         }
         
         public void AddEvent(string key_, Action action)

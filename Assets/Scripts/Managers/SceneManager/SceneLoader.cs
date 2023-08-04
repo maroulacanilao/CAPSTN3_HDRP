@@ -8,6 +8,7 @@ using CustomEvent;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Managers.SceneLoader.SceneTransition;
+using NaughtyAttributes;
 
 namespace Managers.SceneLoader
 {
@@ -26,8 +27,8 @@ namespace Managers.SceneLoader
     public struct LoadSceneParameters
     {
         public LoadSceneType loadSceneType;
-        public string sceneName;
-        public string sceneToActivate;
+        [Scene] public string sceneName;
+        [Scene] public string sceneToActivate;
         public bool randomTransition;
         public int transitionIndex;
         
@@ -334,7 +335,8 @@ namespace Managers.SceneLoader
         {
             var _sceneToActivate = SceneManager.GetSceneByName(sceneParameters_.sceneToActivate);
             if(!_sceneToActivate.IsValid()) _sceneToActivate = SceneManager.GetSceneAt(0);
-            
+            Debug.Log($"<color=blue>Scene to activate: {_sceneToActivate.name}</color>");
+
             if (!_sceneToActivate.isLoaded)
             {
                 sceneParameters_.loadSceneType = LoadSceneType.LoadSingle;
@@ -359,6 +361,8 @@ namespace Managers.SceneLoader
                 AsyncOperation unload = SceneManager.UnloadSceneAsync(
                     _sceneToUnload,
                     UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
+                
+                if(unload == null) continue;
 
                 unload.allowSceneActivation = true;
             }

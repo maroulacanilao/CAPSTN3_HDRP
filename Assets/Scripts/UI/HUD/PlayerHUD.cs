@@ -10,7 +10,7 @@ namespace UI.HUD
         [SerializeField] private EquipmentActionUI equipmentActionUI;
         [SerializeField] private Toolbar.Toolbar toolbar;
         
-        private void Awake()
+        private void Start()
         {
             SceneManager.activeSceneChanged += OnSceneChanged;
             ApplySettings(SettingsEnabler.currSettings);

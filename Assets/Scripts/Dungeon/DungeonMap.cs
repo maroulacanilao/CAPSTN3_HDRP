@@ -1,9 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using BaseCore;
 using Character;
 using CustomHelpers;
+using Items;
+using Items.ItemData;
+using Managers;
 using NaughtyAttributes;
 using ScriptableObjectData.CharacterData;
 using UnityEngine;
@@ -13,29 +17,26 @@ namespace Dungeon
 {
     public class DungeonMap : MonoBehaviour
     {
-        [SerializeField] 
-        private Transform playerSpawnPoint;
-
-        [SerializeField]
-        private GameObject mapExit;
-        
-        [SerializeField] 
-        private EnemyStation[] stations;
+        [SerializeField] private Transform playerSpawnPoint;
+        [SerializeField] private QuestItemData questData;
+        [SerializeField] private string postCombatMessage;
+        [SerializeField] private EnemyStation[] stations;
         public Vector3 PlayerSpawnPoint => playerSpawnPoint.position;
 
         private readonly List<EnemyCharacter> enemiesSpawned = new List<EnemyCharacter>();
 
-        private void Awake()
+        protected virtual void Awake()
         {
             DungeonManager.OnEnemyDeath.AddListener(RemoveEnemy);
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             DungeonManager.OnEnemyDeath.RemoveListener(RemoveEnemy);
+            LootSpawner.OnLootSpawned.RemoveListener(OnLootSpawned);
         }
         
-        public void InitializeLevel(DungeonMapData dungeonMapData_)
+        public virtual void InitializeLevel(DungeonMapData dungeonMapData_)
         {
             RemoveAllEnemy();
             
@@ -51,6 +52,8 @@ namespace Dungeon
                 
                 var _index = Random.Range(0, _stationList.Count);
                 var _station = _stationList[_index];
+                if(_station == null) continue;
+                
                 _stationList.RemoveAt(_index);
                 
                 var _enemyData = dungeonMapData_.possibleEnemies.GetWeightedRandom();
@@ -61,41 +64,32 @@ namespace Dungeon
                 
                 DungeonManager.OnEnemySpawn.Invoke(_enemyInstance, _station);
             }
-            
-            mapExit.SetActive(false);
-            
+
             gameObject.SetActive(true);
+            
+            LootSpawner.OnLootSpawned.AddListener(OnLootSpawned);
         }
         
-        public void DeInitializeLevel()
+        public virtual void DeInitializeLevel()
         {
             RemoveAllEnemy();
             gameObject.SetActive(false);
+            LootSpawner.OnLootSpawned.RemoveListener(OnLootSpawned);
         }
-        
-        private void RemoveEnemy(EnemyCharacter enemyCharacter_)
+
+        protected virtual void RemoveEnemy(EnemyCharacter enemyCharacter_)
         {
-            if(!enemiesSpawned.Contains(enemyCharacter_)) return;
-            
+            if (!enemiesSpawned.Contains(enemyCharacter_)) return;
+
             PurgeNulls();
-            
-            if(!enemiesSpawned.Remove(enemyCharacter_)) return;
-            
+
+            if (!enemiesSpawned.Remove(enemyCharacter_)) return;
+
             Destroy(enemyCharacter_.gameObject);
-            
-            if(enemiesSpawned.Count > 0) return;
-            
-            OnLevelComplete();
+
+            Managers.GameManager.DelaySendToFungus(postCombatMessage, -1f, 1);
         }
-        
-        private void OnLevelComplete()
-        {
-            //TODO: Add event for level complete
-            
-            Debug.Log("<color=red>Level Complete!</color>");
-            mapExit.SetActive(true);
-        }
-        
+
         private void RemoveAllEnemy()
         {
             if(enemiesSpawned.Count == 0) return;
@@ -113,6 +107,24 @@ namespace Dungeon
         private void PurgeNulls()
         {
             enemiesSpawned.RemoveAll(_enemy => _enemy.IsEmptyOrDestroyed());
+        }
+        
+        private void OnLootSpawned(LootDropObject lootDropObject_)
+        {
+            Debug.Log("OnLootSpawned");
+            if(enemiesSpawned.Count > 0) return;
+            Debug.Log("OnLootSpawned 2");
+            if(lootDropObject_ == null) return;
+            Debug.Log("LootDropObject is not null");
+            if (questData == null) throw new Exception("Quest Data is null");
+            Debug.Log("QuestData is not null");
+
+            var _questItem = questData.GetItemQuest();
+            
+            if(_questItem == null) return;
+            Debug.Log("QuestItem is not null");
+
+            lootDropObject_.lootDrop.itemsDrop.Add(_questItem);
         }
         
         [Button("Get All Stations")]

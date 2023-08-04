@@ -14,14 +14,16 @@ namespace UI.TabMenu.Codex
         [SerializeField] private EnemyDataBase enemyDataBase;
         private List<KeyValuePair<EnemyData,int>> enemyKillsStatsList = new List<KeyValuePair<EnemyData, int>>();
 
-        public void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             RemoveItems();
             if(enemyDataBase == null) enemyDataBase = dataBase.enemyDataBase;
             
+            errorTXT.gameObject.SetActive(enemyDataBase.enemyKillsStats.Count <= 0);
             if (enemyDataBase.enemyKillsStats.Count == 0)
             {
-                codexInfoDisplay.gameObject.SetActive(false);
+                codexInfoDisplay.DisplayInfo(new CodexInfo());
                 return;
             }
             
@@ -35,9 +37,9 @@ namespace UI.TabMenu.Codex
                 var _codexItem = Instantiate(codexItemPrefab, contentParent).Initialize(_i,_statPair.Key.characterName);
                 codexItems.Add(_codexItem);
             }
-
-            codexItems[0].GetOrAddComponent<ButtonSelectFirst>();
             
+            EventSystem.current.SetSelectedGameObject(codexItems[0].gameObject);
+
             ShowCodex(0);
         }
         
@@ -50,7 +52,9 @@ namespace UI.TabMenu.Codex
                 name = _statPair.Key.characterName,
                 description = _statPair.Key.encyclopediaInfo.description,
                 sprite = _statPair.Key.encyclopediaInfo.sprite,
-                quantity = $"Kills: {_statPair.Value}"
+                quantityTxt = $"Kills: {_statPair.Value}",
+                quantity = _statPair.Value,
+                errorMsg = $"Kill more {_statPair.Key.characterName} to unlock more from this entry."
             };
 
             codexInfoDisplay.DisplayInfo(_info);

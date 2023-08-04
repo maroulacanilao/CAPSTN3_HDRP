@@ -48,8 +48,9 @@ namespace Items.Inventory
         [ReadOnly] private SerializedDictionary<int, Item> itemStorageDictionary;
         [ReadOnly] private SerializedDictionary<ItemData.ItemData, List<Item>> lookupDictionary;
         
+        public bool hasFreeSlot => itemStorageDictionary.Count < maxInventorySize;
         
-
+        
         #region Getters
 
         public ItemWeapon WeaponEquipped => weaponEquipped;
@@ -79,13 +80,22 @@ namespace Items.Inventory
                 itemTools[i] = _tool;
                 InventoryEvents.OnItemOnHandUpdate.Invoke(i, _tool);
             }
-            
+            armorEquipped?.OnUnEquip(playerData.statsData);
+            weaponEquipped?.OnUnEquip(playerData.statsData);
             armorEquipped = null;
             weaponEquipped = null;
             InventoryEvents.OnUpdateStackable.AddListener(UpdateStackable);
             hasInitialized = true;
             
+            InventoryEvents.OnUpdateInventory.Invoke(this);
+            
             Debug.Log(itemTools.Length);
+        }
+        
+        public void ForceInitialize()
+        {
+            hasInitialized = false;
+            Initialize();
         }
 
         public void DeInitializeInventory()
@@ -125,7 +135,9 @@ namespace Items.Inventory
 
             if (item_.IsStackable)
             {
-                if (stackableDictionary.TryGetValue(item_.Data, out var stackable))
+                if (stackableDictionary.TryGetValue(item_.Data, out var stackable) 
+                    && stackable!= null 
+                    && stackable.Data == item_.Data)
                 {
                     stackable.AddStack(item_.StackCount);
                     return true;
@@ -210,14 +222,15 @@ namespace Items.Inventory
         
         public void RemoveItemInStorage(int index_)
         {
-            if(index_ == -1) return;
-            if (itemStorageDictionary[index_].IsStackable)
+            if(!itemStorageDictionary.TryGetValue(index_, out var item_)) return;
+            
+            if (item_.IsStackable)
             {
                 stackableDictionary.Remove(itemStorageDictionary[index_].Data);
             }
 
-            lookupDictionary[itemStorageDictionary[index_].Data].Remove(itemStorageDictionary[index_]);
-            if(lookupDictionary[itemStorageDictionary[index_].Data].Count == 0) lookupDictionary.Remove(itemStorageDictionary[index_].Data);
+            lookupDictionary[item_.Data].Remove(itemStorageDictionary[index_]);
+            if(lookupDictionary[item_.Data].Count == 0) lookupDictionary.Remove(item_.Data);
             
             itemStorageDictionary.Remove(index_);
             InventoryEvents.OnUpdateInventory.Invoke(this);
@@ -231,14 +244,18 @@ namespace Items.Inventory
         {
             Initialize();
             Debug.Log("remove + " + item_.Data.ItemName );
-            var _key = itemStorageDictionary.FirstOrDefault(x => x.Value == item_).Key;
+            if(!itemStorageDictionary.ContainsValue(item_)) return;
+            if(!itemStorageDictionary.TryGetKey(item_, out var _key)) return;
             RemoveItemInStorage(_key);
         }
         
         public void RemoveItemInHand(int index_)
         {
             if(itemTools[index_] == null) return;
-            if(itemTools[index_].IsStackable) stackableDictionary.Remove(itemTools[index_].Data);
+            if (itemTools[index_].IsStackable)
+            {
+                stackableDictionary.Remove(itemTools[index_].Data);
+            }
             itemTools[index_] = null;
             InventoryEvents.OnItemOnHandUpdate.Invoke(index_, null);
         }
@@ -280,11 +297,13 @@ namespace Items.Inventory
                 return;
             }
             RemoveItemInStorage(stackableItem_);
+            RemoveItemInHand(stackableItem_);
         }
 
         public void UpdateStackable(ItemStackable stackableItem_)
         {
             Initialize();
+            if(stackableItem_ == null) return;
 
             if (!stackableDictionary.TryGetValue(stackableItem_.Data, out var _stackable)) return;
 
@@ -558,27 +577,62 @@ namespace Items.Inventory
             return itemStorageDictionary.Values.Where(i => i != null && types_.Contains(i.ItemType)).ToList();
         }
 
-
         public void Load(SaveSystem.InventoryLoadData loadData_)
         {
-            Initialize();
+            LoadImplementation(loadData_);
+        }
+
+        private void LoadImplementation(SaveSystem.InventoryLoadData loadData_)
+        {
+            ForceInitialize();
             itemStorageDictionary.Clear();
-            itemTools = loadData_.toolItems;
-            Gold.SetAmount(loadData_.gold);
-            
-            foreach (var _item in loadData_.storageItems)
+            var _tools = loadData_.toolItems;
+            for (int i = 0; i < _tools.Length; i++)
             {
-                itemStorageDictionary.Add(_item.slot, _item.item);
+                var _item = _tools[i];
+                if (_item == null) continue;
+                AddItem(_item);
+                if(!itemStorageDictionary.TryGetKey(_item, out var _key))
+                {
+                    RemoveItem(_item);
+                    continue;
+                }
+                EquipTool(_key);
             }
             
             armorEquipped?.OnUnEquip(playerData.statsData);
-            armorEquipped = loadData_.armorItem as ItemArmor;
-            armorEquipped?.OnEquip(playerData.statsData);
+            
+            if (loadData_.armorItem is ItemArmor _armor)
+            {
+                AddItem(_armor);
+                if(itemStorageDictionary.TryGetKey(_armor, out var _key))
+                {
+                    Debug.Log($"Loadin Armor: {_armor.Data.ItemName} @ slot {_key} || {itemStorageDictionary[_key].Data.ItemName}");
+                    EquipArmor(_key);
+                }
+            }
 
             weaponEquipped?.OnUnEquip(playerData.statsData);
-            weaponEquipped = loadData_.weaponItem as ItemWeapon;
-            weaponEquipped?.OnEquip(playerData.statsData);
             
+            if (loadData_.weaponItem is ItemWeapon _weapon)
+            {
+                AddItem(_weapon);
+                if(itemStorageDictionary.TryGetKey(_weapon, out var _key))
+                {
+                    EquipWeapon(_key);
+                }
+            }
+            
+            Gold.SetAmount(loadData_.gold);
+
+            foreach (var _item in loadData_.storageItems)
+            {
+                if (_item == null) continue;
+                if (_item.slot == -1) continue;
+                if (_item.item == null) continue;
+                AddItem(_item.item);
+            }
+
             InventoryEvents.OnUpdateInventory.Invoke(this);
         }
     }

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using CustomHelpers;
+using Interface;
 using Managers;
+using ObjectPool;
 using UnityEngine;
 
 namespace EnemyController.EnemyStates
@@ -9,11 +11,9 @@ namespace EnemyController.EnemyStates
     {
         private Transform player => stateMachine.playerTransform;
         private Transform station;
-        private CharacterController characterController;
-        
+
         public EnemyAttackState(EnemyAIController aiController_, EnemyStateMachine stateMachine_) : base(aiController_, stateMachine_)
         {
-            characterController = controller.GetComponent<CharacterController>();
             stateName = "Attack";
         }
         
@@ -21,15 +21,10 @@ namespace EnemyController.EnemyStates
         {
             base.Enter();
             isStateActive = true;
-            controller.aiPath.canMove = false;
-            controller.aiPath.isStopped = true;
+            StopMovement();
             controller.animator.ResetTrigger(controller.AttackHash);
             controller.animator.SetFloat(controller.attackAnimSpeedHash, controller.attackSpeed);
             controller.StartCoroutine(Co_Attack());
-
-            controller.aiPath.maxSpeed = 0;
-            controller.aiPath.enabled = false;
-            characterController.enabled = false;
         }
         
         public override void Exit()
@@ -37,8 +32,7 @@ namespace EnemyController.EnemyStates
             base.Exit();
             isStateActive = false;
             controller.animator.ResetTrigger(controller.AttackHash);
-            controller.aiPath.enabled = true;
-            characterController.enabled = true;
+            ResumeMovement();
         }
 
         public override void AnimationUpdate()
@@ -49,6 +43,11 @@ namespace EnemyController.EnemyStates
         private IEnumerator Co_Attack()
         {
             var _animator = controller.animator;
+            if(player == null)
+            {
+                stateMachine.ChangeState(stateMachine.patrolState);
+                yield break;
+            }
             var _orientation = controller.transform.position.x > player.position.x ? -1 : 1;
             
             // Debug.Log(controller.transform.position.x + " " + player.position.x);
@@ -59,12 +58,24 @@ namespace EnemyController.EnemyStates
             
             _animator.SetTrigger(controller.AttackHash);
 
-
-
+            
             yield return controller.animator.WaitForAnimationEvent(controller.AttackHitEvent,1f);
             
             if(IsWithinAttackRange(player))
             {
+                if(player == null)
+                {
+                    stateMachine.ChangeState(stateMachine.patrolState);
+                    yield break;
+                }
+                var _pos = controller.transform.GetMiddlePosition(player.transform).AddY(0.5f);
+                
+                AssetHelper.PlayHitEffect(_pos, Quaternion.identity);
+                
+                var _hit = player.GetComponent<IHittable>();
+                _hit?.Hit();
+                yield return new WaitForSeconds(0.2f);
+                
                 GameManager.OnEnterBattle.Invoke(controller.enemyCharacter, false);
                 yield break;
             }

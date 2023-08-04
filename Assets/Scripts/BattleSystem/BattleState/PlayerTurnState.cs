@@ -13,6 +13,8 @@ namespace BattleSystem.BattleState
 
         protected override IEnumerator TurnLogic()
         {
+            yield return BattleTutorial.TurnTutorial();
+            yield return null;
             BattleManager.OnPlayerTurnStart.Invoke(battleCharacter);
             yield return BattleManager.OnPlayerEndDecide.WaitForEvt();
             yield return EndTurn();

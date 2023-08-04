@@ -1,3 +1,4 @@
+using System;
 using Character;
 using CustomHelpers;
 using Items;
@@ -30,7 +31,12 @@ namespace UI
         [SerializeField] protected Image itemIcon;
         
         protected Item currItem;
-        
+
+        private void Awake()
+        {
+            DisplayNull();
+        }
+
         public virtual void DisplayItem(Item item)
         {
             if (item == null)
@@ -40,6 +46,7 @@ namespace UI
             }
             currItem = item;
             var _data = item.Data;
+            itemIcon.color = Color.white;
             
             namePanel.SetActive(currItem.ItemType != ItemType.Gold);
             statsPanel.gameObject.SetActive(currItem.ItemType != ItemType.Gold);
@@ -54,7 +61,7 @@ namespace UI
             nameTxt.SetText(_data.ItemName);
             typeTxt.SetText(currItem.ItemType.ToString());
             rarityTxt.SetText(currItem.RarityType.GetColoredText());
-            descriptionTxt.SetText(_data.Description);
+            descriptionTxt.SetText(_data.Description.Beautify());
             itemIcon.sprite = _data.Icon;
 
             if (currItem is ItemGear _gear)
@@ -65,14 +72,16 @@ namespace UI
             else statsPanel.gameObject.SetActive(false);
         }
 
-        public void DisplayNull()
+        public  virtual void DisplayNull()
         {
-            nameTxt.SetText("");
-            typeTxt.SetText("");
-            rarityTxt.SetText("");
-            descriptionTxt.SetText("");
+            nameTxt.SetText("No Item Selected");
+            typeTxt.SetText("???");
+            rarityTxt.SetText("???");
+            descriptionTxt.SetText("???");
             itemIcon.sprite = null;
+            itemIcon.color = Color.clear;
             statsPanel.DisplayDynamic(new CombatStats(), false);
+            
         }
     }
 }

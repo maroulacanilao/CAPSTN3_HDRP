@@ -12,7 +12,7 @@ namespace UI.HUD
     {
         [SerializeField] private GameObject actionPanel, interactPanel;
         [SerializeField] private TextMeshProUGUI actionText, interactText;
-        [SerializeField] private float tick = 0.2f;
+        [SerializeField] private float tick = 0.1f;
 
         private PlayerInputController controller;
         
@@ -54,7 +54,7 @@ namespace UI.HUD
             
             string _message = "";
         
-            var _action = playerEquipment.GetEquipmentAction();
+            var _action = playerEquipment.currAction;
         
             switch (_action)
             {
@@ -65,7 +65,7 @@ namespace UI.HUD
                     _message = "<color=orange>Water Plant</color>";
                     break;
                 case EquipmentAction.Plant:
-                    _message = "<color=orange>Plant Seed</color>";
+                    _message = $"<color=orange>Plant {playerEquipment.seedName} </color>";
                     break;
                 case EquipmentAction.Harvest:
                     _message = "<color=orange>Harvest</color>";

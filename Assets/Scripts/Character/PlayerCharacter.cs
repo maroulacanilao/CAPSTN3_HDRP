@@ -3,6 +3,7 @@ using BaseCore;
 using Character.CharacterComponents;
 using CustomEvent;
 using Items.Inventory;
+using NaughtyAttributes;
 using Player;
 using ScriptableObjectData.CharacterData;
 using UnityEngine;
@@ -37,10 +38,18 @@ namespace Character
         {
         }
 
+        [Button("Remove HP and Mana")]
         public void Refill()
         {
             health.RefillHealth();
             mana.RefreshMana();
         }
+
+        [Button("Remove some mana")]
+        private void RemoveMana()
+        {
+            mana.UseMana(10);
+        }
+        
     }
 }

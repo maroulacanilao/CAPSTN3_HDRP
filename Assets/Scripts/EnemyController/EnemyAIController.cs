@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
 using Character;
+using CustomHelpers;
 using Dungeon;
 using EnemyController.EnemyStates;
 using Farming;
+using Interface;
+using Managers;
 using NaughtyAttributes;
 using Pathfinding;
 using UnityEngine;
@@ -11,7 +14,7 @@ using UnityEngine.AI;
 
 namespace EnemyController
 {
-    public class EnemyAIController : MonoBehaviour
+    public class EnemyAIController : MonoBehaviour, IHittable
     {
         #region Components
 
@@ -95,11 +98,18 @@ namespace EnemyController
 
         #endregion
 
-        [SerializeReference] [ReadOnly] private EnemyStateMachine stateMachine;
+        [SerializeReference] [ReadOnly] protected EnemyStateMachine stateMachine;
         
-        public EnemyStation station { get; private set; }
+        public EnemyStation station { get; protected set; }
         
-        public void Initialize(EnemyStation station_)
+        public CharacterController movementController { get; private set; }
+
+        private void Awake()
+        {
+            movementController = GetComponent<CharacterController>();
+        }
+
+        public virtual void Initialize(EnemyStation station_)
         {
             station = station_;
             stateMachine = new EnemyStateMachine(this);
@@ -107,14 +117,54 @@ namespace EnemyController
             stateMachine.Initialize();
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
-            stateMachine?.Enable();
+            stateMachine?.patrolState?.TeleportToRandomWaypoint();
+            stateMachine?.ChangeState(stateMachine?.patrolState);
+            TimeManager.OnPauseTime.AddListener(OnPause);
         }
 
-        private void FixedUpdate()
+        protected void OnDisable()
         {
-            stateMachine.FixedUpdate();
+            TimeManager.OnPauseTime.RemoveListener(OnPause);
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            stateMachine?.FixedUpdate();
+        }
+        
+        public void Hit()
+        {
+            var _hit = stateMachine.hitState;
+            _hit.previousState = stateMachine.CurrentState;
+            stateMachine.ChangeState(_hit);
+        }
+
+        private void OnPause(bool isPaused_)
+        {
+            if (this.IsEmptyOrDestroyed())
+            {
+                TimeManager.OnPauseTime.RemoveListener(OnPause);
+                return;
+            }
+            
+            if (isPaused_)
+            {
+                StopAllCoroutines();
+                stateMachine?.CurrentState?.Exit();
+                stateMachine?.CurrentState?.StopMovement();
+            }
+            else
+            {
+                stateMachine?.CurrentState?.ResumeMovement();
+                stateMachine?.CurrentState?.Enter();
+            }
+        }
+        
+        public void ResetPosition()
+        {
+            aiPath.Teleport(station.transform.position);
         }
     }
 }

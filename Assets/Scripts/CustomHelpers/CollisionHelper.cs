@@ -1,3 +1,4 @@
+using ScriptableObjectData;
 using UnityEngine;
 
 namespace CustomHelpers

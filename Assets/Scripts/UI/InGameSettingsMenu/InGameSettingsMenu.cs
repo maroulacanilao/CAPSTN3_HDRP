@@ -18,7 +18,7 @@ namespace UI.InGameSettingsMenu
         [SerializeField] private Button settingsBtn, exitDungeonBtn, saveBtn, exitToMainMenu, exitGameBtn;
 
         [BoxGroup("Settings Panel")]
-        [SerializeField] private GameObject panel;
+        [SerializeField] private GameObject panel, cheatMenu;
 
         public void Awake()
         {
@@ -40,11 +40,13 @@ namespace UI.InGameSettingsMenu
         private void OnSceneChanged(Scene current, Scene next)
         {
             exitDungeonBtn.gameObject.SetActive(next.name == gameDataBase.DungeonSceneName);
+            saveBtn.gameObject.SetActive(next.name == gameDataBase.FarmSceneName);
         }
 
         private void OnEnable()
         {
             panel.SetActive(false);
+            cheatMenu.SetActive(false);
             EventSystem.current.SetSelectedGameObject(settingsBtn.gameObject);
         }
 
@@ -67,13 +69,13 @@ namespace UI.InGameSettingsMenu
         
         private void ExitToMainMenuClick()
         {
-            gameDataBase.sessionData.farmLoadType = FarmLoadType.DungeonEntrance;
             var _sceneParam = new LoadSceneParameters(LoadSceneType.LoadSingle, gameDataBase.MainMenuSceneName, gameDataBase.MainMenuSceneName);
             SceneLoader.OnLoadScene.Invoke(_sceneParam);
         }
         
         private void ExitDungeonClick()
         {
+            gameDataBase.sessionData.farmLoadType = FarmLoadType.DungeonEntrance;
             var _sceneParam = new LoadSceneParameters(LoadSceneType.UnloadAllExcept, gameDataBase.FarmSceneName, gameDataBase.FarmSceneName);
             SceneLoader.OnLoadScene.Invoke(_sceneParam);
         }

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
+using CustomHelpers;
 using Farming;
 using Items.Inventory;
 using Managers;
 using ScriptableObjectData;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SaveSystem
@@ -102,6 +104,7 @@ namespace SaveSystem
             foreach (var _tile in manager_.farmTiles)
             {
                 var _data = SaveFarmTile(_tile);
+                if(_data == null) continue;
                 _farmTileSaveData.Add(_data);
             }
             
@@ -110,6 +113,7 @@ namespace SaveSystem
 
         public static FarmTileSaveData SaveFarmTile(FarmTile tile_)
         {
+            if(tile_.IsEmptyOrDestroyed()) return null;
             var _data = new FarmTileSaveData
             {
                 position = tile_.transform.position.ToString(),
@@ -117,7 +121,7 @@ namespace SaveSystem
                 tileState = tile_.tileState,
                 seedDataID = tile_.seedData.ItemID,
                 datePlanted = tile_.datePlanted.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture),
-                minutesRemaining = tile_.timeRemaining.TotalMinutes.ToString(),
+                minutesRemaining = tile_.timeRemaining.TotalMinutes.ToString(CultureInfo.InvariantCulture),
             };
 
             return _data;
@@ -174,7 +178,7 @@ namespace SaveSystem
         {
             var _progressionData = gameDataBase_.progressionData;
             var _playerSaveData = SavePlayerProgress(gameDataBase_);
-            var _farmTileSaveData = SaveAllFarmTiles(FarmTileManager.Instance);
+            //var _farmTileSaveData = SaveAllFarmTiles(FarmTileManager.Instance);
             
             var _dayCounter = _progressionData.dayCounter;
             var _dungeonLevel = _progressionData.highestDungeonLevel;
@@ -183,7 +187,6 @@ namespace SaveSystem
             var _saveData = new SaveData
             {
                 playerSaveData = _playerSaveData,
-                farmTileSaveData = _farmTileSaveData,
                 dayCounter = _dayCounter,
                 dungeonLevel = _dungeonLevel,
                 timeOfDay = _timeOfDay

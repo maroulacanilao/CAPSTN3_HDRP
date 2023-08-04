@@ -2,7 +2,12 @@ fileFormatVersion: 2
 guid: feae6c5c1abcbad43b6bc3d387c94c14
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: tikbalang-death_Clip
+    second: {fileID: 7400000, guid: f095e39814290f5448ae729cde483515, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -33,7 +38,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 64
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -93,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 0
+  platformSettingsDirtyTick: 638246342972506451
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -128,7 +133,7 @@ ScriptedImporter:
       y: 4
       width: 53
       height: 107
-    spriteID: 3a34849efee68984785b854d91f18ea8
+    spriteID: a7e53182bc0647a4e89e12136d8d654c
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -148,7 +153,7 @@ ScriptedImporter:
       y: 4
       width: 62
       height: 112
-    spriteID: d6aeee5d59e0be94a860cf521767ddab
+    spriteID: c7d322cfa33293e40ade8b35b91a8043
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -168,7 +173,7 @@ ScriptedImporter:
       y: 4
       width: 62
       height: 112
-    spriteID: 4bb24a94102698b479c48c6839d3bba9
+    spriteID: 8db86eb271d36b542aa69477cf235274
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -188,7 +193,7 @@ ScriptedImporter:
       y: 124
       width: 69
       height: 36
-    spriteID: 802f574778d485c4d8951bd08175543c
+    spriteID: c3e7e4595e7c13743a6d0f0b063acf4f
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -208,7 +213,7 @@ ScriptedImporter:
       y: 168
       width: 66
       height: 37
-    spriteID: 59547ca8df57f924cae0de0230508bb5
+    spriteID: a9628313f7d3ba1468597eba22f967e0
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -233,7 +238,7 @@ ScriptedImporter:
         y: 0
         width: 53
         height: 107
-      spriteId: 3a34849efee68984785b854d91f18ea8
+      spriteId: a7e53182bc0647a4e89e12136d8d654c
     - name: tikbalang-death_Frame_1
       frameIndex: 1
       cellRect:
@@ -241,7 +246,7 @@ ScriptedImporter:
         y: 0
         width: 62
         height: 112
-      spriteId: d6aeee5d59e0be94a860cf521767ddab
+      spriteId: c7d322cfa33293e40ade8b35b91a8043
     - name: tikbalang-death_Frame_2
       frameIndex: 2
       cellRect:
@@ -249,7 +254,7 @@ ScriptedImporter:
         y: 0
         width: 62
         height: 112
-      spriteId: 4bb24a94102698b479c48c6839d3bba9
+      spriteId: 8db86eb271d36b542aa69477cf235274
     - name: tikbalang-death_Frame_3
       frameIndex: 3
       cellRect:
@@ -257,7 +262,7 @@ ScriptedImporter:
         y: 3
         width: 69
         height: 36
-      spriteId: 802f574778d485c4d8951bd08175543c
+      spriteId: c3e7e4595e7c13743a6d0f0b063acf4f
     - name: tikbalang-death_Frame_4
       frameIndex: 4
       cellRect:
@@ -265,10 +270,87 @@ ScriptedImporter:
         y: 1
         width: 66
         height: 37
-      spriteId: 59547ca8df57f924cae0de0230508bb5
+      spriteId: a9628313f7d3ba1468597eba22f967e0
     linkedCells: []
     parentIndex: -1
-  platformSettings: []
+  platformSettings:
+  - name: DefaultTexturePlatform
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Standalone
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Server
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Android
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: iPhone
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: WebGL
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Windows Store Apps
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 130, y: 118}

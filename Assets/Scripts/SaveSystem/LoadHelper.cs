@@ -13,7 +13,7 @@ namespace SaveSystem
 {
     public class LoadHelper
     {
-        public static InventoryLoadData LoadInventoryData(InventorySaveData inventorySaveData_, GameDataBase gameDataBase_)
+        public static InventoryLoadData GetInventoryData(InventorySaveData inventorySaveData_, GameDataBase gameDataBase_)
         {
             var _itemDatabase = gameDataBase_.itemDatabase;
 
@@ -118,10 +118,9 @@ namespace SaveSystem
 
         public static void LoadData(SaveData saveData_, GameDataBase gameDataBase_)
         {
-            LoadInventoryData(saveData_.playerSaveData.inventorySaveData, gameDataBase_);
             LoadPlayStats(saveData_, gameDataBase_);
             LoadSpells(saveData_, gameDataBase_);
-            
+
             var _statsBought = saveData_.playerSaveData.statsBought;
             gameDataBase_.statShopData.SetBoughtStats(_statsBought);
             
@@ -133,6 +132,12 @@ namespace SaveSystem
             
             _progressData.dayCounter = saveData_.dayCounter;
             _progressData.highestDungeonLevel = saveData_.dungeonLevel;
+            gameDataBase_.playerData.health?.RefillHealth();
+            gameDataBase_.playerData.mana?.RefreshMana();
+            
+            Debug.Log("Loading Inventory @ level " + gameDataBase_.playerData.level);
+            var _inventoryData = GetInventoryData(saveData_.playerSaveData.inventorySaveData, gameDataBase_);
+            gameDataBase_.playerInventory.Load(_inventoryData);
         }
         
         public static void LoadFarmTiles(FarmTileSaveData[] farmTileSaveData_, GameDataBase gameDataBase_)

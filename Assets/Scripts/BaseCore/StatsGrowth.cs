@@ -91,6 +91,7 @@ namespace BaseCore
             OnBeforeChangeStats?.Invoke();
             
             bonusStats += stats_;
+            Debug.Log(bonusStats.defense);
             
             OnAfterChangeStats?.Invoke();
         }

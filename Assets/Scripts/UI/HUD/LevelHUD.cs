@@ -19,6 +19,13 @@ namespace UI.HUD
 
         private PlayerLevel lvlData => playerData.LevelData;
 
+        private Vector3 defaultSize;
+
+        private void Awake()
+        {
+            defaultSize = levelText.transform.localScale;
+        }
+        
         private void OnEnable()
         {
             PlayerLevel.OnExperienceChanged.AddListener(UpdateExp);
@@ -43,13 +50,12 @@ namespace UI.HUD
             yield return Co_SetOtherObjectActive(true, 0);
             yield return new WaitForSeconds(0.1f);
             var _temp = addExpInfo_.prevScaledLvlExp + addExpInfo_.addedExp;
+            _temp = Mathf.Clamp(_temp, 0, addExpInfo_.prevScaledLvlExpNeeded);
             var _fillAmount = _temp / (float) addExpInfo_.prevScaledLvlExpNeeded;
-            
+
             var _neededExp = addExpInfo_.leveledUp ? addExpInfo_.prevNeededExp : lvlData.NextLevelExperience;
-            var _currentExp = addExpInfo_.leveledUp ? _neededExp : lvlData.TotalExperience;
-            
-            Debug.Log($"Needed Exp: {_neededExp} | Current Exp: {_currentExp}");
-            UpdateExpText(addExpInfo_.prevExp,_currentExp,_neededExp);
+
+            UpdateExpText(addExpInfo_.prevScaledLvlExp,_temp,addExpInfo_.prevScaledLvlExpNeeded, addExpInfo_.addedExp);
             
             yield return expBar.DOFillAmount(_fillAmount, effectDuration).SetUpdate(true).WaitForCompletion();
 
@@ -73,7 +79,9 @@ namespace UI.HUD
             
             levelText.text = $"Level {lvlData.CurrentLevel}";
             
-            UpdateExpText(_currentExp,lvlData.TotalExperience,lvlData.NextLevelExperience);
+            Debug.Log($"Level Up! prevExp : 0 || newExp : {lvlData.CurrentLevelExperience} || neededExp : {lvlData.CurrentExperienceNeeded}");
+            
+            UpdateExpText(0,lvlData.CurrentLevelExperience,lvlData.CurrentExperienceNeeded,addExpInfo_.addedExp);
 
             var _temp2 = lvlData.CurrentLevelExperience / (float) lvlData.CurrentExperienceNeeded;
             expBar.fillAmount = 0;
@@ -85,23 +93,20 @@ namespace UI.HUD
             yield return Co_SetOtherObjectActive(false, 2f);
         }
         
-        private void UpdateExpText(int prevExp_, int newExp_, int neededExp_)
+        private void UpdateExpText(int prevExp_, int newExp_, int neededExp_, int addedExp_)
         {
-            // var _txtTween = DOTween.To(() => prevExp_, x => _prevExp = x, _newExp, 1f).OnUpdate(() =>
-            // {
-            //     expTXT.text = $"{Mathf.Clamp(_prevExp,0,_nxtLvlExp):0}/{_lvlData.NextLevelExperience:0}";
-            // }).SetUpdate(true);
-            
+            var _addedTxt = $" <color=green>+{addedExp_}</color>";
             DOTween.To(() => prevExp_, x => prevExp_ = x, newExp_, effectDuration).OnUpdate(() =>
             {
-                expText.text = $"{Mathf.Clamp(prevExp_,0,neededExp_):0} / {neededExp_:0}";
+                expText.text = $"{Mathf.Clamp(prevExp_,0,neededExp_):0} / {neededExp_:0} {_addedTxt}";
             }).SetUpdate(true);
         }
         
         private void DisplayLevel(bool willDisableOtherObjects_ = true)
         {
+            levelText.transform.localScale = defaultSize;
             levelText.text = $"Level {lvlData.CurrentLevel}";
-            expText.text = $"{lvlData.TotalExperience} / {lvlData.NextLevelExperience}";
+            expText.text = $"{lvlData.CurrentLevelExperience} / {lvlData.CurrentExperienceNeeded}";
             
             expBar.fillAmount = lvlData.CurrentLevelExperience / (float) lvlData.CurrentExperienceNeeded;
             if(willDisableOtherObjects_) StartCoroutine(Co_SetOtherObjectActive(false, 0.5f));

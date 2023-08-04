@@ -19,7 +19,8 @@ namespace UI.Battle
             {
                 UseItemActionUI.CurrentItemBtn = this;
                 BattleActionUI.Instance.currentAction = BattleAction.Item;
-                BattleActionUI.Instance.ShowPlayerTargetPanel();
+                var _player = BattleActionUI.Instance.player;
+                BattleActionUI.Instance.StartAction(_player);
             });
         }
         

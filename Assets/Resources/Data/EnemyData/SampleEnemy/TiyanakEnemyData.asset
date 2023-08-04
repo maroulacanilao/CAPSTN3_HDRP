@@ -1,0 +1,255 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab2bc082a35423d45a82555249286019, type: 3}
+  m_Name: TiyanakEnemyData
+  m_EditorClassIdentifier: 
+  <characterName>k__BackingField: Tiyanak
+  <farmPrefab>k__BackingField: {fileID: 8592459772990040416, guid: f1131aa31da3fb545b4bdcf34dc40c2b,
+    type: 3}
+  <battlePrefab>k__BackingField: {fileID: 5490923670729881753, guid: e174b9b92d87feb41a2e3ed617f7449d,
+    type: 3}
+  <statsData>k__BackingField:
+    <baseCombatStats>k__BackingField:
+      vitality: 20
+      strength: 15
+      intelligence: 5
+      defense: 4
+      speed: 15
+    <maxLevelCombatStats>k__BackingField:
+      vitality: 50
+      strength: 50
+      intelligence: 15
+      defense: 20
+      speed: 60
+    healthGrowthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    intelligenceGrowthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 5
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 1.1111112
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1.1111112
+        outSlope: 1.1111112
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    strengthGrowthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 0
+        tangentMode: 65
+        weightedMode: 2
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 1.7917824
+        tangentMode: 5
+        weightedMode: 1
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    defenseGrowthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 0
+        tangentMode: 65
+        weightedMode: 2
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 1.7917824
+        tangentMode: 5
+        weightedMode: 1
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    speedGrowthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 65
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 0.09954314
+        tangentMode: 5
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  <spells>k__BackingField:
+  - {fileID: 11400000, guid: d9caf8e68115dc14e8d50f8ec65b89da, type: 2}
+  - {fileID: 11400000, guid: 8652fbbf7c3ee2943a1b3c77be4bb433, type: 2}
+  <weaknessTags>k__BackingField:
+  - Fire
+  - Burn
+  - Stake
+  <LootTable>k__BackingField:
+    <possibleExperienceDrop>k__BackingField: {x: 15, y: 15}
+    possibleItemCount: {x: 2, y: 4}
+    guaranteedItemDrop:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: 66870a666710fa54aa83b64479a135c5, type: 2}
+        Value: 5
+    itemProbability:
+      itemDictionary:
+        _serializedList:
+        - Key: {fileID: 11400000, guid: c08935882abf3b14caea83b8174879e3, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 7aec536cc3c3b384fb6e9b7847a3fbf8, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 657be2e4709e83c42bd02cd8d9fc09d6, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 3ef7149958e75424fa1427956a1e4259, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 66870a666710fa54aa83b64479a135c5, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 2f9170227bb86224cb25fa2da170e60f, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 14274afb37a409041ae78845e893ad21, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 1ccd76fe8e75f134eaca68b5c4069fb9, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 8d6135eadf32087439ca9df46b04d714, type: 2}
+          Value: 1
+        - Key: {fileID: 11400000, guid: 0ff9d82d4e6465b42829a6f4f572f8ab, type: 2}
+          Value: 0.5
+        - Key: {fileID: 11400000, guid: f78cb74c44c879a4e9ca30cf0b641386, type: 2}
+          Value: 1
+        - Key: {fileID: 11400000, guid: 3cf7935cb92dcc341bee9dbd24398f70, type: 2}
+          Value: 1
+        - Key: {fileID: 11400000, guid: fec94f0233e9d95498e26ae0efe96d87, type: 2}
+          Value: 0.01
+  <combatTendency>k__BackingField:
+    <actionTypeWeights>k__BackingField:
+      itemDictionary:
+        _serializedList:
+        - Key: 0
+          Value: 1
+        - Key: 1
+          Value: 0.5
+    <spells>k__BackingField:
+    - {fileID: 11400000, guid: d9caf8e68115dc14e8d50f8ec65b89da, type: 2}
+    - {fileID: 11400000, guid: 8652fbbf7c3ee2943a1b3c77be4bb433, type: 2}
+  <levelRange>k__BackingField: {x: 0, y: 0}
+  <alliesDictionary>k__BackingField:
+    itemDictionary:
+      _serializedList: []
+  <encyclopediaInfo>k__BackingField:
+    description: Tiyanaks mimic and take the form of an infant baby when there are
+      people nearby. When victims take notice and go closer, it transforms back into
+      a goblin-like physic and eats its prey. Tiyanaks are said to be deceased babies
+      who died before baptism, a child of both human and demon or aborted fetuses
+      who seek revenge on its mother. Best ignore random babies alone in the forest
+      or caves
+    sprite: {fileID: -6001526755327445033, guid: c849eaeedba9adc4093446729c543617,
+      type: 3}

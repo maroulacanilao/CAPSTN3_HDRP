@@ -68,7 +68,7 @@ namespace Farming
             FarmTile.timeRemaining = default;
 
             FarmTile.plantRenderer.gameObject.SetActive(false);
-            FarmTile.plantRenderer.sprite = FarmTile.defaultPlantSprite;
+            FarmTile.plantRenderer.sprite = null;
 
             ChangeRenderer();
             ChangeMaterial();
@@ -85,6 +85,8 @@ namespace Farming
         public override void PlantSeed(SeedData seedData_)
         {
             FarmTile.seedData = seedData_;
+            
+            AudioManager.PlayPlanting();
 
             if (FarmTile.isWatered) FarmTile.ChangeState(FarmTile.growingTileState);
             else FarmTile.ChangeState(FarmTile.plantedTileState);
@@ -132,11 +134,10 @@ namespace Farming
 
         public override void Interact()
         {
-            // var _item = farmTile.seedData.produceData.GetConsumableItem(1);
-            // GameManager.Instance.GameDataBase.playerInventory.AddItem(_item);
             FarmTileManager.OnHarvestCrop.Invoke(FarmTile.seedData);
             FarmTile.ChangeState(FarmTile.emptyTileState);
             FarmTile.health.RefillHealth();
+            AudioManager.PlayHarvesting();
         }
     }
 }

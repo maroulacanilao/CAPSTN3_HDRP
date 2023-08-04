@@ -19,18 +19,24 @@ namespace UI.ShrineUI.GetSpells
 
         protected void Awake()
         {
+            DisplayNull();
             offerBtn.onClick.AddListener(OfferSpell);
         }
         
         public void DisplaySpell(ShrineSpellItem spellItem_)
         {
-            if(spellItem_ == null) return;
+            if (spellItem_ == null)
+            {
+                DisplayNull();
+                return;
+            }
             currentSpellItem = spellItem_;
             DisplaySpell(spellItem_.spellData);
             
             if (spellItem_.offerRequirement.consumableData == null) throw new Exception("No consumable data found!");
             
             requirementItem.Set(spellItem_.offerRequirement);
+            requirementItem.gameObject.SetActive(true);
             
             var _canLearn = shrine.CanLearn(currentSpellItem.spellData, out var _error);
             
@@ -49,7 +55,16 @@ namespace UI.ShrineUI.GetSpells
         
         private void OfferSpell()
         {
+            if(currentSpellItem == null) return;
+            if(currentSpellItem.spellData == null) return;
             shrine.LearnSpell(currentSpellItem.spellData);
+        }
+
+        public override void DisplayNull()
+        {
+            base.DisplayNull();
+            requirementItem.gameObject.SetActive(false);
+            offerBtn.interactable = false;
         }
 
     }

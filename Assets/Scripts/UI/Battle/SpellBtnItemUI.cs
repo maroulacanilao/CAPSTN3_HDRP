@@ -23,14 +23,28 @@ namespace UI.Battle
         public static int currIndex = 0;
         public static readonly Evt<SpellBtnItemUI> OnSelectSpell = new Evt<SpellBtnItemUI>();
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             button.onClick.AddListener(() =>
             {
                 mainPanel.currentAction = BattleAction.Spell;
                 currIndex = spellIndex;
-                if(spellData.spellType is SpellType.Damage or SpellType.DeBuff) mainPanel.ShowEnemyTargetPanel();
-                else mainPanel.ShowPlayerTargetPanel();
+                if (spellData.spellType is SpellType.Damage or SpellType.DeBuff)
+                {
+                    if (spellData.isAOE)
+                    {
+                        var _target = BattleSystem.BattleManager.Instance.GetOppositePartyOf(mainPanel.player.character, false)[0];
+                        mainPanel.StartAction(_target);
+                        return;
+                    }
+                    mainPanel.ShowEnemyTargetPanel();
+                }
+                else
+                {
+                    var _target = BattleSystem.BattleManager.Instance.playerParty[0];
+                    mainPanel.StartAction(_target);
+                }
             });
         }
         

@@ -17,6 +17,7 @@ namespace Player.ControllerState
         public WateringInputState WateringState { get; private set; }
         public UnTillInputState UnTillState { get; private set; }
         public AttackInputState AttackState { get; private set; }
+        public HitInputState HitState { get; private set; }
 
         #endregion
         
@@ -53,6 +54,7 @@ namespace Player.ControllerState
             WateringState = new WateringInputState(this);
             UnTillState = new UnTillInputState(this);
             AttackState = new AttackInputState(this);
+            HitState = new HitInputState(this);
             timeLastJumpPressed = -1;
             
             CurrentState = GroundedState;

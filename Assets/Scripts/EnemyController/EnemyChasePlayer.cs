@@ -16,6 +16,7 @@ namespace EnemyController
         public override void Enter()
         {
             base.Enter();
+            controller.animator.SetTrigger(controller.GroundedHash);
             isStateActive = true;
             controller.aiPath.canMove = true;
             controller.aiPath.isStopped = false;
@@ -57,6 +58,7 @@ namespace EnemyController
         {
             base.Exit();
             isStateActive = false;
+            controller.animator.ResetTrigger(controller.GroundedHash);
             controller.StopAllCoroutines();
         }
     }

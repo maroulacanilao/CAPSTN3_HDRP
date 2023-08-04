@@ -14,14 +14,7 @@ namespace Managers
     public class TimeManager : Singleton<TimeManager>
     {
         [SerializeField] private ProgressionData progressionData;
-        
-        [Header("Time Values (24hr format)")]
-        [SerializeField] private int endingHour = 24;
-        [SerializeField] private bool isEndingHourNextDay = true;
-        [SerializeField] private int startingHour = 6;
-        [SerializeField] private int nightHour = 19;
-        [SerializeField] private int minutePerTick = 5;
-        [SerializeField] private float tickRate = 4.8f; // 1 second in real time = minutePerTick in game
+        [SerializeField] private TimeSettings timeSettings;
 
         [Header("Events")]
         public static readonly Evt OnMinuteTick = new Evt();
@@ -48,36 +41,20 @@ namespace Managers
             set => Instance.didDayStart = value;
         }
 
-        public static int EndingHour
-        {
-            get => Instance.endingHour;
-            set => Instance.endingHour = value;
-        }
+        public static int EndingHour => Instance.timeSettings.endingHour;
 
-        public static int StartingHour
-        {
-            get => Instance.startingHour;
-            set => Instance.startingHour = value;
-        }
-        
-        public static int NightHour
-        {
-            get => Instance.nightHour;
-            set => Instance.nightHour = value;
-        }
+        public static int StartingHour => Instance.timeSettings.startingHour;
 
-        public static float TimeScale
-        {
-            get => Instance.tickRate;
-            set => Instance.tickRate = value;
-        }
+        public static int NightHour => Instance.timeSettings.nightHour;
+
+        public static float TimeScale => Instance.timeSettings.tickRate;
+
+        public static int MinutePerTick => Instance.timeSettings.minutePerTick;
         
-        public static int MinutePerTick
-        {
-            get => Instance.minutePerTick;
-            set => Instance.minutePerTick = value;
-        }
+        public static int MaxDays => Instance.timeSettings.maxDays;
         
+        public static int DaysLeft => MaxDays - DayCounter;
+
         public static bool IsWeekend => CurrentDay is DayOfWeek.Saturday or DayOfWeek.Sunday;
         public static float GameTime => CurrentHour + ( CurrentMinute/ 60f);
         public static bool IsTimePaused => Instance.isTimePaused;
@@ -121,9 +98,9 @@ namespace Managers
             {
                 dateTime = CustomDateTime.FromDateTime(dateTime),
                 endTime = CustomDateTime.FromDateTime(endTime),
-                minutePerTick = minutePerTick,
-                nightHour = nightHour,
-                tickRate = tickRate,
+                minutePerTick = MinutePerTick,
+                nightHour = NightHour,
+                tickRate = timeSettings.tickRate,
                 deltaTime = Time.deltaTime,
                 timer = timer,
                 didMinuteTick = new NativeArray<bool>(1, Allocator.TempJob),
@@ -185,7 +162,6 @@ namespace Managers
             _prevDateTime = DateTime;
 
             Instance.dateTime = DateTime.AddDays(1);
-            Instance.progressionData.dayCounter++;
 
 
             //reset hour and minutes to 0:00
@@ -193,13 +169,13 @@ namespace Managers
             Instance.dateTime = DateTime.AddMinutes(-CurrentMinute);
 
             // reset hour to starting hour
-            Instance.dateTime = DateTime.AddHours(Instance.startingHour);
+            Instance.dateTime = DateTime.AddHours(StartingHour);
 
             OnBeginDay.Invoke();
 
-            var _end = new DateTime(Instance.dateTime.Year, Instance.dateTime.Month, Instance.dateTime.Day, Instance.endingHour, 0, 0);
+            var _end = new DateTime(Instance.dateTime.Year, Instance.dateTime.Month, Instance.dateTime.Day, EndingHour, 0, 0);
             
-            Instance.endTime = Instance.isEndingHourNextDay ? _end.AddDays(1) : _end;
+            Instance.endTime = Instance.timeSettings.isEndingHourNextDay ? _end.AddDays(1) : _end;
 
             // check if new week month or year
             if (CurrentDay == DayOfWeek.Monday) OnNewWeek.Invoke();
@@ -223,6 +199,10 @@ namespace Managers
             Instance.isTimePaused = true;
 
             Instance.didDayStart = false;
+            
+            Instance.progressionData.dayCounter++;
+            
+            Debug.Log($"{DaysLeft} Days Left");
 
             OnEndDay.Invoke();
         }
@@ -262,7 +242,7 @@ namespace Managers
         {
             if(isTimePaused) return;
             
-            dateTime = dateTime.AddMinutes(minutePerTick).RoundToFive();
+            dateTime = dateTime.AddMinutes(MinutePerTick).RoundToFive();
             OnMinuteTick.Invoke();
 
             Instance.timeText = $"{CurrentDay} {CurrentDate} {CurrentHour}:{CurrentMinute}";
@@ -271,7 +251,7 @@ namespace Managers
                 
             OnHourTick.Invoke();
 
-            if (CurrentHour == nightHour)
+            if (CurrentHour == NightHour)
             {
                 OnNightTime.Invoke();
             }
@@ -293,6 +273,18 @@ namespace Managers
             if(Instance.IsEmptyOrDestroyed()) return;
             Instance.dateTime = dateTime_;
             OnMinuteTick.Invoke();
+        }
+
+        public static bool IsNight()
+        {
+            if(Instance.IsEmptyOrDestroyed()) return false;
+            return CurrentHour >= NightHour || CurrentHour < 5;
+        }
+
+        public static void ResetData()
+        {
+            Instance.timeStarted = false;
+            
         }
     }
     

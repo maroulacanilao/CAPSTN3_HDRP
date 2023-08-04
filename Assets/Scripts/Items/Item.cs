@@ -2,8 +2,10 @@ using System;
 using BaseCore;
 using Character;
 using Character.CharacterComponents;
+using CustomHelpers;
 using Items.ItemData;
 using Items.ItemData.Tools;
+using Managers;
 using Player;
 using UnityEngine;
 
@@ -226,8 +228,8 @@ namespace Items
             
             var _effectInstance = UnityEngine.Object.Instantiate(_data.ConsumeEffect, Vector3.zero, Quaternion.identity);
             
-            statusEffectReceiver_.ApplyStatusEffect(_effectInstance);
-
+            statusEffectReceiver_.ApplyStatusEffect(_effectInstance).StartCoroutine();
+            
             RemoveStack();
             return HasStack;
         }
@@ -337,6 +339,24 @@ namespace Items
             {
                 isToolable = true,
                 isDiscardable = false,
+            };
+            return _clone;
+        }
+    }
+
+    [Serializable]
+    public class ItemQuest : Item
+    {
+        public ItemQuest(ItemData.ItemData data_) : base(data_)
+        {
+            isDiscardable = false;
+        }
+
+        public override Item Clone()
+        {
+            var _clone = new ItemQuest(data)
+            {
+                isDiscardable = false
             };
             return _clone;
         }

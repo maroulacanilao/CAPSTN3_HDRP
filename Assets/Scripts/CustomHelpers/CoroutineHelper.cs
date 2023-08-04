@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using CustomEvent;
+using Managers;
 using UnityEngine;
 
 namespace CustomHelpers
@@ -37,6 +38,11 @@ namespace CustomHelpers
         public static CustomYieldInstruction WaitForAnimationEvent(this Animator animator_, string eventName_, float fallbackTime = 5)
         {
             return new WaitForAnimationEvent(animator_, eventName_, fallbackTime);
+        }
+        
+        public static void StartCoroutine(this IEnumerator coroutine_)
+        {
+            GameManager.Instance.StartCoroutine(coroutine_);
         }
     }
 }

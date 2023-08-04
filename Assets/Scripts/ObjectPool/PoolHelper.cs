@@ -21,6 +21,7 @@ namespace ObjectPool
         
         public static GameObject GetInstance(this GameObject prefab_, Vector3 position_, Quaternion rotation_)
         {
+            if (prefab_ == null) return null;
             return PoolManager.GetInstance(prefab_,position_,rotation_);
         }
         

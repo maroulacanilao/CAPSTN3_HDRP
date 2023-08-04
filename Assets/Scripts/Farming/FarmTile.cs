@@ -66,7 +66,7 @@ namespace Farming
         
         [SerializeReference] private FarmTileState currentState;
 
-        public readonly Evt<TileState> OnChangeState = new Evt<TileState>();
+        public readonly Evt<FarmTile,TileState> OnChangeState = new Evt<FarmTile,TileState>();
         private IPoolable poolableImplementation;
 
         private void Awake()
@@ -92,7 +92,7 @@ namespace Farming
             currentState = farmTileState_;
             currentState?.EnterLogic();
             
-            OnChangeState.Invoke(tileState);
+            OnChangeState.Invoke(this,tileState);
         }
 
         #region Action
@@ -144,17 +144,11 @@ namespace Farming
                 Debug.LogError("Cant Parse Vector3");
                 return;
             }
-            if(!StringHelpers.TryParseQuaternion(saveData_.rotation, out var _rotation))
-            {
-                Debug.LogError("Cant Parse Quaternion");
-                return;
-            }
-            
+
             var _transform = transform;
             
             _transform.position = _position;
-            _transform.rotation = _rotation;
-            
+
             Debug.Log(seedData_.ItemName);
             seedData = seedData_;
             
@@ -169,16 +163,14 @@ namespace Farming
                     
                     ChangeState(growingTileState);
                     
-                    if(DateTime.TryParseExact(saveData_.datePlanted, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var _datePlanted))
-                    {
-                        datePlanted = _datePlanted;
-                    }
-                    
                     if (double.TryParse(saveData_.minutesRemaining, out var _minutes))
                     {
                         timeRemaining = TimeSpan.FromMinutes(_minutes);
+                        datePlanted = TimeManager.DateTime.Subtract(timeRemaining);
                         Debug.Log($"Time Remaining: {timeRemaining.TotalMinutes}");
                     }
+                    
+
                     
                     var _state = currentState as GrowingTileState;
                     

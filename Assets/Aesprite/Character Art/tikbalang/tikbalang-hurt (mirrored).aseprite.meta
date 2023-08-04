@@ -2,7 +2,12 @@ fileFormatVersion: 2
 guid: eb12debf8ccd2a64b9c3cf42bde6e17c
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: tikbalang-hurt (mirrored)_Clip
+    second: {fileID: 7400000, guid: df0fc4825b23cac4184ede9eb2e81bbc, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -33,7 +38,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 64
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -93,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 0
+  platformSettingsDirtyTick: 638246343112984746
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -128,7 +133,7 @@ ScriptedImporter:
       y: 124
       width: 53
       height: 107
-    spriteID: e7c4e14238a3f79418cd9df05c9901cf
+    spriteID: 0e86266ac2bc6734782d88fa0450913c
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -148,7 +153,7 @@ ScriptedImporter:
       y: 4
       width: 62
       height: 112
-    spriteID: f4f354e31b7b8e1469522d215fa4c604
+    spriteID: d36e181ba89d8d74bbdcf87e68ba9348
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -173,7 +178,7 @@ ScriptedImporter:
         y: 0
         width: 53
         height: 107
-      spriteId: e7c4e14238a3f79418cd9df05c9901cf
+      spriteId: 0e86266ac2bc6734782d88fa0450913c
     - name: tikbalang-hurt (mirrored)_Frame_1
       frameIndex: 1
       cellRect:
@@ -181,10 +186,87 @@ ScriptedImporter:
         y: 0
         width: 62
         height: 112
-      spriteId: f4f354e31b7b8e1469522d215fa4c604
+      spriteId: d36e181ba89d8d74bbdcf87e68ba9348
     linkedCells: []
     parentIndex: -1
-  platformSettings: []
+  platformSettings:
+  - name: DefaultTexturePlatform
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Standalone
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Server
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Android
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: iPhone
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: WebGL
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Windows Store Apps
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 64, y: 118}

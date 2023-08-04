@@ -27,5 +27,10 @@ namespace ScriptableObjectData
         [field: BoxGroup("Prefabs")] [field: SerializeField]
         [field: SerializedDictionary("key", "Prefab")]
         public SerializedDictionary<string,GameObject> prefabs { get; private set; }
+        
+        [field: BoxGroup("Sprites")] [field: SerializeField]
+        public Sprite selectedButtonSprite { get; private set; }
+        [field: BoxGroup("Sprites")] [field: SerializeField]
+        public Sprite deselectedButtonSprite { get; private set; }
     }
 }

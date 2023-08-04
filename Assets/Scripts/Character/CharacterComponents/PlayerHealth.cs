@@ -1,4 +1,5 @@
-﻿using Items.Inventory;
+﻿using BaseCore;
+using Items.Inventory;
 using ScriptableObjectData.CharacterData;
 using UnityEngine;
 
@@ -19,12 +20,14 @@ namespace Character.CharacterComponents
             OnManuallyUpdateHealth.Invoke(this);
             data_.statsData.OnBeforeChangeStats.AddListener(BeforeChangeStats);
             data_.statsData.OnAfterChangeStats.AddListener(AfterChangeStats);
+            PlayerLevel.OnLevelUp.AddListener(RefillHealth);
         }
         
         ~PlayerHealth()
         {
             playerData.statsData.OnBeforeChangeStats.RemoveListener(BeforeChangeStats);
             playerData.statsData.OnAfterChangeStats.RemoveListener(AfterChangeStats);
+            PlayerLevel.OnLevelUp.RemoveListener(RefillHealth);
         }
 
         public override void OnCharacterEnable()

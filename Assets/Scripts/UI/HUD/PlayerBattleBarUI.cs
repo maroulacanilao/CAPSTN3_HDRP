@@ -24,6 +24,7 @@ namespace UI.HUD
             base.Start();
             characterMana = character.mana;
             playerData = character.characterData as PlayerData;
+            
             characterMana.OnUseMana.AddListener(UpdateMana);
             characterMana.OnAddMana.AddListener(UpdateMana);
             characterHealth.OnManuallyUpdateHealth.AddListener(ManuallyUpdateHealthBar);
@@ -40,6 +41,13 @@ namespace UI.HUD
             characterMana?.OnManuallyUpdateMana.RemoveListener(ManuallyUpdateManaBar);
             characterMana?.OnUseMana.RemoveListener(UpdateMana);
             characterMana?.OnAddMana.RemoveListener(UpdateMana);
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            ManuallyUpdateManaBar(characterMana);
+            ManuallyUpdateHealthBar(characterHealth);
         }
 
         private void UpdateMana(CharacterMana characterMana_)
@@ -61,12 +69,17 @@ namespace UI.HUD
 
         private void ManuallyUpdateHealthBar(CharacterHealth characterHealth_)
         {
+            if(characterHealth == null) return;
+            if(hpBar == null) return;
             hpBar.fillAmount = (float) playerData.health.CurrentHp / playerData.health.MaxHp;
             hpText.text = $"Health: {playerData.health.CurrentHp}/{playerData.health.MaxHp}";
+            hpBar.color = hpBar.fillAmount > 0.2f ? originalColor : damageColor;
         }
         
         private void ManuallyUpdateManaBar(CharacterMana characterMana_)
         {
+            if(characterMana == null) return;
+            if(manaBar == null) return;
             manaBar.fillAmount = (float) playerData.mana.CurrentMana / playerData.mana.MaxMana;
             mana_TXT.text = $"Mana: {playerData.mana.CurrentMana}/{playerData.mana.MaxMana}";
         }

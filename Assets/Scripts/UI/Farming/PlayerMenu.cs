@@ -14,7 +14,6 @@ namespace UI.Farming
         {
             OpenedMenu = this;
             PlayerMenuManager.OnCloseAllUI.AddListener(CloseMenu);
-            CloseDialog();
         }
         
         protected virtual void OnDisable()

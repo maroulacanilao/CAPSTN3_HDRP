@@ -4,6 +4,7 @@ using BaseCore;
 using BattleSystem;
 using CustomHelpers;
 using Items;
+using Items.Inventory;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,6 +39,8 @@ namespace UI.Battle
             enemyTargetPanel.Initialize(this, battleManager.enemyParty);
             playerTargetPanel.Initialize(this, battleManager.playerParty);
             itemPanel.Initialize(this);
+            
+            mainPanel.SetActive(false);
         }
 
         private void OnDestroy()
@@ -57,6 +60,7 @@ namespace UI.Battle
             currentTarget = battleManager.GetFirstAliveEnemy();
             mainPanel.SetActive(true);
             BackToActionPanel();
+            BattleTextManager.Stop();
         }
         
         public void CloseOtherPanels()
@@ -107,7 +111,7 @@ namespace UI.Battle
             currentAction = BattleAction.BasicAttack;
             ShowEnemyTargetPanel();
         }
-        
+
         #endregion
 
         #region Actions
@@ -192,7 +196,8 @@ namespace UI.Battle
             var currentItem = UseItemActionUI.CurrentItemBtn.item;
             
             currentItem.Consume(target_.character.statusEffectReceiver);
-            
+            if(currentItem is ItemConsumable _itemConsumable) InventoryEvents.OnUpdateStackable.Invoke(_itemConsumable);
+
             yield return CoroutineHelper.GetWait(1f);
             yield return null;
             BattleManager.OnPlayerEndDecide.Invoke();
@@ -209,6 +214,12 @@ namespace UI.Battle
             Debug.Log("Player Skipped a Turn");
             yield return CoroutineHelper.GetWait(0.2f);
             BattleManager.OnPlayerEndDecide.Invoke();
+        }
+
+        public void Flee()
+        {
+            battleManager.TryFlee();
+            mainPanel.SetActive(false);
         }
 
         #endregion

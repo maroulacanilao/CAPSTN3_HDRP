@@ -31,8 +31,9 @@ namespace UI.DungeonEntranceUI
             Cursor.visible = true;
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             Time.timeScale = 1;
         }
 
@@ -62,6 +63,7 @@ namespace UI.DungeonEntranceUI
                 _options.Add(_option);
             }
             dropdown.options = _options;
+            dropdown.value = dropdown.options.Count - 1;
         }
     }
 }

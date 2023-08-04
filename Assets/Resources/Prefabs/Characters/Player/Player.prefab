@@ -186,7 +186,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1330858410}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.08, y: 1.1, z: -0.307}
+  m_LocalPosition: {x: 0.08, y: 1.1, z: -0.633}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -204,8 +204,8 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.9716981, g: 0.8529833, b: 0.6921057, a: 1}
-  m_Intensity: 827.60516
+  m_Color: {r: 1, g: 0.8919025, b: 0.740566, a: 1}
+  m_Intensity: 5
   m_Range: 20
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Intensity: 827.60516
+  m_Intensity: 5
   m_EnableSpotReflector: 1
   m_LuxAtDistance: 1
   m_InnerSpotPercent: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
   m_ShapeWidth: 0.5
   m_ShapeHeight: 0.5
   m_AspectRatio: 1
-  m_ShapeRadius: 0.025
+  m_ShapeRadius: 0
   m_SoftnessScale: 1
   m_UseCustomSpotLightShadowCone: 0
   m_CustomSpotLightShadowCone: 30
@@ -476,7 +476,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: c2b98a9aa56ab3343ac5a8c4fc07889f, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -542,14 +542,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b886b46f084922d4e80b630d300a39ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameDataBase: {fileID: 11400000, guid: 3d535b235f15be1409dd9834cae2a057, type: 2}
   farmTilePrefab: {fileID: 8189976617550584776, guid: 1f683a5ee46817443b82b5511597556b,
     type: 3}
-  farmTileLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  farmGroundLayer:
-    serializedVersion: 2
-    m_Bits: 8
   lineRenderer: {fileID: 1224222651}
   distanceToPlayer: 1
   distanceToGround: 0.05
@@ -571,7 +566,7 @@ MonoBehaviour:
   size: {x: 1.5, y: 1.25, z: 1.5}
   interactableLayer:
     serializedVersion: 2
-    m_Bits: 640
+    m_Bits: 128
   tickRate: 0.25
 --- !u!1 &1040642371183458987
 GameObject:
@@ -670,6 +665,7 @@ Transform:
   - {fileID: 1330858411}
   - {fileID: 7131102032840302733}
   - {fileID: 6225582102715942861}
+  - {fileID: 1736029649184640945}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -720,33 +716,12 @@ MonoBehaviour:
   <jumpHash>k__BackingField: 125937960
   <attackHash>k__BackingField: 1080829965
   <attackSpeedHash>k__BackingField: -498733101
+  <hitHash>k__BackingField: 1654612129
   <JumpStartEvent>k__BackingField: JumpStart
   <hoeEnd>k__BackingField: HoeEnd
   <waterEnd>k__BackingField: WaterEnd
   <attackHitEvent>k__BackingField: AttackHit
   <attackEndEvent>k__BackingField: AnimEnd
-  <animParam>k__BackingField:
-    <animator>k__BackingField: {fileID: 1359967692}
-    <groundedHash>k__BackingField: 862969536
-    <isIdleHash>k__BackingField: 2058724655
-    <xSpeedHash>k__BackingField: 1584793824
-    <ySpeedHash>k__BackingField: -1792353467
-    <attackHash>k__BackingField: 1080829965
-    <spellAnimationHash>k__BackingField: -2017977412
-    <hurtAnimationHash>k__BackingField: 1654612129
-    <deathAnimationHash>k__BackingField: 646380074
-    <atkSpeedHash>k__BackingField: 0
-    <animEndEvtId>k__BackingField: AnimEnd
-    <atkHitEvtId>k__BackingField: AttackHit
-    <atkEndEvtId>k__BackingField: AnimEnd
-    <castHitEvtId>k__BackingField: CastHit
-    <castEndEvtId>k__BackingField: CastEnd
-    <hoeHash>k__BackingField: 1584793824
-    <wateringHash>k__BackingField: 0
-    <jumpHash>k__BackingField: 0
-    <jumpStartEvtId>k__BackingField: JumpStart
-    <hoeEndEvtId>k__BackingField: HoeEnd
-    <waterEndEvtId>k__BackingField: WaterEnd
   <animator>k__BackingField: {fileID: 1359967692}
   <animationEventReceiver>k__BackingField: {fileID: 7825488674379097175}
   <collisionDetector>k__BackingField: {fileID: 1040642371183458998}
@@ -756,7 +731,7 @@ MonoBehaviour:
   <attackCooldown>k__BackingField: 0.5
   <attackSpeed>k__BackingField: 4
   <attackOffset>k__BackingField: {x: 0, y: 0.875, z: 0}
-  <attackSize>k__BackingField: {x: 8, y: 1.75, z: 8}
+  <attackSize>k__BackingField: {x: 8, y: 2, z: 8}
   <enemyLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 1024
@@ -771,7 +746,7 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 4d19981c7bb613a42a9b7da0d1dadf6f, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 0.4
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
@@ -838,6 +813,37 @@ MonoBehaviour:
   <player>k__BackingField: {fileID: 1040642371267966287}
   interactDetector: {fileID: 9014571295811784189}
   toolArea: {fileID: 9014571295811784188}
+--- !u!1 &3781173330482704669
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1736029649184640945}
+  m_Layer: 6
+  m_Name: Spell
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1736029649184640945
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3781173330482704669}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1040642371267966273}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8917236130486882684
 GameObject:
   m_ObjectHideFlags: 0

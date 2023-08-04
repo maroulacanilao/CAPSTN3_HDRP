@@ -16,11 +16,13 @@ namespace ScriptableObjectData
 
         public AudioClip GetSceneMusic(string sceneName)
         {
+            if(string.IsNullOrEmpty(sceneName)) return null;
             return backgroundMusics.TryGetValue(sceneName, out var music) ? music : null;
         }
 
         public AudioClip GetSfx(string audioID)
         {
+            if(string.IsNullOrEmpty(audioID)) return null;
             return soundEffectsDictionary.TryGetValue(audioID, out var music) ? music : null;
         }
     }

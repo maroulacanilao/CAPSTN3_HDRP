@@ -15,12 +15,14 @@ namespace UI.TabMenu.InventoryMenu
     public class Item_MenuItem : SelectableMenuButton, IDragHandler, IEndDragHandler, IBeginDragHandler
     {
         public enum InventoryItemType { storage = 0, toolBar = 1, weaponBar = 2, armorBar = 3  }
-        
+
+        [SerializeField] private Image bg;
         [SerializeField] private TextMeshProUGUI countTxt;
         [SerializeField] private Image icon;
         [SerializeField] private Image ghostIcon;
         [SerializeField] private Color highLightColor;
         [SerializeField] private Color swappingColor;
+        [SerializeField] Sprite selectedSprite, deselectedSprite;
 
         [field: SerializeField] public InventoryItemType inventoryItemType { get; private set; }
         
@@ -48,10 +50,13 @@ namespace UI.TabMenu.InventoryMenu
             }
         }
 
-        public static bool isDragging;
-        
         public static Item_MenuItem swappingItem { get; set; }
         public static Item_MenuItem selectedItem { get; set; }
+
+        protected void OnValidate()
+        {
+            bg = GetComponent<Image>();
+        }
 
 
         protected override void OnEnable()
@@ -60,7 +65,6 @@ namespace UI.TabMenu.InventoryMenu
             UpdateDisplay();
             ghostIcon.transform.localPosition = Vector3.zero;
             ghostIcon.gameObject.SetActive(false);
-            isDragging = false;
         }
 
         protected override void OnDisable()
@@ -68,7 +72,6 @@ namespace UI.TabMenu.InventoryMenu
             base.OnDisable();
             ghostIcon.transform.localPosition = Vector3.zero;
             ghostIcon.gameObject.SetActive(false);
-            isDragging = false;
         }
         
         public void Initialize(InventoryMenu inventoryMenu_, int index_)
@@ -108,23 +111,25 @@ namespace UI.TabMenu.InventoryMenu
             if(this.IsEmptyOrDestroyed()) return;
             if(!hasInitialized) return;
             bool _isItemValid = item != null && item.Data != null;
-            
-            if(inventoryItemType == InventoryItemType.storage) icon.color = _isItemValid ? Color.white : Color.gray;
-            else icon.color = Color.white;
-            
-            countTxt.gameObject.SetActive(item is {IsStackable: true});
-            
+            bg.color = Color.white;
+
             if (_isItemValid)
             {
                 icon.sprite = item.Data.Icon;
                 ghostIcon.sprite = item.Data.Icon;
+                icon.color = Color.white;
             }
             else
             {
                 icon.sprite = null;
                 ghostIcon.sprite = null;
+                icon.color = Color.clear;
+                countTxt.gameObject.SetActive(false);
+                return;
             }
             
+            countTxt.gameObject.SetActive(item is {IsStackable: true});
+
             if(countTxt.gameObject.activeSelf) countTxt.SetText($"{item.StackCount}x");
         }
 
@@ -138,6 +143,7 @@ namespace UI.TabMenu.InventoryMenu
         public void SelectOutline()
         {
             outline.effectColor = outlineColor;
+            bg.sprite = selectedSprite;
         }
         
         public override void DeselectButton()
@@ -147,18 +153,20 @@ namespace UI.TabMenu.InventoryMenu
                 SwappingOutline();
                 return;
             }
+            bg.sprite = deselectedSprite;
             if (isHighlighting)
             {
+
                 EquipOutline();
                 return;
             }
-
             outline.effectColor = Color.clear;
         }
 
         public void SwappingOutline()
         {
             outline.effectColor = swappingColor;
+            bg.color = swappingColor;
         }
         
         public void EquipOutline()
@@ -166,6 +174,7 @@ namespace UI.TabMenu.InventoryMenu
             if(this == swappingItem) return;
             isHighlighting = true;
             outline.effectColor = highLightColor;
+            bg.color = highLightColor;
         }
 
         public void ResetOutline()
@@ -173,6 +182,8 @@ namespace UI.TabMenu.InventoryMenu
             isHighlighting = false;
             if(selectedItem == this) return;
             outline.effectColor = Color.clear;
+            bg.sprite = deselectedSprite;
+            bg.color = Color.white;
         }
         
         public void OnBeginDrag(PointerEventData eventData)

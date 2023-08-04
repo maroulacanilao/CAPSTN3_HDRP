@@ -22,12 +22,14 @@ namespace UI.ShrineUI.EquipmentStore
             {
                 shrineEquipmentStore.Buy(currentEquipmentStoreItem);
             });
+            DisplayNull();
         }
 
         public void SetItem(ShrineEquipmentStoreItem item_)
         {
             currentEquipmentStoreItem = item_;
             DisplayItem(item_.gearItem);
+            descriptionPanel.gameObject.SetActive(false);
             
             if (item_ != null)
             {
@@ -57,6 +59,14 @@ namespace UI.ShrineUI.EquipmentStore
                     errorTXt.text = "";
                     break;
             }
+        }
+
+        public override void DisplayNull()
+        {
+            base.DisplayNull();
+            buyBtn.interactable = false;
+            requirementItem.gameObject.SetActive(false);
+            descriptionPanel.gameObject.SetActive(false);
         }
     }
 }

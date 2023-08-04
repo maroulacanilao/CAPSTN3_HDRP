@@ -91,7 +91,28 @@ namespace EnemyController.EnemyStates
         
         protected void ChasePlayer()
         {
-            controller.aiPath.destination = player.position + playerRb.velocity;
+            // controller.aiPath.destination = player.position + playerRb.velocity;
+            controller.aiPath.destination = player.position;
+        }
+        
+        public void StopMovement()
+        {
+            if(controller.IsEmptyOrDestroyed()) return;
+            controller.aiPath.canMove = false;
+            controller.aiPath.isStopped = true;
+            controller.aiPath.maxSpeed = 0;
+            controller.aiPath.enabled = false;
+            controller.movementController.enabled = false;
+        }
+        
+        public void ResumeMovement()
+        {
+            if(controller.IsEmptyOrDestroyed()) return;
+            controller.aiPath.canMove = true;
+            controller.aiPath.isStopped = false;
+            controller.aiPath.maxSpeed = controller.patrolSpeed;
+            controller.aiPath.enabled = true;
+            controller.movementController.enabled = true;
         }
     }
 }

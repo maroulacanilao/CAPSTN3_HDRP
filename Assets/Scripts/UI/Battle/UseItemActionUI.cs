@@ -12,6 +12,7 @@ namespace UI.Battle
 {
     public class UseItemActionUI : MonoBehaviour
     {
+        [SerializeField] private Transform parent;
         [SerializeField] private PlayerInventory inventory;
     
         [SerializeField] private ItemActionBtn itemBtnPrefab;
@@ -33,13 +34,14 @@ namespace UI.Battle
         
         public void OnDisable()
         {
-            InventoryEvents.OnUpdateInventory.RemoveListener(UpdateInventory);
+            // InventoryEvents.OnUpdateInventory.RemoveListener(UpdateInventory);
         }
 
         private void OnEnable()
         {
-            InventoryEvents.OnUpdateInventory.AddListener(UpdateInventory);
-            if(itemBtnList.Count == 0) CreateItemButtons();
+            // InventoryEvents.OnUpdateInventory.AddListener(UpdateInventory);
+            RemoveAllItemButtons();
+            CreateItemButtons();
             if(itemBtnList.Count == 0) return;
             
             OnItemBtnSelect.Invoke(itemBtnList[0]);
@@ -77,7 +79,7 @@ namespace UI.Battle
         
             foreach (var _item in _itemsList)
             {
-                var _btn = Object.Instantiate(itemBtnPrefab, transform);
+                var _btn = Object.Instantiate(itemBtnPrefab, parent);
                 _btn.Initialize(battleActionUI,_item);
                 itemBtnList.Add(_btn);
             }
@@ -86,11 +88,17 @@ namespace UI.Battle
         private void PurgeNulls()
         {
             if(itemBtnList.Count == 0) return;
+            Debug.Log("Purging Nulls");
             foreach (var _itemBtn in itemBtnList)
             {
-                if(_itemBtn == null) itemBtnList.Remove(_itemBtn);
+                if (_itemBtn == null)
+                {
+                    itemBtnList.Remove(_itemBtn);
+                    continue;
+                }
                 
-                if (_itemBtn.item != null) continue;
+                if(_itemBtn.item is {HasStack: true}) continue;
+                Debug.Log($"Removing {_itemBtn.item.Data.ItemName}");
                 itemBtnList.Remove(_itemBtn);
                 Object.Destroy(_itemBtn);
             }
@@ -99,6 +107,16 @@ namespace UI.Battle
         public bool HasItems()
         {
             return itemBtnList.Count > 0;
+        }
+        
+        private void RemoveAllItemButtons()
+        {
+            if(itemBtnList.Count == 0) return;
+            foreach (var _itemBtn in itemBtnList)
+            {
+                Object.Destroy(_itemBtn.gameObject);
+            }
+            itemBtnList.Clear();
         }
     }
 }

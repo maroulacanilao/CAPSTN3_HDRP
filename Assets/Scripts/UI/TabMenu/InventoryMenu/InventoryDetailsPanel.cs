@@ -1,4 +1,5 @@
 using System;
+using Character;
 using CustomHelpers;
 using Items;
 using Items.Inventory;
@@ -8,6 +9,7 @@ using UnityEngine.UI;
 
 namespace UI.TabMenu.InventoryMenu
 {
+    [DefaultExecutionOrder(3)]
     public class InventoryDetailsPanel : ItemDetailsPanel
     {
         [NaughtyAttributes.BoxGroup("Panels")]
@@ -18,6 +20,9 @@ namespace UI.TabMenu.InventoryMenu
         
         [NaughtyAttributes.BoxGroup("Error Text")] 
         [SerializeField] protected TextMeshProUGUI errorTxt;
+        
+        [NaughtyAttributes.BoxGroup("ConfirmMenu")] 
+        [SerializeField] protected DiscardConfirm discardConfirmMenu;
         
         private Item_MenuItem currMenuItem;
 
@@ -36,9 +41,16 @@ namespace UI.TabMenu.InventoryMenu
             unequipBtn.onClick.AddListener(UnEquipItem);
         }
 
+        private void OnEnable()
+        {
+            discardConfirmMenu.gameObject.SetActive(false);
+        }
+
         private void OnDisable()
         {
             if(!inventoryMenu.gameObject.activeInHierarchy) return;
+            
+            discardConfirmMenu.gameObject.SetActive(false);
             
             inventoryMenu.SelectLastSelectable();
         }
@@ -68,7 +80,7 @@ namespace UI.TabMenu.InventoryMenu
             
             currMenuItem = selectedMenuItem_;
             currItem = currMenuItem.item;
-            
+
             if (currItem == null)
             {
                 DisplayNull();
@@ -77,6 +89,23 @@ namespace UI.TabMenu.InventoryMenu
             }
             
             DisplayItem(currItem);
+            
+            if (currItem is ItemArmor _armor)
+            {
+                // statsPanel.Display(_gear.Stats, false);
+                // nameTxt.SetText($"{_gear.Data.ItemName} - Lv.{_gear.Level}");
+                
+                var _oldStats = inventory.ArmorEquipped?.Stats ?? new CombatStats();
+                statsPanel.DisplayDiffDynamic(_armor.Stats, _oldStats,false);
+                nameTxt.SetText($"{_armor.Data.ItemName} - Lv.{_armor.Level}");
+            }
+            else if (currItem is ItemWeapon _weapon)
+            {
+                var _oldStats = inventory.WeaponEquipped?.Stats ?? new CombatStats();
+                statsPanel.DisplayDiffDynamic(_weapon.Stats, _oldStats,false);
+                nameTxt.SetText($"{_weapon.Data.ItemName} - Lv.{_weapon.Level}");
+            }
+            else statsPanel.gameObject.SetActive(false);
             
 
             consumeBtn.gameObject.SetActive(currItem is ItemConsumable);
@@ -92,7 +121,7 @@ namespace UI.TabMenu.InventoryMenu
             
             unequipBtn.gameObject.SetActive(_canUnEquip);
             discardBtn.gameObject.SetActive(currItem.IsDiscardable);
-            
+
             actionButtonGroup.gameObject.SetActive(true);
         }
 
@@ -102,27 +131,7 @@ namespace UI.TabMenu.InventoryMenu
             if(!currItem.IsDiscardable) return;
             if(currMenuItem == null) return;
             
-            var _index = currMenuItem.index;
-
-            switch (currMenuItem.inventoryItemType)
-            {
-                case Item_MenuItem.InventoryItemType.storage:
-                    inventory.RemoveItemInStorage(_index);
-                    break;
-                case Item_MenuItem.InventoryItemType.toolBar:
-                    inventory.RemoveItemInHand(currMenuItem.index);
-                    break;
-                case Item_MenuItem.InventoryItemType.weaponBar:
-                    inventory.DiscardEquippedWeapon();
-                    break;
-                case Item_MenuItem.InventoryItemType.armorBar:
-                    inventory.DiscardEquippedArmor();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            currMenuItem.UpdateDisplay();
-            ShowItemDetail(currMenuItem);
+            discardConfirmMenu.ShowMenu(currMenuItem);
         }
         
         private void EquipItem()
@@ -130,7 +139,7 @@ namespace UI.TabMenu.InventoryMenu
             if(currMenuItem.inventoryItemType is not Item_MenuItem.InventoryItemType.storage) return;
             
             var _level = inventoryMenu.playerData.LevelData.CurrentLevel;
-            var _itemName = $"<color=orange>{currItem.Data.ItemName}</color>";
+            var _itemName = $"<color=red>{currItem.Data.ItemName}</color>";
             
             if(currItem is ItemWeapon _weapon)
             {

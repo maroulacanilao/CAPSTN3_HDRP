@@ -19,6 +19,9 @@ namespace Spells.Base
 		public SpellType spellType { get; protected set; }
 		
 		[field: BoxGroup("Description")] [field: SerializeField] 
+		public bool isAOE { get; protected set; }
+		
+		[field: BoxGroup("Description")] [field: SerializeField] 
 		public int manaCost { get; protected set; }
 		
 		[field: BoxGroup("Description")] [field: SerializeField] [field: ResizableTextArea]
@@ -35,13 +38,18 @@ namespace Spells.Base
 		public StatusEffectBase statusEffect { get; protected set; }
 
 		[field: BoxGroup("Damage Properties")] [field: SerializeField] [field: Range(0,2f)]
-		[field: ShowIf("spellType", SpellType.Damage )] 
+		[field: ShowIf("spellType", SpellType.Damage )]
 		public float damageModifier { get; protected set; }
+		
+		[field: BoxGroup("Damage Properties")] [field: SerializeField]
+		[field: ShowIf("spellType", SpellType.Damage )]
+		public bool isPhysical { get; protected set; }
 
 		[field: BoxGroup("Description")]
 		[field: SerializeField] public List<string> tags { get; protected set; }
 		
 		[SerializeField] private SpellObject spellPrefab;
+		[field: SerializeField] public bool ForEnemyOnly { get; private set; }
 		
 		public SpellObject GetSpellObject(SpellUser user_)
 		{

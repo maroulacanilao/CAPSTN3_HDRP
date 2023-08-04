@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,12 +8,16 @@ using Character;
 using CustomEvent;
 using CustomHelpers;
 using Dungeon;
+using EnemyController;
+using Farming;
 using Managers.SceneLoader;
 using NaughtyAttributes;
 using Player;
 using ScriptableObjectData;
 using ScriptableObjectData.CharacterData;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using LoadSceneParameters = Managers.SceneLoader.LoadSceneParameters;
 
 namespace Managers
 {
@@ -33,23 +38,20 @@ namespace Managers
         public string FarmSceneName { get; private set; }
         
         [field: BoxGroup("SceneName")] [field: SerializeField] [field: NaughtyAttributes.Scene]
+        public string TutorialSceneName { get; private set; }
+        
+        [field: BoxGroup("SceneName")] [field: SerializeField] [field: NaughtyAttributes.Scene]
         public string BattleSceneName { get; private set; }
         
         [field: BoxGroup("SceneName")] [field: SerializeField] [field: NaughtyAttributes.Scene]
         public string DungeonSceneName { get; private set; }
-        
-        [field: BoxGroup("Camera")] [field: SerializeField] 
-        
-        private ToBattleCamera toBattleCamera { get; set; }
-        
-        
+
+
         public PlayerData PlayerData => GameDataBase.playerData;
         
         private PlayerCharacter mPlayer;
         private PlayerCharacter mPLayerOnBattle;
         private EnemyCharacter mCurrentEnemy;
-
-        private float lastTimeBattle = -1;
         public PlayerCharacter Player
         {
             get
@@ -88,7 +90,7 @@ namespace Managers
         public EnemyCharacter CurrentEnemy => mCurrentEnemy.IsEmptyOrDestroyed() ? null : mCurrentEnemy;
 
         public static readonly Evt<EnemyCharacter, bool> OnEnterBattle = new Evt<EnemyCharacter, bool>();
-        public static readonly Evt<bool> OnExitBattle = new Evt<bool>();
+        public static readonly Evt<BattleResultType> OnExitBattle = new Evt<BattleResultType>();
 
         protected override void Awake()
         {
@@ -105,74 +107,77 @@ namespace Managers
             
             if(_player == null) return;
             mPlayer = _player.GetComponent<PlayerCharacter>();
+            Fungus.FungusManager.Instance.useUnscaledTime = true;
+        }
+
+        private void Start()
+        {
+            TimeManager.OnEndDay.AddListener(OnEndDay);
+            Fungus.FungusManager.Instance.useUnscaledTime = true;
         }
 
         protected void OnDestroy()
         {
+            TimeManager.OnEndDay.RemoveListener(OnEndDay);
             GameDataBase.DeInitialize();
+            EventQueueData.DeInitializeQueue();
             OnEnterBattle.RemoveListener(EnterBattle);
             OnExitBattle.RemoveListener(ExitBattle);
         }
         
         private void EnterBattle(EnemyCharacter enemyCharacter_, bool isPlayerFirst_)
         {
-            if(SceneLoader.SceneLoader.IsSceneAlreadyActive(BattleSceneName)) return;
+            if (SceneLoader.SceneLoader.IsSceneAlreadyActive(BattleSceneName))
+            {
+                Time.timeScale = 1;
+                return;
+            }
+            if (enemyCharacter_.IsEmptyOrDestroyed())
+            {
+                Time.timeScale = 1;
+                return;
+            }
             
             StartCoroutine(Co_EnterBattle(enemyCharacter_, isPlayerFirst_));
-            
-            // if(lastTimeBattle + 2f > Time.time) return; 
-            // if(enemyCharacter_.IsEmptyOrDestroyed()) return;
-            //
-            // lastTimeBattle = Time.time;
-            //
-            // BattleData.EnterBattle(enemyCharacter_, isPlayerFirst_);
-            // mCurrentEnemy = enemyCharacter_;
-            //
-            // Time.timeScale = 0;
-            //
-            // var _sceneParameter = new LoadSceneParameters(LoadSceneType.LoadAdditive,BattleSceneName , BattleSceneName, false, 3);
-            // SceneLoader.SceneLoader.OnLoadScene.Invoke(_sceneParameter);
         }
         
         private IEnumerator Co_EnterBattle(EnemyCharacter enemyCharacter_, bool isPlayerFirst_)
         {
-            if(lastTimeBattle + 2f > Time.time) yield break; 
-            if(enemyCharacter_.IsEmptyOrDestroyed()) yield break;
-            
-            lastTimeBattle = Time.time;
-            
             BattleData.EnterBattle(enemyCharacter_, isPlayerFirst_);
             mCurrentEnemy = enemyCharacter_;
             Time.timeScale = 0;
             var _transform = Player.transform;
-
-            var _cam = CameraManager.GetActivePlayerCamera();
-
-            if (_cam != null)
-            {
-                yield return _cam.Co_ZoomIn(2f, 30);
-            }
 
             yield return null;
 
             var _sceneParameter = new LoadSceneParameters(LoadSceneType.LoadAdditive,BattleSceneName , BattleSceneName, false, 3);
             SceneLoader.SceneLoader.OnLoadScene.Invoke(_sceneParameter);
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.1f);
         }
         
-        private void ExitBattle(bool didPlayerWin_)
+        private void ExitBattle(BattleResultType result_)
         {
-            if(didPlayerWin_) OnBattleWon();
-            else OnBattleLost();
+            switch (result_)
+            {
+                case BattleResultType.Win:
+                    OnBattleWon();
+                    break;
+                case BattleResultType.Lose:
+                    OnBattleLost();
+                    break;
+                case BattleResultType.Flee:
+                    OnBattleFlee();
+                    break;
+            }
         }
 
         private void OnBattleWon()
         {
             if(!BattleData.currentEnemyData) return;
             
-            // Debug.Log($"<color=red>BATTLE WON</color>");
-
+            Debug.Log($"<color=red>BATTLE WON</color>");
+            var _data = CurrentEnemy.characterData as EnemyData;
             var _lootData = new LootDropData()
             {
                 level = CurrentEnemy.level,
@@ -180,13 +185,13 @@ namespace Managers
                 position = CurrentEnemy.transform.position
             };
             
+            DungeonManager.OnEnemyDeath.Invoke(CurrentEnemy);
+            
             void SpawnLoot()
             {
-                lastTimeBattle = Time.time;
-                GameDataBase.enemyDataBase.AddKills(CurrentEnemy.characterData as EnemyData);
+                GameDataBase.enemyDataBase.AddKills(_data);
                 
                 LootSpawner.OnSpawnLoot.Invoke(_lootData);
-                DungeonManager.OnEnemyDeath.Invoke(CurrentEnemy);
                 TimeManager.AddMinutes(BattleData.minutesJumped);
             }
             
@@ -201,7 +206,7 @@ namespace Managers
 
         private void OnBattleLost()
         {
-            GameDataBase.sessionData.farmLoadType = FarmLoadType.House;
+            GameDataBase.sessionData.farmLoadType = FarmLoadType.NewDay;
             
             void AdvanceDay()
             {
@@ -210,8 +215,95 @@ namespace Managers
             
             EventQueueData.AddEvent(FarmSceneName, AdvanceDay);
             
-            var _sceneParameter = new LoadSceneParameters(LoadSceneType.Unload, DungeonSceneName, DungeonSceneName, false, 3);
+            var _sceneParameter = new LoadSceneParameters(LoadSceneType.UnloadAllExcept, DungeonSceneName, FarmSceneName, false, 3);
             SceneLoader.SceneLoader.OnLoadScene.Invoke(_sceneParameter);
+        }
+
+        private void OnBattleFlee()
+        {
+            void Flee()
+            {
+                if(CurrentEnemy.IsEmptyOrDestroyed()) return;
+                
+                var _enemyController = CurrentEnemy.GetComponent<EnemyAIController>();
+                
+                if(_enemyController == null) return;
+                
+                var _station = _enemyController.station;
+                
+                if(_station == null) return;
+                
+                _enemyController.Initialize(_station);
+            }
+            
+            EventQueueData.AddEvent(FarmSceneName, Flee);
+            
+            var _sceneParameter = new LoadSceneParameters(LoadSceneType.Unload, BattleSceneName, DungeonSceneName, false, 3);
+            SceneLoader.SceneLoader.OnLoadScene.Invoke(_sceneParameter);
+        }
+
+        public static bool IsBattleSceneActive()
+        {
+            return UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == Instance.BattleSceneName;
+        }
+
+        public static bool IsFarmSceneActive()
+        {
+            var _active = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == Instance.FarmSceneName;
+            return SceneManager.sceneCount == 1 && _active;
+        }
+        
+        public static bool IsDungeonSceneActive()
+        {
+            var _active = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == Instance.DungeonSceneName;
+            return SceneManager.sceneCount == 1 && _active;
+        }
+        
+        public static bool IsFarmOrTutorialSceneActive()
+        {
+            var _active = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == Instance.FarmSceneName;
+            var _active2 = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == Instance.TutorialSceneName;
+            return SceneManager.sceneCount == 1 && (_active || _active2);
+        }
+
+        private void OnEndDay()
+        {
+            GameDataBase.sessionData.farmLoadType = FarmLoadType.NewDay;
+            
+            if (SceneManager.sceneCount > 1 && SceneManager.GetActiveScene().name != FarmSceneName)
+            {
+                var _sceneParameter = new LoadSceneParameters(LoadSceneType.UnloadAllExcept, DungeonSceneName, FarmSceneName, false, 3);
+                SceneLoader.SceneLoader.OnLoadScene.Invoke(_sceneParameter);
+            }
+            else
+            {
+                FarmSceneManager.Instance.SetSceneOnType();
+            }
+        }
+        
+        public static void DoAction(Action action_)
+        {
+            action_?.Invoke();
+        }
+
+        public static void Save()
+        {
+            if(IsInstanceNull()) return;
+            
+            Instance.GameDataBase.progressionData.SaveProgression();
+        }
+
+        public static void DelaySendToFungus(string message_, float delaySeconds_, int delayFrames_ = 0)
+        {
+            if(Instance.IsEmptyOrDestroyed()) return;
+            Instance.StartCoroutine(Co_DelaySendToFungus(message_, delaySeconds_,delayFrames_));
+        }
+        
+        public static IEnumerator Co_DelaySendToFungus(string message_, float delay_, int delayFrames_ = 0)
+        {
+            if(delay_ > 0 ) yield return new WaitForSeconds(delay_);
+            yield return new WaitForFrames(delayFrames_);
+            Fungus.Flowchart.BroadcastFungusMessage(message_);
         }
     }
 }

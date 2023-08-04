@@ -20,7 +20,7 @@ namespace UI.HUD
         [SerializeField] protected Color damageColor = Color.red;
         [SerializeField] protected Color healColor = Color.green;
         
-        Color originalColor;
+        protected Color originalColor;
         protected CharacterHealth characterHealth;
 
         protected virtual void Start()

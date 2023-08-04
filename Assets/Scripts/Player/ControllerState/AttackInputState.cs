@@ -4,6 +4,8 @@ using CustomHelpers;
 using Managers;
 using UnityEngine;
 using System.Linq;
+using Interface;
+using ObjectPool;
 
 namespace Player.ControllerState
 {
@@ -79,12 +81,6 @@ namespace Player.ControllerState
             var _pos = player.transform.position + player.attackOffset;
             var _cols = Physics.OverlapBox(_pos, player.attackSize, Quaternion.identity, player.enemyLayer);
 
-            foreach (var col in _cols)
-            {
-                if(col == null) continue;
-                Debug.Log($"1 In Range Attack: <color=yellow>{col.gameObject.name}</color>");
-            }
-
             var _res = _cols.Where(_col => _col != null && _col.transform != player.transform).ToList();
 
             if (_res.Count == 0) return null;
@@ -101,9 +97,7 @@ namespace Player.ControllerState
             foreach (var _col in _res)
             {
                 if(_col.gameObject == null) continue;
-                
-                Debug.Log($"2 In Range Attack: <color=yellow>{_col.gameObject.name}</color>");
-                
+
                 if(_col.TryGetComponent(out EnemyCharacter _enemy)) return _enemy;
             }
 
@@ -122,7 +116,6 @@ namespace Player.ControllerState
 
         private void OnAttackHit()
         {
-            Debug.Log("ATTACK HIT");
             var _enemy = GetEnemyInRange();
             
             if (_enemy.IsEmptyOrDestroyed())
@@ -142,8 +135,7 @@ namespace Player.ControllerState
                 return;
             }
 
-            // Debug.Log("Hit");
-            GameManager.OnEnterBattle.Invoke(_enemy, true);
+            player.StartCoroutine(Hit(_enemy));
         }
 
         private void OnAttackEnd()
@@ -155,6 +147,21 @@ namespace Player.ControllerState
         {
             yield return new WaitForSeconds(2f);
             OnAttackEnd();
+        }
+
+        private IEnumerator Hit(EnemyCharacter enemyCharacter_)
+        {
+            var _hit = enemyCharacter_.GetComponent<IHittable>();
+            
+            _hit?.Hit();
+            
+            var _pos = player.transform.GetMiddlePosition(enemyCharacter_.transform).AddY(0.5f);
+            
+            AssetHelper.PlayHitEffect(_pos, Quaternion.identity);
+            
+            yield return new WaitForSeconds(0.2f);
+
+            GameManager.OnEnterBattle.Invoke(enemyCharacter_,true);
         }
     }
 }

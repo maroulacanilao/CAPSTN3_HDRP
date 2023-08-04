@@ -13,18 +13,21 @@ namespace UI.ShrineUI.EquipmentStore
         [SerializeField] Transform contentParent;
         [SerializeField] private ShrineStoreEquipmentDetails detailPanel;
         [SerializeField] private ShrineEquipmentStoreItem equipmentStoreItemPrefab;
+        [SerializeField] private ConsumableDisplay consumableDisplay;
         
         private Dictionary<ItemGear, OfferRequirement> gearOffers => shrineData.GetAllGearOffers();
         private List<ShrineEquipmentStoreItem> equipmentStoreItems = new List<ShrineEquipmentStoreItem>();
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             CreateList();
             ShrineEquipmentStoreItem.OnClickItem.AddListener(OnClickItem);
         }
-        
-        private void OnDisable()
+
+        protected override void OnDisable()
         {
+            base.OnDisable();
             ShrineEquipmentStoreItem.OnClickItem.RemoveListener(OnClickItem);
         }
 
@@ -39,6 +42,7 @@ namespace UI.ShrineUI.EquipmentStore
             }
             
             SelectFirstItem();
+            consumableDisplay.UpdateDisplay();
         }
         
         private void ClearList()

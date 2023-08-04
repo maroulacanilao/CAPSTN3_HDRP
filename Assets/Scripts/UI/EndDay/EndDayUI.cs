@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Threading.Tasks;
+using CustomEvent;
 using DG.Tweening;
 using Managers;
 using TMPro;
@@ -9,61 +11,108 @@ using UnityEngine.UI;
 
 namespace UI.EndDay
 {
-    public class EndDayUI : PlayerMenu
+    public class EndDayUI : MonoBehaviour
     {
-
+        [SerializeField] private GameObject panel;
         [SerializeField] TextMeshProUGUI dayCount_TXT;
+        [SerializeField] private TextMeshProUGUI save_TXT;
         [SerializeField] float effectDuration = 0.5f;
         [SerializeField] Button startDay_BTN;
+        [SerializeField] GameObject gameOverPanelPrefab;
+        
+        public static readonly Evt OnShowEndDayUI = new Evt();
 
         Vector3 originalScale;
         Vector3 targetScale;
 
-        public override void Initialize()
+        private void Awake()
         {
-            TimeManager.OnEndDay.AddListener(EndDay);
             originalScale = dayCount_TXT.transform.localScale;
             targetScale = originalScale * 1.5f;
+            panel.SetActive(false);
+            OnShowEndDayUI.AddListener(EndDay);
             startDay_BTN.onClick.AddListener(StartDayClick);
+            save_TXT.gameObject.SetActive(false);
         }
 
-        private async void EndDay()
+        private void OnDestroy()
+        {
+            OnShowEndDayUI.RemoveListener(EndDay);
+            startDay_BTN.onClick.RemoveListener(StartDayClick);
+        }
+
+        private void EndDay()
+        {
+            StartCoroutine(Co_EndDay());
+        }
+
+        private void StartDayClick()
+        {
+            panel.SetActive(false);
+            TimeManager.BeginDay();
+            TimeManager.PauseTime();
+            TimeManager.ResumeTime();
+        }
+
+        private IEnumerator Co_EndDay()
         {
             PlayerMenuManager.OnCloseAllUI.Invoke();
             startDay_BTN.gameObject.SetActive(false);
 
             Time.timeScale = 0;
-            gameObject.SetActive(true);
+            panel.SetActive(true);
             dayCount_TXT.text = $"Day {TimeManager.DayCounter}";
             dayCount_TXT.transform.localScale = originalScale;
             
-            await Task.Delay(1000);
+            yield return new WaitForSecondsRealtime(0.1f);
 
-            await dayCount_TXT.transform
+            if (TimeManager.DaysLeft <= 0)
+            {
+                Time.timeScale = 0;
+                Debug.Log("<color=red> Day counter is 0 or less. </color>");
+                Instantiate(gameOverPanelPrefab, transform.parent);
+                yield break;
+            }
+
+            StartCoroutine(Co_Save());
+
+
+            yield return new WaitForSecondsRealtime(1f);
+
+            yield return dayCount_TXT.transform
                 .DOScale(targetScale, effectDuration)
                 .SetEase(Ease.InSine)
                 .SetUpdate(true)
-                .AsyncWaitForCompletion();
+                .WaitForCompletion();
             
             dayCount_TXT.text = $"Day {TimeManager.DayCounter + 1}";
             
-            await dayCount_TXT.transform
+            yield return dayCount_TXT.transform
                 .DOScale(originalScale, effectDuration)
                 .SetEase(Ease.OutSine)
                 .SetUpdate(true)
-                .AsyncWaitForCompletion();
-            
-            await Task.Delay(500);
+                .WaitForCompletion();
+
+            yield return new WaitForSecondsRealtime(1f);
             
             startDay_BTN.gameObject.SetActive(true);
         }
-
-        private void StartDayClick()
+        
+        private IEnumerator Co_Save()
         {
-            gameObject.SetActive(false);
-            TimeManager.BeginDay();
-            TimeManager.PauseTime();
-            TimeManager.ResumeTime();
+            save_TXT.gameObject.SetActive(true);
+            save_TXT.color = Color.white;
+            try
+            {
+                GameManager.Save();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+            yield return new WaitForSeconds(0.5f);
+            save_TXT.DOFade(0f, 1f);
+            save_TXT.gameObject.SetActive(false);
         }
     }
 }

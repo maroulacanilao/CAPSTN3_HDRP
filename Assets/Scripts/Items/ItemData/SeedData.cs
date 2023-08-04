@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AYellowpaper.SerializedCollections;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Items.ItemData
@@ -12,8 +13,13 @@ namespace Items.ItemData
         [field: SerializeField] public Vector2Int producePossibleCount { get; set; }
         [field: SerializeField] public ConsumableData produceData { get; private set; }
         
+        [field: ShowAssetPreview]
         [field: SerializeField] public Sprite soilSprite { get; private set; }
+        
+        [field: ShowAssetPreview]
         [field: SerializeField] public Sprite plantSprite { get; private set; }
+        
+        [field: ShowAssetPreview]
         [field: SerializeField] public Sprite readyToHarvestSprite { get; private set; }
 
         [field: SerializeField] public int expReward { get; private set; }

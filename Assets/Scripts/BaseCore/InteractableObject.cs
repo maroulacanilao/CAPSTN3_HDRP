@@ -1,3 +1,4 @@
+using System;
 using CustomEvent;
 using CustomHelpers;
 using UnityEngine;
@@ -13,6 +14,13 @@ namespace BaseCore
         public static readonly Evt<InteractableObject> OnExit = new Evt<InteractableObject>();
 
         protected bool isEfectActive;
+        
+        private IInteractableEffect[] interactableEffects;
+
+        private void Awake()
+        {
+            interactableEffects = GetComponents<IInteractableEffect>();
+        }
 
         protected virtual void OnEnable()
         {
@@ -45,6 +53,7 @@ namespace BaseCore
             }
             
             isEfectActive = true;
+            EnterEffect();
             Enter();
         }
 
@@ -53,6 +62,7 @@ namespace BaseCore
             if(IsNull()) return;
             if(obj_ != this) return;
             isEfectActive = false;
+            ExitEffect();
             Exit();
         }
 
@@ -68,6 +78,22 @@ namespace BaseCore
             OnEnter.RemoveListener(EnterWrapper);
             OnExit.RemoveListener(ExitWrapper);
             return true;
+        }
+        
+        protected void EnterEffect()
+        {
+            foreach (var interactableEffect in interactableEffects)
+            {
+                interactableEffect.OnEnter();
+            }
+        }
+        
+        protected void ExitEffect()
+        {
+            foreach (var interactableEffect in interactableEffects)
+            {
+                interactableEffect.OnExit();
+            }
         }
     }
 }

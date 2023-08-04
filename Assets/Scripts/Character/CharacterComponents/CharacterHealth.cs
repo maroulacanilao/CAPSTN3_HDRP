@@ -13,7 +13,7 @@ namespace Character.CharacterComponents
         public readonly Evt<CharacterHealth, HealInfo> OnHeal = new Evt<CharacterHealth, HealInfo>();
         public readonly Evt<CharacterHealth> OnManuallyUpdateHealth = new Evt<CharacterHealth>();
 
-        public bool IsInvincible { get; set; }
+        public bool IsInvincible { get; set; } = false;
         public bool CanOverHeal { get; set; }
         public virtual int MaxHp => character.stats.vitality;
         public int CurrentHp { get; protected set; }
@@ -38,6 +38,15 @@ namespace Character.CharacterComponents
 
         public virtual void TakeDamage(DamageInfo damageInfo)
         {
+            if(IsInvincible) return;
+            if(damageInfo.DamageAmount <= 0) Debug.LogError("Damage amount is less than or equal to 0");
+            if (CurrentHp <= 0)
+            {
+                OnDeath.Invoke(this, damageInfo);
+                return;
+            }
+
+            damageInfo.DamageAmount = Mathf.Clamp(damageInfo.DamageAmount, 1, int.MaxValue);
             SetCurrentHp(CurrentHp - damageInfo.DamageAmount);
 
             OnTakeDamage.Invoke(this, damageInfo);
@@ -64,6 +73,15 @@ namespace Character.CharacterComponents
         {
             SetCurrentHp(MaxHp);
             OnManuallyUpdateHealth.Invoke(this);
+        }
+
+        public void DamageNonLethal(int damageAmount_)
+        {
+            var _hp = CurrentHp - damageAmount_;
+            _hp = Mathf.Clamp(_hp,1, MaxHp);
+            SetCurrentHp(_hp);
+            var damageInfo = new DamageInfo(damageAmount_, null);
+            OnTakeDamage.Invoke(this, damageInfo);
         }
     }
 }

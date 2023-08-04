@@ -54,6 +54,8 @@ namespace ScriptableObjectData.CharacterData
         [ContextMenu("Reset Data")]
         public void ResetData()
         {
+            health.RefillHealth();
+            mana.RefreshMana();
             LevelData.ResetExperience();
             spells.Clear();
         }

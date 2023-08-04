@@ -33,7 +33,7 @@ namespace BattleSystem
             set => mBattleData = value;
         }
         
-        public static AttackResult AttackTarget(this BattleCharacter attacker_, BattleCharacter target_, DamageInfo baseDamageInfo_)
+        public static AttackResult GetAttackResult(this BattleCharacter attacker_, BattleCharacter target_, DamageInfo baseDamageInfo_)
         {
             Random.InitState(Time.timeSinceLevelLoad.GetHashCode());
             var _attackResult = new AttackResult() { attackResultType = AttackResultType.Miss, damageInfo = baseDamageInfo_};
@@ -58,7 +58,7 @@ namespace BattleSystem
             if (_attackResult.damageInfo.DamageType == DamageType.Magical)
             {
                 _attackResult.damageInfo.DamageAmount = CalculateMagicDamage(_attackResult.damageInfo.DamageAmount, target_.TotalStats);
-                _attackResult.attackResultType = _isWeak ? AttackResultType.Weakness : AttackResultType.Hit;  
+                _attackResult.attackResultType = _isWeak ? AttackResultType.Weakness : AttackResultType.Hit;
                 return _attackResult;
             }
             
@@ -67,10 +67,10 @@ namespace BattleSystem
 
             var _isCritical = IsAttackCritical(attacker_.TotalStats, target_.TotalStats);
 
-            if (_isCritical)
-            {
-                _attackResult.damageInfo.DamageAmount = Mathf.RoundToInt(_dmg * battleData.crtDmgMod);
-            }
+            if (_isCritical) _dmg = Mathf.RoundToInt(_dmg * battleData.crtDmgMod);
+
+            _attackResult.damageInfo.DamageAmount = Mathf.RoundToInt(_dmg);
+            _attackResult.damageInfo.DamageAmount = Mathf.Clamp(_attackResult.damageInfo.DamageAmount, 1, int.MaxValue);
 
             _attackResult.attackResultType = _isCritical ? AttackResultType.Critical : AttackResultType.Hit;
             
@@ -86,6 +86,7 @@ namespace BattleSystem
         {
             float _dmgMult = 1f - (targetStats_.defense / 100f);
             int _totalDmg = (int)(magicDamage_ * _dmgMult);
+            _totalDmg = Mathf.Clamp(_totalDmg, 5, int.MaxValue);
             return _totalDmg;
         }
         

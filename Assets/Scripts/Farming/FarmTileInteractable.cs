@@ -38,7 +38,7 @@ namespace Farming
             cropUI.gameObject.SetActive(false);
         }
         
-        private void ChangeState(TileState tileState_)
+        private void ChangeState(FarmTile tile_, TileState tileState_)
         {
             canInteract = tileState_ == TileState.Planted;
         }

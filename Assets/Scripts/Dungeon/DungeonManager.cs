@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using BaseCore;
 using Character;
 using CustomEvent;
 using CustomHelpers;
+using Items;
+using Items.Inventory;
+using Items.ItemData;
 using Managers;
 using NaughtyAttributes;
 using Player;
@@ -23,9 +27,10 @@ namespace Dungeon
         [SerializeField] private DungeonMap[] dungeonMaps;
         [SerializeField] private SessionData sessionData;
 
-        private DungeonMap currDungeon;
+        public DungeonMap currDungeon { get; private set; }
         private PlayerInputController playerController;
         public int PlayerLevel => playerData.LevelData.CurrentLevel;
+        private PlayerInventory inventory => playerData.inventory;
         
         public static readonly Evt<EnemyCharacter, EnemyStation> OnEnemySpawn = new Evt<EnemyCharacter, EnemyStation>();
         public static readonly Evt<EnemyCharacter> OnEnemyDeath = new Evt<EnemyCharacter>();
@@ -37,12 +42,17 @@ namespace Dungeon
             base.Awake();
 
             playerController = PlayerInputController.Instance;
+        }
+
+        private void Start()
+        {
             EnterNewDungeon(sessionData.dungeonLevel);
         }
 
         private void OnDestroy()
         {
             LootSpawner.RemoveAllLoots.Invoke();
+            RemoveQuestItems();
         }
 
         private void OnEnable()
@@ -62,14 +72,25 @@ namespace Dungeon
             EnterNewDungeon(currentLevel);
         }
         
+        public void GoToPrevDungeon()
+        {
+            EnterNewDungeon(currentLevel - 1);
+        }
+        
         public void EnterNewDungeon(int level_)
         {
             currentLevel = level_;
-            var _level = Mathf.Clamp(level_, 1, dungeonMapData.Length - 1);
+            var _level = Mathf.Clamp(level_, 1, dungeonMapData.Length);
             
             var _data = dungeonMapData.FirstOrDefault(d => d.dungeonLevel == _level);
             
-            if (_data.willUseRandomMap)
+            DeInitializeAllDungeon();
+            
+            if(_data == null)
+            {
+                _data = dungeonMapData[0];
+            }
+            else if (_data.willUseRandomMap)
             {
                 var _index = _data.possibleMapRange.GetRandomItem();
                 currDungeon = dungeonMaps[_index];
@@ -82,6 +103,36 @@ namespace Dungeon
             
             playerController.transform.position = currDungeon.PlayerSpawnPoint;
         }
+        
+        private void DeInitializeAllDungeon()
+        {
+            foreach (var _dungeon in dungeonMaps)
+            {
+                _dungeon.DeInitializeLevel();
+            }
+            RemoveQuestItems();
+        }
+
+        private void RemoveQuestItems()
+        {
+            var _questItems = inventory.itemsLookup.Where(i => i.Key is QuestItemData).ToList();
+            
+            if(_questItems.Count <= 0) return;
+            
+            var _list = new List<Item>();
+            
+            foreach (var _keyValuePair in _questItems)
+            {
+                if(_keyValuePair.Value == null) continue;
+                if(_keyValuePair.Value.Count <= 0) continue;
+                _list.AddRange(_keyValuePair.Value);
+            }
+            
+            foreach (var _item in _list)
+            {
+                inventory.RemoveItem(_item);
+            }
+        }
 
         [Button("Get All Dungeon Maps")]
         public void GetAllDungeonMaps()
@@ -93,6 +144,11 @@ namespace Dungeon
         public void GetAllDungeonMapData()
         {
             dungeonMapData = Resources.LoadAll<DungeonMapData>("Data/DungeonMaps");
+        }
+
+        public void PlayerDied()
+        {
+            // GameManager.OnExitBattle.Invoke(BattleResultType.Lose);
         }
     }
 }

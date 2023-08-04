@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BaseCore;
+using Character;
 using CustomEvent;
 using CustomHelpers;
 using Managers;
 using ScriptableObjectData.CharacterData;
+using UI.Battle;
 using UnityEngine;
 
 namespace BattleSystem
@@ -23,7 +25,7 @@ namespace BattleSystem
         public static readonly Evt<BattleCharacter> OnPlayerTurnStart = new Evt<BattleCharacter>();
         public static readonly Evt OnPlayerEndDecide = new Evt();
         public static readonly Evt<string> OnBattleEvent = new Evt<string>();
-        public static readonly Evt<bool> OnBattleEnd = new Evt<bool>();
+        public static readonly Evt<BattleResultType> OnBattleEnd = new Evt<BattleResultType>();
 
         protected override void Awake()
         {
@@ -43,10 +45,10 @@ namespace BattleSystem
             Cursor.visible = true;
         }
 
-        public void End(bool hasWon_)
+        public void End(BattleResultType result_)
         {
             StopAllCoroutines();
-            OnBattleEnd.Invoke(hasWon_);
+            OnBattleEnd.Invoke(result_);
         }
         
         public bool IsEnemyPartyStillAlive()
@@ -110,6 +112,57 @@ namespace BattleSystem
             }
 
             return _totalExp;
+        }
+
+        public void TryFlee()
+        {
+            StartCoroutine(Co_TryFlee());
+        }
+
+        IEnumerator Co_TryFlee()
+        {
+            var _baseChance = 1f;
+
+            var _mult = 0.35f;
+
+            foreach (var enemy in enemyParty)
+            {
+                if(enemy.IsEmptyOrDestroyed()) continue;
+                if(!enemy.character.IsAlive) continue;
+                
+                _baseChance *= _mult;
+            }
+            
+            var _chance = Mathf.Clamp(_baseChance, 0.05f, 0.9f);
+            
+            var _roll = Random.Range(0f, 1f);
+            
+            var _success = _roll <= _chance;
+            
+            var _msg = _success ? "Flee Successful" : "Flee Failed";
+
+            yield return BattleTextManager.DoWrite(_msg);
+            
+            if(_success) GameManager.OnExitBattle.Invoke(BattleResultType.Flee);
+            else OnPlayerEndDecide.Invoke();
+        }
+
+        public List<BattleCharacter> GetOppositePartyOf(CharacterBase character_, bool aliveOnly_ = true)
+        {
+            var _party = new List<BattleCharacter>();
+            
+            _party = playerParty.Any(p => p.character == character_) ? enemyParty : playerParty;
+            
+            return !aliveOnly_ ? _party : _party.Where(c => c.character.IsAlive).ToList();
+        }
+        
+        public List<BattleCharacter> GetPartyOf(CharacterBase character_, bool aliveOnly_ = true)
+        {
+            var _party = new List<BattleCharacter>();
+            
+            _party = playerParty.Any(p => p.character == character_) ? playerParty : enemyParty;
+            
+            return !aliveOnly_ ? _party : _party.Where(c => c.character.IsAlive).ToList();
         }
     }
 }

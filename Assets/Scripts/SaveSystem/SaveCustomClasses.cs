@@ -60,7 +60,7 @@ namespace SaveSystem
 
         public int totalExperience;
         public int level;
-        
+
         public CombatStats statsBought;
         public PlayStatsSaveData[] enemyKills;
         public PlayStatsSaveData[] cropHarvested;

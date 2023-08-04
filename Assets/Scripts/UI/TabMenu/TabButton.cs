@@ -14,8 +14,8 @@ namespace UI.TabMenu
         [SerializeField] private TabGroup tabGroup;
         [SerializeField] private Image background;
         [SerializeField] private TextMeshProUGUI text;
-        [SerializeField] private Color selectedColor;
-        [SerializeField] private Color deselectedColor;
+        [SerializeField] private Sprite selectedSprite;
+        [SerializeField] private Sprite deselectedSprite;
         [SerializeField] private Color highlightedColor;
 
         private void Reset()
@@ -50,12 +50,13 @@ namespace UI.TabMenu
         
         public void Select()
         {
-            background.color = selectedColor;
+            background.sprite = selectedSprite;
         }
 
         public void Deselect()
         {
-            background.color = deselectedColor;
+            background.sprite = deselectedSprite;
+            background.color = Color.white;
         }
         
         public void OnPointerDown(PointerEventData eventData)

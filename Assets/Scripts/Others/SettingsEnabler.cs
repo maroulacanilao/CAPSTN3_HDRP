@@ -83,9 +83,8 @@ public class SettingsEnabler : Singleton<SettingsEnabler>
         foreach (var _setting in _sceneSettings)
         {
             if(defaultSettings == _setting) continue;
+            if(sceneSettingsDictionary.ContainsKey(_setting.sceneName)) continue;
             sceneSettingsDictionary.Add(_setting.sceneName, _setting);
         }
     }
-    
-    
 }

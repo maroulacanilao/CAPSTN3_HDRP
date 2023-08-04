@@ -12,17 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2aae6ae11f4051469a8f13720814260, type: 3}
   m_Name: FlameThrowerData
   m_EditorClassIdentifier: 
-  <spellName>k__BackingField: Flame Thrower
+  <spellName>k__BackingField: Fire Ball
   <spellType>k__BackingField: 2
-  <manaCost>k__BackingField: 10
-  <Description>k__BackingField: Throws Fire
+  <isAOE>k__BackingField: 0
+  <manaCost>k__BackingField: 18
+  <Description>k__BackingField: Unleashes a scorching orb of flames, engulfing foes
+    in its fiery wrath.
   <icon>k__BackingField: {fileID: 0}
   <hasStatusEffect>k__BackingField: 1
   <statusEffect>k__BackingField: {fileID: 6034014327263174175, guid: 1dd21689f7c9b484fa9123ac5cf3bd68,
     type: 3}
-  <damageModifier>k__BackingField: 1.1
+  <damageModifier>k__BackingField: 1
+  <isPhysical>k__BackingField: 0
   <tags>k__BackingField:
   - Fire
   - Burn
   spellPrefab: {fileID: 7160370014723242318, guid: bd1ba55b8d79ffb429c562baed4ca130,
     type: 3}
+  <ForEnemyOnly>k__BackingField: 0

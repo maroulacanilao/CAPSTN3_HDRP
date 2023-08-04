@@ -7,6 +7,7 @@ namespace UI.Battle
 {
     public class TargetPanel : MonoBehaviour
     {
+        [SerializeField] private Transform parent;
         [SerializeField] private TargetButton targetButtonPrefab;
         
         private BattleActionUI mainPanel;
@@ -22,7 +23,7 @@ namespace UI.Battle
                 var _character = partyList_[i];
                 if(_character == null) continue;
 
-                var _targetButton = Instantiate(targetButtonPrefab, transform);
+                var _targetButton = Instantiate(targetButtonPrefab, parent);
                 _targetButton.Initialize(mainPanel, _character);
                 if(_targetButton == null) continue;
                 if (i == 0) _targetButton.gameObject.AddComponent<ButtonSelectFirst>();

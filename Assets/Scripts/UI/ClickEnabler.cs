@@ -3,12 +3,13 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class ClickEnabler : SelectableMenuButton
+    public class ClickEnabler : MonoBehaviour
     {
+        [SerializeField] private Button button;
         [SerializeField] private GameObject[] objectsToEnable;
         [SerializeField] private GameObject[] objectsToDisable;
 
-        private void Awake()
+        protected void Awake()
         {
             if(button == null) button = GetComponent<Button>();
             button.onClick.AddListener(OnClick);

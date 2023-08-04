@@ -82,8 +82,7 @@ namespace BaseCore
             }
 
             itemList_.RemoveAll(_itemsToRemove.Contains);
-
-            return itemList_;
+            return itemList_.OrderBy(i => i.ItemType).ToList();
         }
 
         private List<Item> GetGuaranteedItems(int level_)
@@ -125,15 +124,23 @@ namespace BaseCore
             int _itemsCount = possibleItemCount.GetRandomInRange();
             var _items = new List<Item>();
             
+            var _probabilityClone = itemProbability.Clone();
+            
             for (var i = 0; i < _itemsCount; i++)
             {
-                var _item = itemProbability.GetWeightedRandom().GetItem(level_);
+                _probabilityClone.RecalculateChances();
+                var _data = _probabilityClone.GetWeightedRandom();
+                var _item = _data.GetItem(level_);
+                
+                _probabilityClone.RemoveItem(_data);
             
-                if (_item is not ItemStackable)
+                if (_item is not ItemStackable _stackable)
                 {
                     _items.Add(_item);
                     continue;
                 }
+
+                _stackable.SetStack(level_ + 1);
             
                 var _similarItem = _items.FirstOrDefault(i => i.Data.ItemID == _item.Data.ItemID);
             
@@ -142,10 +149,9 @@ namespace BaseCore
                     _items.Add(_item);
                     continue;
                 }
-            
-                var _consumableItem = (ItemConsumable) _item;
+                
                 var _similarConsumable = (ItemConsumable) _similarItem;
-                _similarConsumable.AddStack(_consumableItem.StackCount);
+                _similarConsumable.AddStack(_stackable.StackCount);
             }
             
             return _items;

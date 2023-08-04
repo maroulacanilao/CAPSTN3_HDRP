@@ -26,7 +26,7 @@ namespace BattleSystem.BattleState
         {
             if (!battleCharacter.character.IsAlive)
             {
-                StateMachine.NextTurnState();
+                yield return StateMachine.NextTurnState();
             }
             yield return CoroutineHelper.GetWait(0.15f);
             yield return battleCharacter.character.statusEffectReceiver.BeforeTurnTick(this);
@@ -59,12 +59,12 @@ namespace BattleSystem.BattleState
         {
             if (!BattleManager.IsEnemyPartyStillAlive())
             {
-                yield return new BattleEndState(StateMachine, true).Enter();
+                yield return new BattleEndState(StateMachine, BattleResultType.Win).Enter();
                 yield break;
             }
             else if (!BattleManager.IsPlayerPartyStillAlive())
             {
-                yield return new BattleEndState(StateMachine, false).Enter();
+                yield return new BattleEndState(StateMachine, BattleResultType.Lose).Enter();
                 yield break;
             }
             if (willEndCurrentState_) yield return StateMachine.NextTurnState();

@@ -23,7 +23,12 @@ public class SpellDisplay : MonoBehaviour
             return mPlayerData;
         }
     }
-    
+
+    private void Awake()
+    {
+        DisplayNull();
+    }
+
     public virtual void DisplaySpell(SpellData spellData_)
     {
         spellNameText.text = spellData_.spellName;
@@ -42,5 +47,14 @@ public class SpellDisplay : MonoBehaviour
         spellCostText.text = $"Mana Cost: {spellObject_.spellData.manaCost}";
         spellDescText.text = spellObject_.spellData.Description;
         spellDamageText.text = $"Damage: {spellObject_.damage}";
+    }
+
+    public virtual void DisplayNull()
+    {
+        spellNameText.text = "No Spell Selected";
+        spellTypeText.text = "Spell Type: ???";
+        spellCostText.text = "Mana Cost: ???";
+        spellDescText.text = "???";
+        spellDamageText.text = "Damage: ???";
     }
 }

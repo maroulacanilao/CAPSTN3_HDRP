@@ -1,0 +1,270 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab2bc082a35423d45a82555249286019, type: 3}
+  m_Name: MananggalEnemyData
+  m_EditorClassIdentifier: 
+  <characterName>k__BackingField: Mananaggal
+  <farmPrefab>k__BackingField: {fileID: 8592459772990040416, guid: 41834338247ac2541b11c7bbc2864fd3,
+    type: 3}
+  <battlePrefab>k__BackingField: {fileID: 5490923670729881753, guid: bde50f98297c0cb41b253b57208265a2,
+    type: 3}
+  <statsData>k__BackingField:
+    <baseCombatStats>k__BackingField:
+      vitality: 30
+      strength: 10
+      intelligence: 5
+      defense: 4
+      speed: 20
+    <maxLevelCombatStats>k__BackingField:
+      vitality: 75
+      strength: 40
+      intelligence: 30
+      defense: 30
+      speed: 75
+    healthGrowthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    intelligenceGrowthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 5
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 1.1111112
+        tangentMode: 69
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1.1111112
+        outSlope: 1.1111112
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    strengthGrowthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 0
+        tangentMode: 65
+        weightedMode: 2
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 1.7917824
+        tangentMode: 5
+        weightedMode: 1
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    defenseGrowthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 2
+        outSlope: 0
+        tangentMode: 65
+        weightedMode: 2
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 1.7917824
+        tangentMode: 5
+        weightedMode: 1
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    speedGrowthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 65
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.1
+        value: 0
+        inSlope: -0
+        outSlope: 0.09954314
+        tangentMode: 5
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  <spells>k__BackingField:
+  - {fileID: 11400000, guid: d9caf8e68115dc14e8d50f8ec65b89da, type: 2}
+  - {fileID: 11400000, guid: 8652fbbf7c3ee2943a1b3c77be4bb433, type: 2}
+  <weaknessTags>k__BackingField:
+  - Fire
+  - Burn
+  - Stake
+  <LootTable>k__BackingField:
+    <possibleExperienceDrop>k__BackingField: {x: 30, y: 30}
+    possibleItemCount: {x: 2, y: 4}
+    guaranteedItemDrop:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: c08935882abf3b14caea83b8174879e3, type: 2}
+        Value: 5
+      - Key: {fileID: 11400000, guid: 2f9170227bb86224cb25fa2da170e60f, type: 2}
+        Value: 5
+    itemProbability:
+      itemDictionary:
+        _serializedList:
+        - Key: {fileID: 11400000, guid: c08935882abf3b14caea83b8174879e3, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 7aec536cc3c3b384fb6e9b7847a3fbf8, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 657be2e4709e83c42bd02cd8d9fc09d6, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 3ef7149958e75424fa1427956a1e4259, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 66870a666710fa54aa83b64479a135c5, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 2f9170227bb86224cb25fa2da170e60f, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 14274afb37a409041ae78845e893ad21, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 1ccd76fe8e75f134eaca68b5c4069fb9, type: 2}
+          Value: 0.25
+        - Key: {fileID: 11400000, guid: 0ff9d82d4e6465b42829a6f4f572f8ab, type: 2}
+          Value: 1
+        - Key: {fileID: 11400000, guid: 53dc2fe1e64f87a4e8e8961add4c37a9, type: 2}
+          Value: 1
+        - Key: {fileID: 11400000, guid: 16da50d2a2750f0488f03c8963c98323, type: 2}
+          Value: 0.1
+        - Key: {fileID: 11400000, guid: 3cf7935cb92dcc341bee9dbd24398f70, type: 2}
+          Value: 1
+        - Key: {fileID: 11400000, guid: 8d6135eadf32087439ca9df46b04d714, type: 2}
+          Value: 1
+        - Key: {fileID: 11400000, guid: f78cb74c44c879a4e9ca30cf0b641386, type: 2}
+          Value: 1
+  <combatTendency>k__BackingField:
+    <actionTypeWeights>k__BackingField:
+      itemDictionary:
+        _serializedList:
+        - Key: 0
+          Value: 1
+        - Key: 1
+          Value: 0.5
+        - Key: 2
+          Value: 0.25
+        - Key: 3
+          Value: 0
+        - Key: 4
+          Value: 0
+    <spells>k__BackingField:
+    - {fileID: 11400000, guid: 8652fbbf7c3ee2943a1b3c77be4bb433, type: 2}
+    - {fileID: 11400000, guid: d9caf8e68115dc14e8d50f8ec65b89da, type: 2}
+  <levelRange>k__BackingField: {x: 0, y: 0}
+  <alliesDictionary>k__BackingField:
+    itemDictionary:
+      _serializedList:
+      - Key: {fileID: 11400000, guid: a4f70bc4263a22c4594b7e6c5f3bbfb6, type: 2}
+        Value: 0.1
+      - Key: {fileID: 11400000}
+        Value: 1
+  <encyclopediaInfo>k__BackingField:
+    description: "Manananggal are also Aswang, but have the ability to take flight
+      and detach itself from its lower half of their body. It is a human torso with
+      wings that resembles a bat. They usually target pregnant  women and prey on
+      their fetuses. It is said that during the day it takes the form of a normal
+      human and at night it detaches itself from its lower half. It is advised that
+      if you see a lower half of a Manananggal you can drench it with spices like
+      vinegar or salt. Best have spices near you at all times\r"
+    sprite: {fileID: -2568506110583574892, guid: 7fe558bcd8706004eaaa372804dff648,
+      type: 3}

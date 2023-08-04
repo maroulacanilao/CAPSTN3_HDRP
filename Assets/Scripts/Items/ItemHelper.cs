@@ -58,6 +58,10 @@ public static class ItemHelper
             {
                 return new ItemTool(data_);
             }
+            case ItemType.QuestItem:
+            {
+                return new ItemQuest(data_);
+            }
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -95,6 +99,7 @@ public static class ItemHelper
 
     public static ItemConsumable GetConsumableItem(this ConsumableData data_, int count_ = 0)
     {
+        Debug.Log("GetConsumableItem called: " + data_.name + " count: " + count_);
         var _count = count_ <= 0 ? UnityEngine.Random.Range(1, data_.maxPossibleDropCount) : count_;
         return new ItemConsumable(data_, _count);
     }
@@ -108,6 +113,11 @@ public static class ItemHelper
     public static ItemGold GetGoldItem(int goldAmount_)
     {
         return new ItemGold(GoldData, goldAmount_);
+    }
+    
+    public static ItemQuest GetItemQuest(this QuestItemData data_)
+    {
+        return new ItemQuest(data_);
     }
 
     // public static float GetDropChance(this RarityType rarityType_, int level_, float rarityIncreasePerLevel_)
@@ -123,4 +133,26 @@ public static class ItemHelper
     //     return dropChance;
     // }
 
+    public static int GetStatByType(this CombatStats stats_, StatType type_)
+    {
+        switch (type_)
+        {
+            case StatType.Health:
+                return stats_.vitality;
+            case StatType.Strength:
+                return stats_.strength;
+            case StatType.Defense:
+                return stats_.defense;
+            case StatType.Intelligence:
+                return stats_.intelligence;
+            case StatType.Speed:
+                return stats_.speed;
+        }
+        return 0;
+    }
+    
+    public static StatType GetStatType(this ConsumableData data_)
+    {
+        return GameDataBase.statsDataBase.GetStatTypeByConsumable(data_);
+    }
 }

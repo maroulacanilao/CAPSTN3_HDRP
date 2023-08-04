@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using BaseCore;
 using Character;
 using CustomHelpers;
 using NaughtyAttributes;
 using Player;
-using SaveSystem;
 using ScriptableObjectData;
+using UI.EndDay;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,6 +18,7 @@ namespace Managers
     {
         [field: SerializeField] public EventQueueData eventQueueData { get; private set; }
         [SerializeField] private SessionData sessionData;
+        [SerializeField] private GameObject endingCutscene;
 
         #region SpawnPoints
 
@@ -53,14 +53,11 @@ namespace Managers
         {
             if(next_.name != gameObject.scene.name) return;
             
+            eventQueueData.ExecuteEvents(gameObject.scene.name);
+            
             SetSceneOnType();
         }
 
-        private void OnEnable()
-        {
-            eventQueueData.ExecuteEvents(gameObject.scene.name);
-        }
-    
         private void OnDisable()
         {
             eventQueueData.ClearQueue(gameObject.scene.name);
@@ -69,7 +66,7 @@ namespace Managers
             InputManager.Instance.enabled = true;
         }
 
-        private void SetSceneOnType()
+        public void SetSceneOnType()
         {
             var _sceneType = sessionData.farmLoadType;
 
@@ -101,8 +98,7 @@ namespace Managers
         
         private void OnNewGame()
         {
-            player.transform.position = houseSpawnPoint.position;
-            RefillPlayer();
+            player.transform.position = newGameSpawnPoint.position;
         }
         
         private void OnDungeonEntrance()
@@ -110,28 +106,32 @@ namespace Managers
             player.transform.position = dungeonEntranceSpawnPoint.position;
         }
         
-        private void OnNewDay()
+        private async void OnNewDay()
         {
             player.transform.position = houseSpawnPoint.position;
             RefillPlayer();
+            EndDayUI.OnShowEndDayUI.Invoke();
         }
         
         private void OnLoadGame()
         {
             player.transform.position = houseSpawnPoint.position;
-            RefillPlayer();
         }
         
         private void OnHouse()
         {
             player.transform.position = houseSpawnPoint.position;
-            RefillPlayer();
         }
         
         private void RefillPlayer()
         {
             var _playerChar = player.GetComponent<PlayerCharacter>();
             _playerChar.Refill();
+        }
+        
+        public void EnableEndingCutscene()
+        {
+            endingCutscene.SetActive(true);
         }
     }
 }

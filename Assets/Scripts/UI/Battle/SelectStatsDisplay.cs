@@ -36,7 +36,10 @@ namespace UI.Battle
             }
             
             nameTxt.text = character_.characterData.characterName;
-            statsInfo.Display(character_.TotalStats, false);
+            Debug.Log(character_.characterData.characterName);
+            Debug.Log(character_.Level);
+            Debug.Log(character_.character.level);
+            statsInfo.DisplayCharacterStats(character_.characterData.statsData, character_.character.level);
             panel.SetActive(true);
         }
     }

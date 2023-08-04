@@ -7,7 +7,7 @@ namespace BaseCore
     [System.Serializable]
     public class WeightedDictionary<T>
     {
-        [UnityEngine.SerializeField] private SerializedDictionary<T, float> itemDictionary;
+        [UnityEngine.SerializeField] private SerializedDictionary<T, float> itemDictionary = new SerializedDictionary<T, float>();
         private Dictionary<T, float> fixedChances;
 
         private bool hasInitialized = false;
@@ -15,13 +15,15 @@ namespace BaseCore
 
         private T itemWithLargestWeight;
         
+        public int Count => itemDictionary.Count;
+        
         public WeightedDictionary()
         {
         }
         
         public WeightedDictionary(SerializedDictionary<T, float> itemDictionary_)
         {
-            itemDictionary = itemDictionary_;
+            itemDictionary = new SerializedDictionary<T, float>(itemDictionary_);
             ForceInitialize();
         }
 
@@ -132,5 +134,9 @@ namespace BaseCore
             return _copy;
         }
         
+        public bool ContainsItem(T item)
+        {
+            return itemDictionary.ContainsKey(item);
+        }
     }
 }

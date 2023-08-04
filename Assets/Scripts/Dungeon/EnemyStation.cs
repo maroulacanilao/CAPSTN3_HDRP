@@ -2,6 +2,7 @@ using System;
 using Character;
 using CustomHelpers;
 using EnemyController;
+using NaughtyAttributes;
 using ScriptableObjectData.CharacterData;
 using UnityEngine;
 
@@ -31,6 +32,12 @@ namespace Dungeon
             enemyController.transform.SetParent(transform);
 
             return _enemy as EnemyCharacter;
+        }
+        
+        [Button("Get All Waypoints")]
+        public void GetAllWaypoints()
+        {
+            patrolPoints = GetComponentsInChildren<Transform>();
         }
     }
 }

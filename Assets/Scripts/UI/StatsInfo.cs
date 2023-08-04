@@ -1,4 +1,5 @@
 using System;
+using BaseCore;
 using Character;
 using CustomHelpers;
 using DG.Tweening;
@@ -163,6 +164,22 @@ namespace UI
             Display(combatStats_, includeVitality_);
         }
         
+        public void DisplayDiffDynamic(CombatStats combatStats_, CombatStats oldCombatStats_, bool includeVitality_ = true)
+        {
+            if (!gameObject.activeSelf) gameObject.SetActive(true);
+            
+            RemoveDynamic(combatStats_);
+            
+            Display(combatStats_, includeVitality_);
+            var _diff = combatStats_ - oldCombatStats_;
+            
+            if(_diff.strength != 0) strTXT.text += _diff.strength > 0? $" <color=green>(+{_diff.strength})</color>" : $" <color=red>({_diff.strength})</color>";
+            if(_diff.defense != 0) defTXT.text += _diff.defense > 0? $" <color=green>(+{_diff.defense})</color>" : $" <color=red>({_diff.defense})</color>";
+            if(_diff.intelligence != 0) intTXT.text += _diff.intelligence > 0? $" <color=green>(+{_diff.intelligence})</color>" : $" <color=red>({_diff.intelligence})</color>";
+            if(_diff.speed != 0) spdTXT.text += _diff.speed > 0? $" <color=green>(+{_diff.speed})</color>" : $" <color=red>({_diff.speed})</color>";
+            if(_diff.vitality != 0) vitTXT.text += _diff.vitality > 0? $" <color=green>(+{_diff.vitality})</color>" : $" <color=red>({_diff.vitality})</color>";
+        }
+        
         public void DisplayArmor(CombatStats combatStats_, bool includeVitality_ = false)
         {
             if (!gameObject.activeSelf) gameObject.SetActive(true);
@@ -177,8 +194,8 @@ namespace UI
         {
             if (!gameObject.activeSelf) gameObject.SetActive(true);
             if (vitPanel != null) vitPanel.SetActive(false);
-            if(defPanel != null) strPanel.SetActive(false);
-            if(spdPanel != null) intPanel.SetActive(false);
+            if(defPanel != null) defPanel.SetActive(false);
+            if(spdPanel != null) spdPanel.SetActive(false);
             
             Display(combatStats_, false);
         }
@@ -284,6 +301,30 @@ namespace UI
             intPanel.SetActive(stats_.intelligence != 0);
             defPanel.SetActive(stats_.defense != 0);
             spdPanel.SetActive(stats_.speed != 0);
+        }
+
+        public void DisplayCharacterStats(StatsGrowth statsGrowth_, int level_, bool includeVitality_ = false)
+        {
+            var _base = statsGrowth_.GetTotalNonBonusStats(level_);
+            var _bonus = statsGrowth_.bonusStats;
+            
+            if (!gameObject.activeInHierarchy) gameObject.SetActive(true);
+            if (vitPanel != null) vitPanel.SetActive(includeVitality_);
+
+            // TODO: Remove label
+            if (includeVitality_) vitTXT.text =  $"VIT: {GetCharacterStatText(_base.vitality, _bonus.vitality)}";
+            strTXT.text =  $"STR: {GetCharacterStatText(_base.strength, _bonus.strength)}";
+            defTXT.text =  $"DEF: {GetCharacterStatText(_base.defense, _bonus.defense)}";
+            intTXT.text =  $"INT: {GetCharacterStatText(_base.intelligence, _bonus.intelligence)}";
+            spdTXT.text =  $"SPD: {GetCharacterStatText(_base.speed, _bonus.speed)}";
+        }
+        
+        private string GetCharacterStatText(int statVal_, int bonusStatVal_)
+        {
+            var _sb = new System.Text.StringBuilder();
+            _sb.Append(statVal_);
+            if(bonusStatVal_ != 0) _sb.Append($" <color=green>(+{bonusStatVal_})</color>");
+            return _sb.ToString();
         }
     }
 }

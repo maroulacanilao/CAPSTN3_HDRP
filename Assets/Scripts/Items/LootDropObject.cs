@@ -11,20 +11,20 @@ namespace Items
 {
     public class LootDropObject : InteractableObject, IPoolable
     {
-        [SerializeField] GameObject ghostObject;
+        [SerializeField] GameObject closedModel, openModel;
         [SerializeField] private UI_LootMenu lootMenu;
         public LootDrop lootDrop { get; protected set; }
 
         public LootDropObject Initialize(LootDrop lootDrop_)
         {
             lootDrop = lootDrop_;
-
             return this;
         }
         
         public void OnSpawn()
         {
-            
+            openModel.SetActive(false);
+            closedModel.SetActive(true);
         }
         
         public void OnDeSpawn()
@@ -40,12 +40,16 @@ namespace Items
 
         protected override void Enter()
         {
-            ghostObject.SetActive(true);
+            // ghostObject.SetActive(true);
+            openModel.SetActive(true);
+            closedModel.SetActive(false);
         }
 
         protected override void Exit()
         {
-            ghostObject.SetActive(false);
+            // ghostObject.SetActive(false);
+            openModel.SetActive(false);
+            closedModel.SetActive(true);
         }
 
         private void OnDestroy()

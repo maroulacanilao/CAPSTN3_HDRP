@@ -3,9 +3,11 @@ using System.Collections;
 using BattleSystem;
 using Character;
 using Character.CharacterComponents;
+using CustomHelpers;
 using Managers;
 using UI.Battle;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Spells.Base
 {
@@ -23,9 +25,14 @@ namespace Spells.Base
 			{
 				switch (spellData.spellType)
 				{
-					case SpellType.Damage:
+					case SpellType.Damage when spellData.isPhysical:
 					{
 						var _magDmg = character.stats.strength;
+						return Mathf.RoundToInt(_magDmg * spellData.damageModifier);
+					}
+					case SpellType.Damage when  !spellData.isPhysical:
+					{
+						var _magDmg = character.stats.intelligence;
 						return Mathf.RoundToInt(_magDmg * spellData.damageModifier);
 					}
 						
@@ -90,11 +97,49 @@ namespace Spells.Base
 			var _dif = character.level - target.character.level;
 			_dif = Mathf.Clamp(_dif, 1, 3);
 			_effectInstance.SetDuration(_dif);
-                
-			target.character.statusEffectReceiver.ApplyStatusEffect(_effectInstance, character.gameObject);
+			
+			yield return target.character.statusEffectReceiver.ApplyStatusEffect(_effectInstance, character.gameObject);
                 
 			var _txt = $"{target.character.characterData.characterName} is stunned for {_dif} turn(s)!";
 			yield return BattleTextManager.DoWrite(_txt);
+		}
+		
+		protected bool PlayAura(GameObject auraObj_)
+		{
+			if (auraObj_.IsEmptyOrDestroyed()) return false;
+			if(target.IsEmptyOrDestroyed()) return false;
+            
+			auraObj_.transform.position = target.transform.position;
+			auraObj_.transform.rotation = Quaternion.identity;
+
+			if (auraObj_.TryGetComponent(out ParticleSystem _particleSystem))
+			{
+				_particleSystem.Play();
+				return true;
+			}
+			if (auraObj_.TryGetComponent(out VisualEffect _visualEffect))
+			{
+				_visualEffect.Play();
+				return true;
+			}
+            
+			var _particleSystemInChild = auraObj_.GetComponentInChildren<ParticleSystem>();
+            
+			if (_particleSystemInChild.IsValid())
+			{
+				_particleSystemInChild.Play();
+				return true;
+			}
+            
+			var _visualEffectInChild = auraObj_.GetComponentInChildren<VisualEffect>();
+            
+			if (_visualEffectInChild.IsValid())
+			{
+				_visualEffectInChild.Play();
+				return true;
+			}
+            
+			return false;
 		}
 	}
 }

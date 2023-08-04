@@ -6,11 +6,11 @@ namespace UI.TabMenu.InventoryMenu
 {
     public class InventoryControlUI : MonoBehaviour
     {
-        public TextMeshProUGUI swapTxt, cancelTxt;
+        public GameObject swapTxt, cancelTxt;
 
         private void Update()
         {
-            cancelTxt.gameObject.SetActive(Item_MenuItem.swappingItem != null);
+            cancelTxt.SetActive(Item_MenuItem.swappingItem != null);
         }
     }
 }

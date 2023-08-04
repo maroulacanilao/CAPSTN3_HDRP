@@ -42,13 +42,10 @@ namespace UI.TabMenu.CharacterInfo
 
         public void OnEnable()
         {
-            var _levelNum = level.CurrentLevel;
-            var _currLvlExp = level.CurrentLevelExperience;
             level_TXT.text = $"Level: {level.CurrentLevel}";
-            currentExp_TXT.text = $"{level.TotalExperience} / {level.NextLevelExperience}";
-
-            var _nextLevelExp = level.EvaluateExperience(_levelNum + 1) - level.EvaluateExperience(_levelNum);
-            expBar.fillAmount = (float) _currLvlExp/ _nextLevelExp;
+            currentExp_TXT.text = $"{level.CurrentLevelExperience} / {level.CurrentExperienceNeeded}";
+            
+            expBar.fillAmount = (float) level.CurrentLevelExperience/ level.CurrentExperienceNeeded;
             nextLevelExp_TXT.text = $"Next Level: {level.ExperienceNeededToLevelUp}";
 
             var _weapon = inventory.WeaponEquipped;
@@ -58,12 +55,14 @@ namespace UI.TabMenu.CharacterInfo
             {
                 weaponName_TXT.text = _weapon.Data.ItemName;
                 weaponIcon.sprite = _weapon.Data.Icon;
+                weaponIcon.color = Color.white;
                 weaponStatsInfo.DisplayWeapon(_weapon.Stats);
             }
             else
             {
                 weaponStatsInfo.DisplayWeapon(new CombatStats());
                 weaponIcon.sprite = null;
+                weaponIcon.color = Color.clear;
                 weaponName_TXT.text = "No Weapon Equipped";
             }
 
@@ -71,16 +70,18 @@ namespace UI.TabMenu.CharacterInfo
             {
                 armor_TXT.text = _armor.Data.ItemName;
                 armorIcon.sprite = _armor.Data.Icon;
+                armorIcon.color = Color.white;
                 armorStatsInfo.DisplayArmor(_armor.Stats);
             }
             else
             {
                 armorStatsInfo.DisplayArmor(new CombatStats());
                 armorIcon.sprite = null;
+                armorIcon.color = Color.clear;
                 armor_TXT.text = "No Armor Equipped";
             }
             
-            totalStatsInfo.Display(playerData.totalStats, false);
+            totalStatsInfo.DisplayCharacterStats(playerData.statsData, playerData.level);
         }
         
         

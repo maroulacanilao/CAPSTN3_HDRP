@@ -16,7 +16,7 @@ namespace UI.Farming
         
         private void OnEnable()
         {
-            UpdateUI(tile.tileState);
+            UpdateUI(tile, tile.tileState);
             tile.OnChangeState.AddListener(UpdateUI);
         }
 
@@ -25,7 +25,7 @@ namespace UI.Farming
             tile.OnChangeState.RemoveListener(UpdateUI);
         }
 
-        private void UpdateUI(TileState state_)
+        private void UpdateUI(FarmTile tile_, TileState state_)
         {
             panel.SetActive(tile.tileState != TileState.Empty && enabled);
             

@@ -1,15 +1,18 @@
+using CustomEvent;
 using CustomHelpers;
 using Items;
 using Items.Inventory;
 using Player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Toolbar
 {
-    public class ToolUI : MonoBehaviour
+    public class ToolUI : MonoBehaviour, IPointerDownHandler
     {
+        [SerializeField] Sprite selectedSprite, deselectedSprite;
         [SerializeField] private Outline outline;
         [SerializeField] private Image toolIcon;
         [SerializeField] private TextMeshProUGUI count_TXT, hotKey_TXT;
@@ -19,7 +22,7 @@ namespace UI.Toolbar
         private Image background;
         private int index;
         private Item currItem;
-        
+
         public void Initialize(PlayerInventory playerInventory_, int index_)
         {
             inventory = playerInventory_;
@@ -46,6 +49,7 @@ namespace UI.Toolbar
         {
             outline.effectColor = index == index_ ? selectColor : deselectColor;
             hotKey_TXT.color = index == index_ ? selectColor : Color.black;
+            background.sprite = index == index_ ? selectedSprite : deselectedSprite;
         }
         
         private void UpdateToolBar(int index_, Item item_)
@@ -60,6 +64,15 @@ namespace UI.Toolbar
             else count_TXT.gameObject.SetActive(false);
             toolIcon.sprite = item_?.Data.Icon;
             currItem = item_;
+            
+            if (item_ == null || toolIcon.sprite == null)
+            {
+                toolIcon.color = Color.clear;
+            }
+            else
+            {
+                toolIcon.color = Color.white;
+            }
         }
 
         private void UpdateStackable(ItemStackable StackableItem_)
@@ -72,6 +85,11 @@ namespace UI.Toolbar
         {
             currItem = inventory.ItemTools[index];
             UpdateToolBar(index, inventory.ItemTools[index]);
+        }
+        
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            PlayerEquipment.OnManualSelect.Invoke(index);
         }
     }
 }

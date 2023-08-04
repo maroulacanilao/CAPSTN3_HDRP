@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using BattleSystem.BattleState;
 using Character;
+using CustomHelpers;
+using Managers;
+using UI.Battle;
 using UnityEngine;
 
 public class BonusStatScaled_SE : StatusEffectBase
@@ -13,7 +16,10 @@ public class BonusStatScaled_SE : StatusEffectBase
     [field: SerializeField] public float intelligenceMultiplier { get; set; }
     [field: SerializeField] public float defenseMultiplier { get; set; }
     [field: SerializeField] public float SpeedMultiplier { get; set; }
-    
+
+    [Header("VFX")] 
+    [SerializeField] private string VfxName;
+
 
     private CombatStats bonusStatApplied;
 
@@ -26,10 +32,10 @@ public class BonusStatScaled_SE : StatusEffectBase
         hasDeApplied = false;
     }
 
-    protected override void OnActivate()
+    protected override IEnumerator OnActivate()
     {
-        if(hasApplied) return;
-        var _baseStats = Target.character.statsData.GetTotalStats(Target.character.level);
+        if(hasApplied) yield break;
+        var _baseStats = Target.character.statsData.GetTotalNonBonusStats(Target.character.level);
         
         bonusStatApplied = new CombatStats()
         {
@@ -39,9 +45,18 @@ public class BonusStatScaled_SE : StatusEffectBase
             defense = Mathf.RoundToInt(_baseStats.defense * defenseMultiplier),
             speed = Mathf.RoundToInt(_baseStats.speed * SpeedMultiplier)
         };
-        
+
         Target.character.statsData.AddBonusStats(bonusStatApplied);
         hasApplied = true;
+        
+        if(!GameManager.IsBattleSceneActive()) yield break;
+        
+        yield return AssetHelper.Co_PlayEffect(VfxName, Target.character.transform, Vector3.zero, Quaternion.identity, 1f);
+        var _name = $"<color=red>{Target.character.characterData.characterName}</color>";
+        var _msg = BattleText.Replace("NAME", _name).Beautify();
+            
+        yield return BattleTextManager.DoWrite(_msg.ToString());
+        
     }
     
     protected override void OnDeactivate()

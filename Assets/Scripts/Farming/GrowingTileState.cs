@@ -23,7 +23,8 @@ namespace Farming
         public override void EnterLogic()
         {
             IsNextPhase = false;
-
+            FarmTile.plantRenderer.gameObject.SetActive(true);
+            FarmTile.plantRenderer.sprite = FarmTile.seedData.soilSprite;
             FarmTile.datePlanted = TimeManager.DateTime;
             FarmTile.timeRemaining = TimeSpan.FromMinutes(FarmTile.seedData.minutesToGrow).RoundToFive();
             
@@ -79,12 +80,10 @@ namespace Farming
 
         public void UpdateAppearance()
         {
-            if (FarmTile.progress >= 0.3f)
+            if (FarmTile.progress >= 0.5f)
             {
                 IsNextPhase = true;
                 FarmTile.plantRenderer.gameObject.SetActive(true);
-                // ToDO: Add mat to farmtile
-                // farmTile.soilMeshFilter.sprite = farmTile.defaultSoilSprite;
                 FarmTile.plantRenderer.sprite = FarmTile.seedData.plantSprite;
                 SoilMesh.mesh = TileState.Growing2.GetTileMesh();
             }
@@ -117,7 +116,7 @@ namespace Farming
             
             jobInfo.isReadyToHarvestArray[0] = _timeRemaining <= 0;
             
-            jobInfo.isNextPhaseArray[0] = _timeRemaining <= jobInfo.minutesToGrow * 0.3f;
+            jobInfo.isNextPhaseArray[0] = _timeRemaining <= jobInfo.minutesToGrow * 0.5f;
         }
         
         public CustomTimeSpan Difference(CustomDateTime dateTime1, CustomDateTime dateTime2)

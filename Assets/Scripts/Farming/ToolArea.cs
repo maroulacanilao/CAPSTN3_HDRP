@@ -1,19 +1,21 @@
+using System.Collections.Generic;
 using BaseCore;
 using CustomHelpers;
 using Items;
 using Items.Inventory;
 using Managers;
 using ObjectPool;
+using Others;
 using Player;
+using ScriptableObjectData;
 using UnityEngine;
 
 namespace Farming
 {
     public class ToolArea : Singleton<ToolArea>
     {
+        [SerializeField] private GameDataBase gameDataBase;
         [SerializeField] private GameObject farmTilePrefab;
-        [SerializeField] private LayerMask farmTileLayer;
-        [SerializeField] private LayerMask farmGroundLayer;
         [SerializeField] private LineRenderer lineRenderer;
         [SerializeField] private float distanceToPlayer = 2f;
         [SerializeField] private float distanceToGround = 0.01f;
@@ -26,6 +28,10 @@ namespace Farming
         private bool ShowLine = true;
         
         public Vector3 size { get; private set; } = Vector3.one;
+
+        private LayerMask farmTileLayer => gameDataBase.farmTileLayer;
+        private LayerMask plowableLayer => gameDataBase.plowableAreaLayer;
+        private LayerMask foliageLayer => gameDataBase.foliageLayer;
 
         public void Start()
         {
@@ -124,8 +130,6 @@ namespace Farming
         
         public FarmTile GetFarmTile()
         {
-            if (!lineRenderer.enabled) return null;
-            
             var _ray = new Ray(transform.position.AddY(0.5f), Vector3.down);
             
             return Physics.Raycast(_ray, out var _hit, .7f, farmTileLayer) 
@@ -140,7 +144,7 @@ namespace Farming
             {
                 var _pos = lineRenderer.GetPosition(i) + transform.position;
                 var _rayDown = new Ray(_pos.AddY(0.1f), Vector3.down);
-                if (!Physics.Raycast(_rayDown, out var _hitInfo, 0.2f, farmGroundLayer))
+                if (!Physics.Raycast(_rayDown, out var _hitInfo, 0.2f, plowableLayer))
                 {
                     return false;
                 }
@@ -148,11 +152,20 @@ namespace Farming
             return true;
         }
         
+        public bool HasFoliage(out GameObject foliage_)
+        {
+            foliage_ = null;
+            
+            if (!lineRenderer.enabled) return false;
+            var _pos = transform.position;
+            return TrGetFoliage(_pos, out foliage_);
+        }
+
         public RaycastHit GetGround()
         {
             var _ray = new Ray(playerPosition.AddY(0.5f), Vector3.down);
 
-            Physics.Raycast(_ray, out var _hit, 0.55f, farmGroundLayer);
+            Physics.Raycast(_ray, out var _hit, 0.55f, plowableLayer);
             return _hit;
         }
 
@@ -160,6 +173,19 @@ namespace Farming
         {
             ShowLine = value_;
             lineRenderer.enabled = ShowLine; 
+        }
+
+        public static bool TrGetFoliage(Vector3 position_, out GameObject foliage_)
+        {
+            foliage_ = null;
+            var _rayDown = new Ray(position_.AddY(-0.1f), Vector3.up);
+            
+            if (!Physics.Raycast(_rayDown, out var _hitInfo, 1f, Instance.foliageLayer)) return false;
+            
+            if(_hitInfo.collider == null) return false;
+            
+            foliage_ = _hitInfo.collider.gameObject;
+            return true;
         }
 
         #endregion

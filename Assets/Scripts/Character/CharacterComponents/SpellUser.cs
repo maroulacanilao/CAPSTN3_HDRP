@@ -60,7 +60,7 @@ namespace Character.CharacterComponents
             var _spell = spellData_.GetSpellObject(this);
             yield return null;
 
-            character.mana.UseMana(_spell.spellData.manaCost);
+            //character.mana.UseMana(_spell.spellData.manaCost);
         
             yield return _spell.Activate(target_);
         

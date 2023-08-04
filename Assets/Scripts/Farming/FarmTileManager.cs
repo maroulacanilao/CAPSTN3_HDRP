@@ -5,6 +5,7 @@ using AYellowpaper.SerializedCollections;
 using BaseCore;
 using CustomEvent;
 using CustomHelpers;
+using Items;
 using Items.Inventory;
 using Items.ItemData;
 using ObjectPool;
@@ -29,6 +30,7 @@ namespace Farming
         public static readonly Evt<FarmTile> OnAddFarmTile = new Evt<FarmTile>();
         public static readonly Evt<FarmTile> OnRemoveTile = new Evt<FarmTile>();
         public static readonly Evt<SeedData> OnHarvestCrop = new Evt<SeedData>();
+        public static readonly Evt<Item,int> OnSuccessHarvest = new Evt<Item, int>();
 
         private ToolArea toolArea;
         private PlayerData playerData => gameDataBase.playerData;
@@ -50,7 +52,7 @@ namespace Farming
 
         private void OnDestroy()
         {
-            OnHarvestCrop.AddListener(HarvestCrop);
+            OnHarvestCrop.RemoveListener(HarvestCrop);
         }
 
         public List<FarmTile> GetAllNonEmptyTile()
@@ -111,6 +113,15 @@ namespace Farming
             Instance.farmTiles.Remove(farmTile_);
             OnRemoveTile.Invoke(farmTile_);
             farmTile_.gameObject.ReturnInstance();
+            
+            if (Instance.toolArea.HasFoliage(out GameObject fol_) 
+                && fol_.IsValid() 
+                && fol_.TryGetComponent(out Others.FarmFoliage foliage))
+            {
+                if (foliage == null) return;
+                
+                foliage.SetModelActive(true);
+            }
         }
 
         public FarmTile SpawnTileAtToolArea()
@@ -121,9 +132,17 @@ namespace Farming
                 .GetInstance<FarmTile>(ToolArea.Instance.transform.position.SetY(_yPos), Quaternion.identity)
                 .Initialize();
             
-            //Instantiate(farmTilePrefab, ToolArea.Instance.transform.position.SetY(_yPos), Quaternion.identity);
             _tile.Initialize();
-            // _tile.transform.rotation = Quaternion.Euler(90, 0, 0);
+
+            if (toolArea.HasFoliage(out GameObject fol_) 
+                && fol_.IsValid() 
+                && fol_.TryGetComponent(out Others.FarmFoliage foliage))
+            {
+                if(foliage == null) return _tile;
+                
+                foliage.SetModelActive(false);
+            }
+            
             return _tile;
         }
 
@@ -149,17 +168,15 @@ namespace Farming
         public void HarvestCrop(SeedData seedData_)
         {
             if(seedData_ == null) return;
-            // if(!plantedSeeds.ContainsKey(seedData_)) return;
-            // if(plantedSeeds[seedData_] <= 0) return;
-            //
-            // plantedSeeds[seedData_]--;
-            // if(plantedSeeds[seedData_] <= 0) plantedSeeds.Remove(seedData_);
-
-            var _count = seedData_.producePossibleCount.GetRandomInRange();
-            var _item = seedData_.produceData.GetConsumableItem(_count);
+            var _item = seedData_.produceData.GetConsumableItem(1);
+            var _exp = 50;
+            
             inventory.AddItem(_item);
             
-            playerLevel.AddExp(seedData_.expReward);
+            playerLevel.AddExp(_exp);
+            gameDataBase.cropDataBase.AddHarvest(_item.Data as ConsumableData);
+            
+            OnSuccessHarvest.Invoke(_item, _exp);
         }
 
         public static void AddTileManual(FarmTile farmTile_)

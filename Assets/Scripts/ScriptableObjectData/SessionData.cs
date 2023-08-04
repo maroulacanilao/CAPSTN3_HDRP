@@ -18,11 +18,18 @@ namespace ScriptableObjectData
             hasStartedTime = false;
             farmLoadType = FarmLoadType.NewGame;
             hasInitialized = true;
+            dungeonLevel = 1;
         }
         
         public void DeInitialize()
         {
             hasInitialized = false;
+        }
+        
+        public void ReInitialize()
+        {
+            hasInitialized = false;
+            InitializeSession();
         }
     }
 }

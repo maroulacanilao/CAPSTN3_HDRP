@@ -14,18 +14,70 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <GoldItemData>k__BackingField: {fileID: 11400000, guid: 362d2e6e08f9f094bb9873e5f969f192,
     type: 2}
-  <ItemIconDictionary>k__BackingField:
-    _serializedList: []
   <ItemDataDictionary>k__BackingField:
     _serializedList:
     - Key: Carrot
       Value: {fileID: 11400000, guid: e88b3c2ffdb5fca4380a54db620ffbea, type: 2}
     - Key: carrotSeed
       Value: {fileID: 11400000, guid: 7aec536cc3c3b384fb6e9b7847a3fbf8, type: 2}
-    - Key: SteelArmor
+    - Key: Corn
+      Value: {fileID: 11400000, guid: fe963237b4eed3942938ed8eb390b092, type: 2}
+    - Key: cornSeed
+      Value: {fileID: 11400000, guid: c08935882abf3b14caea83b8174879e3, type: 2}
+    - Key: Garlic
+      Value: {fileID: 11400000, guid: c97a57fdab5796f4d828ec343fea8209, type: 2}
+    - Key: GarlicSeed
+      Value: {fileID: 11400000, guid: 14274afb37a409041ae78845e893ad21, type: 2}
+    - Key: Onion
+      Value: {fileID: 11400000, guid: 22ff84e7baf5e2e4da61a6f130da3146, type: 2}
+    - Key: onionSeed
+      Value: {fileID: 11400000, guid: 1ccd76fe8e75f134eaca68b5c4069fb9, type: 2}
+    - Key: Potato
+      Value: {fileID: 11400000, guid: 788ffcb08f4d6ae40821a15240eec986, type: 2}
+    - Key: potatoSeed
+      Value: {fileID: 11400000, guid: 2f9170227bb86224cb25fa2da170e60f, type: 2}
+    - Key: BellPepper
+      Value: {fileID: 11400000, guid: 0f63c29eef6fb474e83541b65ef148e4, type: 2}
+    - Key: Bell Pepper Seed
+      Value: {fileID: 11400000, guid: 3ef7149958e75424fa1427956a1e4259, type: 2}
+    - Key: Tomato
+      Value: {fileID: 11400000, guid: 0a48213de1033c34da73f7dc8c1389b0, type: 2}
+    - Key: tomatoSeed
+      Value: {fileID: 11400000, guid: 66870a666710fa54aa83b64479a135c5, type: 2}
+    - Key: WildChili
+      Value: {fileID: 11400000, guid: f06a69f6cd747c141ba7e5753ef4d48e, type: 2}
+    - Key: wildChiliSeed
+      Value: {fileID: 11400000, guid: 657be2e4709e83c42bd02cd8d9fc09d6, type: 2}
+    - Key: ApprenticeClothes
       Value: {fileID: 11400000, guid: 004ea5c2fe93d494ba69efc34ea86818, type: 2}
+    - Key: BayaniBreastplate
+      Value: {fileID: 11400000, guid: 4e987d95376e8cf4f8cd4193a18041cc, type: 2}
+    - Key: GuardianArmor
+      Value: {fileID: 11400000, guid: a019f0b294e762b4285ea546e3d0077e, type: 2}
+    - Key: SundaloArmor
+      Value: {fileID: 11400000, guid: 232c886689e560a4994fca11eac1a42b, type: 2}
+    - Key: KatadArmor
+      Value: {fileID: 11400000, guid: 0ff9d82d4e6465b42829a6f4f572f8ab, type: 2}
+    - Key: MaggagawayRobe
+      Value: {fileID: 11400000, guid: 53dc2fe1e64f87a4e8e8961add4c37a9, type: 2}
+    - Key: ApolakiSword
+      Value: {fileID: 11400000, guid: 16da50d2a2750f0488f03c8963c98323, type: 2}
+    - Key: BlessedSword
+      Value: {fileID: 11400000, guid: f78cb74c44c879a4e9ca30cf0b641386, type: 2}
+    - Key: CursedSword
+      Value: {fileID: 11400000, guid: 8d6135eadf32087439ca9df46b04d714, type: 2}
+    - Key: GuardianSword
+      Value: {fileID: 11400000, guid: fec94f0233e9d95498e26ae0efe96d87, type: 2}
+    - Key: MysthicSword
+      Value: {fileID: 11400000, guid: 3cf7935cb92dcc341bee9dbd24398f70, type: 2}
     - Key: SteelSword
       Value: {fileID: 11400000, guid: a07fb1f81f2f37047a65917abef3a85b, type: 2}
+    - Key: DungeonExplosives
+      Value: {fileID: 11400000, guid: f96f8944acc4ec84c9e96b40ab8fea09, type: 2}
+    - Key: DungeonKey
+      Value: {fileID: 11400000, guid: 6f316566b6358d749a2d0d5685cd1f21, type: 2}
+    - Key: DungeonRope
+      Value: {fileID: 11400000, guid: dff37d99e39c428409f472721d893868, type: 2}
     - Key: GoldItem
       Value: {fileID: 11400000, guid: 362d2e6e08f9f094bb9873e5f969f192, type: 2}
     - Key: HoeTool
@@ -37,15 +89,44 @@ MonoBehaviour:
     - Key: 3
       Value:
       - {fileID: 11400000, guid: e88b3c2ffdb5fca4380a54db620ffbea, type: 2}
+      - {fileID: 11400000, guid: fe963237b4eed3942938ed8eb390b092, type: 2}
+      - {fileID: 11400000, guid: c97a57fdab5796f4d828ec343fea8209, type: 2}
+      - {fileID: 11400000, guid: 22ff84e7baf5e2e4da61a6f130da3146, type: 2}
+      - {fileID: 11400000, guid: 788ffcb08f4d6ae40821a15240eec986, type: 2}
+      - {fileID: 11400000, guid: 0f63c29eef6fb474e83541b65ef148e4, type: 2}
+      - {fileID: 11400000, guid: 0a48213de1033c34da73f7dc8c1389b0, type: 2}
+      - {fileID: 11400000, guid: f06a69f6cd747c141ba7e5753ef4d48e, type: 2}
     - Key: 2
       Value:
       - {fileID: 11400000, guid: 7aec536cc3c3b384fb6e9b7847a3fbf8, type: 2}
+      - {fileID: 11400000, guid: c08935882abf3b14caea83b8174879e3, type: 2}
+      - {fileID: 11400000, guid: 14274afb37a409041ae78845e893ad21, type: 2}
+      - {fileID: 11400000, guid: 1ccd76fe8e75f134eaca68b5c4069fb9, type: 2}
+      - {fileID: 11400000, guid: 2f9170227bb86224cb25fa2da170e60f, type: 2}
+      - {fileID: 11400000, guid: 3ef7149958e75424fa1427956a1e4259, type: 2}
+      - {fileID: 11400000, guid: 66870a666710fa54aa83b64479a135c5, type: 2}
+      - {fileID: 11400000, guid: 657be2e4709e83c42bd02cd8d9fc09d6, type: 2}
     - Key: 6
       Value:
       - {fileID: 11400000, guid: 004ea5c2fe93d494ba69efc34ea86818, type: 2}
+      - {fileID: 11400000, guid: 4e987d95376e8cf4f8cd4193a18041cc, type: 2}
+      - {fileID: 11400000, guid: a019f0b294e762b4285ea546e3d0077e, type: 2}
+      - {fileID: 11400000, guid: 232c886689e560a4994fca11eac1a42b, type: 2}
+      - {fileID: 11400000, guid: 0ff9d82d4e6465b42829a6f4f572f8ab, type: 2}
+      - {fileID: 11400000, guid: 53dc2fe1e64f87a4e8e8961add4c37a9, type: 2}
     - Key: 7
       Value:
+      - {fileID: 11400000, guid: 16da50d2a2750f0488f03c8963c98323, type: 2}
+      - {fileID: 11400000, guid: f78cb74c44c879a4e9ca30cf0b641386, type: 2}
+      - {fileID: 11400000, guid: 8d6135eadf32087439ca9df46b04d714, type: 2}
+      - {fileID: 11400000, guid: fec94f0233e9d95498e26ae0efe96d87, type: 2}
+      - {fileID: 11400000, guid: 3cf7935cb92dcc341bee9dbd24398f70, type: 2}
       - {fileID: 11400000, guid: a07fb1f81f2f37047a65917abef3a85b, type: 2}
+    - Key: 4
+      Value:
+      - {fileID: 11400000, guid: f96f8944acc4ec84c9e96b40ab8fea09, type: 2}
+      - {fileID: 11400000, guid: 6f316566b6358d749a2d0d5685cd1f21, type: 2}
+      - {fileID: 11400000, guid: dff37d99e39c428409f472721d893868, type: 2}
     - Key: 1
       Value:
       - {fileID: 11400000, guid: 362d2e6e08f9f094bb9873e5f969f192, type: 2}
@@ -58,11 +139,11 @@ MonoBehaviour:
     - Key: 1
       Value: {r: 1, g: 1, b: 1, a: 1}
     - Key: 2
-      Value: {r: 0, g: 0.29781726, b: 0.6603774, a: 1}
+      Value: {r: 0.495283, g: 0.7224058, b: 1, a: 1}
     - Key: 3
-      Value: {r: 0.46226418, g: 0, b: 0.027989754, a: 1}
+      Value: {r: 1, g: 0.4481132, b: 0.48218033, a: 1}
     - Key: 4
-      Value: {r: 0.4528302, g: 0, b: 0.44115657, a: 1}
+      Value: {r: 1, g: 0.41037738, b: 0.9865996, a: 1}
   <RarityModiferValue>k__BackingField:
     _serializedList:
     - Key: 1
@@ -78,11 +159,11 @@ MonoBehaviour:
     - Key: 1
       Value: {x: 3, y: 3}
     - Key: 2
-      Value: {x: 0.5, y: 5}
+      Value: {x: 0.5, y: 4}
     - Key: 3
       Value: {x: 0.1, y: 4}
     - Key: 4
-      Value: {x: 0.01, y: 1.5}
+      Value: {x: 0.01, y: 3}
   <RarityChanceCurve>k__BackingField:
     _serializedList:
     - Key: 1
@@ -158,11 +239,20 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
+          time: 0.7
+          value: 0.7
+          inSlope: 1.625
+          outSlope: 1
+          tangentMode: 69
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
           time: 1
           value: 1
-          inSlope: 3.5088668
+          inSlope: 1
           outSlope: 3.5088668
-          tangentMode: 0
+          tangentMode: 69
           weightedMode: 0
           inWeight: 0.014809012
           outWeight: 0
@@ -192,11 +282,20 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
+          time: 0.80073243
+          value: 0.8
+          inSlope: 86.15937
+          outSlope: 1.0036756
+          tangentMode: 65
+          weightedMode: 1
+          inWeight: 0.008655715
+          outWeight: 0.33333334
+        - serializedVersion: 3
           time: 1
           value: 1
-          inSlope: 4.4497027
+          inSlope: 1.0036756
           outSlope: 4.4497027
-          tangentMode: 0
+          tangentMode: 69
           weightedMode: 0
           inWeight: 0.021823883
           outWeight: 0

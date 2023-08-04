@@ -1,5 +1,9 @@
+using BaseCore;
+using Character;
+using Character.CharacterComponents;
 using CustomHelpers;
 using Managers;
+using ScriptableObjectData.CharacterData;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +25,7 @@ namespace Player.ControllerState
             jumpTimer = 0;
             playerState = PlayerSate.Jumping;
             player.animator.SetTrigger(player.jumpHash);
+            AudioManager.PlayJump();
         }
 
         public override void LogicUpdate()
@@ -61,14 +66,21 @@ namespace Player.ControllerState
     [System.Serializable]
     public class FallingPlayerInputState : PlayerInputState
     {
+        private PlayerHealth playerHealth;
+        private Vector3 startingPos;
         public FallingPlayerInputState(PlayerInputStateMachine stateMachine_) : base(stateMachine_)
-        { }
+        {
+            var _data = player.GetComponent<CharacterBase>().characterData as PlayerData;
+            if(_data == null) return;
+            playerHealth = _data.health;
+        }
     
         public override void Enter()
         {
             base.Enter();
             //player.animator.SetTrigger(player.fallHash);
             playerState = PlayerSate.Falling;
+            startingPos = player.transform.position;
         }
 
         public override void LogicUpdate()
@@ -90,7 +102,19 @@ namespace Player.ControllerState
         public override void Exit()
         {
             base.Exit();
+            FallDamage();
             //player.animator.ResetTrigger(player.fallHash);
+        }
+
+        public void FallDamage()
+        {
+            if(playerHealth == null) return;
+            var _pos = player.transform.position;
+            
+            var _fallDist = Mathf.Abs(startingPos.y - _pos.y);
+            if(_fallDist < 5f) return;
+            var _dam = new DamageInfo((int)_fallDist, null);
+            playerHealth.TakeDamage(_dam);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Managers.SceneLoader.SceneTransition
         protected override void Setup()
         {
             image = imgRect.GetComponent<Image>();
+            image.raycastTarget = false;
         }
     
         protected override Task OnTransition()

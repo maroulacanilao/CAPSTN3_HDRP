@@ -22,8 +22,8 @@ namespace ScriptableObjectData
         [field: SerializeField] public CropDataBase cropDataBase { get; private set; }
         [field: SerializeField] public SpellDataBase spellDataBase { get; private set; }
         [field: SerializeField] public StatsDataBase statsDataBase { get; private set; }
-        
-        
+
+
         [field: Header("Game Data")]
         [field: SerializeField] public BattleData battleData { get; private set; }
         [field: SerializeField] public ShippingData shippingData { get; private set; }
@@ -47,13 +47,19 @@ namespace ScriptableObjectData
         public string FarmSceneName { get; private set; }
         
         [field: SerializeField] [field: Scene] 
+        public string TutorialScene { get; private set; }
+        
+        [field: SerializeField] [field: Scene] 
         public string BattleSceneName { get; private set; }
         
         [field: SerializeField] [field: Scene] 
         public string DungeonSceneName { get; private set; }
         
-
-
+        [field: Header("Layers")] 
+        [field: SerializeField] public LayerMask farmTileLayer { get; private set; }
+        [field: SerializeField] public LayerMask plowableAreaLayer { get; private set; }
+        [field: SerializeField] public LayerMask foliageLayer { get; private set; }
+        
         private bool hasInitialized;
         
         public void Initialize()
@@ -65,7 +71,19 @@ namespace ScriptableObjectData
             statShopData.Initialize();
             shrineData.Initialize(this);
             progressionData.Initialize();
+            eventQueueData.ClearAllQueues();
             hasInitialized = true;
+        }
+        
+        public void ReInitialize()
+        {
+            if(!hasInitialized) return;
+            settingsData.Initialize();
+            sessionData.InitializeSession();
+            statShopData.Initialize();
+            shrineData.Initialize(this);
+            progressionData.Initialize();
+            eventQueueData.ClearAllQueues();
         }
     
         public void DeInitialize()

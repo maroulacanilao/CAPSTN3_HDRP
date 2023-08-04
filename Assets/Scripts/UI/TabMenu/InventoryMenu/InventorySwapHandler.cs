@@ -66,7 +66,6 @@ namespace UI.TabMenu.InventoryMenu
 
         private void OnSwap()
         {
-            Debug.Log("Swap");
             if (!enabled)
             {
                 // Debug.Log("Not Enabled");
@@ -158,7 +157,7 @@ namespace UI.TabMenu.InventoryMenu
         {
             var _item = swappingItem.item;
             if(_item == null) return false;
-            var _itemName = $"<color=orange>{_item.Data.ItemName}</color>";
+            var _itemName = $"<color=red>{_item.Data.ItemName}</color>";
             var _level = inventoryMenu.playerData.LevelData.CurrentLevel;
             
             switch (selectedItem.inventoryItemType)

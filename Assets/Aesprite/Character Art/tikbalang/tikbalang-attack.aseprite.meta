@@ -2,7 +2,12 @@ fileFormatVersion: 2
 guid: 9fe98f79dde35e147963c7db87183780
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: tikbalang-attack_Clip
+    second: {fileID: 7400000, guid: b3365b58debd1c6489f105cf20e88285, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -33,7 +38,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 64
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -93,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 0
+  platformSettingsDirtyTick: 638246342732894722
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -128,7 +133,7 @@ ScriptedImporter:
       y: 118
       width: 53
       height: 107
-    spriteID: 9c046e662d9e97c4a83f744b6e446b4a
+    spriteID: bf956bec03e0c43429fc1e511f2c97c2
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -148,7 +153,7 @@ ScriptedImporter:
       y: 4
       width: 68
       height: 106
-    spriteID: 3ed35caf769d27b43aa873667888229e
+    spriteID: 6353b2b7c09cddb4c813ade2bb36e243
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -168,7 +173,7 @@ ScriptedImporter:
       y: 4
       width: 89
       height: 106
-    spriteID: 71a5f65d59d6abb4a864523d1223c62c
+    spriteID: 2e5b7f6073d20c041912052df0141d45
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -188,7 +193,7 @@ ScriptedImporter:
       y: 118
       width: 44
       height: 110
-    spriteID: 266d090c6674bf347adfd680b6dd7a7d
+    spriteID: 751111970842035468bc022291aa1f74
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -213,7 +218,7 @@ ScriptedImporter:
         y: 0
         width: 53
         height: 107
-      spriteId: 9c046e662d9e97c4a83f744b6e446b4a
+      spriteId: bf956bec03e0c43429fc1e511f2c97c2
     - name: tikbalang-attack_Frame_1
       frameIndex: 1
       cellRect:
@@ -221,7 +226,7 @@ ScriptedImporter:
         y: 0
         width: 68
         height: 106
-      spriteId: 3ed35caf769d27b43aa873667888229e
+      spriteId: 6353b2b7c09cddb4c813ade2bb36e243
     - name: tikbalang-attack_Frame_2
       frameIndex: 2
       cellRect:
@@ -229,7 +234,7 @@ ScriptedImporter:
         y: 0
         width: 89
         height: 106
-      spriteId: 71a5f65d59d6abb4a864523d1223c62c
+      spriteId: 2e5b7f6073d20c041912052df0141d45
     - name: tikbalang-attack_Frame_3
       frameIndex: 3
       cellRect:
@@ -237,10 +242,87 @@ ScriptedImporter:
         y: 0
         width: 44
         height: 110
-      spriteId: 266d090c6674bf347adfd680b6dd7a7d
+      spriteId: 751111970842035468bc022291aa1f74
     linkedCells: []
     parentIndex: -1
-  platformSettings: []
+  platformSettings:
+  - name: DefaultTexturePlatform
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Standalone
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Server
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Android
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: iPhone
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: WebGL
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Windows Store Apps
+    overridden: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 100, y: 118}

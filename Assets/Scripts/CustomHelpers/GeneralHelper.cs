@@ -83,5 +83,19 @@ namespace CustomHelpers
                 0
             );
         }
+        
+        public static Color AddGrayishTint(this Color color, float strength)
+        {
+            // Convert color to HSV
+            Color.RGBToHSV(color, out float h, out float s, out float v);
+
+            // Reduce saturation and adjust brightness
+            s *= (1f - strength);
+            v *= (1f + strength * 0.5f);
+
+            // Convert back to RGB
+            Color grayishColor = Color.HSVToRGB(h, s, v);
+            return grayishColor;
+        }
     }
 }

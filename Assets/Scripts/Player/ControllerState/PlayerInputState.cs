@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Player.ControllerState
 {
-    public enum PlayerSate { Grounded, Jumping, Falling, Swimming, Climbing, Dashing, Attacking, UsingTool, Interacting, Menu }
+    public enum PlayerSate { Grounded, Jumping, Falling, Swimming, Climbing, Dashing, Attacking, UsingTool, Interacting, Menu, Hit }
     
     [System.Serializable]
     public abstract class PlayerInputState : UnitState
@@ -66,8 +66,6 @@ namespace Player.ControllerState
         {
             if (!InputManager.IsInputEnabled())
             {
-                player.animator.SetFloat(player.xSpeedHash, 0);
-                player.animator.SetFloat(player.ySpeedHash, 0);
                 player.animator.SetBool(player.isIdleHash, true);
                 return;
             }

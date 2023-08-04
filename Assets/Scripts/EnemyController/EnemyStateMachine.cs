@@ -10,14 +10,15 @@ namespace EnemyController
     public class EnemyStateMachine
     {
 
-        private EnemyAIController aiController;
+        protected EnemyAIController aiController;
 
         #region States
         
-        public EnemyPatrolState patrolState { get; private set; }
-        public EnemyChasePlayer chasePlayerState { get; private set; }
-        public EnemyAttackState attackState { get; private set; }
-        public EnemyGoToStationState goToStationState { get; private set; }
+        public EnemyPatrolState patrolState { get; protected set; }
+        public EnemyChasePlayer chasePlayerState { get; protected set; }
+        public EnemyAttackState attackState { get; protected set; }
+        public EnemyGoToStationState goToStationState { get; protected set; }
+        public EnemyHitState hitState { get; protected set; }
 
         #endregion
 
@@ -33,27 +34,32 @@ namespace EnemyController
             }
         }
         
-        private PlayerInputController mPlayerController;
+        protected PlayerInputController mPlayerController;
 
-        [SerializeReference] private EnemyControllerState currentState;
+        [SerializeReference] protected EnemyControllerState currentState;
+        
+        public EnemyControllerState CurrentState => currentState;
         
         public EnemyStateMachine(EnemyAIController aiController_)
         {
             aiController = aiController_;
-
         }
-        
-        public void Initialize()
+        protected EnemyStateMachine()
+        {
+        }
+
+        public virtual void Initialize()
         {
             patrolState = new EnemyPatrolState(aiController, this);
             chasePlayerState = new EnemyChasePlayer(aiController, this);
             attackState = new EnemyAttackState(aiController, this);
             goToStationState = new EnemyGoToStationState(aiController, this);
+            hitState = new EnemyHitState(aiController, this);
             
             ChangeState(patrolState);
         }
 
-        public void Enable()
+        public virtual void Enable()
         {
             if (aiController.station.IsEmptyOrDestroyed())
             {
@@ -64,13 +70,13 @@ namespace EnemyController
             currentState?.Enable();
         }
 
-        public void FixedUpdate()
+        public virtual void FixedUpdate()
         {
             currentState?.AnimationUpdate();
             currentState?.FixedUpdate();
         }
 
-        public void ChangeState(EnemyControllerState newState_)
+        public virtual void ChangeState(EnemyControllerState newState_)
         {
             currentState?.Exit();
             currentState = newState_;

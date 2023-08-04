@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace BattleSystem
 {
+    
+    [Serializable] 
+    public enum BattleResultType { Win, Lose, Flee }
     [CreateAssetMenu(menuName = "ScriptableObjects/Persistent/BattleData", fileName = "BattleData")]
     public class BattleData : ScriptableObject
     {

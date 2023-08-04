@@ -9,7 +9,6 @@ namespace Interactable
         
         protected override void Interact()
         {
-            Debug.Log("enable object "+ objectToEnable.name);
             objectToEnable.SetActive(true);
         }
     

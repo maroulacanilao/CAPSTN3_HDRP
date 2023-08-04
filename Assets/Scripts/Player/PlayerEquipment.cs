@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using BaseCore;
 using Character;
@@ -31,8 +32,12 @@ namespace Player
         public static readonly Evt OnTillAction = new Evt();
         public static readonly Evt OnWaterAction = new Evt();
         public static readonly Evt OnUnTillAction = new Evt();
+        public static readonly Evt<int> OnManualSelect = new Evt<int>();
         
         public FarmTile currTile { get; private set; }
+        
+        public EquipmentAction currAction { get; private set; }
+        public string seedName { get; private set; }
 
         private void Start()
         {
@@ -44,20 +49,25 @@ namespace Player
         {
             InputManager.OnCycleTool.AddListener(CycleTool);
             InputManager.OnSelectTool.AddListener(SelectTool);
+            OnManualSelect.AddListener(SelectAndUse);
         }
-        
+
+        private void Update()
+        {
+            currAction = GetEquipmentAction();
+        }
+
         private void OnDisable()
         {
             InputManager.OnCycleTool.RemoveListener(CycleTool);
             InputManager.OnSelectTool.RemoveListener(SelectTool);
+            OnManualSelect.RemoveListener(SelectAndUse);
         }
 
         
         public void UseTool()
         {
-            // _equipmentActions[currIndex]?.Invoke();
-            var _action = GetEquipmentAction();
-            DoEquipmentAction(_action);
+            DoEquipmentAction(currAction);
         }
 
         #region Tool Selection
@@ -75,6 +85,13 @@ namespace Player
             currIndex = index_;
             ClampIndex();
             OnChangeItemOnHand.Invoke(currIndex);
+        }
+
+        public void SelectAndUse(int index_)
+        {
+            SelectTool(index_);
+            currAction = GetEquipmentAction();
+            UseTool();
         }
 
         private void ClampIndex()
@@ -95,11 +112,15 @@ namespace Player
             {
                 if(_farmTileInteractable.farmTile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
             }
-            
-            if(CurrentItem == null) return EquipmentAction.None;
 
             var _tile = toolArea.GetFarmTile();
             SetTile(_tile);
+
+            if (CurrentItem == null)
+            {
+                if(_tile != null && _tile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
+                return EquipmentAction.None;
+            }
             
             
             if (CurrentItem.Data is HoeData)
@@ -134,8 +155,9 @@ namespace Player
                 return EquipmentAction.Water;
             }
 
-            if (CurrentItem is ItemSeed)
+            if (CurrentItem is ItemSeed _itemSeed)
             {
+                seedName = _itemSeed.Data.ItemName;
                 if (currTile == null)
                 {
                     return EquipmentAction.None;
@@ -215,8 +237,7 @@ namespace Player
             
             currTile.OnPlantSeed(CurrentItem.Data as SeedData);
             var _itemSeed = (ItemSeed) CurrentItem;
-            _itemSeed.RemoveStack();
-            InventoryEvents.OnUpdateStackable.Invoke(_itemSeed);
+            playerInventory.RemoveStackable(_itemSeed, 1);
         }
 
         public void Harvest()
@@ -246,13 +267,12 @@ namespace Player
             }
         }
 
-        private IEnumerator Co_TileSetter()
+        private IEnumerator Co_ActionSetter()
         {
             var _waiter = new WaitForSeconds(0.2f);
             while (enabled)
             {
-                var _tile = toolArea.GetFarmTile();
-                SetTile(_tile);
+                currAction = GetEquipmentAction();
                 yield return _waiter;
             }
         }

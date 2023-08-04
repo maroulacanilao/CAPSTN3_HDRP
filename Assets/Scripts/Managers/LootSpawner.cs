@@ -28,6 +28,7 @@ namespace Managers
         [SerializeField] private Vector3 lootPosition;
 
         public static readonly Evt<LootDropData> OnSpawnLoot = new Evt<LootDropData>();
+        public static readonly Evt<LootDropObject> OnLootSpawned = new Evt<LootDropObject>();
         public static readonly Evt RemoveAllLoots = new Evt();
 
         private Transform mParent;
@@ -63,6 +64,7 @@ namespace Managers
                 .Initialize(lootDropData_.lootTable.GetDrop(itemDatabase,lootDropData_.level));
             
             lootDropObjects.Add(_lootObj);
+            OnLootSpawned.Invoke(_lootObj);
         }
         
         private void RemoveAll()

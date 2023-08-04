@@ -1,11 +1,11 @@
 ﻿using System;
+using CustomHelpers;
 using UnityEngine;
 
 namespace ObjectPool
 {
     public class Poolable : MonoBehaviour
     {
-        
         private IPoolable[] poolables = Array.Empty<IPoolable>();
         private bool isInitialized;
         private Pool pool;
@@ -45,6 +45,14 @@ namespace ObjectPool
 
         public void Release()
         {
+            if(this.IsEmptyOrDestroyed()) return;
+            if(gameObject.IsEmptyOrDestroyed()) return;
+
+            if (pool == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
             pool.Release(this);
         }
     }

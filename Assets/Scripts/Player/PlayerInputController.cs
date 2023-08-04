@@ -1,8 +1,10 @@
 using System;
 using BaseCore;
+using Character;
 using CustomEvent;
 using CustomHelpers;
 using Farming;
+using Interface;
 using Managers;
 using NaughtyAttributes;
 using Player.ControllerState;
@@ -13,7 +15,7 @@ using UnityEngine;
 namespace Player
 {
     [DefaultExecutionOrder(-1)]
-    public class PlayerInputController : MonoBehaviour
+    public class PlayerInputController : MonoBehaviour, IHittable
     {
         [field: SerializeField] public bool CanUseFarmTools { get; private set; } = true;
         
@@ -67,6 +69,9 @@ namespace Player
         [field: SerializeField] public int attackHash { get; private set; }
         [field: AnimatorParam("animator")] [field: Foldout("Animation Hashes")]
         [field: SerializeField] public int attackSpeedHash { get; private set; }
+        
+        [field: AnimatorParam("animator")] [field: Foldout("Animation Hashes")]
+        [field: SerializeField] public int hitHash { get; private set; }
         #endregion
 
         #region Animation Events
@@ -229,6 +234,18 @@ namespace Player
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(transform.position + attackOffset, attackSize);
+        }
+
+        [Button("Damage")]
+        private void Damage()
+        {
+            var _player = GetComponent<PlayerCharacter>();
+            _player.TakeDamage(new DamageInfo(20,null));
+        }
+        
+        public void Hit()
+        {
+            StateMachine.ChangeState(StateMachine.HitState);
         }
     }
 }

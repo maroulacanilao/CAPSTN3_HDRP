@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI.HUD
 {
-    public class EffectIconItem : MonoBehaviour
+    public class EffectIconItem : HoverTextTip
     {
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI text;
@@ -31,6 +31,7 @@ namespace UI.HUD
             text.text = statusEffect.HasDuration ? statusEffect.turnsLeft.ToString() : string.Empty;
             
             statusEffect.OnTurnsLeftChange.AddListener(UpdateText);
+            SetMessage(statusEffect_.EffectName);
         }
         
         private void UpdateText(int turnLeft_)

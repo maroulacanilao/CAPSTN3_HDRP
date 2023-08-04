@@ -42,6 +42,7 @@ namespace BaseCore
         public int CurrentExperienceNeeded => EvaluateExperience(CurrentLevel + 1) - EvaluateExperience(CurrentLevel);
         
         public static readonly Evt<AddExpInfo> OnExperienceChanged = new Evt<AddExpInfo>();
+        public static readonly Evt OnLevelUp = new Evt();
 
         public PlayerLevel Initialize(int totalExperience_)
         {
@@ -87,6 +88,7 @@ namespace BaseCore
             Debug.Log($"prevExp: {_prevExp} | newExp: {totalExperience} | leveledUp: {_didLevelUp} | prevLevel: {_prevLevel} | newLevel: {level} | addedExp: {expAmount_} | prevScaledLvlExp: {_prevExpScaled} | prevScaledLvlExpNeeded: {_prevExpNeededScaled} | prevNeededExp: {_prevNeededExp}");
             
             OnExperienceChanged.Invoke(_info);
+            if(_didLevelUp) OnLevelUp.Invoke();
             return _didLevelUp;
         }
 

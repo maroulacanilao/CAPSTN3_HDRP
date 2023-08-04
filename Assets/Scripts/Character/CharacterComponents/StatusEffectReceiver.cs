@@ -42,23 +42,28 @@ namespace Character.CharacterComponents
             }
         }
 
-        public bool ApplyStatusEffect(StatusEffectBase effect_, GameObject source_ = null)
+        public IEnumerator ApplyStatusEffect(StatusEffectBase effect_, GameObject source_ = null)
         {
+            if (character == null || !character.IsAlive)
+            {
+                if(effect_.IsValid()) Object.Destroy(effect_);
+                
+                yield break;
+            }
             if (StatusEffectsDictionary.TryGetValue(effect_.ID, out var _effect))
             {
-                if (!_effect.IsStackable) return false;
+                if (!_effect.IsStackable) yield break;
                 
                 _effect.StackEffect(effect_);
-                return true;
+                yield break;
             }
             effect_.transform.ResetTransformation();
             effect_.transform.SetParent(container);
             
             StatusEffectsDictionary.Add(effect_.ID, effect_);
 
-            effect_.Activate(this, source_);
+            yield return effect_.Activate(this, source_);
             OnApply?.Invoke(effect_);
-            return true;
         }
 
         public void RemoveStatusEffect(int effectID_)
@@ -86,6 +91,7 @@ namespace Character.CharacterComponents
             
             foreach (var _effect in _effectList)
             {
+                if(!character.IsAlive) yield break;
                 yield return _effect.BeforeTurnTick(ownerTurnState_);
             }
         }
@@ -102,6 +108,7 @@ namespace Character.CharacterComponents
             
             foreach (var _effect in _effectList)
             {
+                if(!character.IsAlive) yield break;
                 yield return _effect.AfterTurnTick(ownerTurnState_);
             }
         }
@@ -120,19 +127,25 @@ namespace Character.CharacterComponents
             }
         }
         
-        public void RemoveAllStatusEffect()
+        public IEnumerator RemoveAllStatusEffect()
         {
             foreach (var _effect in StatusEffectsDictionary.Values.ToList())
             {
                 RemoveStatusEffect(_effect);
             }
+            StatusEffectsDictionary.Clear();
+            yield break;
         }
         
-        public void TransferStatusEffect(StatusEffectReceiver target_)
+        public void RemoveSkipTurnStatusEffect()
         {
-            foreach (var _effect in StatusEffectsDictionary.Values.ToList())
+            var _skipTurnEffects = StatusEffectsDictionary.Values
+                .Where(e => e is SkipTurn_SE)
+                .ToList();
+            
+            foreach (var _effect in _skipTurnEffects)
             {
-                target_.ApplyStatusEffect(_effect);
+                RemoveStatusEffect(_effect);
             }
         }
     }

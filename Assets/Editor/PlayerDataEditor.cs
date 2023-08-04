@@ -59,6 +59,8 @@ public class PlayerDataEditor : Editor
                 EditorGUILayout.BeginHorizontal("box");
                 EditorGUILayout.LabelField("Level " + i);
                 EditorGUILayout.LabelField(_levelData.EvaluateExperience(i) + " XP");
+                var _expNeeded = _levelData.EvaluateExperience(i + 1) - _levelData.EvaluateExperience(i);
+                EditorGUILayout.LabelField(_expNeeded + " XP Needed");
                 EditorGUILayout.EndHorizontal();
             }
 

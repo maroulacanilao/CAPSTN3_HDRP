@@ -11,11 +11,13 @@ namespace ScriptableObjectData
     [CreateAssetMenu(fileName = "EnemyDataBase", menuName = "ScriptableObjects/EnemyDataBase", order = 99)]
     public class EnemyDataBase : ScriptableObject
     {
-        [field: SerializedDictionary("level", "enemyData")]
+        [field: SerializedDictionary("ID", "enemyData")]
         [field: SerializeField] public SerializedDictionary<string, EnemyData> enemyDataDictionary { get; private set; }
 
         [field: SerializeField] [field: CurveRange(0,0,2.4f,1,EColor.Green)]
-        public AnimationCurve enemySpawnRate { get; private set; }
+        
+        
+        public AnimationCurve enemySpawnRate { get; private set; } // not used
 
         [field: SerializeField] public SerializedDictionary<EnemyData, int> enemyKillsStats { get; private set; }
         
@@ -50,7 +52,7 @@ namespace ScriptableObjectData
             var _enemiesData = Resources.LoadAll<EnemyData>("Data/EnemyData");
             foreach (var _data in _enemiesData)
             {
-                enemyDataDictionary.Add(_data.characterName, _data);
+                enemyDataDictionary.TryAdd(_data.characterName, _data);
             }
             UnityEditor.EditorUtility.SetDirty(this);
         }

@@ -31,26 +31,20 @@ namespace BattleSystem
         {
             var _enemyAction = new AICombatAction();
             var _possibleActions = actionTypeWeights.Clone();
-            
-            if(character_.health.HpPercentage <= 0.4f)
-            {
-                _possibleActions.RemoveItem(AIActionType.Heal);
-            }
-            
+
             var _spells = GetPossibleSpells(character_.mana.CurrentMana);
             
             if(!_spells.ContainsKey(SpellType.Damage)) _possibleActions.RemoveItem(AIActionType.SpellAttack);
             if(!_spells.ContainsKey(SpellType.Heal)) _possibleActions.RemoveItem(AIActionType.Heal);
             if(!_spells.ContainsKey(SpellType.Buff)) _possibleActions.RemoveItem(AIActionType.Buff);
             if(!_spells.ContainsKey(SpellType.DeBuff)) _possibleActions.RemoveItem(AIActionType.DeBuff);
+            if(character_.health.HpPercentage > 0.5f) _possibleActions.RemoveItem(AIActionType.Heal);
             
             _possibleActions.RecalculateChances();
             _enemyAction.actionType = _possibleActions.GetWeightedRandom();
             
             switch (_enemyAction.actionType)
             {
-                case AIActionType.BasicAttack:
-                    break;
                 case AIActionType.SpellAttack:
                     if(_spells.TryGetValue(SpellType.Damage, out var _spell))
                         _enemyAction.spellData = _spell.GetRandomItem();
@@ -64,8 +58,11 @@ namespace BattleSystem
                 case AIActionType.DeBuff:
                     _enemyAction.spellData = _spells[SpellType.DeBuff].GetRandomItem();
                     break;
+                case AIActionType.BasicAttack:
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    _enemyAction.spellData = null;
+                    _enemyAction.actionType = AIActionType.BasicAttack;
+                    break;
             }
             
             return _enemyAction;

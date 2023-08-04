@@ -9,7 +9,9 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using Character;
 using Farming;
+using GameTutorial;
 using Managers;
 using SaveSystem;
 
@@ -31,12 +33,14 @@ namespace ScriptableObjectData
         public int dayCounter { get; set; } = 0;
         public int highestDungeonLevel { get; set; } = 1;
         public bool hasFinishedTutorial { get; set; }
+        public bool hasDefeatedSidapa { get; set; } = false;
         
         public SaveData saveData { get; private set; }
         
         public string savePath { get; private set; }
         
         public bool isLoadOperationDone { get; private set; }
+        public bool isLoadSuccessful;
 
         public void Initialize()
         {
@@ -55,17 +59,24 @@ namespace ScriptableObjectData
         [Button("Save")]
         public void SaveProgression()
         {
-            SaveData saveData = SaveHelper.SaveProgress(gameDataBase);
+            try
+            {
+                saveData = SaveHelper.SaveProgress(gameDataBase);
             
-            BinaryFormatter formatter = new BinaryFormatter();
+                BinaryFormatter formatter = new BinaryFormatter();
 
-            FileStream fileStream = File.Create(savePath);
+                FileStream fileStream = File.Create(savePath);
             
-            formatter.Serialize(fileStream, saveData);
+                formatter.Serialize(fileStream, saveData);
             
-            fileStream.Close();
+                fileStream.Close();
 
-            Debug.Log($"Game saved @ {savePath}");
+                Debug.Log($"Game saved @ {savePath}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to save game: {e.Message}");
+            }
         }
 
         [Button("Load Data")]
@@ -106,31 +117,34 @@ namespace ScriptableObjectData
         public IEnumerator LoadProgression()
         {
             isLoadOperationDone = false;
+            isLoadSuccessful = false;
             if (saveData == null)
             {
                 Debug.Log("No save data found");
                 isLoadOperationDone = true;
+                isLoadSuccessful = false;
                 yield break;
             }
-
-            gameDataBase.sessionData.farmLoadType = FarmLoadType.LoadGame;
-            var _sceneName = gameDataBase.FarmSceneName;
-            // gameDataBase.eventQueueData.AddEvent(_sceneName, InGameLoad);
-
-            LoadHelper.LoadData(saveData, gameDataBase);
-            isLoadOperationDone = true;
             
-            // try
-            // {
-            //
-            // }
-            // catch (Exception e)
-            // {
-            //     Debug.Log(e);
-            //     isLoadOperationDone = true;
-            // }
+            try
+            {
+                gameDataBase.sessionData.farmLoadType = FarmLoadType.LoadGame;
+                var _sceneName = gameDataBase.FarmSceneName;
 
+                LoadHelper.LoadData(saveData, gameDataBase);
+                gameDataBase.eventQueueData.AddEvent(_sceneName, InGameLoad);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                isLoadOperationDone = true;
+                isLoadSuccessful = false;
+                yield break;
+            }
+            
+            isLoadSuccessful = true;
             yield return new WaitForSeconds(1);
+            isLoadOperationDone = true;
         }
 
         [Button("InGameLoad")]
@@ -138,7 +152,7 @@ namespace ScriptableObjectData
         {
             try
             {
-                LoadHelper.LoadFarmTiles(saveData.farmTileSaveData, gameDataBase);
+                // LoadHelper.LoadFarmTiles(saveData.farmTileSaveData, gameDataBase);
                 
                 if (DateTime.TryParseExact(saveData.timeOfDay, "yyyyMMddHHmmss", 
                         CultureInfo.InvariantCulture, DateTimeStyles.None, out var _parsedDateTime))
@@ -153,12 +167,26 @@ namespace ScriptableObjectData
         }
 
         [Button("ResetProgress")]
-        private void ResetProgress()
+        public void ResetProgress()
         {
             dayCounter = 0;
             highestDungeonLevel = 1;
             hasFinishedTutorial = false;
+            hasDefeatedSidapa = false;
+            inventory.ForceInitialize();
             playerData.ResetData();
+            gameDataBase.sessionData.farmLoadType = FarmLoadType.NewGame;
+            gameDataBase.sessionData.dungeonLevel = 1;
+            gameDataBase.cropDataBase.cropHarvestStats.Clear();
+            gameDataBase.enemyDataBase.enemyKillsStats.Clear();
+            gameDataBase.statShopData.SetBoughtStats(new CombatStats());
+            TutorialValues.ResetValues();
+            // TutorialValues.HavePlanted = false;
+            // TutorialValues.HaveWatered = false;
+            // TutorialValues.HaveHoed = false;
+            // TutorialValues.HasHarvested = false;
+            // TutorialValues.DoneWithTutorial = false;
+            // TutorialValues.IsFarmingTutorialDone = false;
         }
     }
 }

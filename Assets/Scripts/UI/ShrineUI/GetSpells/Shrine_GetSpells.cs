@@ -15,6 +15,7 @@ namespace UI.ShrineUI.GetSpells
         [SerializeField] private Transform contentParent;
         [SerializeField] private Shrine_SpellDetails spellDetails;
         [SerializeField] private ShrineSpellItem spellItemPrefab;
+        [SerializeField] private ConsumableDisplay consumableDisplay;
         private SpellDataBase spellDataBase => gameDataBase.spellDataBase;
         
         private SerializedDictionary<SpellData,OfferRequirement> spellOfferList;
@@ -25,15 +26,17 @@ namespace UI.ShrineUI.GetSpells
         {
             spellOfferList = new SerializedDictionary<SpellData, OfferRequirement>();
         }
-        
-        private void OnEnable()
+
+        protected override void OnEnable()
         {
+            base.OnEnable();
             CreateSpellOffers();
             ShrineSpellItem.OnClickSpell.AddListener(OnClickSpell);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             ShrineSpellItem.OnClickSpell.RemoveListener(OnClickSpell);
         }
 
@@ -57,6 +60,7 @@ namespace UI.ShrineUI.GetSpells
             }
             
             SelectFirstSpell();
+            consumableDisplay.UpdateDisplay();
         }
         
         private void OnClickSpell(ShrineSpellItem spellBtn_)
@@ -78,6 +82,7 @@ namespace UI.ShrineUI.GetSpells
             {
                 errorTxt.text = "No more spells available";
                 errorTxt.gameObject.SetActive(true);
+                spellDetails.DisplayNull();
             }
         }
         

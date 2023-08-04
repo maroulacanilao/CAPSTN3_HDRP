@@ -19,5 +19,12 @@ namespace UI.ShrineUI
             nameTxt.text = _data.ItemName;
             countTxt.text = $"x{_count}";
         }
+        
+        public void SetNull()
+        {
+            icon.sprite = null;
+            nameTxt.text = "";
+            countTxt.text = "";
+        }
     }
 }

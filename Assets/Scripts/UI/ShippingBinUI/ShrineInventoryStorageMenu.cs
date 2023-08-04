@@ -11,14 +11,16 @@ namespace UI.ShippingBinUI
         [SerializeField] private PlayerInventory playerInventory;
         [SerializeField] private ShrineInventoryItem[] storageItemMenus;
 
-        public virtual void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             SetStorageItems();
             ShrineInventoryItem.OnItemClicked.AddListener(ItemClicked);
         }
 
-        public virtual void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             ShrineInventoryItem.OnItemClicked.AddListener(ItemClicked);
         }
 

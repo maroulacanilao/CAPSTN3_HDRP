@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using CustomHelpers;
+using Managers;
 using UnityEngine;
 
 namespace Player.ControllerState
@@ -46,6 +47,7 @@ namespace Player.ControllerState
         {
             player.animator.SetTrigger(player.hoeHash);
             base.Enter();
+            AudioManager.PlayPlow();
         }
         
         public override void Exit()
@@ -66,7 +68,7 @@ namespace Player.ControllerState
         {
             animEndEvent = player.hoeEnd;
         }
-        
+
         protected override void ToolAction()
         {
             player.playerEquipment.UnTill();
@@ -85,6 +87,7 @@ namespace Player.ControllerState
         {
             player.animator.SetTrigger(player.wateringHash);
             base.Enter();
+            AudioManager.PlayWatering();
         }
         
         public override void Exit()

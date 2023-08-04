@@ -33,9 +33,7 @@ namespace BattleSystem
             var _characters = battleManager.playerParty.Concat(battleManager.enemyParty).ToList();
 
             _characters.Shuffle();
-            
-            Debug.Log(battleManager.battleData.isPlayerFirst);
-            
+
             if (battleManager.battleData.isPlayerFirst)
             {
                 var _player = _characters.Find(c => c.character.characterData is PlayerData);

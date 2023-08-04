@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Managers;
 using ScriptableObjectData;
+using TMPro;
 using UI.Farming;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace UI.TabMenu.Codex
         [SerializeField] protected CodexItem codexItemPrefab;
         [SerializeField] protected Transform contentParent;
         [SerializeField] protected CodexInfoDisplay codexInfoDisplay;
+        [SerializeField] protected TextMeshProUGUI errorTXT;
         protected List<CodexItem> codexItems = new List<CodexItem>();
         
         protected GameDataBase dataBase;
@@ -21,12 +23,12 @@ namespace UI.TabMenu.Codex
             dataBase = GameManager.Instance.GameDataBase;
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             CodexItem.OnClickEvent.AddListener(ShowCodex);
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             CodexItem.OnClickEvent.RemoveListener(ShowCodex);
         }

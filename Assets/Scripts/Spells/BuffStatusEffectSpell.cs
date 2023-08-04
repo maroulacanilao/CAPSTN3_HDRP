@@ -1,7 +1,9 @@
 using System.Collections;
 using CustomHelpers;
+using ObjectPool;
 using Spells.Base;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Spells
 {
@@ -12,11 +14,12 @@ namespace Spells
             if(target == null) throw new System.NotImplementedException();
 
             yield return battleCharacter.PlaySpellCastAnim();
-            
+
             var _effectInstance = Instantiate(spellData.statusEffect, Vector3.zero, Quaternion.identity);
-            target.character.statusEffectReceiver.ApplyStatusEffect(_effectInstance, character.gameObject);
+
+            yield return target.character.statusEffectReceiver.ApplyStatusEffect(_effectInstance, character.gameObject);
+
             battleCharacter.animator.SetTrigger(battleCharacter.moveAnimationHash);
-            yield return CoroutineHelper.GetWait(0.2f);
         }
     
         protected override IEnumerator OnDeactivate()

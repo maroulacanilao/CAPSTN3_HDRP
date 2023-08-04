@@ -18,14 +18,20 @@ namespace EnemyController
         private void OnEnable()
         {
             player = null;
-            StartCoroutine(OnPlayerNearbyRoutine());
+            // StartCoroutine(OnPlayerNearbyRoutine());
         }
 
         private void OnDisable()
         {
-            StopAllCoroutines();
+            // StopAllCoroutines();
         }
-        
+
+        private void FixedUpdate()
+        {
+            if (!IsPlayerNearby()) return;
+            OnPlayerNearby.Invoke(player);
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag(targetTag)) return;
@@ -52,7 +58,10 @@ namespace EnemyController
         
         public bool IsPlayerNearby()
         {
-            return player != null;
+            if(player == null) return false;
+            
+            var _verticalDistance = Mathf.Abs(transform.parent.position.y - player.position.y);
+            return _verticalDistance < 1.5f;
         }
     }
 }

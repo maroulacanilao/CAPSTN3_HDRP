@@ -18,6 +18,6 @@ public class TreasureChest : LootDropObject
 
     public override void ReturnToPool()
     {
-        Destroy(gameObject, 2f);
+        Destroy(gameObject, .1f);
     }
 }

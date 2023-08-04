@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class TimeStopper : MonoBehaviour
 {
-    [SerializeField] private bool timeScaleOnly = false;
-    [SerializeField] [HideIf("timeScaleOnly")] private bool pauseTimeManagerScale = true;
+    [SerializeField] protected bool timeScaleOnly = false;
+    [SerializeField] [HideIf("timeScaleOnly")] protected bool pauseTimeManagerScale = true;
     
     private void OnEnable()
     {

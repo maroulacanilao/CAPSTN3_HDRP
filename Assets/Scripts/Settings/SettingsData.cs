@@ -37,6 +37,7 @@ namespace Settings
         {
             savePath = Path.Combine(Application.persistentDataPath, saveFileName);
             Load();
+            SettingsUtil.Initialize(this);
         }
         
         public void ResetSettings()

@@ -12,10 +12,10 @@ namespace EnemyController.EnemyStates
     [System.Serializable]
     public class EnemyPatrolState : EnemyControllerState
     {
-        private Transform[] waypoints;
+        protected Transform[] waypoints;
         
-        private int currentWaypointIndex;
-        private AIPath aiPath;
+        protected int currentWaypointIndex;
+        protected AIPath aiPath;
         
         public EnemyPatrolState(EnemyAIController aiController_, EnemyStateMachine stateMachine_) 
             : base(aiController_, stateMachine_)
@@ -49,6 +49,7 @@ namespace EnemyController.EnemyStates
         {
             base.Exit();
             isStateActive = false;
+            controller.animator.ResetTrigger(controller.GroundedHash);
             controller.alertRange.OnPlayerNearby.RemoveListener(OnPlayerNearby);
             controller.StopAllCoroutines();
         }
@@ -81,6 +82,12 @@ namespace EnemyController.EnemyStates
             if(player_ != stateMachine.playerTransform) return;
             
             stateMachine.ChangeState(stateMachine.chasePlayerState);
+        }
+        
+        public void TeleportToRandomWaypoint()
+        {
+            currentWaypointIndex = UnityEngine.Random.Range(0, waypoints.Length);
+            controller.transform.position = waypoints[currentWaypointIndex].position;
         }
     }
 }
