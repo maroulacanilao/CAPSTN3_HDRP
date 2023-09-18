@@ -75,12 +75,13 @@ namespace BattleSystem
             var _player = playerPartyStation[0].Initialize(battleData.playerData, _playerLevel);
             
             playerParty.Add(_player);
-            
+            var _partyIndex = 1;
             battleData.playerData.alliesData.ForEach(a =>
             {
                 var _allyLevel = a.LevelData.CurrentLevel;
-                var _ally = playerPartyStation[1].Initialize(a, _allyLevel);
+                var _ally = playerPartyStation[_partyIndex].Initialize(a, _allyLevel);
                 playerParty.Add(_ally);
+                _partyIndex += 1;
             });
             
             var _enemyLevel = battleData.currentEnemyLevel;

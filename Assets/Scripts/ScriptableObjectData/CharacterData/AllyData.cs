@@ -14,10 +14,15 @@ namespace ScriptableObjectData.CharacterData
         [field: SerializeField] public PlayerLevel LevelData { get; private set; }
         public int level => LevelData.CurrentLevel;
         
-        [field: SerializeField] public CharacterHealth health { get; private set; }
-        [field: SerializeField] public CharacterMana mana { get; private set; }
+        [field: SerializeField] public AllyHealth health { get; private set; }
+        [field: SerializeField] public AllyMana mana { get; private set; }
         
-        
+        public void Initialize(GameDataBase gameDataBase)
+        {
+            statsData.ClearAdditionalStats();
+            health = new AllyHealth(this);
+            mana = new AllyMana(this);
+        }
         // public BattleCharacterController SpawnBattleAlly(int level_)
         // {
         //     var _enemy = battlePrefab.GetInstance();
