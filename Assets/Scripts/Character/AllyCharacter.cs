@@ -12,6 +12,39 @@ namespace Character
 {
     public class AllyCharacter : CharacterBase
     {
+        private AllyData allyData;
+        public override CharacterHealth health => allyData.health;
+        public override CharacterMana mana => allyData.mana;
+        public override int level => allyData.LevelData.CurrentLevel;
+        public override StatsGrowth statsData => allyData.statsData;
+        
+        protected override void Awake()
+        {
+            allyData = characterData as AllyData;
+        }
+        
+        private void OnEnable()
+        {
+            health.OnCharacterEnable();
+            mana.OnCharacterEnable();
+        }
+        
+        public override void SetLevel(int level_)
+        {
+        }
+        
+        [Button("Remove HP and Mana")]
+        public void Refill()
+        {
+            health.RefillHealth();
+            mana.RefreshMana();
+        }
+
+        [Button("Remove some mana")]
+        private void RemoveMana()
+        {
+            mana.UseMana(10);
+        }
 
     }
 }

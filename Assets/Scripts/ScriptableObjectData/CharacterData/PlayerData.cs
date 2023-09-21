@@ -30,6 +30,17 @@ namespace ScriptableObjectData.CharacterData
             alliesData.Add(allyData_);
         }
 
+        public void RemoveAlly(AllyData allydata_)
+        {
+            foreach (var a in alliesData)
+            {
+                if (a == allydata_)
+                {
+                    alliesData.Remove(a);
+                }
+            }
+        }
+
         public void Initialize(GameDataBase gameDataBase)
         {
             inventory.Initialize();

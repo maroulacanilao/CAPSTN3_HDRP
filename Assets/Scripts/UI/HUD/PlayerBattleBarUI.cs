@@ -16,14 +16,33 @@ namespace UI.HUD
         [SerializeField] private TextMeshProUGUI mana_TXT;
 
         private CharacterMana characterMana;
+        
+        private AllyData allyData;
         private PlayerData playerData;
+
+        [SerializeField] bool isForAlly;
         
         protected override void Start()
         {
-            if(character == null) character = FindObjectOfType<PlayerCharacter>();
+            if (character == null && !isForAlly)
+            {
+                
+                character = FindObjectOfType<PlayerCharacter>();
+                //Print debug log of what type is character right now
+                Debug.Log(character.GetType());
+            }
+            else if (character == null && isForAlly)
+            {
+                character = FindObjectOfType<AllyCharacter>();
+                Debug.Log(character.GetType());
+            }
+            
             base.Start();
             characterMana = character.mana;
-            playerData = character.characterData as PlayerData;
+            
+            //If current character is ally then use ally data
+            if(character is AllyCharacter allyCharacter) allyData = character.characterData as AllyData; 
+            else playerData = character.characterData as PlayerData;
             
             characterMana.OnUseMana.AddListener(UpdateMana);
             characterMana.OnAddMana.AddListener(UpdateMana);

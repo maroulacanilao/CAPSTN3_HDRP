@@ -28,7 +28,7 @@ namespace BattleSystem
 
         [field: SerializeField] [field: Required()] [field: BoxGroup("Components")] 
         public CharacterBase character { get; private set; }
-
+        
         [field: SerializeField] [field: Required()] [field: BoxGroup("Components")]
         public CharacterController controller { get; private set; }
 
