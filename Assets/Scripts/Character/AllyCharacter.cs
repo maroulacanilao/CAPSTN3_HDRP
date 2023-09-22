@@ -15,11 +15,14 @@ namespace Character
         private AllyData allyData;
         public override CharacterHealth health => allyData.health;
         public override CharacterMana mana => allyData.mana;
+
+        public override StatusEffectReceiver statusEffectReceiver => allyData.statusEffectReceiver;
         public override int level => allyData.LevelData.CurrentLevel;
         public override StatsGrowth statsData => allyData.statsData;
         
         protected override void Awake()
         {
+            statusEffectReceiver = new StatusEffectReceiver(this);
             allyData = characterData as AllyData;
         }
         
@@ -27,6 +30,7 @@ namespace Character
         {
             health.OnCharacterEnable();
             mana.OnCharacterEnable();
+            allyData.statusEffectReceiver.SetCharacter(this);
         }
         
         public override void SetLevel(int level_)

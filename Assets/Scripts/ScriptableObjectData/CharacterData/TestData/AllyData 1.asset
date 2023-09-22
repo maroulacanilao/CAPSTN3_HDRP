@@ -18,17 +18,17 @@ MonoBehaviour:
     type: 3}
   <statsData>k__BackingField:
     <baseCombatStats>k__BackingField:
-      vitality: 0
-      strength: 0
-      intelligence: 0
-      defense: 0
-      speed: 0
+      vitality: 10
+      strength: 10
+      intelligence: 10
+      defense: 10
+      speed: 10
     <maxLevelCombatStats>k__BackingField:
-      vitality: 0
-      strength: 0
-      intelligence: 0
-      defense: 0
-      speed: 0
+      vitality: 10
+      strength: 10
+      intelligence: 10
+      defense: 10
+      speed: 10
     healthGrowthCurve:
       serializedVersion: 2
       m_Curve: []
@@ -64,7 +64,25 @@ MonoBehaviour:
   <LevelData>k__BackingField:
     <expLvlCurve>k__BackingField:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4

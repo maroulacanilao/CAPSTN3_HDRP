@@ -15,6 +15,8 @@ namespace ScriptableObjectData.CharacterData
         [field: SerializeField] public AllyHealth health { get; private set; }
         [field: SerializeField] public AllyMana mana { get; private set; }
         
+        public AllyStatusEffectReceiver statusEffectReceiver { get; private set; }
+        
         public int level => LevelData.CurrentLevel;
         public CombatStats totalStats => statsData.GetTotalStats(level);
         public CombatStats baseStats => statsData.GetTotalNonBonusStats(level);
@@ -24,6 +26,7 @@ namespace ScriptableObjectData.CharacterData
             statsData.ClearAdditionalStats();
             health = new AllyHealth(this);
             mana = new AllyMana(this);
+            statusEffectReceiver = new AllyStatusEffectReceiver(this);
         }
         
         public CombatStats GetStats()

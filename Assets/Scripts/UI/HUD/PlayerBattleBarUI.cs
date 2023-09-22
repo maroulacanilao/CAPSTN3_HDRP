@@ -2,6 +2,7 @@ using System.Collections;
 using Character;
 using Character.CharacterComponents;
 using DG.Tweening;
+using Fungus;
 using ScriptableObjectData.CharacterData;
 using TMPro;
 using UnityEngine;
@@ -26,22 +27,23 @@ namespace UI.HUD
         {
             if (character == null && !isForAlly)
             {
-                
                 character = FindObjectOfType<PlayerCharacter>();
+                
                 //Print debug log of what type is character right now
-                Debug.Log(character.GetType());
+                //Debug.Log(character.GetType());
             }
             else if (character == null && isForAlly)
             {
                 character = FindObjectOfType<AllyCharacter>();
-                Debug.Log(character.GetType());
+                
+                //Debug.Log(character.GetType());
             }
             
             base.Start();
             characterMana = character.mana;
             
             //If current character is ally then use ally data
-            if(character is AllyCharacter allyCharacter) allyData = character.characterData as AllyData; 
+            if(character is AllyCharacter) allyData = character.characterData as AllyData; 
             else playerData = character.characterData as PlayerData;
             
             characterMana.OnUseMana.AddListener(UpdateMana);
@@ -90,8 +92,16 @@ namespace UI.HUD
         {
             if(characterHealth == null) return;
             if(hpBar == null) return;
-            hpBar.fillAmount = (float) playerData.health.CurrentHp / playerData.health.MaxHp;
-            hpText.text = $"Health: {playerData.health.CurrentHp}/{playerData.health.MaxHp}";
+            if (character is AllyCharacter)
+            {
+                hpBar.fillAmount = (float) allyData.health.CurrentHp / allyData.health.MaxHp;
+                hpText.text = $"Health: {allyData.health.CurrentHp}/{allyData.health.MaxHp}";
+            }
+            else
+            {
+                hpBar.fillAmount = (float)playerData.health.CurrentHp / playerData.health.MaxHp;
+                hpText.text = $"Health: {playerData.health.CurrentHp}/{playerData.health.MaxHp}";
+            }
             hpBar.color = hpBar.fillAmount > 0.2f ? originalColor : damageColor;
         }
         
@@ -99,8 +109,17 @@ namespace UI.HUD
         {
             if(characterMana == null) return;
             if(manaBar == null) return;
-            manaBar.fillAmount = (float) playerData.mana.CurrentMana / playerData.mana.MaxMana;
-            mana_TXT.text = $"Mana: {playerData.mana.CurrentMana}/{playerData.mana.MaxMana}";
+            if (character is AllyCharacter)
+            {
+                manaBar.fillAmount = (float) allyData.mana.CurrentMana / allyData.mana.MaxMana;
+                mana_TXT.text = $"Mana: {allyData.mana.CurrentMana}/{allyData.mana.MaxMana}";
+            }
+            else
+            {
+                manaBar.fillAmount = (float) playerData.mana.CurrentMana / playerData.mana.MaxMana;
+                mana_TXT.text = $"Mana: {playerData.mana.CurrentMana}/{playerData.mana.MaxMana}"; 
+            }
+            
         }
     }
 }
