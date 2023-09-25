@@ -24,7 +24,7 @@ namespace ScriptableObjectData.CharacterData
         public int level => LevelData.CurrentLevel;
         public CombatStats totalStats => statsData.GetTotalStats(level);
         public CombatStats baseStats => statsData.GetTotalNonBonusStats(level);
-
+        
         public void AddAlly(AllyData allyData_)
         {
             alliesData.Add(allyData_);

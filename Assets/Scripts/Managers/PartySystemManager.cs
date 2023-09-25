@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using BattleSystem;
 using Character;
+using NaughtyAttributes;
+using ScriptableObjectData;
 using ScriptableObjectData.CharacterData;
 using UnityEngine;
 
@@ -9,9 +11,11 @@ public class PartySystemManager : MonoBehaviour
 {
     private static PartySystemManager _instance;
     public static PartySystemManager Instance { get; private set; }
-    public PlayerData player;
+
+    public PlayerData playerData;
+    public AllyDataBase allyDataBase;
     
-    List<AllyData> party = new List<AllyData>();
+    public string id_;
     
     void Awake()
     {
@@ -26,20 +30,15 @@ public class PartySystemManager : MonoBehaviour
         
     }
 
-    public void Start()
+    [Button("Make ally playable")]
+    private void MakePlayable()
     {
-        //transfer the party list content to player.alliesData
-        // player.alliesData = party;
+        var id = "woodcutter";
+        playerData.alliesData.Add(allyDataBase.allyDataDictionary[id_]); 
     }
     
-    public void AddCharacter(AllyData character)
-    {
-        party.Add(character);
-    }
     
-    public void RemoveCharacter(AllyData character)
-    {
-        party.Remove(character);
-    }
+
+    
     
 }
