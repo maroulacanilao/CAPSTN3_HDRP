@@ -31,10 +31,10 @@ public class PartySystemManager : MonoBehaviour
     }
 
     [Button("Make ally playable")]
-    private void MakePlayable()
+    public void MakePlayable(string id)
     {
-        var id = "woodcutter";
-        playerData.alliesData.Add(allyDataBase.allyDataDictionary[id_]); 
+        // var id = "woodcutter";
+        playerData.alliesData.Add(allyDataBase.allyDataDictionary[id]); 
     }
     
     
