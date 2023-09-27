@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CustomHelpers;
+using System.Collections;
 
 namespace BattleSystem.BattleState
 {
@@ -9,29 +10,14 @@ namespace BattleSystem.BattleState
         {
             
         }
-        
-        public override IEnumerator Enter()
-        {
-            yield break;
-        }
-        protected override IEnumerator StartTurn()
-        {
-            yield break;
-        }
 
         protected override IEnumerator TurnLogic()
         {
-            yield break;
-        }
-
-        protected override IEnumerator EndTurn()
-        {
-            yield break;
-        }
-
-        public override IEnumerator Exit()
-        {
-            yield break;
+            yield return BattleTutorial.TurnTutorial();
+            yield return null;
+            BattleManager.OnPlayerTurnStart.Invoke(battleCharacter);
+            yield return BattleManager.OnPlayerEndDecide.WaitForEvt();
+            yield return EndTurn();
         }
     }
 }
