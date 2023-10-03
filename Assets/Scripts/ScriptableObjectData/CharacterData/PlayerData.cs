@@ -15,7 +15,6 @@ namespace ScriptableObjectData.CharacterData
         [field: SerializeField] public PlayerInventory inventory { get; private set; }
         [field: SerializeField] public PlayerLevel LevelData { get; private set; }
         [field: SerializeField] public List<AllyData> alliesData { get; private set; }
-
         [field: SerializeField] public List<AllyData> offPartyData { get; private set; }
         
         [field: SerializeField] public BlessingMeter blessingMeter { get; private set; }

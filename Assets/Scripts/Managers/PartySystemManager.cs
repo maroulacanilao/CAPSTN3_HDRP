@@ -15,6 +15,8 @@ public class PartySystemManager : MonoBehaviour
     public PlayerData playerData;
     public AllyDataBase allyDataBase;
     
+    public List<AllyData> offPartyData; //Implement the off party data here if something is wrong with saving.
+    
     public string id_;
     
     void Awake()
@@ -36,9 +38,5 @@ public class PartySystemManager : MonoBehaviour
         // This gets the ID of the NPC interacted with, crossmatches it with the ally data base, if valid, transfers it to the playable allies
         playerData.offPartyData.Add(allyDataBase.allyDataDictionary[id]);
     }
-    
-    
-
-    
     
 }
