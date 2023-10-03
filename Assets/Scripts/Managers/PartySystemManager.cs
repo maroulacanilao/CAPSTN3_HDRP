@@ -34,7 +34,7 @@ public class PartySystemManager : MonoBehaviour
     public void MakePlayable(string id)
     {
         // This gets the ID of the NPC interacted with, crossmatches it with the ally data base, if valid, transfers it to the playable allies
-        allyDataBase.TransferKeyValuePair(id);
+        playerData.offPartyData.Add(allyDataBase.allyDataDictionary[id]);
     }
     
     
