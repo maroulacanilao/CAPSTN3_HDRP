@@ -35,6 +35,8 @@ public class PartySystemManager : MonoBehaviour
     //Call this when interacting with the NPC for the first time
     public void MakePlayable(string id)
     {
+        if (playerData.offPartyData.Contains(allyDataBase.allyDataDictionary[id])) return;
+        
         // This gets the ID of the NPC interacted with, crossmatches it with the ally data base, if valid, transfers it to the playable allies
         playerData.offPartyData.Add(allyDataBase.allyDataDictionary[id]);
     }
