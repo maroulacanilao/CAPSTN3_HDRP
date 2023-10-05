@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5507939118422586463}
   - component: {fileID: 2681054529787420826}
   m_Layer: 0
-  m_Name: TestAlly
+  m_Name: npc_woodcutterBattle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,17 +54,17 @@ MonoBehaviour:
   <spriteOutline>k__BackingField: {fileID: 6929920983319879799}
   <spriteRenderer>k__BackingField: {fileID: 1304278734455947202}
   <animator>k__BackingField: {fileID: 21431658572354597}
-  <xSpeedAnimationHash>k__BackingField: 0
-  <moveAnimationHash>k__BackingField: 0
-  <attackAnimationHash>k__BackingField: 0
-  <spellAnimationHash>k__BackingField: 0
-  <hurtAnimationHash>k__BackingField: 0
-  <deathAnimationHash>k__BackingField: 0
-  <isIdleHash>k__BackingField: 0
-  <groundedHash>k__BackingField: 0
-  <AnimEvent_AttackHit>k__BackingField: 
-  <AnimEvent_AnimEnd>k__BackingField: 
-  <AnimEvent_SpellCast>k__BackingField: 
+  <xSpeedAnimationHash>k__BackingField: 1584793824
+  <moveAnimationHash>k__BackingField: 862969536
+  <attackAnimationHash>k__BackingField: 1080829965
+  <spellAnimationHash>k__BackingField: -2017977412
+  <hurtAnimationHash>k__BackingField: 1654612129
+  <deathAnimationHash>k__BackingField: 646380074
+  <isIdleHash>k__BackingField: 2098831385
+  <groundedHash>k__BackingField: 862969536
+  <AnimEvent_AttackHit>k__BackingField: AttackHit
+  <AnimEvent_AnimEnd>k__BackingField: AnimEnd
+  <AnimEvent_SpellCast>k__BackingField: AnimEnd
   opponent: {fileID: 0}
   LevelDebug: 0
 --- !u!114 &5507939118422586463
@@ -175,13 +175,13 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7172488081813241347, guid: 7a60c0f4a1204df4691c89ece9f5d268,
+  m_Sprite: {fileID: 3453135496783335175, guid: cdc3fb42ec63d6546b64fb4f0e22edba,
     type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.53125, y: 1.03125}
+  m_Size: {x: 0.53, y: 0.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -197,7 +197,7 @@ Animator:
   m_GameObject: {fileID: 9049806526621193452}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c2b98a9aa56ab3343ac5a8c4fc07889f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 077627e4497615641ace6286a4006a7e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
