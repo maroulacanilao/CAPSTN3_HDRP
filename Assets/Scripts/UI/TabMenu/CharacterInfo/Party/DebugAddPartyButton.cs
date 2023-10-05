@@ -11,42 +11,69 @@ public class DebugAddPartyButton : MonoBehaviour
 {
     // public AllyDataBase woodcutterAllyData;
 
-    private PartySystemManager partySystemManager;
+    [SerializeField] private PartySystemManager partySystemManager;
+    [SerializeField] private PlayerData playerData;
+    [SerializeField] private AllyDataBase allyDataBase;
+    [SerializeField] private List<AllyData> alliesData;
+    [SerializeField] private List<AllyData> offPartyData;
+
+    [SerializeField] private List<CharacterData> currentPartyMembers;
 
     public TextMeshProUGUI playerPartyMemberText;
-    public TextMeshProUGUI[] allyPartyMemberTexts;
+    public TextMeshProUGUI[] partyMemberTexts;
+
+    public TextMeshProUGUI[] offPartyMemberTexts;
 
     // Start is called before the first frame update
     void Start()
-    {
+    {        
         partySystemManager = GameManager.Instance.Player.GetComponent<PartySystemManager>();
-        UpdatePartyList();
+        playerData = partySystemManager.playerData;
+        allyDataBase = partySystemManager.allyDataBase;
+        alliesData = partySystemManager.playerData.alliesData;
+        offPartyData = partySystemManager.playerData.offPartyData;
+
+        currentPartyMembers = new List<CharacterData>();
+
+        UpdatePartyListTexts();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PartyCheck()
     {
-        
+
     }
 
-    public void UpdatePartyList()
+    public void AddOffPartyMemberToParty()
     {
-        playerPartyMemberText.text = partySystemManager.playerData.characterName;
-        playerPartyMemberText.gameObject.SetActive(true);
 
-        if (partySystemManager.playerData.alliesData.Count > 0)
+    }
+
+    public void FillEmptyPartySlots(int offPartyIndex)
+    {
+        if (currentPartyMembers.Count <= 0)
         {
-            for (int i = 0; i < partySystemManager.playerData.alliesData.Count; i++)
+            currentPartyMembers.Add(playerData);
+        }
+        else
+        {
+            if (currentPartyMembers.Count < 2)
             {
-                if (partySystemManager.playerData.alliesData.Count <= allyPartyMemberTexts.Length)
-                {
-                    allyPartyMemberTexts[i].text = partySystemManager.playerData.alliesData[i].characterName;
-                    allyPartyMemberTexts[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    break;
-                }
+                alliesData.Add(offPartyData[offPartyIndex]);
+                currentPartyMembers.Add(offPartyData[offPartyIndex]);
+                UpdatePartyListTexts();
+            }
+        }
+    }
+
+
+    public void UpdatePartyListTexts()
+    {
+        if (currentPartyMembers.Count > 0)
+        {
+            for (int i = 0; i < currentPartyMembers.Count; i++)
+            {
+                partyMemberTexts[i].text = currentPartyMembers[i].characterName;
+                partyMemberTexts[i].gameObject.SetActive(true);
             }
         }
     }
@@ -54,12 +81,18 @@ public class DebugAddPartyButton : MonoBehaviour
     public void AddWoodcutter()
     {
         partySystemManager.MakePlayable("woodcutter");
-        UpdatePartyList();
+
+        if (alliesData.Count < 2)
+        {
+            FillEmptyPartySlots(0);
+        }
+
+        UpdatePartyListTexts();
     }
 
     public void AddHerbalist()
     {
         partySystemManager.MakePlayable("herbalist");
-        UpdatePartyList();
+        UpdatePartyListTexts();
     }
 }
