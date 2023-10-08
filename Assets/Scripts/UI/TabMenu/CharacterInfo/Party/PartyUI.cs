@@ -91,9 +91,8 @@ public class PartyUI : MonoBehaviour
     {
         if (alliesData.Count < mainPartyMemberTexts.Length)
         {
-            alliesData.Add(offPartyData[offPartyIndex]);
             offPartyMemberTexts[offPartyIndex].GetComponent<Button>().interactable = false;
-            offPartyData.Remove(offPartyData[offPartyIndex]);
+            partySystemManager.AddOffPartyIntoAlliesData(offPartyIndex);
 
             UpdateMainPartyTexts();
             UpdateOffPartyButtons();
@@ -108,9 +107,8 @@ public class PartyUI : MonoBehaviour
     {
         if (offPartyData.Count < offPartyMemberTexts.Length)
         {
-            offPartyData.Add(alliesData[mainPartyIndex]);
             mainPartyMemberTexts[mainPartyIndex].GetComponent<Button>().interactable = false;
-            alliesData.Remove(alliesData[mainPartyIndex]);
+            partySystemManager.MoveAlliesDataIntoOffParty(mainPartyIndex);
         }
 
         UpdateMainPartyTexts();
