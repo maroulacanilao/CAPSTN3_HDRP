@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3197142725244214639}
   - component: {fileID: 6495632384005579059}
   - component: {fileID: 7482391286081928191}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: npc_stonemason
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ Transform:
   m_GameObject: {fileID: 9050533721100056703}
   m_LocalRotation: {x: 0.13052616, y: -0, z: -0, w: 0.9914449}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6536428225668926796}
@@ -172,7 +172,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 795148678607591934, guid: 83ee6f57f61fffc46bf63d3ed326433a, type: 3}
+  m_Sprite: {fileID: 3161884135886425653, guid: 471af8f8062129c46ab4e7cbc0a44cd2,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -272,8 +273,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9007498739700028534, guid: 7f663085e0cff4646a5571e2ece32411,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007498739700028534, guid: 7f663085e0cff4646a5571e2ece32411,
+        type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007498740261586710, guid: 7f663085e0cff4646a5571e2ece32411,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f663085e0cff4646a5571e2ece32411, type: 3}
