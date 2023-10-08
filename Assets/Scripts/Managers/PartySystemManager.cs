@@ -40,5 +40,17 @@ public class PartySystemManager : MonoBehaviour
         // This gets the ID of the NPC interacted with, crossmatches it with the ally data base, if valid, transfers it to the playable allies
         playerData.offPartyData.Add(allyDataBase.allyDataDictionary[id]);
     }
-    
+
+    public void AddOffPartyIntoAlliesData(int offPartyIndex)
+    {
+        playerData.AddAlly(playerData.offPartyData[offPartyIndex]);
+        playerData.offPartyData.Remove(playerData.offPartyData[offPartyIndex]);
+    }
+
+    public void MoveAlliesDataIntoOffParty(int alliesDataIndex)
+    {
+        playerData.offPartyData.Add(playerData.alliesData[alliesDataIndex]);
+        playerData.alliesData.Remove(playerData.alliesData[alliesDataIndex]);
+    }
+
 }
