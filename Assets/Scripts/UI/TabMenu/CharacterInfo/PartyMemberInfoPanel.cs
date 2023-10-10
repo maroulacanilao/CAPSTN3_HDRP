@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UI.HUD;
 using BattleSystem;
+using Character.CharacterComponents;
 
 namespace UI.TabMenu.CharacterInfo.Party
 {
@@ -23,8 +24,14 @@ namespace UI.TabMenu.CharacterInfo.Party
         [BoxGroup("Stats Text")]
         [SerializeField] protected StatsInfo statsPanel;
 
-        [BoxGroup("HP/Mana Bar")]
-        [SerializeField] protected HealthBarUI healthBarUI;
+        [BoxGroup("HP/Mana Panel")]
+        [SerializeField] protected Image hpIcon;
+        [BoxGroup("HP/Mana Panel")]
+        [SerializeField] protected TextMeshProUGUI hpTxt;
+        [BoxGroup("HP/Mana Panel")]
+        [SerializeField] protected Image manaIcon;
+        [BoxGroup("HP/Mana Panel")]
+        [SerializeField] protected TextMeshProUGUI manaTxt;
 
         [BoxGroup("Icon")]
         [SerializeField] protected Image allyIcon;
@@ -57,18 +64,29 @@ namespace UI.TabMenu.CharacterInfo.Party
             skillInfoPanel.SetActive(true);
 
             nameTxt.SetText(currAlly.characterName);
+            descriptionTxt.text = $"This character has no available skills at the moment.";
             allyIcon.sprite = currAlly.icon;
 
             statsPanel.DisplayDynamic(currAlly.GetStats(), false);
+
+
+            hpTxt.text = $"Health: {ally.health.CurrentHp}/{ally.health.MaxHp}";
+            manaTxt.text = $"Mana: {ally.mana.CurrentMana} / {ally.mana.MaxMana}";
+            hpIcon.gameObject.SetActive(true);
+            manaIcon.gameObject.SetActive(true);
         }
 
         public virtual void DisplayNull()
         {
             nameTxt.SetText("?????");
-            descriptionTxt.SetText("???");
+            descriptionTxt.SetText("??????");
             allyIcon.sprite = null;
             allyIcon.color = Color.clear;
             statsPanel.DisplayDynamic(new CombatStats(), false);
+            hpTxt.text = $"????";
+            manaTxt.text = $"????";
+            hpIcon.gameObject.SetActive(false);
+            manaIcon.gameObject.SetActive(false);
         }
 
     }
