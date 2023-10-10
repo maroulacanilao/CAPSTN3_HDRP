@@ -5,6 +5,7 @@ using Character;
 using NaughtyAttributes;
 using ScriptableObjectData;
 using ScriptableObjectData.CharacterData;
+using UI.TabMenu.CharacterInfo;
 using UnityEngine;
 
 public class PartySystemManager : MonoBehaviour
@@ -18,7 +19,9 @@ public class PartySystemManager : MonoBehaviour
     public List<AllyData> offPartyData; //Implement the off party data here if something is wrong with saving.
     
     public string id_;
-    
+
+    public PartyUI partyUI;
+
     void Awake()
     {
         if (_instance != null && _instance != this)

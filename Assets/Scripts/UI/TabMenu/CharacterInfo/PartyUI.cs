@@ -5,7 +5,10 @@ using ScriptableObjectData.CharacterData;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UI.HUD;
+using UI.TabMenu.CharacterInfo.Party;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.TabMenu.CharacterInfo
@@ -19,9 +22,10 @@ namespace UI.TabMenu.CharacterInfo
         [SerializeField] private List<AllyData> alliesData;
         [SerializeField] private List<AllyData> offPartyData;
 
-        public TextMeshProUGUI playerPartyMemberText;
         public TextMeshProUGUI[] mainPartyMemberTexts;
         public TextMeshProUGUI[] offPartyMemberTexts;
+
+        [field: SerializeField] public PartyMemberInfoPanel[] PartyMemberInfoPanels { get; private set; }
 
         private void Awake()
         {
@@ -29,48 +33,56 @@ namespace UI.TabMenu.CharacterInfo
             playerData = partySystemManager.playerData;
             alliesData = playerData.alliesData;
             offPartyData = playerData.offPartyData;
+
+            for (int i = 0; i < PartyMemberInfoPanels.Length; i++)
+            {
+                PartyMemberInfoPanels[i].ShowAllyDetail(null);
+            }
+        }
+
+        private void Start()
+        {
+            UpdateMainParty();
+            UpdateOffParty();
         }
 
         public void OnEnable()
         {
-            UpdateMainPartyTexts();
-            UpdateOffPartyButtons();
+            UpdateMainParty();
+            UpdateOffParty();
         }
 
-        public void UpdateMainPartyTexts()
+        public void UpdateMainParty()
         {
-            playerPartyMemberText.text = playerData.characterName;
-
-            for (int i = 0; i < mainPartyMemberTexts.Length; i++)
+            if (alliesData != null)
             {
-                if (alliesData != null && alliesData.Count > 0)
+                for (int i = 0; i < mainPartyMemberTexts.Length; i++)
                 {
-                    if (i < alliesData.Count)
+                    if (alliesData.Count > 0 && i < alliesData.Count)
                     {
                         mainPartyMemberTexts[i].text = alliesData[i].characterName;
                         mainPartyMemberTexts[i].GetComponent<Button>().interactable = true;
+
+                        PartyMemberInfoPanels[i].ShowAllyDetail(alliesData[i]);
                     }
                     else
                     {
                         mainPartyMemberTexts[i].text = "--";
                         mainPartyMemberTexts[i].GetComponent<Button>().interactable = false;
+
+                        PartyMemberInfoPanels[i].ShowAllyDetail(null);
                     }
-                }
-                else
-                {
-                    mainPartyMemberTexts[i].text = "--";
-                    mainPartyMemberTexts[i].GetComponent<Button>().interactable = false;
                 }
             }
         }
 
-        public void UpdateOffPartyButtons()
+        public void UpdateOffParty()
         {
-            for (int i = 0; i < offPartyMemberTexts.Length; i++)
+            if (offPartyData != null)
             {
-                if (offPartyData != null && offPartyData.Count > 0)
+                for (int i = 0; i < offPartyMemberTexts.Length; i++)
                 {
-                    if (i < offPartyData.Count)
+                    if (offPartyData.Count > 0 && i < offPartyData.Count)
                     {
                         offPartyMemberTexts[i].text = offPartyData[i].characterName;
                         offPartyMemberTexts[i].GetComponent<Button>().interactable = true;
@@ -80,11 +92,6 @@ namespace UI.TabMenu.CharacterInfo
                         offPartyMemberTexts[i].text = "--";
                         offPartyMemberTexts[i].GetComponent<Button>().interactable = false;
                     }
-                }
-                else
-                {
-                    offPartyMemberTexts[i].text = "--";
-                    offPartyMemberTexts[i].GetComponent<Button>().interactable = false;
                 }
             }
         }
@@ -98,8 +105,8 @@ namespace UI.TabMenu.CharacterInfo
                 offPartyMemberTexts[offPartyIndex].GetComponent<Button>().interactable = false;
                 partySystemManager.AddOffPartyIntoAlliesData(offPartyIndex);
 
-                UpdateMainPartyTexts();
-                UpdateOffPartyButtons();
+                UpdateMainParty();
+                UpdateOffParty();
             }
         }
 
@@ -111,49 +118,50 @@ namespace UI.TabMenu.CharacterInfo
                 partySystemManager.MoveAlliesDataIntoOffParty(mainPartyIndex);
             }
 
-            UpdateMainPartyTexts();
-            UpdateOffPartyButtons();
+            UpdateMainParty();
+            UpdateOffParty();
         }
+
+        #endregion
 
         #region Debug Functions
 
-        public void AddWoodcutter()
-        {
-            partySystemManager.MakePlayable("woodcutter");
+        //public void AddWoodcutter()
+        //{
+        //    partySystemManager.MakePlayable("woodcutter");
 
-            if (alliesData.Count < 2)
-            {
-                // AddOffPartyMemberToMainParty(0); // automatically add current character to main party
-            }
+        //    if (alliesData.Count < 2)
+        //    {
+        //        // AddOffPartyMemberToMainParty(0); // automatically add current character to main party
+        //    }
 
-            offPartyMemberTexts[0].GetComponent<Button>().interactable = true;
-            UpdateOffPartyButtons();
-        }
+        //    offPartyMemberTexts[0].GetComponent<Button>().interactable = true;
+        //    UpdateOffParty();
+        //}
 
-        public void AddHerbalist()
-        {
-            partySystemManager.MakePlayable("herbalist");
+        //public void AddHerbalist()
+        //{
+        //    partySystemManager.MakePlayable("herbalist");
 
-            if (alliesData.Count < 2)
-            {
-                // AddOffPartyMemberToMainParty(1); // automatically add current character to main party
-            }
+        //    if (alliesData.Count < 2)
+        //    {
+        //        // AddOffPartyMemberToMainParty(1); // automatically add current character to main party
+        //    }
 
-            offPartyMemberTexts[1].GetComponent<Button>().interactable = true;
-            UpdateOffPartyButtons();
-        }
+        //    offPartyMemberTexts[1].GetComponent<Button>().interactable = true;
+        //    UpdateOffParty();
+        //}
 
-        public void ResetPartyData()
-        {
-            alliesData.Clear();
-            offPartyData.Clear();
+        //public void ResetPartyData()
+        //{
+        //    alliesData.Clear();
+        //    offPartyData.Clear();
 
-            UpdateMainPartyTexts();
-            UpdateOffPartyButtons();
-        }
-
-        #endregion
+        //    UpdateMainParty();
+        //    UpdateOffParty();
+        //}
 
         #endregion
+
     }
 }

@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 113116409400501866}
   - component: {fileID: 6725107901976279281}
   - component: {fileID: 4815258196559575717}
+  - component: {fileID: 4231486665182357142}
   m_Layer: 7
   m_Name: npc_woodcutter
   m_TagString: Untagged
@@ -204,6 +205,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.4628401, y: 4.711606, z: 1.104126}
   m_Center: {x: -0.006093025, y: 2.355803, z: 0.040096283}
+--- !u!114 &4231486665182357142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4716257716699399097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb0cb1567e811734086a09a3ab73beca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <characterData>k__BackingField: {fileID: 11400000, guid: 100b449758bd8194ba9f2998d3b0ca44,
+    type: 2}
 --- !u!1001 &1085496008519308919
 PrefabInstance:
   m_ObjectHideFlags: 0
