@@ -76,6 +76,9 @@ namespace UI.HUD
                 case EquipmentAction.Consume:
                     _message = "<color=yellow>Consume</color>";
                     break;
+                case EquipmentAction.Fish:
+                    _message = "<color=orange>Fish</color>";
+                    break;
                 case EquipmentAction.None:
                 default:
                     _message = "";
