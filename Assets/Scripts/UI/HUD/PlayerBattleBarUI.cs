@@ -2,8 +2,11 @@ using System.Collections;
 using Character;
 using Character.CharacterComponents;
 using DG.Tweening;
+using Fungus;
+using Managers;
 using ScriptableObjectData.CharacterData;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,14 +19,39 @@ namespace UI.HUD
         [SerializeField] private TextMeshProUGUI mana_TXT;
 
         private CharacterMana characterMana;
+        
+        private AllyData allyData;
         private PlayerData playerData;
+
+        [SerializeField] bool isForAlly;
+
+        [SerializeField] int partyMemberIndex;
+        [SerializeField] bool isForFarm;
+
+        private GameObject testObject;
         
         protected override void Start()
         {
-            if(character == null) character = FindObjectOfType<PlayerCharacter>();
+            if (character == null && !isForAlly)
+            {
+                character = FindObjectOfType<PlayerCharacter>();
+                
+                //Print debug log of what type is character right now
+                //Debug.Log(character.GetType());
+            }
+            else if (character == null && isForAlly)
+            {
+                character = FindObjectOfType<AllyCharacter>();
+
+                // Debug.Log(character.GetType());
+            }
+            
             base.Start();
             characterMana = character.mana;
-            playerData = character.characterData as PlayerData;
+            
+            //If current character is ally then use ally data
+            if(character is AllyCharacter) allyData = character.characterData as AllyData; 
+            else playerData = character.characterData as PlayerData;
             
             characterMana.OnUseMana.AddListener(UpdateMana);
             characterMana.OnAddMana.AddListener(UpdateMana);
@@ -50,6 +78,12 @@ namespace UI.HUD
             ManuallyUpdateHealthBar(characterHealth);
         }
 
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            Destroy(testObject);
+        }
+
         private void UpdateMana(CharacterMana characterMana_)
         {
             UpdateManaText();
@@ -71,8 +105,16 @@ namespace UI.HUD
         {
             if(characterHealth == null) return;
             if(hpBar == null) return;
-            hpBar.fillAmount = (float) playerData.health.CurrentHp / playerData.health.MaxHp;
-            hpText.text = $"Health: {playerData.health.CurrentHp}/{playerData.health.MaxHp}";
+            if (character is AllyCharacter)
+            {
+                hpBar.fillAmount = (float) allyData.health.CurrentHp / allyData.health.MaxHp;
+                hpText.text = $"Health: {allyData.health.CurrentHp}/{allyData.health.MaxHp}";
+            }
+            else
+            {
+                hpBar.fillAmount = (float)playerData.health.CurrentHp / playerData.health.MaxHp;
+                hpText.text = $"Health: {playerData.health.CurrentHp}/{playerData.health.MaxHp}";
+            }
             hpBar.color = hpBar.fillAmount > 0.2f ? originalColor : damageColor;
         }
         
@@ -80,8 +122,17 @@ namespace UI.HUD
         {
             if(characterMana == null) return;
             if(manaBar == null) return;
-            manaBar.fillAmount = (float) playerData.mana.CurrentMana / playerData.mana.MaxMana;
-            mana_TXT.text = $"Mana: {playerData.mana.CurrentMana}/{playerData.mana.MaxMana}";
+            if (character is AllyCharacter)
+            {
+                manaBar.fillAmount = (float) allyData.mana.CurrentMana / allyData.mana.MaxMana;
+                mana_TXT.text = $"Mana: {allyData.mana.CurrentMana}/{allyData.mana.MaxMana}";
+            }
+            else
+            {
+                manaBar.fillAmount = (float) playerData.mana.CurrentMana / playerData.mana.MaxMana;
+                mana_TXT.text = $"Mana: {playerData.mana.CurrentMana}/{playerData.mana.MaxMana}"; 
+            }
+            
         }
     }
 }
