@@ -3,8 +3,10 @@ using Character;
 using Character.CharacterComponents;
 using DG.Tweening;
 using Fungus;
+using Managers;
 using ScriptableObjectData.CharacterData;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +24,11 @@ namespace UI.HUD
         private PlayerData playerData;
 
         [SerializeField] bool isForAlly;
+
+        [SerializeField] int partyMemberIndex;
+        [SerializeField] bool isForFarm;
+
+        private GameObject testObject;
         
         protected override void Start()
         {
@@ -35,8 +42,8 @@ namespace UI.HUD
             else if (character == null && isForAlly)
             {
                 character = FindObjectOfType<AllyCharacter>();
-                
-                //Debug.Log(character.GetType());
+
+                // Debug.Log(character.GetType());
             }
             
             base.Start();
@@ -69,6 +76,12 @@ namespace UI.HUD
             base.OnEnable();
             ManuallyUpdateManaBar(characterMana);
             ManuallyUpdateHealthBar(characterHealth);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            Destroy(testObject);
         }
 
         private void UpdateMana(CharacterMana characterMana_)

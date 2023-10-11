@@ -20,7 +20,9 @@ namespace ScriptableObjectData.CharacterData
         public int level => LevelData.CurrentLevel;
         public CombatStats totalStats => statsData.GetTotalStats(level);
         public CombatStats baseStats => statsData.GetTotalNonBonusStats(level);
-        
+
+        [field: SerializeField] public Sprite icon { get; private set; }
+
         public void Initialize(GameDataBase gameDataBase)
         {
             statsData.ClearAdditionalStats();
