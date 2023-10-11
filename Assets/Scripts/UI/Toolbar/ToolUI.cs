@@ -15,8 +15,10 @@ namespace UI.Toolbar
         [SerializeField] Sprite selectedSprite, deselectedSprite;
         [SerializeField] private Outline outline;
         [SerializeField] private Image toolIcon;
-        [SerializeField] private TextMeshProUGUI count_TXT, hotKey_TXT;
+        [SerializeField] private TextMeshProUGUI count_TXT;
         [SerializeField] private Color selectColor, deselectColor;
+        [SerializeField] private Sprite[] hotkeySprites;
+        [SerializeField] private Image currentHotkeyImage;
 
         private PlayerInventory inventory;
         private Image background;
@@ -34,7 +36,8 @@ namespace UI.Toolbar
             InventoryEvents.OnUpdateInventory.AddListener(UpdateInventory);
             currItem = inventory.ItemTools[index];
             UpdateToolBar(index, inventory.ItemTools[index]);
-            hotKey_TXT.text = $"{index + 1}";
+            // hotKey_TXT.text = $"{index + 1}";
+            currentHotkeyImage.sprite = hotkeySprites[index];
         }
 
         private void OnDestroy()
@@ -48,7 +51,7 @@ namespace UI.Toolbar
         private void ChangeItem(int index_)
         {
             outline.effectColor = index == index_ ? selectColor : deselectColor;
-            hotKey_TXT.color = index == index_ ? selectColor : Color.black;
+            // currentHotkeyImage.color = index == index_ ? selectColor : Color.black;
             background.sprite = index == index_ ? selectedSprite : deselectedSprite;
         }
         

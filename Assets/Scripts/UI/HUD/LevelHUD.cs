@@ -67,7 +67,7 @@ namespace UI.HUD
             }
             
             // if Level Up
-            levelText.text = $"Level {addExpInfo_.prevLevel}";
+            levelText.text = $"{addExpInfo_.prevLevel}";
 
             var _size = levelText.transform.localScale;
             
@@ -77,7 +77,7 @@ namespace UI.HUD
             yield return levelText.transform.DOScale(_size, effectDuration/4f)
                 .SetUpdate(true).SetEase(Ease.OutBack).WaitForCompletion();
             
-            levelText.text = $"Level {lvlData.CurrentLevel}";
+            levelText.text = $"{lvlData.CurrentLevel}";
             
             Debug.Log($"Level Up! prevExp : 0 || newExp : {lvlData.CurrentLevelExperience} || neededExp : {lvlData.CurrentExperienceNeeded}");
             
@@ -105,7 +105,7 @@ namespace UI.HUD
         private void DisplayLevel(bool willDisableOtherObjects_ = true)
         {
             levelText.transform.localScale = defaultSize;
-            levelText.text = $"Level {lvlData.CurrentLevel}";
+            levelText.text = $"{lvlData.CurrentLevel}";
             expText.text = $"{lvlData.CurrentLevelExperience} / {lvlData.CurrentExperienceNeeded}";
             
             expBar.fillAmount = lvlData.CurrentLevelExperience / (float) lvlData.CurrentExperienceNeeded;
