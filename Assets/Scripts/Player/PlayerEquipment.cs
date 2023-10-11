@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace Player
 {
-    public enum EquipmentAction { Till, Water, Plant, Harvest, UnTill, Consume, None }
+    public enum EquipmentAction { Till, Water, Plant, Harvest, UnTill, Consume, Fish, None }
     
     [DefaultExecutionOrder(-1)]
     public class PlayerEquipment : MonoBehaviour
@@ -177,7 +177,15 @@ namespace Player
                         return EquipmentAction.None;
                 }
             }
-            
+
+            if (CurrentItem.Data is FishingPoleData)
+            {
+                if (currTile == null)
+                {
+                    return EquipmentAction.Fish;
+                }
+            }
+
             if (CurrentItem is ItemConsumable) return EquipmentAction.Consume;
             
             return EquipmentAction.None;
@@ -200,6 +208,9 @@ namespace Player
                     break;
                 case EquipmentAction.Harvest:
                     Harvest();
+                    break;
+                case EquipmentAction.Fish:
+                    Fish();
                     break;
                 case EquipmentAction.UnTill:
                     OnUnTillAction.Invoke();
@@ -250,8 +261,24 @@ namespace Player
             currTile.OnInteract();
         }
 
+        public void Fish()
+        {
+            Debug.Log("Estoy Fishing");
+            if (FishingManager.Instance.hasFishingStarted != true)
+            {
+                AudioManager.PlayWatering();
+                FishingManager.Instance.InitiateFishing();
+            }
+
+            if (FishingManager.Instance.fishOnHook == true)
+            {
+                Debug.Log("Fish Caught");
+                FishingManager.Instance.FishingSuscess();
+            }
+        }
+
         #endregion
-        
+
         public void SetTile(FarmTile tile_)
         {
             if (currTile.IsValid())
