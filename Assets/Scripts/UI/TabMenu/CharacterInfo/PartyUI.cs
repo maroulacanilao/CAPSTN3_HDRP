@@ -27,6 +27,8 @@ namespace UI.TabMenu.CharacterInfo
 
         [field: SerializeField] public PartyMemberInfoPanel[] PartyMemberInfoPanels { get; private set; }
 
+        public GameObject partymanagementPanel;
+
         private void Awake()
         {
             partySystemManager = GameManager.Instance.Player.GetComponent<PartySystemManager>();
@@ -42,14 +44,12 @@ namespace UI.TabMenu.CharacterInfo
 
         private void Start()
         {
-            UpdateMainParty();
-            UpdateOffParty();
+            PartyManagementAvailability();
         }
 
         public void OnEnable()
         {
-            UpdateMainParty();
-            UpdateOffParty();
+            PartyManagementAvailability();
         }
 
         public void UpdateMainParty()
@@ -93,6 +93,20 @@ namespace UI.TabMenu.CharacterInfo
                         offPartyMemberTexts[i].GetComponent<Button>().interactable = false;
                     }
                 }
+            }
+        }
+
+        private void PartyManagementAvailability()
+        {
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameManager.Instance.DungeonSceneName)
+            {
+                partymanagementPanel.SetActive(false);
+            }
+            else
+            {
+                partymanagementPanel.SetActive(true);
+                UpdateMainParty();
+                UpdateOffParty();
             }
         }
 
