@@ -20,8 +20,6 @@ public class PartySystemManager : MonoBehaviour
     
     public string id_;
 
-    public PartyUI partyUI;
-
     void Awake()
     {
         if (_instance != null && _instance != this)

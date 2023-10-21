@@ -97,7 +97,7 @@ namespace UI.HUD
         
             DOTween.To(() => _prevVal, x => _prevVal = x, _targetVal, effectDuration).SetUpdate(true).OnUpdate(() =>
             {
-                mana_TXT.text = $"Mana: {_prevVal}/{characterMana.MaxMana}";
+                mana_TXT.text = $"{_prevVal}/{characterMana.MaxMana}";
             });
         }
 
@@ -108,12 +108,12 @@ namespace UI.HUD
             if (character is AllyCharacter)
             {
                 hpBar.fillAmount = (float) allyData.health.CurrentHp / allyData.health.MaxHp;
-                hpText.text = $"Health: {allyData.health.CurrentHp}/{allyData.health.MaxHp}";
+                hpText.text = $"{allyData.health.CurrentHp}/{allyData.health.MaxHp}";
             }
             else
             {
                 hpBar.fillAmount = (float)playerData.health.CurrentHp / playerData.health.MaxHp;
-                hpText.text = $"Health: {playerData.health.CurrentHp}/{playerData.health.MaxHp}";
+                hpText.text = $"{playerData.health.CurrentHp}/{playerData.health.MaxHp}";
             }
             hpBar.color = hpBar.fillAmount > 0.2f ? originalColor : damageColor;
         }
@@ -125,12 +125,12 @@ namespace UI.HUD
             if (character is AllyCharacter)
             {
                 manaBar.fillAmount = (float) allyData.mana.CurrentMana / allyData.mana.MaxMana;
-                mana_TXT.text = $"Mana: {allyData.mana.CurrentMana}/{allyData.mana.MaxMana}";
+                mana_TXT.text = $"{allyData.mana.CurrentMana}/{allyData.mana.MaxMana}";
             }
             else
             {
                 manaBar.fillAmount = (float) playerData.mana.CurrentMana / playerData.mana.MaxMana;
-                mana_TXT.text = $"Mana: {playerData.mana.CurrentMana}/{playerData.mana.MaxMana}"; 
+                mana_TXT.text = $"{playerData.mana.CurrentMana}/{playerData.mana.MaxMana}"; 
             }
             
         }
