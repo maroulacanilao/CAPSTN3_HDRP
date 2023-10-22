@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d9e6a1241b64db99ea56d054361f26c, type: 3}
+  m_Name: WitchAllyData
+  m_EditorClassIdentifier: 
+  <characterName>k__BackingField: Witch
+  <farmPrefab>k__BackingField: {fileID: 4231486665182357142, guid: 1e7032e9df018c34eb50f1f1f5d64843,
+    type: 3}
+  <battlePrefab>k__BackingField: {fileID: -4468340170187691482, guid: 70a56e0d1565c9a419c62735afdcc776,
+    type: 3}
+  <statsData>k__BackingField:
+    <baseCombatStats>k__BackingField:
+      vitality: 100
+      strength: 100
+      intelligence: 100
+      defense: 100
+      speed: 100
+    <maxLevelCombatStats>k__BackingField:
+      vitality: 50
+      strength: 50
+      intelligence: 50
+      defense: 50
+      speed: 50
+    healthGrowthCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    intelligenceGrowthCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    strengthGrowthCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    defenseGrowthCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    speedGrowthCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  <spells>k__BackingField: []
+  <weaknessTags>k__BackingField: []
+  <LevelData>k__BackingField:
+    <expLvlCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <LevelCap>k__BackingField: 100
+    <ExperienceCap>k__BackingField: 10000
+    totalExperience: 0
+  <health>k__BackingField:
+    <character>k__BackingField: {fileID: 0}
+  <mana>k__BackingField:
+    <character>k__BackingField: {fileID: 0}
+  <icon>k__BackingField: {fileID: 21300000, guid: 87c06a657e1e37043815fc14a82b1b36,
+    type: 3}
