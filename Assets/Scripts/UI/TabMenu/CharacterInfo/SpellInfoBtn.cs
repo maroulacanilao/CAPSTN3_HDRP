@@ -25,13 +25,13 @@ namespace UI.TabMenu.CharacterInfo
         public override void SelectButton()
         {
             base.SelectButton();
-            background.sprite = selectedSprite;
+            // Text.sprite = selectedSprite;
         }
         
         public override void DeselectButton()
         {
             base.DeselectButton();
-            background.sprite = deselectedSprite;
+            // Text.sprite = deselectedSprite;
         }
     }
 }

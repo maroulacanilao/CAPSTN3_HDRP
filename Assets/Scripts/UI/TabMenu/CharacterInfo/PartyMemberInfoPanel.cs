@@ -70,8 +70,8 @@ namespace UI.TabMenu.CharacterInfo.Party
             statsPanel.DisplayDynamic(currAlly.GetStats(), false);
 
 
-            hpTxt.text = $"Health: {ally.health.CurrentHp}/{ally.health.MaxHp}";
-            manaTxt.text = $"Mana: {ally.mana.CurrentMana} / {ally.mana.MaxMana}";
+            hpTxt.text = $"{ally.health.CurrentHp}/{ally.health.MaxHp}";
+            manaTxt.text = $"{ally.mana.CurrentMana} / {ally.mana.MaxMana}";
             hpIcon.gameObject.SetActive(true);
             manaIcon.gameObject.SetActive(true);
         }

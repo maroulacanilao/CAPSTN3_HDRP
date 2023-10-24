@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using BaseCore;
 using BattleSystem;
 using CustomHelpers;
+using DG.Tweening;
 using Items;
 using Items.Inventory;
 using NaughtyAttributes;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,11 +27,17 @@ namespace UI.Battle
         [BoxGroup("Panels")] [SerializeField] private TargetPanel playerTargetPanel;
         
         [BoxGroup("Buttons")] [SerializeField] private Button itemsBtn;
-        
+
+        [BoxGroup("Buttons")][SerializeField] private Button[] actionPanelBtns;
+
         public BattleManager battleManager { get; private set; }
         public BattleCharacter player { get; private set; }
         public BattleCharacter currentTarget { get; set; } 
         public BattleAction currentAction { get; set; }
+
+        private Image actionPanelImage;
+
+        [SerializeField] private List<TextMeshProUGUI> actionBtn_Txts;
 
         #region Unity Functions
 
@@ -39,7 +48,14 @@ namespace UI.Battle
             enemyTargetPanel.Initialize(this, battleManager.enemyParty);
             playerTargetPanel.Initialize(this, battleManager.playerParty);
             itemPanel.Initialize(this);
-            
+
+            actionPanelImage = actionPanel.GetComponent<Image>();
+
+            for (int i = 0; i < actionPanelBtns.Length; i++)
+            {
+                actionBtn_Txts.Add(actionPanelBtns[i].GetComponent<TextMeshProUGUI>());
+            }
+
             mainPanel.SetActive(false);
         }
 
@@ -54,7 +70,20 @@ namespace UI.Battle
         
         private void ShowActionMenu(BattleCharacter playerCharacter_)
         {
+            itemsBtn = actionPanelBtns[2];
+            TextMeshProUGUI itemText = actionBtn_Txts[2];
+
             itemsBtn.interactable = itemPanel.HasItems();
+
+            if (!itemsBtn.interactable)
+            {
+                itemText.color.SetAlpha(0.25f);
+            }
+            else
+            {
+                itemText.color.SetAlpha(1f);
+            }
+
             player = playerCharacter_;
             currentAction = BattleAction.BasicAttack;
             currentTarget = battleManager.GetFirstAliveEnemy();
@@ -66,6 +95,7 @@ namespace UI.Battle
         public void CloseOtherPanels()
         {
             actionPanel.SetActive(false);
+            // GrayOutActionPanel();
             spellPanel.gameObject.SetActive(false);
             enemyTargetPanel.gameObject.SetActive(false);
             playerTargetPanel.gameObject.SetActive(false);
@@ -76,8 +106,9 @@ namespace UI.Battle
         {
             CloseOtherPanels();
             actionPanel.SetActive(true);
+            // UngrayActionPanel();
         }
-        
+
         public void ShowSpellMenu()
         {
             CloseOtherPanels();
@@ -101,9 +132,32 @@ namespace UI.Battle
             CloseOtherPanels();
             itemPanel.gameObject.SetActive(true);
         }
-        
+
+        private void GrayOutActionPanel()
+        {
+            actionPanelImage.color = Color.gray;
+            actionPanelImage.color.SetAlpha(0.2f);
+
+            for (int i = 0; i < actionPanelBtns.Length; i++)
+            {
+                actionPanelBtns[i].interactable = false;
+            }
+        }
+
+        private void UngrayActionPanel()
+        {
+            actionPanelImage.color = Color.white;
+            actionPanelImage.color.SetAlpha(1f);
+
+            for (int i = 0; i < actionPanelBtns.Length; i++)
+            {
+                actionPanelBtns[i].interactable = true;
+                Debug.Log(actionPanelBtns[i].interactable);
+            }
+        }
+
         #endregion
-        
+
         #region Button Functions
 
         public void BasicAttackBtnClick()

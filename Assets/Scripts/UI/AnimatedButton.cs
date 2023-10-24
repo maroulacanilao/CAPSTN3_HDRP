@@ -23,12 +23,13 @@ public class AnimatedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         if(button == null) button = GetComponent<Button>();
         originalScale = button.transform.localScale;
-        selectIcon.gameObject.SetActive(false);
+        if(selectIcon != null) selectIcon.gameObject.SetActive(false);
     }
 
     private void Start()
     {
         button.onClick.AddListener(OnClick);
+        if (selectIcon != null) selectIcon.gameObject.SetActive(false);
     }
 
     private void OnEnable()
@@ -36,7 +37,7 @@ public class AnimatedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         if(button == null) button = GetComponent<Button>();
         if(button == null) return;
         button.transform.localScale = originalScale;
-        selectIcon.gameObject.SetActive(false);
+        if (selectIcon != null) selectIcon.gameObject.SetActive(false);
     }
 
     private void OnDisable()
@@ -66,7 +67,7 @@ public class AnimatedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         StopAllCoroutines();
         if(!gameObject.activeInHierarchy) return;
         Managers.AudioManager.PlaySfx(selectSfxName);
-        selectIcon.gameObject.SetActive(true);
+        if(selectIcon != null && button.interactable) selectIcon.gameObject.SetActive(true);
         StartCoroutine(Co_AnimateButton(originalScale * 1.1f));
     }
 
@@ -76,7 +77,7 @@ public class AnimatedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         if(button.IsEmptyOrDestroyed()) return;
         if(button.transform.localScale == originalScale) return;
         StopAllCoroutines();
-        selectIcon.gameObject.SetActive(false);
+        if (selectIcon != null) selectIcon.gameObject.SetActive(false);
         StartCoroutine(Co_AnimateButton(originalScale));
     }
     

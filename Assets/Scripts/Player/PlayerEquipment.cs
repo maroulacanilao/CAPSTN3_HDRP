@@ -39,6 +39,8 @@ namespace Player
         public EquipmentAction currAction { get; private set; }
         public string seedName { get; private set; }
 
+        [SerializeField] private ToolArea[] toolAreas;
+
         private void Start()
         {
             currIndex = 0;

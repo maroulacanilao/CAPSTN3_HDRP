@@ -29,7 +29,7 @@ namespace UI.HUD
             characterHealth.OnTakeDamage.AddListener(DamageEffect);
             characterHealth.OnHeal.AddListener(HealEffect);
             originalColor = hpBar.color;
-            hpText.text = $"Health: {characterHealth.CurrentHp}/{characterHealth.MaxHp}";
+            hpText.text = $"{characterHealth.CurrentHp}/{characterHealth.MaxHp}";
             hpBar.fillAmount = characterHealth.HpPercentage;
         }
 
@@ -66,7 +66,7 @@ namespace UI.HUD
         
             DOTween.To(() => _prevVal, x => _prevVal = x, _targetVal, effectDuration).SetUpdate(true).OnUpdate(() =>
             {
-                hpText.text = $"Health: {_prevVal}/{characterHealth.MaxHp}";
+                hpText.text = $"{_prevVal}/{characterHealth.MaxHp}";
             });
         }
         

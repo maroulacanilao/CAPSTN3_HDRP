@@ -47,19 +47,23 @@ namespace UI.HUD
             }
             
             base.Start();
-            characterMana = character.mana;
             
             //If current character is ally then use ally data
-            if(character is AllyCharacter) allyData = character.characterData as AllyData; 
-            else playerData = character.characterData as PlayerData;
-            
-            characterMana.OnUseMana.AddListener(UpdateMana);
-            characterMana.OnAddMana.AddListener(UpdateMana);
-            characterHealth.OnManuallyUpdateHealth.AddListener(ManuallyUpdateHealthBar);
-            characterMana.OnManuallyUpdateMana.AddListener(ManuallyUpdateManaBar);
-            
-            ManuallyUpdateHealthBar(characterHealth);
-            ManuallyUpdateManaBar(characterMana);
+            if (character != null)
+            {
+                if (character is AllyCharacter) allyData = character.characterData as AllyData;
+                else playerData = character.characterData as PlayerData;
+
+                characterMana = character.mana;
+
+                characterMana.OnUseMana.AddListener(UpdateMana);
+                characterMana.OnAddMana.AddListener(UpdateMana);
+                characterHealth.OnManuallyUpdateHealth.AddListener(ManuallyUpdateHealthBar);
+                characterMana.OnManuallyUpdateMana.AddListener(ManuallyUpdateManaBar);
+
+                ManuallyUpdateHealthBar(characterHealth);
+                ManuallyUpdateManaBar(characterMana);
+            }
         }
         
         protected override void OnDestroy()
