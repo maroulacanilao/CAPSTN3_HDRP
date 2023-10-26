@@ -12,6 +12,7 @@ namespace UI.HUD
         [SerializeField] protected BattleStation battleStation;
         [SerializeField] protected StatusEffectHUD statusEffectHUD;
         [SerializeField] protected TextMeshProUGUI name_TXT;
+        [SerializeField] protected TextMeshProUGUI level_TXT;
         [SerializeField] protected GameObject selectIndicator;
 
         
@@ -34,8 +35,9 @@ namespace UI.HUD
             
             base.Start();
             
-            name_TXT.text = $"{character.characterData.characterName} Lv.{character.level}";
-            if(statusEffectHUD != null) statusEffectHUD.Initialize(character.statusEffectReceiver);
+            name_TXT.text = $"{character.characterData.characterName}";
+            if (level_TXT != null) level_TXT.text = $"{character.level}";
+            if (statusEffectHUD != null) statusEffectHUD.Initialize(character.statusEffectReceiver);
         }
 
         protected virtual void OnEnable()
@@ -67,7 +69,7 @@ namespace UI.HUD
         protected virtual void OnSelectMenuHandler(BattleCharacter battleCharacter_)
         {
             if(battleCharacter == null) return;
-            selectIndicator.SetActive(battleCharacter_ == battleCharacter);
+            if (selectIndicator != null) selectIndicator.SetActive(battleCharacter_ == battleCharacter);
         }
     }
 }

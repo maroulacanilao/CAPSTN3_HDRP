@@ -39,7 +39,7 @@ namespace UI.Battle
             var _data = itemBtn.item.Data;
             
             nameTxt.text = $"{_data.ItemName} x{_count}";
-            quantityTXT.text = $"Quantity: {_count}";
+            quantityTXT.text = $"Quantity: x{_count}";
             descriptionTxt.text =_data.Description;
             
             gameObject.SetActive(true);
