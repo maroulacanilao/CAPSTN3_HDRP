@@ -40,7 +40,6 @@ namespace UI
         [BoxGroup("HoverText")] [ShowIf("showHoverText")] [ResizableTextArea] [SerializeField] string intHoverText;
         [BoxGroup("HoverText")] [ShowIf("showHoverText")] [ResizableTextArea] [SerializeField] string defHoverText;
         [BoxGroup("HoverText")] [ShowIf("showHoverText")] [ResizableTextArea] [SerializeField] string spdHoverText;
-        
 
         [SerializeField] private AssetDataBase assetDatabase;
 
@@ -148,11 +147,11 @@ namespace UI
             if (vitPanel != null) vitPanel.SetActive(includeVitality_);
 
             // TODO: Remove label
-            if (includeVitality_) vitTXT.text =  $"Vit: {combatStats_.vitality}";
-            strTXT.text =  $"STR: {combatStats_.strength}";
-            defTXT.text =  $"Def: {combatStats_.defense}";
-            intTXT.text =  $"INT: {combatStats_.intelligence}";
-            spdTXT.text =  $"SPD: {combatStats_.speed}";
+            if (includeVitality_) vitTXT.text =  $"{combatStats_.vitality}";
+            strTXT.text =  $"{combatStats_.strength}";
+            defTXT.text =  $"{combatStats_.defense}";
+            intTXT.text =  $"{combatStats_.intelligence}";
+            spdTXT.text =  $"{combatStats_.speed}";
         }
 
         public void DisplayDynamic(CombatStats combatStats_, bool includeVitality_ = true)
@@ -173,11 +172,11 @@ namespace UI
             Display(combatStats_, includeVitality_);
             var _diff = combatStats_ - oldCombatStats_;
             
-            if(_diff.strength != 0) strTXT.text += _diff.strength > 0? $" <color=green>(+{_diff.strength})</color>" : $" <color=red>({_diff.strength})</color>";
-            if(_diff.defense != 0) defTXT.text += _diff.defense > 0? $" <color=green>(+{_diff.defense})</color>" : $" <color=red>({_diff.defense})</color>";
-            if(_diff.intelligence != 0) intTXT.text += _diff.intelligence > 0? $" <color=green>(+{_diff.intelligence})</color>" : $" <color=red>({_diff.intelligence})</color>";
-            if(_diff.speed != 0) spdTXT.text += _diff.speed > 0? $" <color=green>(+{_diff.speed})</color>" : $" <color=red>({_diff.speed})</color>";
-            if(_diff.vitality != 0) vitTXT.text += _diff.vitality > 0? $" <color=green>(+{_diff.vitality})</color>" : $" <color=red>({_diff.vitality})</color>";
+            if(_diff.strength != 0) strTXT.text += _diff.strength > 0? $" <color=#5BC2A0>(+{_diff.strength})</color>" : $" <color=#AF023D>({_diff.strength})</color>";
+            if(_diff.defense != 0) defTXT.text += _diff.defense > 0? $" <color=#5BC2A0>(+{_diff.defense})</color>" : $" <color=#AF023D>({_diff.defense})</color>";
+            if(_diff.intelligence != 0) intTXT.text += _diff.intelligence > 0? $" <color=#5BC2A0>(+{_diff.intelligence})</color>" : $" <color=#AF023D>({_diff.intelligence})</color>";
+            if(_diff.speed != 0) spdTXT.text += _diff.speed > 0? $" <color=#5BC2A0>(+{_diff.speed})</color>" : $" <color=#AF023D>({_diff.speed})</color>";
+            if(_diff.vitality != 0) vitTXT.text += _diff.vitality > 0? $" <color=#5BC2A0>(+{_diff.vitality})</color>" : $" <color=#AF023D>({_diff.vitality})</color>";
         }
         
         public void DisplayArmor(CombatStats combatStats_, bool includeVitality_ = false)
@@ -220,27 +219,27 @@ namespace UI
             // TODO: Remove label
             if (vitTXT != null && combatStats_.vitality != 0)
             {
-                vitTXT.text = "MaxHP: +" + combatStats_.vitality.ToString();
+                vitTXT.text = "+" + combatStats_.vitality.ToString();
                 vitTXT.gameObject.SetActive(true);
             }
             if (strTXT != null && combatStats_.strength != 0)
             {
-                strTXT.text = "Damage: +" + combatStats_.strength.ToString();
+                strTXT.text = "+" + combatStats_.strength.ToString();
                 strTXT.gameObject.SetActive(true);
             }
             if(intTXT != null && combatStats_.intelligence != 0)
             {
-                intTXT.text = "MaxMp: +" + combatStats_.intelligence.ToString();
+                intTXT.text = "+" + combatStats_.intelligence.ToString();
                 intTXT.gameObject.SetActive(true);
             }
             if (defTXT != null && combatStats_.defense != 0)
             {
-                defTXT.text = "Armor: +" + combatStats_.defense.ToString();
+                defTXT.text = "+" + combatStats_.defense.ToString();
                 defTXT.gameObject.SetActive(true);
             }
             if(spdTXT != null && combatStats_.speed != 0)
             {
-                spdTXT.text = "Speed: +" + combatStats_.speed.ToString();
+                spdTXT.text = "+" + combatStats_.speed.ToString();
                 spdTXT.gameObject.SetActive(true);
             }
 
@@ -323,7 +322,7 @@ namespace UI
         {
             var _sb = new System.Text.StringBuilder();
             _sb.Append(statVal_);
-            if(bonusStatVal_ != 0) _sb.Append($" <color=green>(+{bonusStatVal_})</color>");
+            if(bonusStatVal_ != 0) _sb.Append($" <color=#5BC2A0>(+{bonusStatVal_})</color>");
             return _sb.ToString();
         }
     }
