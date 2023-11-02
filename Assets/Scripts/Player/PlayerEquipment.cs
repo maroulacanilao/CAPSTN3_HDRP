@@ -35,7 +35,8 @@ namespace Player
         public static readonly Evt<int> OnManualSelect = new Evt<int>();
         
         public FarmTile currTile { get; private set; }
-        
+        public FishingTile fishingTile { get; private set; }
+
         public EquipmentAction currAction { get; private set; }
         public string seedName { get; private set; }
 
@@ -116,6 +117,9 @@ namespace Player
             var _tile = toolArea.GetFarmTile();
             SetTile(_tile);
 
+            var _fishingTile = toolArea.GetFishingTile();
+            SetFishingTile(_fishingTile);
+
             if (CurrentItem == null)
             {
                 if(_tile != null && _tile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
@@ -180,7 +184,7 @@ namespace Player
 
             if (CurrentItem.Data is FishingPoleData)
             {
-                if (currTile == null)
+                if (fishingTile != null)
                 {
                     return EquipmentAction.Fish;
                 }
@@ -269,12 +273,18 @@ namespace Player
                 AudioManager.PlayWatering();
                 FishingManager.Instance.InitiateFishing();
             }
-
-            if (FishingManager.Instance.fishOnHook == true)
+            else if (FishingManager.Instance.fishOnHook == true)
             {
                 Debug.Log("Fish Caught");
                 FishingManager.Instance.FishingSuscess();
             }
+
+            //else if (FishingManager.Instance.hasFishingStarted == true && FishingManager.Instance.fishOnHook == false)
+            //{
+            //    AudioManager.PlayMissSfx();
+            //    FishingManager.Instance.CancelFishing();
+            //    return;
+            //}
         }
 
         #endregion
@@ -292,6 +302,11 @@ namespace Player
             {
                 currTile.Enter();
             }
+        }
+
+        public void SetFishingTile(FishingTile fishingTile_)
+        {
+            fishingTile = fishingTile_;
         }
 
         private IEnumerator Co_ActionSetter()

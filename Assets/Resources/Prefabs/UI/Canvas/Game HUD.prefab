@@ -418,6 +418,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 923369173712446597}
+  - {fileID: 950888824283418010}
   m_Father: {fileID: 6971641383549953092}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -447,6 +448,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fishingNotification: {fileID: 3567399929252739316}
+  fishingStatus: {fileID: 2347232047482232808}
+  fishingImage: {fileID: 21300000, guid: acf85c49a22ece542b74885908acf66d, type: 3}
+  fishingImageFailed: {fileID: 21300000, guid: b2dae73f5056e1b4dbf0fc19a4535f69, type: 3}
 --- !u!1 &1086164746514169332
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,6 +741,82 @@ MonoBehaviour:
   m_Sprite: {fileID: 21300000, guid: 4a931559f42d09d4392a837317d2f0f7, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2347232047482232808
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 950888824283418010}
+  - component: {fileID: 4088825791872703876}
+  - component: {fileID: 8451888747284305575}
+  m_Layer: 5
+  m_Name: FishingStatus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &950888824283418010
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2347232047482232808}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5471674229529107896}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 110}
+  m_SizeDelta: {x: 75, y: 75}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4088825791872703876
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2347232047482232808}
+  m_CullTransparentMesh: 1
+--- !u!114 &8451888747284305575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2347232047482232808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: acf85c49a22ece542b74885908acf66d, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1331,8 +1411,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 95}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 43.9, y: 142.7}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3821416429182660851
 CanvasRenderer:
@@ -3674,14 +3754,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Time_TXT: {fileID: 6971641383709170408}
   daysLeft_Txt: {fileID: 8996223348428846101}
-  dayCyclesUI:
-  - {fileID: 2791374036155507485}
-  - {fileID: 5522951640754641349}
-  - {fileID: 3779936360131322236}
-  - {fileID: 6818647033609084649}
-  dayOrNightIcon:
-  - {fileID: 21300000, guid: 50daeaa7054ee9d40bbe80dffb39ed21, type: 3}
-  - {fileID: 21300000, guid: d05352ae3da9e904f8c64a31c68de560, type: 3}
 --- !u!222 &6971641384476661769
 CanvasRenderer:
   m_ObjectHideFlags: 0
