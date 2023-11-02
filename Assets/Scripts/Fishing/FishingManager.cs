@@ -34,7 +34,7 @@ public class FishingManager : Singleton<FishingManager>
     public static readonly Evt<FishingManager> OnHookedFish = new Evt<FishingManager>();
     public static readonly Evt<bool> OnCaughtFish = new Evt<bool>();
 
-    private IEnumerator waitingForFishRoutine;
+    private Coroutine waitingForFishRoutine;
     private Coroutine hookedFishRoutine;
 
     public void InitiateFishing()
@@ -44,7 +44,7 @@ public class FishingManager : Singleton<FishingManager>
 
         Debug.Log("Fishing Start");
         int randomNumber = Random.Range(3, 5);
-        StartCoroutine(WaitingForFish(randomNumber));
+        waitingForFishRoutine = StartCoroutine(WaitingForFish(randomNumber));
     }
 
     IEnumerator WaitingForFish(int secondsToBite_)
@@ -61,7 +61,7 @@ public class FishingManager : Singleton<FishingManager>
     public void CancelFishing()
     {
         hasFishingStarted = false;
-        StopCoroutine(WaitingForFish(0));
+        StopCoroutine(waitingForFishRoutine);
 
         OnCaughtFish.Invoke(false);
     }
@@ -81,7 +81,7 @@ public class FishingManager : Singleton<FishingManager>
 
         //for (int i = 0; i < 2; i++)
         //{
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1.5f);
         //}
 
         FishingFailed();

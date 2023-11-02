@@ -279,12 +279,11 @@ namespace Player
                 FishingManager.Instance.FishingSuscess();
             }
 
-            //else if (FishingManager.Instance.hasFishingStarted == true && FishingManager.Instance.fishOnHook == false)
-            //{
-            //    AudioManager.PlayMissSfx();
-            //    FishingManager.Instance.CancelFishing();
-            //    return;
-            //}
+            else if (FishingManager.Instance.hasFishingStarted == true && FishingManager.Instance.fishOnHook == false)
+            {
+                AudioManager.PlayMissSfx();
+                FishingManager.Instance.CancelFishing();
+            }
         }
 
         #endregion
