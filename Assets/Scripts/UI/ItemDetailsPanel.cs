@@ -48,7 +48,7 @@ namespace UI
             var _data = item.Data;
             itemIcon.color = Color.white;
             
-            namePanel.SetActive(currItem.ItemType != ItemType.Gold);
+            // namePanel.SetActive(currItem.ItemType != ItemType.Gold);
             statsPanel.gameObject.SetActive(currItem.ItemType != ItemType.Gold);
             descriptionPanel.SetActive(currItem.ItemType != ItemType.Gold);
 

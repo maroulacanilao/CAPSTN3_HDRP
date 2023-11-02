@@ -14,7 +14,7 @@ using UnityEngine.InputSystem;
 namespace UI.TabMenu.InventoryMenu
 {
     [DefaultExecutionOrder(2)]
-    public class InventoryMenu : MonoBehaviour
+    public class InventoryMenu : MonoBehaviour // PlayerMenu
     {
         [field: Header("Data")]
         [field: SerializeField] public PlayerData playerData { get; private set; }
@@ -37,9 +37,14 @@ namespace UI.TabMenu.InventoryMenu
         private Item_MenuItem lastSelectedItem;
         
         private EventSystem eventSystem => EventSystem.current;
-        
+
+        [SerializeField] private GameObject inventoryPanel;
+        [SerializeField] private GameObject[] itemsPanel;
+
         private void Awake()
         {
+            // InputUIManager.OnInventoryMenu.AddListener(ShowInventoryPanel);
+
             for (int i = 0; i < toolBarItems.Length; i++)
             {
                 toolBarItems[i].Initialize(this,i);
@@ -54,18 +59,26 @@ namespace UI.TabMenu.InventoryMenu
             
             inventoryDetailsPanel.Initialize(this);
             inventoryDetailsPanel.ShowItemDetail(null);
+
+            // PrevItemsInInventory();
         }
 
         private void OnEnable()
         {
+            // base function goes here
+
             EventSystem.current.SetSelectedGameObject(storageItems[0].gameObject);
             SelectableMenuButton.OnSelectButton.AddListener(SelectItem);
             InputUIManager.OnMove.AddListener(OnMove);
             OnInventoryMenuOpen.Invoke(this);
+
+            // PrevItemsInInventory();
         }
 
         private void OnDisable()
         {
+            // base function goes here
+
             SelectableMenuButton.OnSelectButton.RemoveListener(SelectItem);
             InputUIManager.OnMove.RemoveListener(OnMove);
             OnInventoryMenuClose.Invoke(this);
@@ -96,6 +109,29 @@ namespace UI.TabMenu.InventoryMenu
         {
             lastSelectedItem = lastSelectedItem == null ? storageItems[0] : lastSelectedItem;
             if(!eventSystem.alreadySelecting) eventSystem.SetSelectedGameObject(lastSelectedItem.gameObject);
+        }
+
+        public void ShowInventoryPanel()
+        {
+            Debug.Log("OpenInventory");
+            inventoryPanel.gameObject.SetActive(true);
+        }
+
+        public void NextItemsInInventory()
+        {
+            itemsPanel[0].SetActive(false);
+            itemsPanel[1].SetActive(true);
+        }
+
+        public void PrevItemsInInventory()
+        {
+            itemsPanel[1].SetActive(false);
+            itemsPanel[0].SetActive(true);
+        }
+
+        public void OnExitBtnClicked()
+        {
+            PlayerMenuManager.OnCloseAllUI.Invoke();
         }
     }
 }

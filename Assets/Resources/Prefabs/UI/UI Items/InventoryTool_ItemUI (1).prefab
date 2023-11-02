@@ -33,10 +33,10 @@ RectTransform:
   m_Father: {fileID: 1157308688312557792}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -20, y: 10}
-  m_SizeDelta: {x: 40, y: 20}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -20, y: -12}
+  m_SizeDelta: {x: 40, y: 24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2416421114710914895
 CanvasRenderer:
@@ -66,10 +66,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 999x
+  m_text: 999
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 573e5d84222a38e478e08aefe001701f, type: 2}
+  m_sharedMaterial: {fileID: -1462055002213965309, guid: 573e5d84222a38e478e08aefe001701f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -93,14 +94,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 17.5
-  m_fontSizeBase: 17.5
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 1
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -172,7 +173,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -30, y: -30}
+  m_SizeDelta: {x: -40, y: -40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5588600887267043573
 CanvasRenderer:
@@ -240,7 +241,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5684453724358412606}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -349,6 +350,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dda372ac55444a73bbc6f1ffcdf32229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Text>k__BackingField: {fileID: 0}
+  <Background>k__BackingField: {fileID: 0}
   <button>k__BackingField: {fileID: 5858598806947277985}
   <outline>k__BackingField: {fileID: 5352122205463169048}
   <outlineColor>k__BackingField: {r: 0.21698111, g: 0.108916014, b: 0, a: 1}
@@ -359,8 +362,8 @@ MonoBehaviour:
   ghostIcon: {fileID: 1510669684042726759}
   highLightColor: {r: 0, g: 0.2735849, b: 0, a: 1}
   swappingColor: {r: 0, g: 0, b: 0.3301887, a: 1}
-  selectedSprite: {fileID: 21300000, guid: c9bb02d6ffb589943b6d965a352b84c4, type: 3}
-  deselectedSprite: {fileID: 21300000, guid: c7a459014a8b12947baedd0a5f3548a4, type: 3}
+  selectedSprite: {fileID: 21300000, guid: c7a459014a8b12947baedd0a5f3548a4, type: 3}
+  deselectedSprite: {fileID: 21300000, guid: c9bb02d6ffb589943b6d965a352b84c4, type: 3}
   <inventoryItemType>k__BackingField: 0
 --- !u!114 &5352122205463169048
 MonoBehaviour:

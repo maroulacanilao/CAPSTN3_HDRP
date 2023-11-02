@@ -880,6 +880,10 @@ MonoBehaviour:
   newGameConfirmPanel: {fileID: 0}
   loadPanel: {fileID: 0}
   loadUnsuccessfulPanel: {fileID: 0}
+  loadingSlider: {fileID: 0}
+  progressTxt: {fileID: 0}
+  sunIcon: {fileID: 0}
+  spinningSpeed: 0
   cameraZoom: {fileID: 404331562}
 --- !u!114 &670852284
 MonoBehaviour:
@@ -2027,6 +2031,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1150112889536598942, guid: 4562126cfb69acc4982e85185bd4a97b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1299273661979307584, guid: 4562126cfb69acc4982e85185bd4a97b,
         type: 3}
       propertyPath: m_Sprite
@@ -2192,6 +2201,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.00012207031
+      objectReference: {fileID: 0}
+    - target: {fileID: 3829549484227072214, guid: 4562126cfb69acc4982e85185bd4a97b,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3829549484227072214, guid: 4562126cfb69acc4982e85185bd4a97b,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4312434383561139719, guid: 4562126cfb69acc4982e85185bd4a97b,
         type: 3}
