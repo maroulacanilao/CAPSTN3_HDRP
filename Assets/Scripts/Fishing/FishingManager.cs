@@ -30,14 +30,21 @@ public class FishingManager : Singleton<FishingManager>
     public bool fishOnHook = false;
 
     public static readonly Evt<Item, int> OnCatchSuccess = new Evt<Item, int>();
+    public static readonly Evt<FishingManager> OnFishingStarted = new Evt<FishingManager>();
     public static readonly Evt<FishingManager> OnHookedFish = new Evt<FishingManager>();
+    public static readonly Evt<bool> OnCaughtFish = new Evt<bool>();
+
+    private Coroutine waitingForFishRoutine;
+    private Coroutine hookedFishRoutine;
 
     public void InitiateFishing()
     {
         hasFishingStarted = true;
+        OnFishingStarted.Invoke(this);
+
         Debug.Log("Fishing Start");
         int randomNumber = Random.Range(3, 5);
-        StartCoroutine(WaitingForFish(randomNumber));
+        waitingForFishRoutine = StartCoroutine(WaitingForFish(randomNumber));
     }
 
     IEnumerator WaitingForFish(int secondsToBite_)
@@ -47,8 +54,16 @@ public class FishingManager : Singleton<FishingManager>
             yield return new WaitForSeconds(1f);
         }
         //HookedFish();
-        StartCoroutine(HookedFishy());
+        hookedFishRoutine = StartCoroutine(HookedFishy());
         yield return null;
+    }
+
+    public void CancelFishing()
+    {
+        hasFishingStarted = false;
+        StopCoroutine(waitingForFishRoutine);
+
+        OnCaughtFish.Invoke(false);
     }
 
     private void HookedFish()
@@ -64,21 +79,33 @@ public class FishingManager : Singleton<FishingManager>
         OnHookedFish.Invoke(this);
         AudioManager.PlayHit();
 
-        for (int i = 0; i < 2; i++)
-        {
-            yield return new WaitForSeconds(1f);
-        }
+        //for (int i = 0; i < 2; i++)
+        //{
+            yield return new WaitForSeconds(1.5f);
+        //}
 
-        hasFishingStarted = false;
-        fishOnHook = false;
-        OnHookedFish.Invoke(this);
+        FishingFailed();
         yield return null;
     }
 
     public void FishingSuscess()
     {
-        CollectFish(fishInPool[0]);
-        StopCoroutine(HookedFishy());
+        int randomFish = Random.Range(0, fishInPool.Count);
+        CollectFish(fishInPool[randomFish]);
+        StopCoroutine(hookedFishRoutine);
+
+        OnCaughtFish.Invoke(true);
+    }
+
+    private void FishingFailed()
+    {
+        AudioManager.PlayMissSfx();
+
+        hasFishingStarted = false;
+        fishOnHook = false;
+
+        OnHookedFish.Invoke(this);
+        OnCaughtFish.Invoke(false);
     }
 
     private void CollectFish(ConsumableData fish_)
