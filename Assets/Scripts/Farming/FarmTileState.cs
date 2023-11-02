@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Farming
 {
     [System.Serializable]
-    public enum TileState { Empty = 0, Planted = 1, Growing = 2, ReadyToHarvest = 3,Growing2 = 4 }
+    public enum TileState { Empty = 0, Planted = 1, Growing = 2, ReadyToHarvest = 3, Growing2 = 4, Water = 5 }
 
     [System.Serializable]
     public abstract class FarmTileState
@@ -138,6 +138,20 @@ namespace Farming
             FarmTile.ChangeState(FarmTile.emptyTileState);
             FarmTile.health.RefillHealth();
             AudioManager.PlayHarvesting();
+        }
+    }
+
+    [System.Serializable]
+    public class WaterTileState : FarmTileState
+    {
+        public WaterTileState(FarmTile farmTile_) : base(farmTile_)
+        {
+            tileState = TileState.Water;
+        }
+
+        public override void EnterLogic()
+        {
+            tileState = TileState.Water;
         }
     }
 }
