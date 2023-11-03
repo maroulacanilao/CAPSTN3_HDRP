@@ -6,7 +6,7 @@ using Items.Inventory;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
+// using static UnityEditor.Progress;
 
 namespace UI.TabMenu.InventoryMenu
 {
