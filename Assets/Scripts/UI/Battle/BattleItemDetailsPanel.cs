@@ -38,8 +38,18 @@ namespace UI.Battle
             var _count = itemBtn.item.StackCount;
             var _data = itemBtn.item.Data;
             
-            nameTxt.text = $"{_data.ItemName} x{_count}";
-            quantityTXT.text = $"Quantity: x{_count}";
+            nameTxt.text = $"{_data.ItemName}";
+
+            if (_count > 0)
+            {
+                Debug.Log($"Quantity: x{_count}");
+                quantityTXT.text = $"Quantity: x{_count}";
+            }
+            else
+            {
+                quantityTXT.gameObject.SetActive(false);
+            }
+
             descriptionTxt.text =_data.Description;
             
             gameObject.SetActive(true);

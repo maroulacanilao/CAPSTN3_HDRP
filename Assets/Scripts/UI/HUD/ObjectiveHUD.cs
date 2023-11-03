@@ -29,8 +29,8 @@ namespace UI.HUD
         {
             originalPos = panel.transform.localPosition;
 
-            panel.gameObject.SetActive(false);
-            ObjectiveButton.gameObject.SetActive(false);
+            panel.SetActive(false);
+            if (ObjectiveButton != null) ObjectiveButton.SetActive(false);
             OnUpdateObjectiveText.AddListener(UpdateObjectiveText);
             OnSendMessage.AddListener(OnReceiveMessage);
             FungusReceiver.OnReceiveMessage.AddListener(OnReceiveMessage);
@@ -64,7 +64,7 @@ namespace UI.HUD
             objectiveText.text = _sb.ToString();
             panel.SetActive(true);
 
-            ObjectiveButton.gameObject.SetActive(true);
+            if (ObjectiveButton != null) ObjectiveButton.gameObject.SetActive(true);
             PlayObjectivePanelAnimation();
         }
 
@@ -80,7 +80,7 @@ namespace UI.HUD
 
             var sequence = DOTween.Sequence();
             sequence.Append(panel.transform.DOLocalMoveX(originalPos.x, 1f));
-            sequence.AppendInterval(5f);
+            sequence.AppendInterval(10f);
             sequence.Append(panel.transform.DOLocalMoveX(500f, 1f));
 
         }

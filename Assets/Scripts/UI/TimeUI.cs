@@ -20,7 +20,7 @@ namespace UI
 
         private void Awake()
         {
-            originalPos = dayCycle_Image.transform.localPosition;
+            if (dayCycle_Image != null) originalPos = dayCycle_Image.transform.localPosition;
 
             TimeManager.OnMinuteTick.AddListener(UpdateText);
             TimeManager.OnBeginDay.AddListener(UpdateDaysRemaining);
