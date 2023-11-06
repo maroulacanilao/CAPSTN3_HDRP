@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 4276.285, g: 4322.8687, b: 4407.995, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -689,6 +689,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 938810886}
   - {fileID: 1520260011}
   - {fileID: 524328164}
   - {fileID: 1179788141}
@@ -843,10 +844,6 @@ PrefabInstance:
     - target: {fileID: 22488902, guid: 8a005a9e0713f4cc1b5ad29fb07657d3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1690055803, guid: 8a005a9e0713f4cc1b5ad29fb07657d3, type: 3}
-      propertyPath: pauseTimeManagerScale
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a005a9e0713f4cc1b5ad29fb07657d3, type: 3}
@@ -1629,8 +1626,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -64.7}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 0, y: -65.3}
+  m_SizeDelta: {x: 160, y: 33.9952}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &519933477
 MonoBehaviour:
@@ -1701,14 +1698,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7122642, b: 0.7122642, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 253fafa68a7808c4a8983e04ab0e6f17, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d6ed7bfe1d77c744fa140251d0078f32, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2097,7 +2094,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 171
     y: 360
-    width: 143
+    width: 145.52234
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -2125,7 +2122,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 398
     y: 356
-    width: 168
+    width: 170.59695
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -2207,7 +2204,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 232
     y: 197
-    width: 117
+    width: 118.05967
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -2234,11 +2231,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: -197.43298, y: 67}
+  scrollPos: {x: -76.68653, y: -28.356966}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 549
-  zoom: 1
+  zoom: 0.6700003
   scrollViewRect:
     serializedVersion: 2
     x: 0
@@ -2273,7 +2270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: Apolaki
-  nameColor: {r: 0, g: 0.44705883, b: 1, a: 1}
+  nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
   portraits:
   - {fileID: 21300000, guid: cc80cffe1c46000409192c3206729b6a, type: 3}
@@ -2295,7 +2292,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 222192706}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &524328172
 MonoBehaviour:
@@ -2376,7 +2373,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 1099.0002
     y: 360.00012
-    width: 123
+    width: 125.22385
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -2428,7 +2425,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 762
     y: 264
-    width: 133
+    width: 135.97011
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -2759,7 +2756,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 778
     y: 133
-    width: 109
+    width: 109.70146
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -2836,7 +2833,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 971.3402
     y: 495.68033
-    width: 79
+    width: 79.85073
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -4109,7 +4106,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 786
     y: 512
-    width: 78
+    width: 77.46268
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -4203,7 +4200,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 782
     y: 430
-    width: 89
+    width: 90.597
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -4263,7 +4260,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 790
     y: 349
-    width: 75
+    width: 75.074615
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -6932,7 +6929,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.8627451}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.8862745}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6957,6 +6954,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 935854405}
   m_CullTransparentMesh: 1
+--- !u!114 &938810885 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4143413577644678254, guid: a1b152decf114cc488e1465fd62cc2e0,
+    type: 3}
+  m_PrefabInstance: {fileID: 4143413576805089899}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25fb867d2049d41f597aefdd6b19f598, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &938810886 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+    type: 3}
+  m_PrefabInstance: {fileID: 4143413576805089899}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &947991579
 GameObject:
   m_ObjectHideFlags: 1
@@ -7651,7 +7666,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 222192706}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1108394419
 MonoBehaviour:
@@ -8341,7 +8356,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 972.3402
     y: 495.68033
-    width: 80.851074
+    width: 78.08511
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -9578,7 +9593,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 787.3251
     y: 512.03094
-    width: 78.72341
+    width: 78.93618
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -9671,7 +9686,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 783.03094
     y: 430
-    width: 91.489365
+    width: 88.29788
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -9730,7 +9745,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 790
     y: 349
-    width: 76.59575
+    width: 75.53192
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -9825,7 +9840,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 1099
     y: 360
-    width: 126.59576
+    width: 123.191505
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -9877,7 +9892,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 762
     y: 264
-    width: 137.23407
+    width: 133.40427
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -10208,7 +10223,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 773
     y: 165
-    width: 112.76597
+    width: 108.72342
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -10344,7 +10359,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 171
     y: 360
-    width: 147.87236
+    width: 142.76599
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -10372,7 +10387,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 398
     y: 356
-    width: 172.34045
+    width: 169.14896
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -10454,7 +10469,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 232
     y: 197
-    width: 120.212776
+    width: 117.23406
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -10522,7 +10537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: Manggagaway
-  nameColor: {r: 0.745283, g: 0, b: 0.18730372, a: 1}
+  nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
   portraits:
   - {fileID: 21300000, guid: e61e54f0219a5b54ca2eeb7f7f18e4e5, type: 3}
@@ -10920,6 +10935,26 @@ GameObject:
   - component: {fileID: 1179788346}
   - component: {fileID: 1179788347}
   - component: {fileID: 1179788350}
+  - component: {fileID: 1179788367}
+  - component: {fileID: 1179788366}
+  - component: {fileID: 1179788365}
+  - component: {fileID: 1179788364}
+  - component: {fileID: 1179788363}
+  - component: {fileID: 1179788362}
+  - component: {fileID: 1179788361}
+  - component: {fileID: 1179788351}
+  - component: {fileID: 1179788360}
+  - component: {fileID: 1179788359}
+  - component: {fileID: 1179788358}
+  - component: {fileID: 1179788357}
+  - component: {fileID: 1179788356}
+  - component: {fileID: 1179788355}
+  - component: {fileID: 1179788354}
+  - component: {fileID: 1179788353}
+  - component: {fileID: 1179788352}
+  - component: {fileID: 1179788368}
+  - component: {fileID: 1179788369}
+  - component: {fileID: 1179788370}
   m_Layer: 0
   m_Name: Tutorial Flowchart
   m_TagString: Untagged
@@ -10943,7 +10978,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 94.32912
     y: 40.746826
-    width: 93
+    width: 92.75859
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -10953,6 +10988,7 @@ MonoBehaviour:
   eventHandler: {fileID: 0}
   commandList:
   - {fileID: 1179788261}
+  - {fileID: 1179788366}
   - {fileID: 1179788146}
   - {fileID: 1179788180}
   suppressAllAutoSelections: 0
@@ -10969,11 +11005,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 94.76636, y: 215.64322}
+  scrollPos: {x: 243.80508, y: 195.65009}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
-  blockViewHeight: 591
-  zoom: 1
+  blockViewHeight: 560
+  zoom: 0.5800004
   scrollViewRect:
     serializedVersion: 2
     x: -343
@@ -10981,8 +11017,9 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 1179788343}
-  selectedCommands: []
+  - {fileID: 1179788169}
+  selectedCommands:
+  - {fileID: 1179788363}
   variables:
   - {fileID: 1179788282}
   - {fileID: 1179788281}
@@ -11012,7 +11049,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 222192706}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1179788146
 MonoBehaviour:
@@ -11028,7 +11065,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 7
   indentLevel: 0
-  storyText: USE YOUR WASD KEYS TO MOVE AROUND
+  storyText: USE YOUR WASD KEYS TO MOVE AROUND.
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -11057,7 +11094,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 94.85922
     y: 141.20874
-    width: 92
+    width: 91.37928
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -11066,6 +11103,7 @@ MonoBehaviour:
   description: Keep on looking
   eventHandler: {fileID: 1179788230}
   commandList:
+  - {fileID: 1179788365}
   - {fileID: 1179788215}
   - {fileID: 1179788224}
   - {fileID: 1179788229}
@@ -11088,9 +11126,9 @@ MonoBehaviour:
     serializedVersion: 2
     x: 80.16475
     y: 236.76491
-    width: 132
+    width: 129.99994
     height: 40
-  tint: {r: 0.5895567, g: 1, b: 0, a: 1}
+  tint: {r: 0.33708644, g: 1, b: 0, a: 1}
   useCustomTint: 1
   itemId: 12
   blockName: Finding Ikapati
@@ -11099,9 +11137,11 @@ MonoBehaviour:
   commandList:
   - {fileID: 1179788296}
   - {fileID: 1179788305}
+  - {fileID: 1179788368}
   - {fileID: 1179788213}
   - {fileID: 1179788212}
   - {fileID: 1179788211}
+  - {fileID: 1179788370}
   - {fileID: 1179788210}
   - {fileID: 1179788299}
   - {fileID: 1179788328}
@@ -11120,9 +11160,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 393.115
+    x: 394.93317
     y: 181.15819
-    width: 73
+    width: 73.44826
     height: 40
   tint: {r: 0.5895567, g: 1, b: 0, a: 1}
   useCustomTint: 0
@@ -11131,6 +11171,7 @@ MonoBehaviour:
   description: Hoe
   eventHandler: {fileID: 1179788219}
   commandList:
+  - {fileID: 1179788361}
   - {fileID: 1179788258}
   - {fileID: 1179788265}
   - {fileID: 1179788264}
@@ -11152,12 +11193,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 20
   indentLevel: 0
-  storyText: 'Now equip the tools in your inventory
+  storyText: 'Now equip the tools in your inventory.
 
 '
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -11181,9 +11222,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 246.36285
+    x: 247.92535
     y: 340.81662
-    width: 81
+    width: 80.3448
     height: 40
   tint: {r: 0.5895567, g: 1, b: 0, a: 1}
   useCustomTint: 0
@@ -11193,6 +11234,7 @@ MonoBehaviour:
   eventHandler: {fileID: 1179788216}
   commandList:
   - {fileID: 1179788325}
+  - {fileID: 1179788363}
   - {fileID: 1179788168}
   - {fileID: 1179788183}
   suppressAllAutoSelections: 0
@@ -11210,7 +11252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 18
   indentLevel: 1
-  storyText: Press F to interact with the box
+  storyText: Press F to interact with the box.
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -11240,7 +11282,7 @@ MonoBehaviour:
   storyText: Now that you have opened your inventory and seeing absolutely nothing.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -11264,9 +11306,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 91.48801
-    y: 334.20227
-    width: 95
+    x: 89.92551
+    y: 335.76477
+    width: 94.1379
     height: 40
   tint: {r: 0.5895567, g: 1, b: 0, a: 1}
   useCustomTint: 0
@@ -11279,9 +11321,11 @@ MonoBehaviour:
   commandList:
   - {fileID: 1179788297}
   - {fileID: 1179788326}
+  - {fileID: 1179788364}
   - {fileID: 1179788171}
   - {fileID: 1179788327}
   - {fileID: 1179788208}
+  - {fileID: 1179788369}
   - {fileID: 1179788170}
   - {fileID: 1179788263}
   - {fileID: 1179788298}
@@ -11331,7 +11375,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 390.34833
     y: 285.26413
-    width: 85
+    width: 84.482735
     height: 40
   tint: {r: 0.5895567, g: 1, b: 0, a: 1}
   useCustomTint: 0
@@ -11341,6 +11385,7 @@ MonoBehaviour:
   eventHandler: {fileID: 1179788218}
   commandList:
   - {fileID: 1179788324}
+  - {fileID: 1179788360}
   - {fileID: 1179788176}
   - {fileID: 1179788202}
   - {fileID: 1179788181}
@@ -11453,7 +11498,7 @@ MonoBehaviour:
     get stronger.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -11481,7 +11526,7 @@ MonoBehaviour:
     you will be able to fight off at least the Engkanto of the tutorial.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -11527,7 +11572,7 @@ MonoBehaviour:
     people. we must defeat them before they make their move
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -11555,7 +11600,7 @@ MonoBehaviour:
     there are items there that you'll need to defeat the Engkanto inside.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -11581,7 +11626,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 924.0192
     y: 235.04797
-    width: 133
+    width: 132.75856
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -11590,10 +11635,12 @@ MonoBehaviour:
   description: Return to talk to Ikapati
   eventHandler: {fileID: 1179788231}
   commandList:
+  - {fileID: 1179788355}
   - {fileID: 1179788190}
   - {fileID: 1179788189}
   - {fileID: 1179788187}
   - {fileID: 1179788186}
+  - {fileID: 1179788357}
   - {fileID: 1179788259}
   - {fileID: 1179788188}
   suppressAllAutoSelections: 0
@@ -11611,10 +11658,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 61
   indentLevel: 0
-  storyText: Now that you have harvested, I want you to do it 4 more times
+  storyText: Now that you have harvested, I want you to do it 4 more times.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -11639,8 +11686,8 @@ MonoBehaviour:
   nodeRect:
     serializedVersion: 2
     x: 517.81445
-    y: 497.624
-    width: 101
+    y: 496.0615
+    width: 101.03445
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -11650,6 +11697,7 @@ MonoBehaviour:
   eventHandler: {fileID: 1179788247}
   commandList:
   - {fileID: 1179788320}
+  - {fileID: 1179788352}
   - {fileID: 1179788194}
   - {fileID: 1179788318}
   suppressAllAutoSelections: 0
@@ -11667,7 +11715,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 59
   indentLevel: 0
-  storyText: To harvest the plant press {b}E{/b}
+  storyText: To harvest the plant press {b}E{/b.
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -11694,7 +11742,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 58
   indentLevel: 0
-  storyText: Wait for the timer to finish before harvesting the plant
+  storyText: Wait for the timer to finish before harvesting the plant.
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -11812,7 +11860,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 53
   indentLevel: 0
-  storyText: Press {b}E{/b} to plant seeds on the tended soil
+  storyText: Press {b}E{/b} to plant seeds on the tended soil.
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -11839,7 +11887,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 52
   indentLevel: 0
-  storyText: Press {b}E{/b} to use the hoe on the selected tile
+  storyText: Press {b}E{/b} to use the hoe on the selected tile.
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -11868,7 +11916,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 522.1151
     y: 400.9504
-    width: 94
+    width: 94.1379
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -11878,6 +11926,7 @@ MonoBehaviour:
   eventHandler: {fileID: 1179788232}
   commandList:
   - {fileID: 1179788322}
+  - {fileID: 1179788351}
   - {fileID: 1179788197}
   - {fileID: 1179788196}
   - {fileID: 1179788198}
@@ -11897,7 +11946,7 @@ MonoBehaviour:
   itemId: 51
   indentLevel: 0
   storyText: Press the number of the slot to where the hoe is placed to select the
-    hoe to start farming
+    hoe to start farming.
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -11924,9 +11973,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 391.38196
+    x: 393.20013
     y: 388.74857
-    width: 83
+    width: 83.103424
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -11936,6 +11985,7 @@ MonoBehaviour:
   eventHandler: {fileID: 1179788217}
   commandList:
   - {fileID: 1179788323}
+  - {fileID: 1179788362}
   - {fileID: 1179788201}
   - {fileID: 1179788200}
   - {fileID: 1179788199}
@@ -11957,7 +12007,7 @@ MonoBehaviour:
   storyText: Claim all of its contents and equip it within your inventory.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -12011,7 +12061,7 @@ MonoBehaviour:
   storyText: First I would like for you to check your inventory.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -12038,7 +12088,7 @@ MonoBehaviour:
   storyText: 'That is correct, and I have come with instructions. '
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -12064,7 +12114,7 @@ MonoBehaviour:
   indentLevel: 1
   storyText: Are you the weird voice in my head?
   description: 
-  character: {fileID: 0}
+  character: {fileID: 938810885}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -12089,7 +12139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 44
   indentLevel: 0
-  storyText: Keep searching for the mysterious voice telling you what to do
+  storyText: Keep searching for the mysterious voice telling you what to do.
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -12290,7 +12340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 94
   indentLevel: 0
-  storyText: Note that you can only farm within the fenced area
+  storyText: Note that you can only farm within the fenced area.
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -12549,7 +12599,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 488.1718
     y: 589.35675
-    width: 141
+    width: 141.03442
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -12560,6 +12610,7 @@ MonoBehaviour:
   commandList:
   - {fileID: 1179788310}
   - {fileID: 1179788321}
+  - {fileID: 1179788353}
   - {fileID: 1179788268}
   - {fileID: 1179788319}
   suppressAllAutoSelections: 0
@@ -12580,7 +12631,7 @@ MonoBehaviour:
   storyText: Return to me, child. There is more I must share with you.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -12608,7 +12659,7 @@ MonoBehaviour:
     creatures upon the land.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -12636,7 +12687,7 @@ MonoBehaviour:
     Sidapa within the mystical cave that now stands before us.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -12664,7 +12715,7 @@ MonoBehaviour:
     free, his darkness will engulf not only this farm but the entire land.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -12689,11 +12740,11 @@ MonoBehaviour:
   itemId: 108
   indentLevel: 1
   storyText: While I am duty-bound to maintain the containment, I need you to seek
-    out the other {color=red}3 guardians dwelling on this farm.{/color} They hold
-    knowledge and wisdom that can aid you in your quest.
+    out the other {color=#af023d}3 guardians dwelling on this farm.{/color} They
+    hold knowledge and wisdom that can aid you in your quest.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -12721,7 +12772,7 @@ MonoBehaviour:
     fearsome god of death.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -12746,10 +12797,10 @@ MonoBehaviour:
   itemId: 105
   indentLevel: 1
   storyText: Many years ago, during the Cholera Outbreak, this farm received my blessings
-    to aid our people in their time of suffering
+    to aid our people in their time of suffering.
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -12775,7 +12826,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 717.1718
     y: 381.35678
-    width: 151
+    width: 150.68958
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -12785,6 +12836,7 @@ MonoBehaviour:
   eventHandler: {fileID: 0}
   commandList:
   - {fileID: 1179788285}
+  - {fileID: 1179788354}
   - {fileID: 1179788276}
   - {fileID: 1179788273}
   - {fileID: 1179788269}
@@ -14710,8 +14762,8 @@ MonoBehaviour:
   nodeRect:
     serializedVersion: 2
     x: 365.41412
-    y: 90.364044
-    width: 134
+    y: 88.63991
+    width: 132.75856
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -15145,9 +15197,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 641.58606
+    x: 646.7584
     y: 170.61165
-    width: 125
+    width: 123.1034
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -15156,6 +15208,7 @@ MonoBehaviour:
   description: 
   eventHandler: {fileID: 1179788304}
   commandList:
+  - {fileID: 1179788359}
   - {fileID: 1179788302}
   suppressAllAutoSelections: 0
 --- !u!114 &1179788304
@@ -15272,7 +15325,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 786.58606
     y: 99.61165
-    width: 113
+    width: 112.068924
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -15281,6 +15334,7 @@ MonoBehaviour:
   description: 
   eventHandler: {fileID: 1179788308}
   commandList:
+  - {fileID: 1179788358}
   - {fileID: 1179788306}
   suppressAllAutoSelections: 0
 --- !u!114 &1179788308
@@ -15532,7 +15586,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 373.58606
     y: 8.611633
-    width: 120
+    width: 118.96547
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -15559,7 +15613,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 787.58606
     y: 539.61163
-    width: 154
+    width: 153.44821
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -15568,6 +15622,7 @@ MonoBehaviour:
   description: 
   eventHandler: {fileID: 1179788317}
   commandList:
+  - {fileID: 1179788356}
   - {fileID: 1179788316}
   suppressAllAutoSelections: 0
 --- !u!114 &1179788316
@@ -15586,7 +15641,7 @@ MonoBehaviour:
   indentLevel: 0
   storyText: '{i} I don''t think I''m ready yet {/i}'
   description: 
-  character: {fileID: 0}
+  character: {fileID: 938810885}
   portrait: {fileID: 0}
   voiceOverClip: {fileID: 0}
   showAlways: 1
@@ -16050,7 +16105,7 @@ MonoBehaviour:
     to tend to the farm. \n"
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -16108,7 +16163,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 104.93475
     y: -62.988506
-    width: 77
+    width: 77.58619
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -16118,6 +16173,7 @@ MonoBehaviour:
   eventHandler: {fileID: 1179788339}
   commandList:
   - {fileID: 1179788338}
+  - {fileID: 1179788367}
   - {fileID: 1179788337}
   - {fileID: 1179788336}
   - {fileID: 1179788335}
@@ -16141,7 +16197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 160
   indentLevel: 0
-  storyText: USE YOUR WASD KEYS TO MOVE AROUND
+  storyText: USE YOUR WASD KEYS TO MOVE AROUND.
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -16318,11 +16374,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 158
   indentLevel: 1
-  storyText: From my estimation, I have {color=red} less than month {/color} before
-    he broke free
+  storyText: From my estimation, I have {color=#af023d} less than month {/color}
+    before he broke free
   description: 
   character: {fileID: 1520260010}
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
   voiceOverClip: {fileID: 0}
   showAlways: 1
   showCount: 1
@@ -16417,7 +16473,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 297.23364
     y: -73.64322
-    width: 131
+    width: 129.99994
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -17296,6 +17352,1126 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 169
   indentLevel: 0
+--- !u!114 &1179788351
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 182
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788352
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 191
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788353
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 190
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788354
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 189
+  indentLevel: 1
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788355
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 188
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788356
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 187
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788357
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 186
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788358
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 185
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788359
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 184
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788360
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 183
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788361
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 181
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788362
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 180
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788363
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 178
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788364
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 176
+  indentLevel: 1
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788365
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 175
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788366
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 172
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788367
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 170
+  indentLevel: 0
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788368
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 192
+  indentLevel: 1
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: InventoryTut
+          m_BoolArgument: 1
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788369
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 193
+  indentLevel: 1
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1179788370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179788136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 194
+  indentLevel: 1
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: InventoryTut
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1183074053
 GameObject:
   m_ObjectHideFlags: 1
@@ -17325,7 +18501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61dddfdc5e0e44ca298d8f46f7f5a915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedFlowchart: {fileID: 1652193279}
+  selectedFlowchart: {fileID: 1179788140}
 --- !u!4 &1183074055
 Transform:
   m_ObjectHideFlags: 1
@@ -17480,7 +18656,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 222192706}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1224797655
 MonoBehaviour:
@@ -18217,7 +19393,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 972.3402
     y: 495.68033
-    width: 79
+    width: 77.54097
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -19453,7 +20629,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 790.03094
     y: 512.03094
-    width: 78
+    width: 77.54097
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -19546,7 +20722,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 784.03094
     y: 430
-    width: 89
+    width: 86.72129
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -19578,7 +20754,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 790
     y: 349
-    width: 75
+    width: 73.606544
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -19673,7 +20849,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 1099
     y: 360
-    width: 123
+    width: 119.508156
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -19725,7 +20901,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 762
     y: 264
-    width: 133
+    width: 128.68848
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -20056,7 +21232,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 773
     y: 165
-    width: 109
+    width: 106.39341
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -20192,7 +21368,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 215
     y: 358
-    width: 143
+    width: 137.8688
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -20220,7 +21396,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 398
     y: 356
-    width: 168
+    width: 164.0983
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -20302,7 +21478,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 232
     y: 197
-    width: 117
+    width: 114.26225
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -20329,11 +21505,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: -48.5, y: 132.5}
+  scrollPos: {x: 145.17494, y: 124.75229}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 549
-  zoom: 1
+  zoom: 0.6100004
   scrollViewRect:
     serializedVersion: 2
     x: 0
@@ -20368,7 +21544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: Mayari
-  nameColor: {r: 0.2880923, g: 0.012904947, b: 0.5471698, a: 1}
+  nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
   portraits:
   - {fileID: 21300000, guid: defcd95725bc5214e9eb595dbb34dfd6, type: 3}
@@ -21803,7 +22979,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 171
     y: 360
-    width: 143
+    width: 137.8688
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -21831,7 +23007,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 399
     y: 356
-    width: 168
+    width: 164.0983
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -21912,7 +23088,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 232
     y: 197
-    width: 117
+    width: 114.26225
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -21939,18 +23115,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 83, y: 94.5}
+  scrollPos: {x: 225.42244, y: 194.84964}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 655
-  zoom: 1
+  zoom: 0.6100004
   scrollViewRect:
     serializedVersion: 2
     x: 0
     y: 0
     width: 0
     height: 0
-  selectedBlocks: []
+  selectedBlocks:
+  - {fileID: 1520260008}
   selectedCommands: []
   variables:
   - {fileID: 1520260013}
@@ -21980,7 +23157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameText: Ikapati
-  nameColor: {r: 0.41598436, g: 0.7169812, b: 0.6433275, a: 1}
+  nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
   portraits:
   - {fileID: 21300000, guid: 7972636c376fe6547b59342fcf0d0f82, type: 3}
@@ -22002,7 +23179,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 222192706}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1520260012
 MonoBehaviour:
@@ -22588,7 +23765,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 721
     y: 313
-    width: 130
+    width: 126.06553
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -23058,7 +24235,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 922
     y: 313
-    width: 136
+    width: 132.6229
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -23534,7 +24711,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 851
     y: 461.5
-    width: 94
+    width: 93.27866
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -24359,7 +25536,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 597
     y: 181.5
-    width: 134
+    width: 132.6229
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -24503,7 +25680,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 222192706}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1652193274
 MonoBehaviour:
@@ -24734,7 +25911,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 514
     y: 403
-    width: 177
+    width: 180.4
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
   useCustomTint: 0
@@ -25234,9 +26411,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 457b2d29da60f2947a4610ff5a2729dc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 249618a2448dd9d46a7db0b2656aef34, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -25389,16 +26566,16 @@ MonoBehaviour:
   m_text: To equip the farming tools drag the item using your mouse into the corresponding
     slot labelled 1 2 3 4
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f8426755283350c46a4c14c6587122d9, type: 2}
-  m_sharedMaterial: {fileID: 397729748478016012, guid: f8426755283350c46a4c14c6587122d9,
+  m_fontAsset: {fileID: 11400000, guid: 5e7846f6a8d524743ae9cf0ce8a0d9cd, type: 2}
+  m_sharedMaterial: {fileID: 4413414114114922074, guid: 5e7846f6a8d524743ae9cf0ce8a0d9cd,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4288263874
-  m_fontColor: {r: 0.7607844, g: 0.7137255, b: 0.6, a: 1}
+    rgba: 4279769143
+  m_fontColor: {r: 0.21568629, g: 0.09411766, b: 0.09411766, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -25415,7 +26592,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25.65
+  m_fontSize: 26.9
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -25451,7 +26628,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 25, y: 15, z: 25, w: 15}
+  m_margin: {x: 54.299072, y: 43.1308, z: 53.818848, w: -0.9808655}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -26179,16 +27356,16 @@ MonoBehaviour:
       m_Calls: []
   m_text: OK
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f8426755283350c46a4c14c6587122d9, type: 2}
-  m_sharedMaterial: {fileID: 397729748478016012, guid: f8426755283350c46a4c14c6587122d9,
+  m_fontAsset: {fileID: 11400000, guid: c416996b7ad4aee45b833c2dbaa71880, type: 2}
+  m_sharedMaterial: {fileID: 5219004645260433777, guid: c416996b7ad4aee45b833c2dbaa71880,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -26205,13 +27382,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
+  m_fontSize: 15
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
-  m_fontSizeMax: 20
-  m_fontStyle: 0
+  m_fontSizeMin: 10
+  m_fontSizeMax: 15
+  m_fontStyle: 32
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -32492,6 +33669,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 2739452573666520191}
+--- !u!1001 &4143413576805089899
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 222192706}
+    m_Modifications:
+    - target: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143413577644678253, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143413577644678255, guid: a1b152decf114cc488e1465fd62cc2e0,
+        type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a1b152decf114cc488e1465fd62cc2e0, type: 3}
 --- !u!4 &4168205449705850544
 Transform:
   m_ObjectHideFlags: 0

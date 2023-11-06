@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CustomEvent;
 using Managers;
 using NaughtyAttributes;
 using ScriptableObjectData;
@@ -39,6 +40,8 @@ public class TestMainMenu : MonoBehaviour
     private bool hasFaded;
     private bool playClicked = false;
     private ProgressionData progressionData => GameDataBase.progressionData;
+
+    public static readonly Evt<string> OnLoadingScreenStart = new();
 
     private void Awake()
     {
@@ -146,6 +149,8 @@ public class TestMainMenu : MonoBehaviour
         else
         {
             StartCoroutine(CO_LoadingScene(sceneName));
+
+            // OnLoadingScreenStart.Invoke(sceneName);
         }
     }
 
@@ -159,7 +164,7 @@ public class TestMainMenu : MonoBehaviour
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
             loadingSlider.value = progress;
             progressTxt.text = $"{progress * 100}%";
-            sunIcon.transform.Rotate(new Vector3(1, 0, 0) * spinningSpeed * Time.deltaTime);
+            sunIcon.transform.Rotate(new Vector3(0, 0, 1) * spinningSpeed * Time.deltaTime);
             yield return null;
         }
     }
