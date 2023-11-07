@@ -47,7 +47,7 @@ public class FarmObjectiveSetter : MonoBehaviour
         var _sb = new System.Text.StringBuilder();
         var _daysRemaining = TimeManager.DaysLeft;
         _sb.Append("Defeat Sidapa in the cave before time runs out!\n");
-        _sb.Append($"(Days Remaining: {_daysRemaining})");
+        // _sb.Append($"(Days Remaining: {_daysRemaining})");
         daysCounterTxt = _sb.ToString().Beautify();
     }
 }

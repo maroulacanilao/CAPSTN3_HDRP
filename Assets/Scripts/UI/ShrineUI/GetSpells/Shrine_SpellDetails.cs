@@ -17,6 +17,9 @@ namespace UI.ShrineUI.GetSpells
         [SerializeField] private ShrineRequirementItem requirementItem;
         public ShrineSpellItem currentSpellItem { get; private set; }
 
+        [Header("Shrine")]
+        [SerializeField] private Image spellIcon;
+
         protected void Awake()
         {
             DisplayNull();
@@ -34,9 +37,12 @@ namespace UI.ShrineUI.GetSpells
             DisplaySpell(spellItem_.spellData);
             
             if (spellItem_.offerRequirement.consumableData == null) throw new Exception("No consumable data found!");
-            
-            requirementItem.Set(spellItem_.offerRequirement);
-            requirementItem.gameObject.SetActive(true);
+
+            if (requirementItem != null) requirementItem.Set(spellItem_.offerRequirement);
+
+            if (spellIcon != null) spellIcon.sprite = spellItem_.spellData.icon;
+
+            if (requirementItem != null) requirementItem.gameObject.SetActive(true);
             
             var _canLearn = shrine.CanLearn(currentSpellItem.spellData, out var _error);
             
@@ -63,7 +69,7 @@ namespace UI.ShrineUI.GetSpells
         public override void DisplayNull()
         {
             base.DisplayNull();
-            requirementItem.gameObject.SetActive(false);
+            if (requirementItem != null) requirementItem.gameObject.SetActive(false);
             offerBtn.interactable = false;
         }
 

@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 1905961128314650639}
   - component: {fileID: 4745175394023197032}
   m_Layer: 7
-  m_Name: ShrineSpellItemBTN
+  m_Name: (OLD)ShrineSpellItemBTN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -329,7 +329,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c93e7b17f804d364796cc70437df33fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <background>k__BackingField: {fileID: 0}
+  <Text>k__BackingField: {fileID: 0}
+  <Background>k__BackingField: {fileID: 0}
   <button>k__BackingField: {fileID: 4616463235896930891}
   <outline>k__BackingField: {fileID: 476180011964913898}
   <outlineColor>k__BackingField: {r: 1, g: 0, b: 0, a: 1}
@@ -380,6 +381,8 @@ MonoBehaviour:
   animationEase: 6
   selectSfxName: ButtonSelect
   clickSfxName: ButtonClick
+  selectIcon: {fileID: 0}
+  WantToAnimate: 1
 --- !u!114 &4745175394023197032
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,7 +13,9 @@ namespace UI.ShrineUI.GetSpells
         [SerializeField] private TextMeshProUGUI spellNameTxt;
         [SerializeField] private Image requirementIcon;
         [SerializeField] private TextMeshProUGUI requirementTxt;
-        
+
+        [SerializeField] private Image spellIcon;
+
         public static readonly Evt<ShrineSpellItem> OnClickSpell = new Evt<ShrineSpellItem>();
 
         public SpellData spellData { get; private set; }
@@ -36,6 +38,8 @@ namespace UI.ShrineUI.GetSpells
 
             requirementIcon.sprite = offerRequirement.consumableData.Icon;
             requirementTxt.text = $"x{offerRequirement.count}";
+
+            if (spellIcon != null) spellIcon.sprite = spellData.icon;
         }
     }
 }
