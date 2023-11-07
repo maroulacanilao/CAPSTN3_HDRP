@@ -19,6 +19,8 @@ public class AnimatedButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private Vector3 originalScale;
 
+    [SerializeField] private bool WantToAnimate = true;
+
     private void Awake()
     {
         if(button == null) button = GetComponent<Button>();
