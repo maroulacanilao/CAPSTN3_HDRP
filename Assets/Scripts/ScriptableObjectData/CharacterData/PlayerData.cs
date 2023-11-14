@@ -70,6 +70,8 @@ namespace ScriptableObjectData.CharacterData
             mana.RefreshMana();
             LevelData.ResetExperience();
             spells.Clear();
+            alliesData.Clear();
+            offPartyData.Clear();
         }
     }
 }
