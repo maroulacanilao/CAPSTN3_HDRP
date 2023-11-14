@@ -155,7 +155,7 @@ namespace Player
                 {
                     return EquipmentAction.None;
                 }
-            
+                
                 if(currTile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
 
                 return EquipmentAction.Water;
@@ -223,8 +223,6 @@ namespace Player
                     break;
             }
         }
-        
-
         #endregion
 
         #region Farm Action
@@ -242,7 +240,11 @@ namespace Player
         public void Water()
         {
             if(currTile == null) return;
-            
+            if(CurrentItem.Data is WateringCanData wateringCanData)
+            {
+                if (wateringCanData.usages <= 0) return;
+                wateringCanData.ReduceUsage();
+            }
             currTile.OnWaterPlant();
             currTile.Heal(new HealInfo(10));
         }
