@@ -80,7 +80,7 @@ namespace UI.ShrineUI.GetSpells
             }
             else
             {
-                errorTxt.text = "No more spells available";
+                errorTxt.text = "No more spells available.";
                 errorTxt.gameObject.SetActive(true);
                 spellDetails.DisplayNull();
             }
@@ -91,7 +91,7 @@ namespace UI.ShrineUI.GetSpells
             message = string.Empty;
             if (!spellOfferList.TryGetValue(spellData_, out var _offer))
             {
-                message = "Spell already learned";
+                message = "Spell already learned.";
                 return false;
             }
             
@@ -101,13 +101,13 @@ namespace UI.ShrineUI.GetSpells
             
             if(!inventory.StackableDictionary.TryGetValue(_requirementData, out var _stackable))
             {
-                message = "You don't have the required item";
+                message = "You don't have the required item.";
                 return false;
             }
             
             if(_stackable.StackCount < _offer.count)
             {
-                message = "You don't have enough of the required item";
+                message = "You don't have enough of the required item.";
                 return false;
             }
             

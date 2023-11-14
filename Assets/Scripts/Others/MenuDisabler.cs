@@ -10,17 +10,17 @@ namespace Others
         private void OnEnable()
         {
             menu = PlayerMenuManager.Instance.gameObject;
-            menu.SetActive(false);
+            if (menu != null) menu.SetActive(false);
         }
         
         private void OnDisable()
         {
-            menu.SetActive(true);
+            if (menu != null) menu.SetActive(true);
         }
 
         private void Update()
         {
-            if(menu.activeInHierarchy) menu.SetActive(false);
+            if(menu != null && menu.activeInHierarchy) menu.SetActive(false);
         }
     }
 }

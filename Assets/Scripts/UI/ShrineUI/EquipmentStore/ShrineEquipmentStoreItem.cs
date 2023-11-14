@@ -2,6 +2,7 @@
 using CustomEvent;
 using Items;
 using Shop;
+using Spells.Base;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,9 @@ namespace UI.ShrineUI.EquipmentStore
         [SerializeField] private TextMeshProUGUI nameTxt;
         [SerializeField] private Image requirementIcon;
         [SerializeField] private TextMeshProUGUI requirementTxt;
-        
+
+        [SerializeField] private Image gearIcon;
+
         public ItemGear gearItem { get; private set; }
         public OfferRequirement offerRequirement { get; private set; }
         
@@ -37,6 +40,8 @@ namespace UI.ShrineUI.EquipmentStore
 
             requirementIcon.sprite = offerRequirement.consumableData.Icon;
             requirementTxt.text = $"x{offerRequirement.count}";
+
+            if (gearIcon != null) gearIcon.sprite = gearItem.Data.Icon;
         }
     }
 }
