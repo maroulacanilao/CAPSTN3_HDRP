@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace Player
 {
-    public enum EquipmentAction { Till, Water, Plant, Harvest, UnTill, Consume, Fish, None }
+    public enum EquipmentAction { Till, Water, Plant, Harvest, UnTill, Consume, Fish, Refill, None }
     
     [DefaultExecutionOrder(-1)]
     public class PlayerEquipment : MonoBehaviour
@@ -32,9 +32,12 @@ namespace Player
         public static readonly Evt OnTillAction = new Evt();
         public static readonly Evt OnWaterAction = new Evt();
         public static readonly Evt OnUnTillAction = new Evt();
+        //public static readonly Evt OnRefillAction = new Evt();
         public static readonly Evt<int> OnManualSelect = new Evt<int>();
         
         public FarmTile currTile { get; private set; }
+        
+        // I'll use the fishing tile as refilling tile so I don't need to make another tile for it.
         public FishingTile fishingTile { get; private set; }
 
         public EquipmentAction currAction { get; private set; }
@@ -151,6 +154,8 @@ namespace Player
             
             if (CurrentItem.Data is WateringCanData)
             {
+                if (fishingTile != null) return EquipmentAction.Refill; // This is for refill
+                
                 if (currTile == null)
                 {
                     return EquipmentAction.None;
@@ -160,7 +165,8 @@ namespace Player
 
                 return EquipmentAction.Water;
             }
-
+            
+         
             if (CurrentItem is ItemSeed _itemSeed)
             {
                 seedName = _itemSeed.Data.ItemName;
@@ -191,7 +197,7 @@ namespace Player
                     return EquipmentAction.Fish;
                 }
             }
-
+            
             if (CurrentItem is ItemConsumable) return EquipmentAction.Consume;
             
             return EquipmentAction.None;
@@ -208,6 +214,9 @@ namespace Player
                     break;
                 case EquipmentAction.Water:
                     OnWaterAction.Invoke();
+                    break;
+                case EquipmentAction.Refill:
+                    Refill();
                     break;
                 case EquipmentAction.Plant:
                     Plant();
@@ -237,12 +246,20 @@ namespace Player
             FarmTileManager.RemoveTileAtToolLocation();
         }
 
+        public void Refill()
+        {
+            if (CurrentItem.Data is WateringCanData wateringCanData)
+            {
+                wateringCanData.RefreshUsage();
+            }
+        }
+
         public void Water()
         {
             if(currTile == null) return;
             if(CurrentItem.Data is WateringCanData wateringCanData)
             {
-                if (wateringCanData.usages <= 0) return;
+                if (wateringCanData.CurrentUsage <= 0) return;
                 wateringCanData.ReduceUsage();
             }
             currTile.OnWaterPlant();
