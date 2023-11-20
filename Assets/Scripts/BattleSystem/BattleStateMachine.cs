@@ -36,7 +36,7 @@ namespace BattleSystem
 
             if (battleManager.battleData.isPlayerFirst)
             {
-                var _player = _characters.Find(c => c.character.characterData is PlayerData);
+                var _player = _characters.Find(c => c.character.characterData is PlayerData or AllyData);
                 
                 _characters.Remove(_player);
                 _characters.Insert(0, _player);

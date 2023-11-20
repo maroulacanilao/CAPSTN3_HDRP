@@ -135,7 +135,15 @@ namespace Farming
             return Physics.Raycast(_ray, out var _hit, .7f, farmTileLayer) 
                 ? _hit.transform.GetComponent<FarmTile>() : null;
         }
-        
+
+        public FishingTile GetFishingTile()
+        {
+            var _ray = new Ray(transform.position.AddY(0.5f), Vector3.down);
+
+            return Physics.Raycast(_ray, out var _hit, .7f, farmTileLayer)
+                ? _hit.transform.GetComponent<FishingTile>() : null;
+        }
+
         public bool IsTillable()
         {
             if (!lineRenderer.enabled) return false;

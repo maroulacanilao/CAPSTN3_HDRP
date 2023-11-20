@@ -130,7 +130,7 @@ namespace UI.TabMenu.InventoryMenu
             
             countTxt.gameObject.SetActive(item is {IsStackable: true});
 
-            if(countTxt.gameObject.activeSelf) countTxt.SetText($"{item.StackCount}x");
+            if(countTxt.gameObject.activeSelf) countTxt.SetText($"{item.StackCount}");
         }
 
         public override void SelectButton()
@@ -138,14 +138,15 @@ namespace UI.TabMenu.InventoryMenu
             SelectOutline();
             InventoryMenu.OnInventoryItemSelect.Invoke(this);
             selectedItem = this;
+            countTxt.gameObject.SetActive(item is { IsStackable: true });
         }
-        
+
         public void SelectOutline()
         {
             outline.effectColor = outlineColor;
             bg.sprite = selectedSprite;
         }
-        
+
         public override void DeselectButton()
         {
             if (swappingItem == this)
@@ -161,6 +162,7 @@ namespace UI.TabMenu.InventoryMenu
                 return;
             }
             outline.effectColor = Color.clear;
+            countTxt.gameObject.SetActive(item is { IsStackable: true });
         }
 
         public void SwappingOutline()

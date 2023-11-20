@@ -14,8 +14,9 @@ namespace ScriptableObjectData.CharacterData
     {
         [field: SerializeField] public PlayerInventory inventory { get; private set; }
         [field: SerializeField] public PlayerLevel LevelData { get; private set; }
-
         [field: SerializeField] public List<AllyData> alliesData { get; private set; }
+        [field: SerializeField] public List<AllyData> offPartyData { get; private set; }
+        
         [field: SerializeField] public BlessingMeter blessingMeter { get; private set; }
         [field: SerializeField] public PlayerHealth health { get; private set; }
         [field: SerializeField] public PlayerMana mana { get; private set; }
@@ -28,6 +29,17 @@ namespace ScriptableObjectData.CharacterData
         public void AddAlly(AllyData allyData_)
         {
             alliesData.Add(allyData_);
+        }
+
+        public void RemoveAlly(AllyData allydata_)
+        {
+            foreach (var a in alliesData)
+            {
+                if (a == allydata_)
+                {
+                    alliesData.Remove(a);
+                }
+            }
         }
 
         public void Initialize(GameDataBase gameDataBase)
@@ -58,6 +70,8 @@ namespace ScriptableObjectData.CharacterData
             mana.RefreshMana();
             LevelData.ResetExperience();
             spells.Clear();
+            alliesData.Clear();
+            offPartyData.Clear();
         }
     }
 }

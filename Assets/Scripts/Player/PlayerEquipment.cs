@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace Player
 {
-    public enum EquipmentAction { Till, Water, Plant, Harvest, UnTill, Consume, None }
+    public enum EquipmentAction { Till, Water, Plant, Harvest, UnTill, Consume, Fish, Refill, None }
     
     [DefaultExecutionOrder(-1)]
     public class PlayerEquipment : MonoBehaviour
@@ -32,12 +32,18 @@ namespace Player
         public static readonly Evt OnTillAction = new Evt();
         public static readonly Evt OnWaterAction = new Evt();
         public static readonly Evt OnUnTillAction = new Evt();
+        //public static readonly Evt OnRefillAction = new Evt();
         public static readonly Evt<int> OnManualSelect = new Evt<int>();
         
         public FarmTile currTile { get; private set; }
         
+        // I'll use the fishing tile as refilling tile so I don't need to make another tile for it.
+        public FishingTile fishingTile { get; private set; }
+
         public EquipmentAction currAction { get; private set; }
         public string seedName { get; private set; }
+
+        [SerializeField] private ToolArea[] toolAreas;
 
         private void Start()
         {
@@ -116,6 +122,9 @@ namespace Player
             var _tile = toolArea.GetFarmTile();
             SetTile(_tile);
 
+            var _fishingTile = toolArea.GetFishingTile();
+            SetFishingTile(_fishingTile);
+
             if (CurrentItem == null)
             {
                 if(_tile != null && _tile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
@@ -145,16 +154,19 @@ namespace Player
             
             if (CurrentItem.Data is WateringCanData)
             {
+                if (fishingTile != null) return EquipmentAction.Refill; // This is for refill
+                
                 if (currTile == null)
                 {
                     return EquipmentAction.None;
                 }
-            
+                
                 if(currTile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
 
                 return EquipmentAction.Water;
             }
-
+            
+         
             if (CurrentItem is ItemSeed _itemSeed)
             {
                 seedName = _itemSeed.Data.ItemName;
@@ -177,6 +189,14 @@ namespace Player
                         return EquipmentAction.None;
                 }
             }
+
+            if (CurrentItem.Data is FishingPoleData)
+            {
+                if (fishingTile != null)
+                {
+                    return EquipmentAction.Fish;
+                }
+            }
             
             if (CurrentItem is ItemConsumable) return EquipmentAction.Consume;
             
@@ -195,19 +215,23 @@ namespace Player
                 case EquipmentAction.Water:
                     OnWaterAction.Invoke();
                     break;
+                case EquipmentAction.Refill:
+                    Refill();
+                    break;
                 case EquipmentAction.Plant:
                     Plant();
                     break;
                 case EquipmentAction.Harvest:
                     Harvest();
                     break;
+                case EquipmentAction.Fish:
+                    Fish();
+                    break;
                 case EquipmentAction.UnTill:
                     OnUnTillAction.Invoke();
                     break;
             }
         }
-        
-
         #endregion
 
         #region Farm Action
@@ -222,10 +246,22 @@ namespace Player
             FarmTileManager.RemoveTileAtToolLocation();
         }
 
+        public void Refill()
+        {
+            if (CurrentItem.Data is WateringCanData wateringCanData)
+            {
+                wateringCanData.RefreshUsage();
+            }
+        }
+
         public void Water()
         {
             if(currTile == null) return;
-            
+            if(CurrentItem.Data is WateringCanData wateringCanData)
+            {
+                if (wateringCanData.CurrentUsage <= 0) return;
+                wateringCanData.ReduceUsage();
+            }
             currTile.OnWaterPlant();
             currTile.Heal(new HealInfo(10));
         }
@@ -250,8 +286,29 @@ namespace Player
             currTile.OnInteract();
         }
 
+        public void Fish()
+        {
+            Debug.Log("Estoy Fishing");
+            if (FishingManager.Instance.hasFishingStarted != true)
+            {
+                AudioManager.PlayWatering();
+                FishingManager.Instance.InitiateFishing();
+            }
+            else if (FishingManager.Instance.fishOnHook == true)
+            {
+                Debug.Log("Fish Caught");
+                FishingManager.Instance.FishingSuscess();
+            }
+
+            else if (FishingManager.Instance.hasFishingStarted == true && FishingManager.Instance.fishOnHook == false)
+            {
+                AudioManager.PlayMissSfx();
+                FishingManager.Instance.CancelFishing();
+            }
+        }
+
         #endregion
-        
+
         public void SetTile(FarmTile tile_)
         {
             if (currTile.IsValid())
@@ -265,6 +322,11 @@ namespace Player
             {
                 currTile.Enter();
             }
+        }
+
+        public void SetFishingTile(FishingTile fishingTile_)
+        {
+            fishingTile = fishingTile_;
         }
 
         private IEnumerator Co_ActionSetter()

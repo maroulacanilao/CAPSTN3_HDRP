@@ -32,6 +32,7 @@ namespace UI.HUD
         private void OnEnable()
         {
             FarmTileManager.OnSuccessHarvest.AddListener(OnSuccessHarvest);
+            FishingManager.OnCatchSuccess.AddListener(OnSuccessHarvest);
             harvestNotification.SetActive(false);
             expTxt.gameObject.SetActive(false);
         }
@@ -39,6 +40,7 @@ namespace UI.HUD
         private void OnDisable()
         {
             FarmTileManager.OnSuccessHarvest.RemoveListener(OnSuccessHarvest);
+            FishingManager.OnCatchSuccess.RemoveListener(OnSuccessHarvest);
         }
         
         private void OnSuccessHarvest(Item item, int exp_)

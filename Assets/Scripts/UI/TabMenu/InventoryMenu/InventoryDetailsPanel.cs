@@ -6,6 +6,7 @@ using Items.Inventory;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+// using static UnityEditor.Progress;
 
 namespace UI.TabMenu.InventoryMenu
 {
@@ -23,7 +24,12 @@ namespace UI.TabMenu.InventoryMenu
         
         [NaughtyAttributes.BoxGroup("ConfirmMenu")] 
         [SerializeField] protected DiscardConfirm discardConfirmMenu;
-        
+
+        [NaughtyAttributes.BoxGroup("Info Text")]
+        [SerializeField] protected Image countIcon;
+        [NaughtyAttributes.BoxGroup("Info Text")]
+        [SerializeField] protected TextMeshProUGUI countTxt;
+
         private Item_MenuItem currMenuItem;
 
         private InventoryMenu inventoryMenu;
@@ -87,9 +93,18 @@ namespace UI.TabMenu.InventoryMenu
                 actionButtonGroup.gameObject.SetActive(false);
                 return;
             }
-            
+
             DisplayItem(currItem);
-            
+
+            if (countIcon != null) countIcon.gameObject.SetActive(currItem is { IsStackable: true });
+
+            if (countTxt != null)
+            {
+                countIcon.gameObject.SetActive(currItem is { IsStackable: true });
+                countTxt.gameObject.SetActive(currItem is { IsStackable: true });
+                if (countTxt.gameObject.activeSelf) countTxt.SetText($"{currItem.StackCount}");
+            }
+
             if (currItem is ItemArmor _armor)
             {
                 // statsPanel.Display(_gear.Stats, false);

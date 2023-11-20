@@ -23,7 +23,6 @@ namespace UI.Battle
         [SerializeField] private Image expBar;
         [SerializeField] private StatsInfo statsInfo;
         [SerializeField] private Button returnBTN;
-
     
         private BattleResultType result;
         private PlayerData playerData;
@@ -69,7 +68,7 @@ namespace UI.Battle
             }
 
             ResultTXT.text = battleResult_ == BattleResultType.Win ? "Victory!" : "You Lost!";
-            ResultTXT.color = battleResult_ == BattleResultType.Win ? Color.green : Color.red;
+            // ResultTXT.color = battleResult_ == BattleResultType.Win ? Color.green : Color.red;
         }
 
         private void ReturnToFarmScene()
@@ -88,9 +87,9 @@ namespace UI.Battle
             var _prevExp = _lvlData.CurrentLevelExperience;
 
             ResultTXT.text = "Victory!";
-            var _addedTxt = $" <color=green>+{_exp}</color>";
+            var _addedTxt = $" <color=#5BC2A0>+{_exp}</color>";
         
-            LevelTXT.text = $"Level: {_lvlData.CurrentLevel}";
+            LevelTXT.text = $"{_lvlData.CurrentLevel}";
             expTXT.text = $"{_prevExp:0}/{_lvlData.NextLevelExperience:0}";
             expBar.fillAmount = (float) _lvlData.CurrentLevelExperience / _lvlData.NextLevelExperience;
         
@@ -114,7 +113,7 @@ namespace UI.Battle
             
                 levelUpEffect.SetActive(true);
             
-                LevelTXT.text = $"Level: {_lvlData.CurrentLevel}";
+                LevelTXT.text = $"{_lvlData.CurrentLevel}";
             
                 _txtTween.Kill(true);
             

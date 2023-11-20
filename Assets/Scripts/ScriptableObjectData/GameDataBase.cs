@@ -22,6 +22,8 @@ namespace ScriptableObjectData
         [field: SerializeField] public CropDataBase cropDataBase { get; private set; }
         [field: SerializeField] public SpellDataBase spellDataBase { get; private set; }
         [field: SerializeField] public StatsDataBase statsDataBase { get; private set; }
+        
+        [field: SerializeField] public AllyDataBase allyDataBase { get; private set; }
 
 
         [field: Header("Game Data")]
@@ -33,7 +35,6 @@ namespace ScriptableObjectData
         [field: SerializeField] public SessionData sessionData { get; private set; }
         [field: SerializeField] public SettingsData settingsData { get; private set; }
         [field: SerializeField] public EventQueueData eventQueueData { get; private set; }
-
 
         [field: Header("Player Data")]
         [field: SerializeField] public PlayerData playerData { get; private set; }
@@ -67,6 +68,7 @@ namespace ScriptableObjectData
             if(hasInitialized) return;
             settingsData.Initialize();
             playerData.Initialize(this);
+            allyDataBase.InitalizeMembers(this);
             sessionData.InitializeSession();
             statShopData.Initialize();
             shrineData.Initialize(this);

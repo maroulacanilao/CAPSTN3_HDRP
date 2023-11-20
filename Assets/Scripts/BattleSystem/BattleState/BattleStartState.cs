@@ -7,6 +7,8 @@ namespace BattleSystem.BattleState
 {
     public class BattleStartState : BattleStateBase
     {
+        Color playerColor;
+        Color enemyColor;
 
         public BattleStartState(BattleStateMachine stateMachine_) : base(stateMachine_)
         {
@@ -21,13 +23,16 @@ namespace BattleSystem.BattleState
             
             yield return new WaitForSeconds(0.1f);
 
-            var _text = $"You encountered {BattleManager.enemyParty[0].characterData.characterName.SurroundWithColor(Color.red)}!";
+            playerColor = new(0.1215686f, 0.572549f, 0.3294118f, 1);
+            enemyColor = new(0.6862745f, 0.007843138f, 0.2392157f, 1);
+
+            var _text = $"You encountered {BattleManager.enemyParty[0].characterData.characterName.SurroundWithColor(enemyColor)}!";
 
             yield return BattleTextManager.DoWrite(_text);
             
             yield return new WaitForSeconds(0.5f);
 
-            var _advantage = BattleManager.battleData.isPlayerFirst ? $"{"You".SurroundWithColor(Color.green)} have" : $"{"Enemy".SurroundWithColor(Color.red)} has";
+            var _advantage = BattleManager.battleData.isPlayerFirst ? $"{"You".SurroundWithColor(playerColor)} have" : $"{"Enemy".SurroundWithColor(enemyColor)} has";
             
             _text = $"{_advantage} the advantage!";
             

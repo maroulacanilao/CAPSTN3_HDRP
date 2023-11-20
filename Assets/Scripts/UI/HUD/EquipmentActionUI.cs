@@ -64,6 +64,9 @@ namespace UI.HUD
                 case EquipmentAction.Water:
                     _message = "<color=orange>Water Plant</color>";
                     break;
+                case EquipmentAction.Refill:
+                    _message = "<color=orange>Refill</color>";
+                    break;
                 case EquipmentAction.Plant:
                     _message = $"<color=orange>Plant {playerEquipment.seedName} </color>";
                     break;
@@ -75,6 +78,9 @@ namespace UI.HUD
                     break;
                 case EquipmentAction.Consume:
                     _message = "<color=yellow>Consume</color>";
+                    break;
+                case EquipmentAction.Fish:
+                    _message = "<color=orange>Fish</color>";
                     break;
                 case EquipmentAction.None:
                 default:

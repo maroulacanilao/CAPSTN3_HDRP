@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Settings;
+using TMPro;
 using UI.Farming;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,7 +15,12 @@ public class SettingsPanel : PlayerMenu
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Button applyBtn;
-    
+    [SerializeField] private Button resetBtn;
+
+    [SerializeField] private TextMeshProUGUI masterVolumeText;
+    [SerializeField] private TextMeshProUGUI musicVolumeText;
+    [SerializeField] private TextMeshProUGUI sfxVolumeText;
+
     private SettingsValues settings => settingsData.settings;
 
     private void Awake()
@@ -23,6 +29,7 @@ public class SettingsPanel : PlayerMenu
         musicSlider.onValueChanged.AddListener(OnSliderValueChanged);
         sfxSlider.onValueChanged.AddListener(OnSliderValueChanged);
         applyBtn.onClick.AddListener(OnApplyBtnClicked);
+        resetBtn.onClick.AddListener(OnResetBtnClicked);
     }
 
     private void OnDestroy()
@@ -31,6 +38,7 @@ public class SettingsPanel : PlayerMenu
         musicSlider.onValueChanged.RemoveListener(OnSliderValueChanged);
         sfxSlider.onValueChanged.RemoveListener(OnSliderValueChanged);
         applyBtn.onClick.RemoveListener(OnApplyBtnClicked);
+        resetBtn.onClick.RemoveListener(OnResetBtnClicked);
     }
 
     protected override void OnEnable()
@@ -40,6 +48,7 @@ public class SettingsPanel : PlayerMenu
         masterSlider.Select();
         EventSystem.current.SetSelectedGameObject(masterSlider.gameObject);
         Canvas.ForceUpdateCanvases();
+        UpdateVolumeTexts();
     }
     
     private void Display()
@@ -53,10 +62,24 @@ public class SettingsPanel : PlayerMenu
     private void OnSliderValueChanged(float value_)
     {
         applyBtn.interactable = true;
+        UpdateVolumeTexts();
     }
 
     private void OnApplyBtnClicked()
     {
         SettingsUtil.SetVolumes(masterSlider.value, musicSlider.value, sfxSlider.value);
+    }
+
+    private void OnResetBtnClicked()
+    {
+        settingsData.ResetSettings();
+        // SettingsUtil.SetVolumes(masterSlider.value, musicSlider.value, sfxSlider.value);
+    }
+
+    private void UpdateVolumeTexts()
+    {
+        masterVolumeText.text = $"{Convert.ToInt16(Mathf.Clamp01(masterSlider.value) * 100)}";
+        musicVolumeText.text = $"{Convert.ToInt16(Mathf.Clamp01(musicSlider.value) * 100)}";
+        sfxVolumeText.text = $"{Convert.ToInt16(Mathf.Clamp01(sfxSlider.value) * 100)}";
     }
 }
