@@ -22,7 +22,7 @@ namespace ScriptableObjectData
         [field: SerializeField] public CropDataBase cropDataBase { get; private set; }
         [field: SerializeField] public SpellDataBase spellDataBase { get; private set; }
         [field: SerializeField] public StatsDataBase statsDataBase { get; private set; }
-        
+        [field: SerializeField] public ToolDataBase toolDataBase { get; private set; }
         [field: SerializeField] public AllyDataBase allyDataBase { get; private set; }
 
 

@@ -10,6 +10,8 @@ using Items.Inventory;
 using Items.ItemData;
 using Items.ItemData.Tools;
 using Managers;
+using NaughtyAttributes;
+using ScriptableObjectData;
 using UnityEngine;
 
 namespace Player
@@ -22,6 +24,7 @@ namespace Player
         [field: SerializeField] public PlayerCharacter player { get; private set; }
         [SerializeField] private InteractDetector interactDetector;
         [SerializeField] private ToolArea toolArea;
+        [SerializeField] private ToolDataBase toolDataBase;
 
         private PlayerInventory playerInventory => player.playerInventory;
 
@@ -69,7 +72,27 @@ namespace Player
             InputManager.OnSelectTool.RemoveListener(SelectTool);
             OnManualSelect.RemoveListener(SelectAndUse);
         }
-
+        
+        [Button("Test Upgrade Tool")]
+        public void UpgradeTool()
+        {
+            if (CurrentItem.Data is WateringCanData wateringCanData)
+            {
+                switch (wateringCanData.level)
+                {
+                    case 0:
+                        CurrentItem.SetData(toolDataBase.WateringCanDictionary[1]);
+                        wateringCanData.RefreshUsage();
+                        //Insert UI Update here
+                        break;
+                    case 1:
+                        CurrentItem.SetData(toolDataBase.WateringCanDictionary[2]);
+                        wateringCanData.RefreshUsage();
+                        //Insert UI Update here
+                        break;
+                }
+            }
+        }
         
         public void UseTool()
         {

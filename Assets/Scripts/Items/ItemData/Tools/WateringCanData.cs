@@ -8,6 +8,7 @@ namespace Items.ItemData.Tools
     {
         public int MaxUsages = 10;
         public int CurrentUsage;
+        public int level;
         
         public override bool UseTool(PlayerEquipment playerEquipment_)
         {
