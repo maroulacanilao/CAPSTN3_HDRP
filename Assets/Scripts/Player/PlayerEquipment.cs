@@ -261,7 +261,25 @@ namespace Player
 
         public void Till()
         {
-            FarmTileManager.AddFarmTileAtToolLocation();
+            StartCoroutine(MultipleTill());
+            // for (int i = 0; i < 3; i++)
+            // {
+            //     Debug.Log("Tilling");
+            //     FarmTileManager.AddFarmTileAtToolLocation();
+            //     ToolArea.Instance.distanceToPlayer++;
+            // }
+        }
+
+        IEnumerator MultipleTill()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                yield return new WaitForSeconds(0.0710f);
+                Debug.Log("Tilling");
+                FarmTileManager.AddFarmTileAtToolLocation();
+                ToolArea.Instance.distanceToPlayer++;
+            }
+            ToolArea.Instance.distanceToPlayer = 1;
         }
         
         public void UnTill()
