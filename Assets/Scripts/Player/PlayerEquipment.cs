@@ -276,8 +276,11 @@ namespace Player
             {
                 yield return new WaitForSeconds(0.0710f);
                 Debug.Log("Tilling");
-                FarmTileManager.AddFarmTileAtToolLocation();
-                ToolArea.Instance.distanceToPlayer++;
+                if (ToolArea.Instance.IsTillable())
+                {
+                    FarmTileManager.AddFarmTileAtToolLocation();
+                    ToolArea.Instance.distanceToPlayer++;
+                }
             }
             ToolArea.Instance.distanceToPlayer = 1;
         }
