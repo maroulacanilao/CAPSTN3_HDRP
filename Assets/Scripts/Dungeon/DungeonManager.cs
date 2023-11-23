@@ -100,7 +100,7 @@ namespace Dungeon
                 currDungeon = dungeonMaps[_data.mapID];
             }
             currDungeon.InitializeLevel(_data);
-            
+            Debug.Log(currDungeon.PlayerSpawnPoint);
             playerController.transform.position = currDungeon.PlayerSpawnPoint;
         }
         
