@@ -8,6 +8,7 @@ using Managers;
 using Player;
 using Player.ControllerState;
 using UI.TabMenu;
+using UI.TabMenu.InventoryMenu;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,7 +18,8 @@ namespace UI.Farming
     {
         [SerializeField] private PlayerMenu[] Menus;
         [SerializeField] private PlayerTabMenu tabGroup;
-        
+        [SerializeField] private InventoryMenu inventoryMenu;
+
         public static readonly Evt OnCloseAllUI = new Evt();
         public static readonly Evt OnOpenMenu = new Evt();
         
@@ -64,7 +66,9 @@ namespace UI.Farming
             
             OnCloseAllUI.Invoke();
             tabGroup.gameObject.SetActive(false);
-            
+
+            inventoryMenu.gameObject.SetActive(false);
+
             var _settings = SettingsEnabler.Instance
                 .sceneSettingsDictionary
                 .TryGetValue(next_.name, out var _settingsData) ? 
@@ -93,6 +97,7 @@ namespace UI.Farming
             if(!CanOpenMenu()) return;
 
             tabGroup.gameObject.SetActive(true);
+
             Cursor.visible = true;
         }
         
@@ -120,10 +125,31 @@ namespace UI.Farming
         
         private void Inventory()
         {
+            // if (!CanOpenMenu()) return;
+            // tabGroup.OpenInventory();
+
+            if (this.IsEmptyOrDestroyed())
+            {
+                OnOpenMenu.RemoveListener(this.OpenMenu);
+                return;
+            }
+
+
+            if (IsMenuOpen())
+            {
+                OnCloseAllUI.Invoke();
+                return;
+            }
+
+            if (controller.playerState != PlayerSate.Grounded) return;
+
             if (!CanOpenMenu()) return;
-            tabGroup.OpenInventory();
+
+            inventoryMenu.gameObject.SetActive(true);
+
+            Cursor.visible = true;
         }
-        
+
         private void Codex()
         {
             if (!CanOpenMenu()) return;

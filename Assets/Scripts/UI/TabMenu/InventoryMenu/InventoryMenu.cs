@@ -1,6 +1,7 @@
 ﻿using System;
 using Character;
 using CustomEvent;
+using CustomHelpers;
 using Items.Inventory;
 using Player;
 using ScriptableObjectData;
@@ -38,7 +39,7 @@ namespace UI.TabMenu.InventoryMenu
         
         private EventSystem eventSystem => EventSystem.current;
 
-        [SerializeField] private GameObject inventoryPanel;
+        // [SerializeField] private GameObject inventoryPanel;
         [SerializeField] private GameObject[] itemsPanel;
 
         private void Awake()
@@ -72,7 +73,7 @@ namespace UI.TabMenu.InventoryMenu
             InputUIManager.OnMove.AddListener(OnMove);
             OnInventoryMenuOpen.Invoke(this);
 
-            // PrevItemsInInventory();
+            PrevItemsInInventory();
         }
 
         private void OnDisable()
@@ -114,7 +115,7 @@ namespace UI.TabMenu.InventoryMenu
         public void ShowInventoryPanel()
         {
             Debug.Log("OpenInventory");
-            inventoryPanel.gameObject.SetActive(true);
+            // inventoryPanel.gameObject.SetActive(true);
         }
 
         public void NextItemsInInventory()
@@ -131,7 +132,8 @@ namespace UI.TabMenu.InventoryMenu
 
         public void OnExitBtnClicked()
         {
-            PlayerMenuManager.OnCloseAllUI.Invoke();
+            if (this.IsEmptyOrDestroyed()) return;
+            gameObject.SetActive(false);
         }
     }
 }
