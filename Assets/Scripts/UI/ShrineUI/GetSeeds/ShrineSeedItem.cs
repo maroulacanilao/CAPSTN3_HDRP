@@ -20,7 +20,7 @@ namespace UI.ShrineUI.GetSeeds
         public static readonly Evt<ShrineSeedItem> OnClickSeed = new Evt<ShrineSeedItem>();
 
         public SeedData SeedData { get; private set; }
-        public OfferRequirement OfferRequirement { get; private set; }
+        public ItemGear OfferRequirement { get; private set; }
 
         protected new void Awake()
         {
@@ -30,15 +30,15 @@ namespace UI.ShrineUI.GetSeeds
             });
         }
 
-        public void Set(SeedData data_, OfferRequirement requirement_)
+        public void Set(SeedData data_, ItemGear requirement_, int count)
         {
             SeedData = data_;
             OfferRequirement = requirement_;
 
             spellNameTxt.text = SeedData.name;
 
-            requirementIcon.sprite = OfferRequirement.consumableData.Icon;
-            requirementTxt.text = $"x{OfferRequirement.count}";
+            requirementIcon.sprite = OfferRequirement.Data.Icon;
+            // requirementTxt.text = $"x{OfferRequirement.Data.}";
 
             if (seedIcon != null) seedIcon.sprite = SeedData.Icon;
         }

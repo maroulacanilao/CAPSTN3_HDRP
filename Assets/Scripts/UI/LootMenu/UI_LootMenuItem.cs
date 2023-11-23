@@ -20,7 +20,7 @@ namespace UI.LootMenu
         {
             button.onClick.AddListener(OnPointerClick);
             item = item_;
-            typeIcon.sprite = item_.ItemType.GetSpriteIcon();
+            typeIcon.sprite = item_.Data.Icon;
             itemName_TXT.SetText(item.Data.ItemName);
             switch (item.ItemType)
             {

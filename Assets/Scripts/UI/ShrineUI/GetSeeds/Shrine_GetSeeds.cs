@@ -51,7 +51,7 @@ namespace UI.ShrineUI.GetSeeds
             foreach (var _seedOffer in seedOfferList)
             {
                 var _seedItem = Instantiate(seedItemPrefab, contentParent);
-                _seedItem.Set(_seedOffer.Key, _seedOffer.Value);
+                // _seedItem.Set(_seedOffer.Key, _seedOffer.Value);
                 seedItems.Add(_seedItem);
             }
 
@@ -110,7 +110,7 @@ namespace UI.ShrineUI.GetSeeds
             return true;
         }
 
-        public void LearnSeed(SeedData seedData_)
+        public void PurchaseSeed(SeedData seedData_)
         {
             errorTxt.gameObject.SetActive(false);
             if (!CanPurchase(seedData_, out var _message))

@@ -27,6 +27,9 @@ namespace UI
         [NaughtyAttributes.BoxGroup("Info Text")]
         [SerializeField] protected TextMeshProUGUI descriptionTxt;
 
+        [NaughtyAttributes.BoxGroup("Info Text")]
+        [SerializeField] protected TextMeshProUGUI ItemTypeRarityTxt;
+
         [NaughtyAttributes.BoxGroup("Icon")]
         [SerializeField] protected Image itemIcon;
         
@@ -59,10 +62,13 @@ namespace UI
             }
             
             nameTxt.SetText(_data.ItemName);
-            typeTxt.SetText(currItem.ItemType.ToString());
-            rarityTxt.SetText(currItem.RarityType.GetColoredText());
-            descriptionTxt.SetText(_data.Description.Beautify());
-            itemIcon.sprite = _data.Icon;
+            if (typeTxt != null) typeTxt.SetText(currItem.ItemType.ToString());
+            if (rarityTxt != null) rarityTxt.SetText(currItem.RarityType.GetColoredText());
+
+            if (ItemTypeRarityTxt != null) ItemTypeRarityTxt.text = $"{currItem.RarityType.GetColoredText()} {currItem.ItemType}";
+
+            if (descriptionTxt != null) descriptionTxt.SetText(_data.Description.Beautify());
+            if (itemIcon != null) itemIcon.sprite = _data.Icon;
 
             if (currItem is ItemGear _gear)
             {

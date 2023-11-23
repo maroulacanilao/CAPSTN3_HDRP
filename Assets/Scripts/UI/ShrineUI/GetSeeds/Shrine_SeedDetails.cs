@@ -39,17 +39,17 @@ namespace UI.ShrineUI.GetSeeds
             CurrentSeedItem = seedItem_;
             DisplayItem(seedItem_.SeedData.GetItem());
 
-            if (seedItem_.OfferRequirement.consumableData == null) throw new Exception("No consumable data found!");
+            // if (seedItem_.OfferRequirement.consumableData == null) throw new Exception("No consumable data found!");
 
-            if (requirementItem != null) requirementItem.Set(seedItem_.OfferRequirement);
+            // if (requirementItem != null) requirementItem.Set(seedItem_.OfferRequirement);
 
             if (seedIcon != null) seedIcon.sprite = seedItem_.SeedData.Icon;
 
             if (requirementItem != null) requirementItem.gameObject.SetActive(true);
 
-            var _canLearn = shrine.CanPurchase(CurrentSeedItem.SeedData, out var _error);
+            var _canPurchase = shrine.CanPurchase(CurrentSeedItem.SeedData, out var _error);
 
-            if (_canLearn)
+            if (_canPurchase)
             {
                 errorTxt.gameObject.SetActive(false);
                 offerBtn.interactable = true;
@@ -66,7 +66,7 @@ namespace UI.ShrineUI.GetSeeds
         {
             if (CurrentSeedItem == null) return;
             if (CurrentSeedItem.SeedData == null) return;
-            shrine.LearnSeed(CurrentSeedItem.SeedData);
+            shrine.PurchaseSeed(CurrentSeedItem.SeedData);
         }
 
         public override void DisplayNull()

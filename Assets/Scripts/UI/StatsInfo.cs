@@ -171,12 +171,46 @@ namespace UI
             
             Display(combatStats_, includeVitality_);
             var _diff = combatStats_ - oldCombatStats_;
-            
-            if(_diff.strength != 0) strTXT.text += _diff.strength > 0? $" <color=#5BC2A0>(+{_diff.strength})</color>" : $" <color=#AF023D>({_diff.strength})</color>";
-            if(_diff.defense != 0) defTXT.text += _diff.defense > 0? $" <color=#5BC2A0>(+{_diff.defense})</color>" : $" <color=#AF023D>({_diff.defense})</color>";
-            if(_diff.intelligence != 0) intTXT.text += _diff.intelligence > 0? $" <color=#5BC2A0>(+{_diff.intelligence})</color>" : $" <color=#AF023D>({_diff.intelligence})</color>";
-            if(_diff.speed != 0) spdTXT.text += _diff.speed > 0? $" <color=#5BC2A0>(+{_diff.speed})</color>" : $" <color=#AF023D>({_diff.speed})</color>";
-            if(_diff.vitality != 0) vitTXT.text += _diff.vitality > 0? $" <color=#5BC2A0>(+{_diff.vitality})</color>" : $" <color=#AF023D>({_diff.vitality})</color>";
+
+            if (_diff.strength != 0)
+            {
+                strTXT.text = $"{oldCombatStats_.strength}";
+                strTXT.text += oldCombatStats_.strength < combatStats_.strength ?
+                        $" >> <color=#1F9282>{combatStats_.strength} (+{_diff.strength})</color>" :
+                        $" >> <color=#AF023D>{combatStats_.strength} ({_diff.strength})</color>";
+            }
+
+            if (_diff.defense != 0)
+            {
+                defTXT.text = $"{oldCombatStats_.defense}";
+                defTXT.text += oldCombatStats_.defense < combatStats_.defense ?
+                        $" >> <color=#1F9282>{combatStats_.defense} (+{_diff.defense})</color>" :
+                        $" >> <color=#AF023D>{combatStats_.defense} ({_diff.defense})</color>";
+            }
+
+            if (_diff.intelligence != 0)
+            {
+                intTXT.text = $"{oldCombatStats_.intelligence}";
+                intTXT.text += oldCombatStats_.intelligence < combatStats_.intelligence ?
+                        $" >> <color=#1F9282>{combatStats_.intelligence} (+{_diff.intelligence})</color>" :
+                        $" >> <color=#AF023D>{combatStats_.intelligence} ({_diff.intelligence})</color>";
+            }
+
+            if (_diff.speed != 0)
+            {
+                spdTXT.text = $"{oldCombatStats_.speed}";
+                spdTXT.text += oldCombatStats_.speed < combatStats_.speed ?
+                        $" >> <color=#1F9282>{combatStats_.speed} (+{_diff.speed})</color>" :
+                        $" >> <color=#AF023D>{combatStats_.speed} ({_diff.speed})</color>";
+            }
+
+            if (_diff.vitality != 0)
+            {
+                vitTXT.text = $"{oldCombatStats_.vitality}";
+                vitTXT.text += oldCombatStats_.vitality < combatStats_.vitality ?
+                        $" >> <color=#1F9282>{combatStats_.vitality} (+{_diff.vitality})</color>" :
+                        $" >> <color=#AF023D>{combatStats_.vitality} ({_diff.vitality})</color>";
+            }
         }
         
         public void DisplayArmor(CombatStats combatStats_, bool includeVitality_ = false)
