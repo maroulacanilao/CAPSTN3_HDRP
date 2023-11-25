@@ -218,6 +218,9 @@ namespace UI.TabMenu.InventoryMenu
             ghostIcon.transform.SetParent(transform);
             ghostIcon.transform.position = transform.position;
             OnDragStateChange.Invoke(eventData, DragState.EndDrag);
+
+            outline.effectColor = Color.clear;
+            bg.color = Color.white;
         }
     }
 }

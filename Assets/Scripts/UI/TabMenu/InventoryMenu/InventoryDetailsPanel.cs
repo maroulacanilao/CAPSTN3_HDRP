@@ -93,7 +93,7 @@ namespace UI.TabMenu.InventoryMenu
                 actionButtonGroup.gameObject.SetActive(false);
                 return;
             }
-
+            
             DisplayItem(currItem);
 
             if (countIcon != null) countIcon.gameObject.SetActive(currItem is { IsStackable: true });
@@ -223,6 +223,16 @@ namespace UI.TabMenu.InventoryMenu
             
             currMenuItem.UpdateDisplay();
             ShowItemDetail(currMenuItem);
+        }
+
+        public override void DisplayItem(Item item)
+        {
+            base.DisplayItem(item);
+
+            if (currMenuItem.inventoryItemType != Item_MenuItem.InventoryItemType.toolBar)
+            {
+                statsPanel.gameObject.SetActive(false);
+            }
         }
     }
 }

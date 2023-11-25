@@ -128,13 +128,6 @@ namespace UI.Farming
             // if (!CanOpenMenu()) return;
             // tabGroup.OpenInventory();
 
-            if (this.IsEmptyOrDestroyed())
-            {
-                OnOpenMenu.RemoveListener(this.OpenMenu);
-                return;
-            }
-
-
             if (IsMenuOpen())
             {
                 OnCloseAllUI.Invoke();

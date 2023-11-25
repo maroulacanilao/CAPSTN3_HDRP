@@ -70,7 +70,7 @@ namespace UI
             if (descriptionTxt != null) descriptionTxt.SetText(_data.Description.Beautify());
             if (itemIcon != null) itemIcon.sprite = _data.Icon;
 
-            if (currItem is ItemGear _gear)
+            if (currItem != null && currItem is ItemGear _gear)
             {
                 statsPanel.DisplayDynamic(_gear.Stats, false);
                 nameTxt.SetText($"{_gear.Data.ItemName} - Lv.{_gear.Level}");
@@ -86,7 +86,8 @@ namespace UI
             descriptionTxt.SetText("???");
             itemIcon.sprite = null;
             itemIcon.color = Color.clear;
-            statsPanel.DisplayDynamic(new CombatStats(), false);
+            // statsPanel.DisplayDynamic(new CombatStats(), false);
+            statsPanel.gameObject.SetActive(false);
             
         }
     }
