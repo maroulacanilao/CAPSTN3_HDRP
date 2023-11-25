@@ -25,9 +25,12 @@ namespace UI.TabMenu.Codex
         [SerializeField] private ScrollRect scrollView;
         [SerializeField] private Image icon;
 
+        [SerializeField] private GameObject blocker;
+        [SerializeField] private TextMeshProUGUI hiddenDescriptionText;
+
         public void DisplayInfo(CodexInfo codexInfo_)
         {
-            nameText.text = codexInfo_.name;
+            if (nameText != null) nameText.text = codexInfo_.name;
             quantityText.text = codexInfo_.quantityTxt;
             icon.sprite = codexInfo_.sprite;
             DisplayDescription(codexInfo_);
@@ -45,6 +48,9 @@ namespace UI.TabMenu.Codex
             if (_infoQuantity == 0)
             {
                 descriptionText.text = "";
+
+                hiddenDescriptionText.text = "";
+                
                 return;
             }
 

@@ -21,7 +21,14 @@ public class InputUIManager : MonoBehaviour
     public static readonly Evt OnCharacterInfo = new Evt();
     public static readonly Evt OnCodexMenu = new Evt();
     public static readonly Evt OnCancelSwap = new Evt();
-    
+
+    // new UI Buttons
+    public static readonly Evt OnPartyMenu = new Evt();
+    public static readonly Evt OnCropsMenu = new Evt();
+    public static readonly Evt OnFishesMenu = new Evt();
+    public static readonly Evt OnMonstersMenu = new Evt();
+
+
 
     public void OnEnable()
     {

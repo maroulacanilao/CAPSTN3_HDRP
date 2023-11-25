@@ -1,9 +1,11 @@
 using System;
 using CustomEvent;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace UI.TabMenu
 {
@@ -13,15 +15,21 @@ namespace UI.TabMenu
         [field: SerializeField] public int index { get; private set; }
         [SerializeField] private TabGroup tabGroup;
         [SerializeField] private Image background;
-        [SerializeField] private TextMeshProUGUI text;
+        // [SerializeField] private TextMeshProUGUI text;
         [SerializeField] private Sprite selectedSprite;
         [SerializeField] private Sprite deselectedSprite;
         [SerializeField] private Color highlightedColor;
 
+        [SerializeField] private GameObject deselectedImageGO;
+        [SerializeField] private GameObject selectedImageGO;
+
+        [SerializeField] private float movePos = 173.54f;
+        private Vector3 originalPos;
+
         private void Reset()
         {
-            background = GetComponent<Image>();
-            text = GetComponentInChildren<TextMeshProUGUI>();
+            background = GetComponentInChildren<Image>();
+            // text = GetComponentInChildren<TextMeshProUGUI>();
             tabGroup = GetComponentInParent<TabGroup>();
         }
         
@@ -29,6 +37,12 @@ namespace UI.TabMenu
         {
             tabGroup = tabGroup_;
             index = index_;
+            if (selectedImageGO != null)
+            {
+                originalPos = selectedImageGO.transform.localPosition;
+                selectedImageGO.SetActive(false);
+
+            }
         }
 
         public void OnSelect(BaseEventData eventData)
@@ -39,7 +53,7 @@ namespace UI.TabMenu
         public void OnPointerEnter(PointerEventData eventData)
         {
             if(tabGroup.selectedTab == this) return;
-            background.color = highlightedColor;
+            if (background != null) background.color = highlightedColor;
         }
         
         public void OnPointerExit(PointerEventData eventData)
@@ -50,18 +64,40 @@ namespace UI.TabMenu
         
         public void Select()
         {
-            background.sprite = selectedSprite;
+            if (background != null) background.sprite = selectedSprite;
+
+            PlaySelectedAnimation();
         }
 
         public void Deselect()
         {
-            background.sprite = deselectedSprite;
-            background.color = Color.white;
+            if (background != null) background.sprite = deselectedSprite;
+            if (background != null) background.color = Color.white;
+
+            PlayDeselectedAnimation();
         }
         
         public void OnPointerDown(PointerEventData eventData)
         {
             OnSelect(eventData);
+        }
+
+        public void PlaySelectedAnimation()
+        {
+            if (selectedImageGO != null)
+            {
+                selectedImageGO.SetActive(true);
+                selectedImageGO.transform.DOLocalMoveY(movePos, 0.5f);
+            }
+        }
+
+        public void PlayDeselectedAnimation()
+        {
+            if (selectedImageGO != null)
+            {
+                selectedImageGO.transform.DOLocalMoveX(originalPos.y, 0.5f);
+                selectedImageGO.SetActive(false);
+            }
         }
     }
 }

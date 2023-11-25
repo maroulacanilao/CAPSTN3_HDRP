@@ -75,7 +75,7 @@ namespace UI.TabMenu.InventoryMenu
             InputUIManager.OnMove.AddListener(OnMove);
             OnInventoryMenuOpen.Invoke(this);
 
-            if (itemsPanel != null) PrevItemsInInventory();
+            if (itemsPanel != null || itemsPanel.Length > 0) PrevItemsInInventory();
         }
 
         protected override void OnDisable()
@@ -117,7 +117,7 @@ namespace UI.TabMenu.InventoryMenu
 
         public void NextItemsInInventory()
         {
-            if (itemsPanel != null)
+            if (itemsPanel != null || itemsPanel.Length > 0)
             {
                 itemsPanel[0].SetActive(false);
                 itemsPanel[1].SetActive(true);
@@ -126,7 +126,7 @@ namespace UI.TabMenu.InventoryMenu
 
         public void PrevItemsInInventory()
         {
-            if (itemsPanel != null)
+            if (itemsPanel != null || itemsPanel.Length > 0)
             {
                 itemsPanel[1].SetActive(false);
                 itemsPanel[0].SetActive(true);

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7686315612618497495}
   - component: {fileID: 1868844670522403533}
   m_Layer: 0
-  m_Name: CodexItem
+  m_Name: (Updated)CodexItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 350, y: 75}
+  m_SizeDelta: {x: 600, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5308079392211277047
 CanvasRenderer:
@@ -71,9 +71,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 05810d248fd974a4f9b296a161f27717, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c14e427c80c3b90458ffb2aa467cdbff, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -152,7 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9c010750cba9474d8caa5f61487ac57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <background>k__BackingField: {fileID: 0}
+  <Text>k__BackingField: {fileID: 0}
+  <Background>k__BackingField: {fileID: 0}
   <button>k__BackingField: {fileID: 2068909563967337860}
   <outline>k__BackingField: {fileID: 7929921037477772692}
   <outlineColor>k__BackingField: {r: 0, g: 0, b: 0, a: 1}
@@ -171,7 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 2068909563967337860}
-  selectedSprite: {fileID: 21300000, guid: 054124be3596cbb4dbe882dc57541d95, type: 3}
+  selectedSprite: {fileID: 21300000, guid: d6e92fdad3d661e44850e038e93f7bb3, type: 3}
 --- !u!1 &7080802296207961901
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,7 +185,7 @@ GameObject:
   - component: {fileID: 9035896953776585569}
   - component: {fileID: 5169040610497510722}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: Name_Txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -238,10 +239,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: sdfz
+  m_text: Codex Entry
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f8426755283350c46a4c14c6587122d9, type: 2}
-  m_sharedMaterial: {fileID: 397729748478016012, guid: f8426755283350c46a4c14c6587122d9,
+  m_fontAsset: {fileID: 11400000, guid: 5e7846f6a8d524743ae9cf0ce8a0d9cd, type: 2}
+  m_sharedMaterial: {fileID: 4413414114114922074, guid: 5e7846f6a8d524743ae9cf0ce8a0d9cd,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -266,7 +267,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 43.6
+  m_fontSize: 50
   m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 1

@@ -23,6 +23,8 @@ namespace UI.LootMenu
         private UI_LootMenu lootMenu;
         private PlayerInventory inventory => lootMenu.inventory;
 
+        [SerializeField] private GameObject notifPanel;
+
         public void Initialize(UI_LootMenu lootMenu_)
         {
             lootBtn.onClick.AddListener((() => lootMenu_.Loot(currLootMenuItem)));
@@ -73,16 +75,23 @@ namespace UI.LootMenu
             lootBtn.gameObject.SetActive(true);
             trashBtn.gameObject.SetActive(true);
             errorTxt.gameObject.SetActive(false);
-            
+            notifPanel.SetActive(false);
+
             if (!lootMenu.HasFreeSpace())
             {
-                errorTxt.gameObject.SetActive(true);
-                errorTxt.SetText("No space in inventory.");
+                if (errorTxt != null)
+                {
+                    errorTxt.gameObject.SetActive(true);
+                    errorTxt.SetText("No space in inventory.");
+                }
             }
             if (!currItem.IsDiscardable)
             {
-                errorTxt.gameObject.SetActive(true);
-                errorTxt.SetText("This item cannot be trashed.");
+                if (errorTxt != null)
+                {
+                    errorTxt.gameObject.SetActive(true);
+                    errorTxt.SetText("This item cannot be trashed.");
+                }
             }
 
             DisplayItem(currItem);
@@ -104,7 +113,5 @@ namespace UI.LootMenu
             }
             else statsPanel.gameObject.SetActive(false);
         }
-        
-        
     }
 }

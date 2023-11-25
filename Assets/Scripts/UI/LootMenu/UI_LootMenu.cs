@@ -5,6 +5,7 @@ using CustomHelpers;
 using Items;
 using Items.Inventory;
 using ObjectPool;
+using TMPro;
 using UI.Farming;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -32,6 +33,9 @@ namespace UI.LootMenu
 
         private int lastItemIndex;
         public PlayerInventory inventory => playerInventory;
+
+        [SerializeField] private GameObject notifPanel;
+        [SerializeField] private TextMeshProUGUI notifTxt;
 
         #region UnityEvents
 
@@ -114,8 +118,19 @@ namespace UI.LootMenu
 
         public void Loot(UI_LootMenuItem lootMenuItem_)
         {
-            if(!playerInventory.AddItem(lootMenuItem_.item)) return;
-            RemoveMenuItem(lootMenuItem_);
+            if (HasFreeSpace())
+            {
+                if (!playerInventory.AddItem(lootMenuItem_.item)) return;
+                RemoveMenuItem(lootMenuItem_);
+            }
+            else
+            {
+                if (notifPanel != null)
+                {
+                    notifPanel.SetActive(true);
+                    notifTxt.SetText("INVENTORY FULL!");
+                }
+            }
         }
         
         public void RemoveMenuItem(UI_LootMenuItem lootMenuItem_)
@@ -216,6 +231,11 @@ namespace UI.LootMenu
         public bool HasFreeSpace()
         {
             return playerInventory.hasFreeSlot;
+        }
+
+        public void OnNotifBtnClicked()
+        {
+            notifPanel.SetActive(false);
         }
     }
 }

@@ -1110,6 +1110,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -88
       objectReference: {fileID: 0}
+    - target: {fileID: 4346092296533956564, guid: 8a6692d8b02f5a34b9eceff6fddb9411,
+        type: 3}
+      propertyPath: menus.Array.data[0]
+      value: 
+      objectReference: {fileID: 5415108679860605873}
     - target: {fileID: 4346092296533956568, guid: 8a6692d8b02f5a34b9eceff6fddb9411,
         type: 3}
       propertyPath: m_Pivot.x
@@ -2499,13 +2504,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 430ada981105a1b4b93523e31c917dca, type: 3}
+--- !u!1 &5415108679860605873 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4489941604621738356, guid: 430ada981105a1b4b93523e31c917dca,
+    type: 3}
+  m_PrefabInstance: {fileID: 8460344771364270789}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5415108679860605884 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4489941604621738361, guid: 430ada981105a1b4b93523e31c917dca,
     type: 3}
   m_PrefabInstance: {fileID: 8460344771364270789}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 5415108679860605873}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1704f3363c8c4699b37e867533bf612b, type: 3}

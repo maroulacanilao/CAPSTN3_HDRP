@@ -23,6 +23,10 @@ namespace ScriptableObjectData.CharacterData
 
         [field: SerializeField] public Sprite icon { get; private set; }
 
+        [field: BoxGroup("Codex Info")]
+        [field: SerializeField] public EncyclopediaInfo encyclopediaInfo { get; private set; }
+
+
         public void Initialize(GameDataBase gameDataBase)
         {
             statsData.ClearAdditionalStats();
