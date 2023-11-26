@@ -15,5 +15,9 @@ namespace ScriptableObjectData
         [field: BoxGroup("Watering Can")] [field: SerializeField]
         [field: SerializedDictionary("Level", "WateringCanData")]
         public SerializedDictionary<int, WateringCanData> WateringCanDictionary { get; private set; }
+        
+        [field: BoxGroup("Hoe")] [field: SerializeField]
+        [field: SerializedDictionary("Level", "HoeData")]
+        public SerializedDictionary<int, HoeData> HoeDictionary { get; private set; }
     }
 }

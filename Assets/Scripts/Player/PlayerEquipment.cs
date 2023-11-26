@@ -92,6 +92,19 @@ namespace Player
                         break;
                 }
             }
+            
+            else if (CurrentItem.Data is HoeData hoeData)
+            {
+                switch (hoeData.level)
+                {
+                    case 0:
+                        CurrentItem.SetData(toolDataBase.HoeDictionary[1]);
+                        break;
+                    case 1:
+                        CurrentItem.SetData(toolDataBase.HoeDictionary[2]);
+                        break;
+                }
+            }
         }
         
         public void UseTool()
@@ -261,18 +274,26 @@ namespace Player
 
         public void Till()
         {
-            StartCoroutine(MultipleTill());
-            // for (int i = 0; i < 3; i++)
-            // {
-            //     Debug.Log("Tilling");
-            //     FarmTileManager.AddFarmTileAtToolLocation();
-            //     ToolArea.Instance.distanceToPlayer++;
-            // }
+            if (CurrentItem.Data is HoeData hoeData)
+            {
+                switch (hoeData.level)
+                {
+                    case 0:
+                        FarmTileManager.AddFarmTileAtToolLocation();
+                        break;
+                    case 1:
+                        StartCoroutine(MultipleTill(3));
+                        break;
+                    case 2:
+                        StartCoroutine(MultipleTill(4));
+                        break;
+                }
+            }
         }
 
-        IEnumerator MultipleTill()
+        IEnumerator MultipleTill(int numberofTills)
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < numberofTills; i++)
             {
                 yield return new WaitForSeconds(0.0710f);
                 Debug.Log("Tilling");
