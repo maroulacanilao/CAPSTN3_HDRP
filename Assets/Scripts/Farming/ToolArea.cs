@@ -17,7 +17,7 @@ namespace Farming
         [SerializeField] private GameDataBase gameDataBase;
         [SerializeField] private GameObject farmTilePrefab;
         [SerializeField] private LineRenderer lineRenderer;
-        [SerializeField] private float distanceToPlayer = 2f;
+        [SerializeField] public float distanceToPlayer = 2f;
         [SerializeField] private float distanceToGround = 0.01f;
         [SerializeField] private float lineWidth = 0.01f;
 
@@ -158,6 +158,11 @@ namespace Farming
                 }
             }
             return true;
+        }
+
+        public void MultiDistanceToPlayer(float distance)
+        {
+            distanceToPlayer *= distance;
         }
         
         public bool HasFoliage(out GameObject foliage_)

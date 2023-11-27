@@ -40,8 +40,8 @@ namespace Items.Inventory
         [SerializeField] private WeaponData startingWeapon;
 
         private ItemGold gold;
-        private ItemWeapon weaponEquipped;
-        private ItemArmor armorEquipped;
+        [SerializeField]private ItemWeapon weaponEquipped;
+        [SerializeField]private ItemArmor armorEquipped;
 
         [ReadOnly] [SerializeReference] private Item[] itemTools;
         [ReadOnly] private SerializedDictionary<ItemData.ItemData, ItemStackable> stackableDictionary;

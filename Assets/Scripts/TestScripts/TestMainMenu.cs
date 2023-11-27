@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using System.Collections.Generic;
 using Managers;
 using NaughtyAttributes;
@@ -114,6 +115,7 @@ public class TestMainMenu : MonoBehaviour
     {
         playClicked = true;
         black.enabled = true;
+        File.Delete(GameDataBase.progressionData.savePath);
         StartCoroutine(Fading());
         GameDataBase.ReInitialize();
         GameDataBase.sessionData.ReInitialize();

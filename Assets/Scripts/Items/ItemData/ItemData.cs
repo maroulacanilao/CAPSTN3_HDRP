@@ -31,7 +31,7 @@ namespace Items.ItemData
         [field: SerializeField] public bool IsStackable { get; protected set; } = false;
 
         [field: ShowAssetPreview]
-        [field: SerializeField] public Sprite Icon { get; private set; }
+        [field: SerializeField] public Sprite Icon; 
 
         [field: ShowAssetPreview]
         [field: SerializeField] public GameObject Prefab { get; private set; }

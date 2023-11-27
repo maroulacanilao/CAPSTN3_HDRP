@@ -19,6 +19,8 @@ public class FishingManager : Singleton<FishingManager>
 {
     [field: SerializeField] public List<ConsumableData> fishInPool { get; private set; } = new List<ConsumableData>();
 
+    [field: SerializeField] public List<ConsumableData> fishableFish { get; private set; } = new List<ConsumableData>();
+
     [SerializeField] private GameDataBase gameDataBase;
     private PlayerData playerData => gameDataBase.playerData;
     private PlayerInventory inventory => playerData.inventory;
@@ -37,10 +39,21 @@ public class FishingManager : Singleton<FishingManager>
     private Coroutine waitingForFishRoutine;
     private Coroutine hookedFishRoutine;
 
-    public void InitiateFishing()
+    public void InitiateFishing(int rodLevel)
     {
         hasFishingStarted = true;
         OnFishingStarted.Invoke(this);
+
+        for (int i = 0; i < fishInPool.Count; i++)
+        {
+            int levelChecker = (int)fishInPool[i].RarityType;
+
+            if (levelChecker <= rodLevel + 1)
+            {
+                fishableFish.Add(fishInPool[i]);
+                Debug.Log($"{fishInPool[i].name}: Level {levelChecker}");
+            }
+        }
 
         Debug.Log("Fishing Start");
         int randomNumber = Random.Range(3, 5);
@@ -62,6 +75,7 @@ public class FishingManager : Singleton<FishingManager>
     {
         hasFishingStarted = false;
         StopCoroutine(waitingForFishRoutine);
+        fishableFish.Clear();
 
         OnCaughtFish.Invoke(false);
     }
@@ -79,10 +93,7 @@ public class FishingManager : Singleton<FishingManager>
         OnHookedFish.Invoke(this);
         AudioManager.PlayHit();
 
-        //for (int i = 0; i < 2; i++)
-        //{
-            yield return new WaitForSeconds(1.5f);
-        //}
+        yield return new WaitForSeconds(1.5f);
 
         FishingFailed();
         yield return null;
@@ -90,8 +101,8 @@ public class FishingManager : Singleton<FishingManager>
 
     public void FishingSuscess()
     {
-        int randomFish = Random.Range(0, fishInPool.Count);
-        CollectFish(fishInPool[randomFish]);
+        int randomFish = Random.Range(0, fishableFish.Count);
+        CollectFish(fishableFish[randomFish]);
         StopCoroutine(hookedFishRoutine);
 
         OnCaughtFish.Invoke(true);
@@ -103,6 +114,7 @@ public class FishingManager : Singleton<FishingManager>
 
         hasFishingStarted = false;
         fishOnHook = false;
+        fishableFish.Clear();
 
         OnHookedFish.Invoke(this);
         OnCaughtFish.Invoke(false);
@@ -116,6 +128,7 @@ public class FishingManager : Singleton<FishingManager>
         var _item = fish_.GetConsumableItem(1);
         AudioManager.PlayHarvesting();
         inventory.AddItem(_item);
+        fishableFish.Clear();
 
         OnCatchSuccess.Invoke(_item, 1);
         OnHookedFish.Invoke(this);
