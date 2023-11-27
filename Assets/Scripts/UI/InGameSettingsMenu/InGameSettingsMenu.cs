@@ -18,7 +18,7 @@ namespace UI.InGameSettingsMenu
         [SerializeField] private Button settingsBtn, exitDungeonBtn, saveBtn, exitToMainMenu, exitGameBtn;
 
         [BoxGroup("Settings Panel")]
-        [SerializeField] private GameObject panel, cheatMenu;
+        [SerializeField] private GameObject audioPanel, cheatMenu;
 
         public void Awake()
         {
@@ -45,18 +45,25 @@ namespace UI.InGameSettingsMenu
 
         private void OnEnable()
         {
-            panel.SetActive(false);
+            audioPanel.SetActive(false);
             cheatMenu.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(settingsBtn.gameObject);
+            EventSystem.current.SetSelectedGameObject(saveBtn.gameObject);
         }
 
         #region Buttons
         
         private void SettingsClick()
         {
-            panel.SetActive(!panel.activeSelf);
+            cheatMenu.SetActive(false);
+            audioPanel.SetActive(true);
         }
-        
+
+        public void CheatsClick()
+        {
+            audioPanel.SetActive(false);
+            cheatMenu.SetActive(true);
+        }
+
         private void SaveGameClick()
         {
             gameDataBase.progressionData.SaveProgression();

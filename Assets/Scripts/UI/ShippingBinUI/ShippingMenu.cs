@@ -37,7 +37,8 @@ namespace UI.ShippingBinUI
         protected override void OnEnable()
         {
             PlayerMenuManager.OnCloseAllUI.Invoke();
-            
+            RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
+
             base.OnEnable();
             
             ShippingMenuItem.OnItemClicked.AddListener(OnItemClick);

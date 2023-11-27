@@ -67,7 +67,7 @@ namespace UI.Farming
             OnCloseAllUI.Invoke();
             tabGroup.gameObject.SetActive(false);
 
-            inventoryMenu.gameObject.SetActive(false);
+            if (inventoryMenu != null) inventoryMenu.gameObject.SetActive(false);
 
             var _settings = SettingsEnabler.Instance
                 .sceneSettingsDictionary

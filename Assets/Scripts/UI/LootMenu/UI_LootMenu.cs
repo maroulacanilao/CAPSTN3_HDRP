@@ -85,6 +85,7 @@ namespace UI.LootMenu
             }
             
             PlayerMenuManager.OnCloseAllUI.Invoke();
+            RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
             RemoveAllItemOnly();
             
             lootDropObject = lootDropObject_;

@@ -9,7 +9,7 @@ using Image = UnityEngine.UI.Image;
 
 namespace UI.TabMenu.Codex
 {
-    public struct CodexInfo
+    public struct CodexInfoRevised
     {
         public string name;
         public string description;
@@ -20,8 +20,8 @@ namespace UI.TabMenu.Codex
 
         public int quantityNeededCount;
     }
-    
-    public class CodexInfoDisplay : MonoBehaviour
+
+    public class CodexInfoDisplayRevised : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI nameText, descriptionText, quantityText;
         [SerializeField] private ScrollRect scrollView;
@@ -31,50 +31,62 @@ namespace UI.TabMenu.Codex
         [SerializeField] private TextMeshProUGUI basicDescriptionText;
         [SerializeField] private TextMeshProUGUI hiddenDescriptionText;
 
-        public void DisplayInfo(CodexInfo codexInfo_)
+        public void DisplayInfo(CodexInfoRevised codexInfo_)
         {
             if (nameText != null) nameText.text = codexInfo_.name;
             quantityText.text = codexInfo_.quantityTxt;
             icon.sprite = codexInfo_.sprite;
-            DisplayDescription(codexInfo_);
-            
+            DisplayDescriptionRevised(codexInfo_);
+
             gameObject.SetActive(true);
             Canvas.ForceUpdateCanvases();
-            scrollView.verticalNormalizedPosition = 1f;
+            if (scrollView != null) scrollView.verticalNormalizedPosition = 1f;
         }
         
-        private void DisplayDescription(CodexInfo codexInfo_)
+        private void DisplayDescriptionRevised(CodexInfoRevised codexInfo_)
         {
-            var _description = codexInfo_.description;
             var _infoQuantity = codexInfo_.quantity;
-            
+
             if (_infoQuantity == 0)
             {
-                if (descriptionText != null) descriptionText.text = "";
+                basicDescriptionText.text = "";
 
                 hiddenDescriptionText.text = "";
-                
+
                 return;
             }
 
-            var entries = new List<string>(_description.Split(new string[] { ". " }, StringSplitOptions.RemoveEmptyEntries));
+            var _description = codexInfo_.description;
+            var entries = new List<string>(_description.Split(". ", 3));
+            
             var sb = new StringBuilder();
+            sb.Append(entries[0]);
+            sb.Append(". ");
+            sb.Append(entries[1]);
+            sb.Append(". ");
 
-            for (int i = 0; i < entries.Count; i++)
+            basicDescriptionText.text = sb.ToString();
+
+
+            var sbHidden = new StringBuilder();
+            for (int i = 2; i < entries.Count; i++)
             {
-                if (i >= _infoQuantity)
-                {
-                    // Entry is locked, apply blurred effect
-                    sb.Append("<color=yellow>"); // Set the text color to a grayish tone
-                    sb.Append(codexInfo_.errorMsg.ToUpper());
-                    sb.Append("</color>");
-                    break;
-                }
-                sb.Append(entries[i]);
-                sb.Append(". ");
+                sbHidden.Append(entries[i]);
+                sbHidden.Append(". ");
             }
 
-            descriptionText.text = sb.ToString();
+            hiddenDescriptionText.text = sbHidden.ToString();
+
+            var _quantityNeededCount = codexInfo_.quantityNeededCount;
+            if (_quantityNeededCount > _infoQuantity)
+            {
+                blocker.SetActive(true);
+            }
+            else
+            {
+                blocker.SetActive(false);
+            }
         }
     }
 }
+

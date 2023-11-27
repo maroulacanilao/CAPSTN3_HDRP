@@ -69,6 +69,7 @@ namespace GameTutorial
             isLooting = true;
             yield return null;
             PlayerMenuManager.OnCloseAllUI.Invoke();
+            RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
             yield return null;
             Fungus.Flowchart.BroadcastFungusMessage(lootingKey);
             InventoryMenu.OnInventoryMenuClose.RemoveListener(OnStartLootingTut);

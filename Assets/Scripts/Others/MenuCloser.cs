@@ -6,4 +6,5 @@ using UnityEngine;
 public class MenuCloser : MonoBehaviour
 {
     public void CloseMenu() => PlayerMenuManager.OnCloseAllUI.Invoke();
+    public void CloseMenuRevised() => RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
 }

@@ -35,6 +35,7 @@ namespace UI.TabMenu
         public void CloseAll()
         {
             PlayerMenuManager.OnCloseAllUI.Invoke();
+            RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
         }
 
         #region NewTabMenus

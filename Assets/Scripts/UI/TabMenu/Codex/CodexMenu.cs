@@ -18,6 +18,8 @@ namespace UI.TabMenu.Codex
         
         protected GameDataBase dataBase;
 
+        [SerializeField] protected GameObject blockerPanel;
+
         public void Awake()
         {
             dataBase = GameManager.Instance.GameDataBase;

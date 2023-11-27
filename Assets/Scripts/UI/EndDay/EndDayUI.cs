@@ -57,6 +57,7 @@ namespace UI.EndDay
         private IEnumerator Co_EndDay()
         {
             PlayerMenuManager.OnCloseAllUI.Invoke();
+            RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
             startDay_BTN.gameObject.SetActive(false);
 
             Time.timeScale = 0;

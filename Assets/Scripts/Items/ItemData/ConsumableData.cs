@@ -20,6 +20,8 @@ namespace Items.ItemData
         [field: BoxGroup("Description")]
         [field: SerializeField] public EncyclopediaInfo encyclopediaInfo { get; private set; }
 
+        public int quantityNeededCount = 5;
+
         private void Reset()
         {
             ItemType = ItemType.Consumable;

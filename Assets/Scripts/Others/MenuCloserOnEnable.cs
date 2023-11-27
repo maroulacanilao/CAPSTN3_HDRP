@@ -11,11 +11,19 @@ public class MenuCloserOnEnable : MonoBehaviour
     
     private void OnEnable()
     {
-        if(onEnable) PlayerMenuManager.OnCloseAllUI.Invoke();
+        if (onEnable)
+        {
+            PlayerMenuManager.OnCloseAllUI.Invoke();
+            RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
+        }
     }
     
     private void OnDisable()
     {
-        if(onDisable) PlayerMenuManager.OnCloseAllUI.Invoke();
+        if (onDisable)
+        {
+            PlayerMenuManager.OnCloseAllUI.Invoke();
+            RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
+        }
     }
 }

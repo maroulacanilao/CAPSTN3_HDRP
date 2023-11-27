@@ -21,7 +21,10 @@ namespace ScriptableObjectData.CharacterData
         public Vector2Int levelRange { get; private set; }
         
         [field: SerializeField] public WeightedDictionary<EnemyData> alliesDictionary { get; private set; }
-        
+
+        [field: BoxGroup("Description")]
         [field: SerializeField] public EncyclopediaInfo encyclopediaInfo { get; private set; }
+
+        public int quantityNeededCount = 5;
     }
 }

@@ -76,6 +76,12 @@ public class SettingsPanel : PlayerMenu
         // SettingsUtil.SetVolumes(masterSlider.value, musicSlider.value, sfxSlider.value);
     }
 
+    public void OnCancelButtonClicked()
+    {
+        PlayerMenuManager.OnCloseAllUI.Invoke();
+        RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
+    }
+
     private void UpdateVolumeTexts()
     {
         masterVolumeText.text = $"{Convert.ToInt16(Mathf.Clamp01(masterSlider.value) * 100)}";

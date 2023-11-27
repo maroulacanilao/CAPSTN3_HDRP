@@ -17,7 +17,7 @@ namespace UI.Farming
         [SerializeField] private PlayerTabMenu tabGroup;
         [SerializeField] private InventoryMenu inventoryMenu;
 
-        public static readonly Evt OnCloseAllUI = new Evt();
+        public static readonly Evt OnCloseAllUIRevised = new Evt();
         public static readonly Evt OnOpenMenu = new Evt();
 
         bool canOpenMenu = true;
@@ -69,7 +69,7 @@ namespace UI.Farming
                 SceneManager.activeSceneChanged -= OnSceneChanged;
             }
 
-            OnCloseAllUI.Invoke();
+            OnCloseAllUIRevised.Invoke();
             tabGroup.gameObject.SetActive(false);
 
             inventoryMenu.gameObject.SetActive(false);
@@ -93,7 +93,7 @@ namespace UI.Farming
 
             if (IsMenuOpen())
             {
-                OnCloseAllUI.Invoke();
+                OnCloseAllUIRevised.Invoke();
                 return;
             }
 
@@ -126,7 +126,7 @@ namespace UI.Farming
         {
             if (IsMenuOpen())
             {
-                OnCloseAllUI.Invoke();
+                OnCloseAllUIRevised.Invoke();
                 return;
             }
 
@@ -173,7 +173,7 @@ namespace UI.Farming
         {
             if (IsMenuOpen())
             {
-                OnCloseAllUI.Invoke();
+                OnCloseAllUIRevised.Invoke();
                 return;
             }
 

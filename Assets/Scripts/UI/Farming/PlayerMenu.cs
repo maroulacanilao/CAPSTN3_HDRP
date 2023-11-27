@@ -14,11 +14,13 @@ namespace UI.Farming
         {
             OpenedMenu = this;
             PlayerMenuManager.OnCloseAllUI.AddListener(CloseMenu);
+            RevisedPlayerMenuManager.OnCloseAllUIRevised.AddListener(CloseMenu);
         }
         
         protected virtual void OnDisable()
         {
             PlayerMenuManager.OnCloseAllUI.RemoveListener(CloseMenu);
+            RevisedPlayerMenuManager.OnCloseAllUIRevised.RemoveListener(CloseMenu);
         }
         
         protected virtual void CloseMenu()
