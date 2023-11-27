@@ -105,6 +105,19 @@ namespace Player
                         break;
                 }
             }
+
+            else if (CurrentItem.Data is FishingPoleData fishingPoleData)
+            {
+                switch (fishingPoleData.level)
+                {
+                    case 0:
+                        CurrentItem.SetData(toolDataBase.FishingPoleDictionary[1]);
+                        break;
+                    case 1:
+                        CurrentItem.SetData(toolDataBase.FishingPoleDictionary[2]);
+                        break;
+                }
+            }
         }
         
         public void UseTool()
@@ -357,7 +370,11 @@ namespace Player
             if (FishingManager.Instance.hasFishingStarted != true)
             {
                 AudioManager.PlayWatering();
-                FishingManager.Instance.InitiateFishing();
+
+                var temp = CurrentItem.Data as FishingPoleData;
+                int fishingPoleLevel = temp.level;
+
+                FishingManager.Instance.InitiateFishing(fishingPoleLevel);
             }
             else if (FishingManager.Instance.fishOnHook == true)
             {
