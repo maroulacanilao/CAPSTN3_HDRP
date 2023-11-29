@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using System.Collections.Generic;
 using CustomEvent;
 using Managers;
@@ -117,6 +118,7 @@ public class TestMainMenu : MonoBehaviour
     {
         playClicked = true;
         black.enabled = true;
+        File.Delete(GameDataBase.progressionData.savePath);
         StartCoroutine(Fading());
         GameDataBase.ReInitialize();
         GameDataBase.sessionData.ReInitialize();

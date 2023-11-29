@@ -97,6 +97,11 @@ namespace Items
         }
 
         public abstract Item Clone();
+
+        public void SetData(ItemData.ItemData _data)
+        {
+            data = _data;
+        }
     }
 
     [Serializable]

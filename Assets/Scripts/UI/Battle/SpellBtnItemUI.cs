@@ -42,8 +42,9 @@ namespace UI.Battle
                 }
                 else
                 {
-                    var _target = BattleSystem.BattleManager.Instance.playerParty[0];
-                    mainPanel.StartAction(_target);
+                    //var _target = BattleSystem.BattleManager.Instance.playerParty[1];
+                    //mainPanel.StartAction(_target);
+                    mainPanel.ShowPlayerTargetPanel();
                 }
             });
         }
