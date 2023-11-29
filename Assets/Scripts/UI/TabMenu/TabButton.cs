@@ -40,8 +40,8 @@ namespace UI.TabMenu
             if (selectedImageGO != null)
             {
                 originalPos = selectedImageGO.transform.localPosition;
+                Debug.Log(originalPos);
                 selectedImageGO.SetActive(false);
-
             }
         }
 
@@ -87,7 +87,7 @@ namespace UI.TabMenu
             if (selectedImageGO != null)
             {
                 selectedImageGO.SetActive(true);
-                selectedImageGO.transform.DOLocalMoveY(movePos, 0.5f);
+                selectedImageGO.transform.DOLocalMoveY(movePos, 0.25f);
             }
         }
 
@@ -95,7 +95,7 @@ namespace UI.TabMenu
         {
             if (selectedImageGO != null)
             {
-                selectedImageGO.transform.DOLocalMoveX(originalPos.y, 0.5f);
+                selectedImageGO.transform.DOLocalMoveY(originalPos.y, 0.25f);
                 selectedImageGO.SetActive(false);
             }
         }

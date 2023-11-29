@@ -345,11 +345,11 @@ namespace UI
             if (vitPanel != null) vitPanel.SetActive(includeVitality_);
 
             // TODO: Remove label
-            if (includeVitality_) vitTXT.text =  $"VIT: {GetCharacterStatText(_base.vitality, _bonus.vitality)}";
-            strTXT.text =  $"STR: {GetCharacterStatText(_base.strength, _bonus.strength)}";
-            defTXT.text =  $"DEF: {GetCharacterStatText(_base.defense, _bonus.defense)}";
-            intTXT.text =  $"INT: {GetCharacterStatText(_base.intelligence, _bonus.intelligence)}";
-            spdTXT.text =  $"SPD: {GetCharacterStatText(_base.speed, _bonus.speed)}";
+            if (includeVitality_) vitTXT.text =  $"{GetCharacterStatText(_base.vitality, _bonus.vitality)}";
+            strTXT.text =  $"{GetCharacterStatText(_base.strength, _bonus.strength)}";
+            defTXT.text =  $"{GetCharacterStatText(_base.defense, _bonus.defense)}";
+            intTXT.text =  $"{GetCharacterStatText(_base.intelligence, _bonus.intelligence)}";
+            spdTXT.text =  $"{GetCharacterStatText(_base.speed, _bonus.speed)}";
         }
         
         private string GetCharacterStatText(int statVal_, int bonusStatVal_)

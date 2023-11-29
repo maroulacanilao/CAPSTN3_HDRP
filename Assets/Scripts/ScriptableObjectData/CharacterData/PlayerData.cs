@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using BaseCore;
 using Character;
 using Character.CharacterComponents;
@@ -14,6 +15,7 @@ namespace ScriptableObjectData.CharacterData
     {
         [field: SerializeField] public PlayerInventory inventory { get; private set; }
         [field: SerializeField] public PlayerLevel LevelData { get; private set; }
+        [field: SerializeField] public List<AllyData> totalPartyData { get; set; }
         [field: SerializeField] public List<AllyData> alliesData { get; private set; }
         [field: SerializeField] public List<AllyData> offPartyData { get; private set; }
         
@@ -21,6 +23,9 @@ namespace ScriptableObjectData.CharacterData
         [field: SerializeField] public PlayerHealth health { get; private set; }
         [field: SerializeField] public PlayerMana mana { get; private set; }
         public PlayerStatusEffectReceiver statusEffectReceiver { get; private set; }
+
+        [field: BoxGroup("Codex Info")]
+        [field: SerializeField] public EncyclopediaInfo encyclopediaInfo { get; private set; }
 
         public int level => LevelData.CurrentLevel;
         public CombatStats totalStats => statsData.GetTotalStats(level);

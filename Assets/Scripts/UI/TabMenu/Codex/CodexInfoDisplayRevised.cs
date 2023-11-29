@@ -35,7 +35,17 @@ namespace UI.TabMenu.Codex
         {
             if (nameText != null) nameText.text = codexInfo_.name;
             quantityText.text = codexInfo_.quantityTxt;
+
             icon.sprite = codexInfo_.sprite;
+            if (icon.sprite == null)
+            {
+                icon.gameObject.SetActive(false);
+            }
+            else
+            {
+                icon.gameObject.SetActive(true);
+            }
+
             DisplayDescriptionRevised(codexInfo_);
 
             gameObject.SetActive(true);

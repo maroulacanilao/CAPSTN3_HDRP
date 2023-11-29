@@ -14,7 +14,7 @@ namespace UI.TabMenu.Codex
         [SerializeField] protected Transform contentParent;
         [SerializeField] protected CodexInfoDisplay codexInfoDisplay;
         [SerializeField] protected TextMeshProUGUI errorTXT;
-        protected List<CodexItem> codexItems = new List<CodexItem>();
+        [SerializeField] protected List<CodexItem> codexItems = new List<CodexItem>();
         
         protected GameDataBase dataBase;
 

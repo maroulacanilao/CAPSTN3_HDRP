@@ -6,10 +6,13 @@ using ScriptableObjectData.CharacterData;
 using Spells.Base;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpellDisplay : MonoBehaviour
 {
     [SerializeField] protected TextMeshProUGUI spellNameText, spellTypeText, spellCostText, spellDescText, spellDamageText;
+
+    [SerializeField] protected Image spellIcon;
 
     private PlayerData mPlayerData;
     protected PlayerData playerData
@@ -49,12 +52,31 @@ public class SpellDisplay : MonoBehaviour
         spellDamageText.text = $"Damage: {spellObject_.damage}";
     }
 
+    public virtual void DisplaySkill(int index_, SpellData spellData_)
+    {
+        spellIcon.sprite = spellData_.icon;
+        spellNameText.text = spellData_.spellName;
+        spellCostText.text = $"-{spellData_.manaCost}mp";
+        spellDescText.text = spellData_.Description;
+
+        if (index_ == 0)
+        {
+            var _dmg = Mathf.RoundToInt(spellData_.damageModifier * playerData.totalStats.intelligence);
+            spellDamageText.text = $"{_dmg}dmg";
+        }
+        else
+        {
+            var _dmg = Mathf.RoundToInt(spellData_.damageModifier * playerData.totalPartyData[index_ - 1].totalStats.intelligence);
+            spellDamageText.text = $"{_dmg}dmg";
+        }
+    }
+
     public virtual void DisplayNull()
     {
-        spellNameText.text = "No Spell Selected";
-        spellTypeText.text = "Spell Type: ???";
-        spellCostText.text = "Mana Cost: ???";
-        spellDescText.text = "???";
-        spellDamageText.text = "Damage: ???";
+        if (spellNameText != null) spellNameText.text = "No Spell Selected";
+        if (spellTypeText != null) spellTypeText.text = "Spell Type: ???";
+        if (spellCostText != null) spellCostText.text = "Mana Cost: ???";
+        if (spellDescText != null) spellDescText.text = "???";
+        if (spellDamageText != null) spellDamageText.text = "Damage: ???";
     }
 }

@@ -20,6 +20,7 @@ namespace ScriptableObjectData
         [field: SerializeField] public AudioDataBase audioDataBase { get; private set; }
         [field: SerializeField] public EnemyDataBase enemyDataBase { get; private set; }
         [field: SerializeField] public CropDataBase cropDataBase { get; private set; }
+        [field: SerializeField] public FishDataBase fishDataBase { get; private set; }
         [field: SerializeField] public SpellDataBase spellDataBase { get; private set; }
         [field: SerializeField] public StatsDataBase statsDataBase { get; private set; }
         

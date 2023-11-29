@@ -64,7 +64,7 @@ namespace UI.TabMenu.CharacterInfo.Party
             skillInfoPanel.SetActive(true);
 
             nameTxt.SetText(currAlly.characterName);
-            descriptionTxt.text = $"This character has no available skills at the moment.";
+            descriptionTxt.SetText(currAlly.encyclopediaInfo.description);
             allyIcon.sprite = currAlly.icon;
 
             statsPanel.DisplayDynamic(currAlly.GetStats(), false);

@@ -1,17 +1,18 @@
-using Character;
+using Items.ItemData;
 using Managers;
 using ScriptableObjectData;
 using ScriptableObjectData.CharacterData;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UI.HUD;
-using UI.TabMenu.CharacterInfo.Party;
+using UI.TabMenu.Codex;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UI.TabMenu.CharacterInfo
+namespace UI.TabMenu.CharacterInfo.Party
 {
     public class PartyUI : MonoBehaviour
     {
@@ -21,13 +22,19 @@ namespace UI.TabMenu.CharacterInfo
         [SerializeField] private PlayerData playerData;
         [SerializeField] private List<AllyData> alliesData;
         [SerializeField] private List<AllyData> offPartyData;
+        [SerializeField] private List<AllyData> totalNpcsList;
+        [SerializeField] private List<AllyData> tempAlliesData = new();
+        [SerializeField] private List<AllyData> tempOffPartyData = new();
 
-        public TextMeshProUGUI[] mainPartyMemberTexts;
-        public TextMeshProUGUI[] offPartyMemberTexts;
+        [SerializeField] private PartySelectInfoPanel[] partyPanels;
+        [SerializeField] private List<int> partyIndexes = new();
 
-        [field: SerializeField] public PartyMemberInfoPanel[] PartyMemberInfoPanels { get; private set; }
+        [SerializeField] private GameObject offPartyPanel;
+        [SerializeField] private TextMeshProUGUI[] offPartyTxts;
+        [SerializeField] private Button ConfirmBtn;
 
-        public GameObject partymanagementPanel;
+        [SerializeField] private TextMeshProUGUI offPartyErrortxt;
+        [SerializeField] private TextMeshProUGUI dungeonErrortxt;
 
         private void Awake()
         {
@@ -35,107 +42,238 @@ namespace UI.TabMenu.CharacterInfo
             playerData = partySystemManager.playerData;
             alliesData = playerData.alliesData;
             offPartyData = playerData.offPartyData;
+            totalNpcsList = playerData.totalPartyData;
 
-            for (int i = 0; i < PartyMemberInfoPanels.Length; i++)
+            for (int i = 0; i < partyPanels.Length; i++)
             {
-                PartyMemberInfoPanels[i].ShowAllyDetail(null);
+                partyPanels[i].DisplayNull();
+                partyIndexes.Add(0);
             }
-        }
-
-        private void Start()
-        {
-            PartyManagementAvailability();
         }
 
         public void OnEnable()
         {
-            PartyManagementAvailability();
-        }
+            offPartyErrortxt.gameObject.SetActive(playerData.totalPartyData.Count <= 0);
+            offPartyPanel.SetActive(playerData.totalPartyData.Count > 0);
+            // ConfirmBtn.gameObject.SetActive(playerData.totalPartyData.Count > 0);
 
-        public void UpdateMainParty()
-        {
-            if (alliesData != null)
+            if (playerData.totalPartyData.Count == 0)
             {
-                for (int i = 0; i < mainPartyMemberTexts.Length; i++)
-                {
-                    if (alliesData.Count > 0 && i < alliesData.Count)
-                    {
-                        mainPartyMemberTexts[i].text = alliesData[i].characterName;
-                        mainPartyMemberTexts[i].GetComponent<Button>().interactable = true;
-
-                        PartyMemberInfoPanels[i].ShowAllyDetail(alliesData[i]);
-                    }
-                    else
-                    {
-                        mainPartyMemberTexts[i].text = "--";
-                        mainPartyMemberTexts[i].GetComponent<Button>().interactable = false;
-
-                        PartyMemberInfoPanels[i].ShowAllyDetail(null);
-                    }
-                }
+                EmptyParty();
+                return;
             }
-        }
 
-        public void UpdateOffParty()
-        {
-            if (offPartyData != null)
-            {
-                for (int i = 0; i < offPartyMemberTexts.Length; i++)
-                {
-                    if (offPartyData.Count > 0 && i < offPartyData.Count)
-                    {
-                        offPartyMemberTexts[i].text = offPartyData[i].characterName;
-                        offPartyMemberTexts[i].GetComponent<Button>().interactable = true;
-                    }
-                    else
-                    {
-                        offPartyMemberTexts[i].text = "--";
-                        offPartyMemberTexts[i].GetComponent<Button>().interactable = false;
-                    }
-                }
-            }
-        }
+            tempAlliesData = alliesData;
+            tempOffPartyData = alliesData;
 
-        private void PartyManagementAvailability()
-        {
-            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameManager.Instance.DungeonSceneName)
+            if (totalNpcsList.Count > 0)
             {
-                partymanagementPanel.SetActive(false);
+                ShowOffParty();
             }
             else
             {
-                partymanagementPanel.SetActive(true);
-                UpdateMainParty();
-                UpdateOffParty();
+                for (int i = 0; i < partyPanels.Length; i++)
+                {
+                    for (int j = 0; j < partyPanels[i].switchBtns.Length; j++)
+                    {
+                        partyPanels[i].switchBtns[j].gameObject.SetActive(false);
+                    }
+                }
+            }
+
+            // checks if the player is in a dungeon
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameManager.Instance.DungeonSceneName)
+            {
+                dungeonErrortxt.gameObject.SetActive(true);
+
+                for (int i = 0; i < partyPanels.Length; i++)
+                {
+                    partyPanels[i].gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                dungeonErrortxt.gameObject.SetActive(false);
+
+                if (alliesData.Count > 0)
+                {
+                    for (int i = 0; i < partyPanels.Length; i++)
+                    {
+                        partyPanels[i].gameObject.SetActive(true);
+                    }
+
+                    ShowCurrentParty();
+                }
+                else
+                {
+                    for (int i = 0; i < partyPanels.Length; i++)
+                    {
+                        partyPanels[i].DisplayNull();
+                        partyIndexes[i] = 0;
+                    }
+                }
+            }
+        }
+
+        public void ShowOffParty()
+        {
+            if (offPartyData != null)
+            {
+                for (var _i = 0; _i < offPartyTxts.Length; _i++)
+                {
+                    if (_i < offPartyData.Count)
+                    {
+                        var ally = offPartyData[_i];
+                        offPartyTxts[_i].text = $"- {ally.characterName}";
+                        offPartyTxts[_i].gameObject.SetActive(true);
+                        continue;
+                    }
+
+                    offPartyTxts[_i].gameObject.SetActive(false);
+                }
+
+                for (int i = 0; i < partyPanels.Length; i++)
+                {
+                    partyPanels[i].ShowButtons();
+                }
+            }
+        }
+
+        public void ShowParty(int partyPanelIndex_, int partyIndex_)
+        {
+            var currentAlly = totalNpcsList[partyIndex_];
+
+            var _info = new PartyInfo
+            {
+                name = currentAlly.characterName,
+                description = currentAlly.encyclopediaInfo.description,
+                sprite = currentAlly.encyclopediaInfo.sprite,
+            };
+
+            partyPanels[partyPanelIndex_].DisplayAllySelected(_info);
+            ShowOffParty();
+        }
+
+        public void ShowCurrentParty()
+        {
+            for (int i = 0; i < totalNpcsList.Count; i++)
+            {
+                if (totalNpcsList[i] == alliesData[0])
+                {
+                    ShowParty(0, i);
+                    break;
+                }
+            }
+
+            for (int i = 0; i < totalNpcsList.Count; i++)
+            {
+                if (alliesData[1] != null && totalNpcsList[i] == alliesData[1])
+                {
+                    ShowParty(1, i);
+                    break;
+                }
+            }
+        }
+
+        public void EmptyParty()
+        {
+            for(int i = 0; i < partyPanels.Length; i++)
+            {
+                partyPanels[i].gameObject.SetActive(false);
             }
         }
 
         #region Buttons
-
-        public void AddOffPartyMemberToMainParty(int offPartyIndex)
+        public void NextPartyMember(int panelIndex)
         {
-            if (alliesData != null && alliesData.Count < mainPartyMemberTexts.Length)
-            {
-                offPartyMemberTexts[offPartyIndex].GetComponent<Button>().interactable = false;
-                partySystemManager.AddOffPartyIntoAlliesData(offPartyIndex);
+            if (!offPartyData.Contains(totalNpcsList[partyIndexes[panelIndex]]))
+                offPartyData.Add(totalNpcsList[partyIndexes[panelIndex]]);
 
-                UpdateMainParty();
-                UpdateOffParty();
+            alliesData.Remove(totalNpcsList[partyIndexes[panelIndex]]);
+
+            partyIndexes[panelIndex] = (partyIndexes[panelIndex] + 1) % totalNpcsList.Count;
+
+            var i = partyIndexes[panelIndex];
+            if (!alliesData.Contains(totalNpcsList[i]))
+            {
+                alliesData.Add(totalNpcsList[i]);
+                offPartyData.Remove(totalNpcsList[i]);
+                ShowParty(panelIndex, i);
+                ShowOffParty();
+            }
+            else
+            {
+                partyIndexes[panelIndex] = (partyIndexes[panelIndex] + 1) % totalNpcsList.Count;
+                alliesData.Add(totalNpcsList[partyIndexes[panelIndex]]);
+                offPartyData.Remove(totalNpcsList[partyIndexes[panelIndex]]);
+                ShowParty(panelIndex, partyIndexes[panelIndex]);
+                ShowOffParty();
+            }
+
+        }
+
+        public void PreviousPartyMember(int panelIndex)
+        {
+            if (!offPartyData.Contains(totalNpcsList[partyIndexes[panelIndex]]))
+                offPartyData.Add(totalNpcsList[partyIndexes[panelIndex]]);
+
+            alliesData.Remove(totalNpcsList[partyIndexes[panelIndex]]);
+
+            partyIndexes[panelIndex]--;
+            if (partyIndexes[panelIndex] < 0)
+            {
+                partyIndexes[panelIndex] += totalNpcsList.Count;
+            }
+
+            var i = partyIndexes[panelIndex];
+            if (!alliesData.Contains(totalNpcsList[i]))
+            {
+                alliesData.Add(totalNpcsList[i]);
+                offPartyData.Remove(totalNpcsList[i]);
+                ShowParty(panelIndex, i);
+                ShowOffParty();
+            }
+            else
+            {
+                partyIndexes[panelIndex]--;
+                if (partyIndexes[panelIndex] < 0)
+                {
+                    partyIndexes[panelIndex] += totalNpcsList.Count;
+                }
+
+                alliesData.Add(totalNpcsList[partyIndexes[panelIndex]]);
+                offPartyData.Remove(totalNpcsList[partyIndexes[panelIndex]]);
+                ShowParty(panelIndex, partyIndexes[panelIndex]);
+                ShowOffParty();
             }
         }
 
-        public void RemoveMainPartyMember(int mainPartyIndex)
+        public void ConfirmParty()
         {
-            if (alliesData != null && offPartyData.Count < offPartyMemberTexts.Length)
+            if (tempAlliesData == null)
             {
-                mainPartyMemberTexts[mainPartyIndex].GetComponent<Button>().interactable = false;
-                partySystemManager.MoveAlliesDataIntoOffParty(mainPartyIndex);
+                return;
             }
 
-            UpdateMainParty();
-            UpdateOffParty();
-        }
+            for (int i = 0; i < tempOffPartyData.Count; i++)
+            {
+                if (!offPartyData.Contains(tempOffPartyData[i]))
+                {
+                    partySystemManager.MoveAlliesDataIntoOffParty(tempOffPartyData[i]);
+                }
+            }
 
+            for (int i = 0; i < tempAlliesData.Count; i++)
+            {
+                if (!alliesData.Contains(tempAlliesData[i]))
+                {
+                    partySystemManager.AddToAlliesData(tempAlliesData[i]);
+                }
+            }
+
+            ShowCurrentParty();
+            ShowOffParty();
+        }
         #endregion
 
         #region Debug Functions

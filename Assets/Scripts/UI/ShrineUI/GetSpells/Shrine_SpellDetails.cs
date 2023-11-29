@@ -17,9 +17,6 @@ namespace UI.ShrineUI.GetSpells
         [SerializeField] private ShrineRequirementItem requirementItem;
         public ShrineSpellItem currentSpellItem { get; private set; }
 
-        [Header("Shrine")]
-        [SerializeField] private Image spellIcon;
-
         protected void Awake()
         {
             DisplayNull();
