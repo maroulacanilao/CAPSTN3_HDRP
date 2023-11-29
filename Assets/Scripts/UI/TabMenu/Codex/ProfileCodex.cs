@@ -12,7 +12,6 @@ using TMPro;
 using UI.Farming;
 using UI.TabMenu.Codex;
 using Unity.VisualScripting;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
