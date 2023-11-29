@@ -35,7 +35,8 @@ namespace Player
         public static readonly Evt OnTillAction = new Evt();
         public static readonly Evt OnWaterAction = new Evt();
         public static readonly Evt OnUnTillAction = new Evt();
-        //public static readonly Evt OnRefillAction = new Evt();
+        public static readonly Evt<int> OnRefillAction = new Evt<int>();
+        public static readonly Evt<int> OnRefillReduced = new Evt<int>();
         public static readonly Evt<int> OnManualSelect = new Evt<int>();
         
         public FarmTile currTile { get; private set; }
@@ -84,11 +85,13 @@ namespace Player
                         CurrentItem.SetData(toolDataBase.WateringCanDictionary[1]);
                         wateringCanData.RefreshUsage();
                         //Insert UI Update here
+                        OnRefillAction.Invoke(wateringCanData.MaxUsages);
                         break;
                     case 1:
                         CurrentItem.SetData(toolDataBase.WateringCanDictionary[2]);
                         wateringCanData.RefreshUsage();
                         //Insert UI Update here
+                        OnRefillAction.Invoke(wateringCanData.MaxUsages);
                         break;
                 }
             }
@@ -329,6 +332,7 @@ namespace Player
             if (CurrentItem.Data is WateringCanData wateringCanData)
             {
                 wateringCanData.RefreshUsage();
+                OnRefillAction.Invoke(wateringCanData.MaxUsages);
             }
         }
 
@@ -339,6 +343,7 @@ namespace Player
             {
                 if (wateringCanData.CurrentUsage <= 0) return;
                 wateringCanData.ReduceUsage();
+                OnRefillReduced.Invoke(wateringCanData.CurrentUsage);
             }
             currTile.OnWaterPlant();
             currTile.Heal(new HealInfo(10));

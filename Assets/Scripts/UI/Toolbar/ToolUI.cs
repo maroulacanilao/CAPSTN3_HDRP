@@ -1,7 +1,9 @@
+using Autotiles3D;
 using CustomEvent;
 using CustomHelpers;
 using Items;
 using Items.Inventory;
+using Items.ItemData.Tools;
 using Player;
 using TMPro;
 using UnityEngine;
@@ -25,8 +27,11 @@ namespace UI.Toolbar
         private int index;
         private Item currItem;
 
+        [SerializeField] private GameObject wateringCanRefillBar;
+
         public void Initialize(PlayerInventory playerInventory_, int index_)
         {
+            wateringCanRefillBar.SetActive(false);
             inventory = playerInventory_;
             index = index_;
             background = GetComponent<Image>();
@@ -75,6 +80,19 @@ namespace UI.Toolbar
             else
             {
                 toolIcon.color = Color.white;
+            }
+
+            if (currItem != null)
+            {
+                if (currItem.Data is WateringCanData wateringCanData)
+                {
+                    wateringCanRefillBar.SetActive(true);
+                    PlayerEquipment.OnRefillReduced.Invoke(wateringCanData.CurrentUsage);
+                }
+                else
+                {
+                    wateringCanRefillBar.SetActive(false);
+                }
             }
         }
 
