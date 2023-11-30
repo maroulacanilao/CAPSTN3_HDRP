@@ -81,9 +81,9 @@ namespace UI
         public  virtual void DisplayNull()
         {
             if (nameTxt != null) nameTxt.SetText("No Item Selected");
-            if (nameTxt != null) typeTxt.SetText("???");
-            if (nameTxt != null) rarityTxt.SetText("???");
-            if (nameTxt != null) descriptionTxt.SetText("???");
+            if (typeTxt != null) typeTxt.SetText("???");
+            if (rarityTxt != null) rarityTxt.SetText("???");
+            if (descriptionTxt != null) descriptionTxt.SetText("???");
             if (itemIcon != null)
             {
                 itemIcon.sprite = null;
