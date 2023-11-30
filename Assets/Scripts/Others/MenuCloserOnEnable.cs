@@ -13,7 +13,7 @@ public class MenuCloserOnEnable : MonoBehaviour
     {
         if (onEnable)
         {
-            PlayerMenuManager.OnCloseAllUI.Invoke();
+            //PlayerMenuManager.OnCloseAllUI.Invoke();
             RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
         }
     }
@@ -22,7 +22,7 @@ public class MenuCloserOnEnable : MonoBehaviour
     {
         if (onDisable)
         {
-            PlayerMenuManager.OnCloseAllUI.Invoke();
+            //PlayerMenuManager.OnCloseAllUI.Invoke();
             RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
         }
     }

@@ -78,7 +78,7 @@ public class SettingsPanel : PlayerMenu
 
     public void OnCancelButtonClicked()
     {
-        PlayerMenuManager.OnCloseAllUI.Invoke();
+        //PlayerMenuManager.OnCloseAllUI.Invoke();
         RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
     }
 

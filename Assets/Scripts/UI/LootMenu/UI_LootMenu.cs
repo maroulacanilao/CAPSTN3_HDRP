@@ -84,7 +84,7 @@ namespace UI.LootMenu
                 return;
             }
             
-            PlayerMenuManager.OnCloseAllUI.Invoke();
+            //PlayerMenuManager.OnCloseAllUI.Invoke();
             RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
             RemoveAllItemOnly();
             
