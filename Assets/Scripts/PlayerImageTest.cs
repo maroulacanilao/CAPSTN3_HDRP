@@ -13,9 +13,17 @@ public class PlayerImageTest : MonoBehaviour
         FungusReceiver.OnTutorialDialogueEnabled.AddListener(SetVisibility);
     }
 
+    private void OnDestroy()
+    {
+        FungusReceiver.OnTutorialDialogueEnabled.RemoveListener(SetVisibility);
+    }
+
     public void SetVisibility(bool isActive)
     {
-        playerPortrait.SetActive(isActive);
-        characterNameBG.SetActive(isActive);
+        if (playerPortrait != null && characterNameBG != null)
+        {
+            playerPortrait.SetActive(isActive);
+            characterNameBG.SetActive(isActive);
+        }
     }
 }
