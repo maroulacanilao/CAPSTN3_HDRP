@@ -80,12 +80,15 @@ namespace UI
 
         public  virtual void DisplayNull()
         {
-            nameTxt.SetText("No Item Selected");
-            typeTxt.SetText("???");
-            rarityTxt.SetText("???");
-            descriptionTxt.SetText("???");
-            itemIcon.sprite = null;
-            itemIcon.color = Color.clear;
+            if (nameTxt != null) nameTxt.SetText("No Item Selected");
+            if (nameTxt != null) typeTxt.SetText("???");
+            if (nameTxt != null) rarityTxt.SetText("???");
+            if (nameTxt != null) descriptionTxt.SetText("???");
+            if (itemIcon != null)
+            {
+                itemIcon.sprite = null;
+                itemIcon.color = Color.clear;
+            }
             // statsPanel.DisplayDynamic(new CombatStats(), false);
             statsPanel.gameObject.SetActive(false);
             
