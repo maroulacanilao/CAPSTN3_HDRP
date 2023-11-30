@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 445916314275716225}
   - component: {fileID: 445916314275716224}
   - component: {fileID: 2083224805249531396}
+  - component: {fileID: -5470691148910483662}
   m_Layer: 7
   m_Name: Treasure Chest
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 445916314275716237}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.3600006, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -59,11 +60,23 @@ MonoBehaviour:
     <possibleExperienceDrop>k__BackingField: {x: 0, y: 0}
     possibleItemCount: {x: 0, y: 0}
     guaranteedItemDrop:
-      _serializedList: []
+      _serializedList:
+      - Key: {fileID: 11400000, guid: edf6a17c74fa7ed4ca859c9914a8a25c, type: 2}
+        Value: 1
+      - Key: {fileID: 11400000, guid: dc9d84328ef113347a89e0b1a23804a2, type: 2}
+        Value: 1
+      - Key: {fileID: 11400000, guid: 562b278c3caa5e44ca80990c67c983db, type: 2}
+        Value: 1
+      - Key: {fileID: 11400000, guid: 7aec536cc3c3b384fb6e9b7847a3fbf8, type: 2}
+        Value: 5
+      - Key: {fileID: 11400000, guid: c08935882abf3b14caea83b8174879e3, type: 2}
+        Value: 5
+      - Key: {fileID: 11400000, guid: 2f9170227bb86224cb25fa2da170e60f, type: 2}
+        Value: 5
     itemProbability:
       itemDictionary:
         _serializedList: []
-  level: 0
+  level: 1
 --- !u!65 &445916314275716224
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -91,6 +104,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToEnable:
   - {fileID: 5499634672955043181}
+--- !u!114 &-5470691148910483662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445916314275716237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 225e9fbd979948ee93e98c3f5c9078bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lootAllItemMessage: lootAllItemMsg
+  doneLootingMessage: ForceEquip
+  TreasureChest: {fileID: 445916314275716225}
+  HoeData: {fileID: 11400000, guid: edf6a17c74fa7ed4ca859c9914a8a25c, type: 2}
+  wateringCanData: {fileID: 11400000, guid: dc9d84328ef113347a89e0b1a23804a2, type: 2}
 --- !u!1 &445916314359040556
 GameObject:
   m_ObjectHideFlags: 0
