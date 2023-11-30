@@ -1,6 +1,7 @@
 using FungusWrapper;
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 
 public class PlayerDialogueTest : MonoBehaviour
@@ -14,8 +15,20 @@ public class PlayerDialogueTest : MonoBehaviour
 
     public void SetVisibility(bool isActive)
     {
-        borders[0].SetActive(isActive);
-        borders[1].SetActive(isActive);
+        if (borders != null)
+        {
+            foreach (GameObject o in borders)
+            {
+                if (o != null)
+                {
+                    o.SetActive(isActive);
+                }
+            }
+        }
     }
 
+    private void OnDestroy()
+    {
+        FungusReceiver.OnPlayerChoicesDisplayed.RemoveListener(SetVisibility);
+    }
 }

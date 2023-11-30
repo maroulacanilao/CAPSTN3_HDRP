@@ -59,7 +59,7 @@ namespace UI.StatShop
             {
                 return;
             }
-            PlayerMenuManager.OnCloseAllUI.Invoke();
+            //PlayerMenuManager.OnCloseAllUI.Invoke();
             RevisedPlayerMenuManager.OnCloseAllUIRevised.Invoke();
             gameObject.SetActive(true);
         }
