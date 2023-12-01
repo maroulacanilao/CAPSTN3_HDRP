@@ -77,6 +77,7 @@ namespace ScriptableObjectData.CharacterData
             spells.Clear();
             alliesData.Clear();
             offPartyData.Clear();
+            totalPartyData.Clear();
         }
     }
 }
