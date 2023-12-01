@@ -70,16 +70,7 @@ namespace UI.TabMenu.CharacterInfo.Party
             {
                 ShowOffParty();
             }
-            else
-            {
-                for (int i = 0; i < partyPanels.Length; i++)
-                {
-                    for (int j = 0; j < partyPanels[i].switchBtns.Length; j++)
-                    {
-                        partyPanels[i].switchBtns[j].gameObject.SetActive(false);
-                    }
-                }
-            }
+
 
             // checks if the player is in a dungeon
             if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameManager.Instance.DungeonSceneName)
@@ -134,7 +125,7 @@ namespace UI.TabMenu.CharacterInfo.Party
 
                 for (int i = 0; i < partyPanels.Length; i++)
                 {
-                    partyPanels[i].ShowButtons();
+                    // partyPanels[i].ShowButtons();
                 }
             }
         }
