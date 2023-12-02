@@ -84,13 +84,11 @@ namespace Player
                     case 0:
                         CurrentItem.SetData(toolDataBase.WateringCanDictionary[1]);
                         wateringCanData.RefreshUsage();
-                        //Insert UI Update here
                         OnRefillAction.Invoke(wateringCanData.MaxUsages);
                         break;
                     case 1:
                         CurrentItem.SetData(toolDataBase.WateringCanDictionary[2]);
                         wateringCanData.RefreshUsage();
-                        //Insert UI Update here
                         OnRefillAction.Invoke(wateringCanData.MaxUsages);
                         break;
                 }

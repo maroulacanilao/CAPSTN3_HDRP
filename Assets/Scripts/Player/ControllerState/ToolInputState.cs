@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using CustomHelpers;
+using Items.ItemData.Tools;
 using Managers;
 using UnityEngine;
 
@@ -81,10 +82,14 @@ namespace Player.ControllerState
         {
             animEndEvent = player.waterEnd;
         }
-
-
+        
         public override void Enter()
         {
+            if (player.playerEquipment.CurrentItem.Data is WateringCanData waterData)
+            {
+                if (waterData.CurrentUsage <= 0) return;
+            }
+            
             player.animator.SetTrigger(player.wateringHash);
             base.Enter();
             AudioManager.PlayWatering();
