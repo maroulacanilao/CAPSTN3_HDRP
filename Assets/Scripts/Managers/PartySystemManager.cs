@@ -46,6 +46,19 @@ public class PartySystemManager : MonoBehaviour
         playerData.offPartyData.Add(allyDataBase.allyDataDictionary[id]);
     }
 
+    public void AddOffPartyIntoAlliesData(int offPartyIndex)
+    {
+        playerData.AddAlly(playerData.offPartyData[offPartyIndex]);
+        playerData.offPartyData.Remove(playerData.offPartyData[offPartyIndex]);
+    }
+
+    public void MoveAlliesDataIntoOffParty(int alliesDataIndex)
+    {
+        playerData.offPartyData.Add(playerData.alliesData[alliesDataIndex]);
+        playerData.alliesData.Remove(playerData.alliesData[alliesDataIndex]);
+    }
+
+    // DO NOT USE THE ONES BELOW
     public void AddToAlliesData(AllyData ally)
     {
         if (playerData != null)

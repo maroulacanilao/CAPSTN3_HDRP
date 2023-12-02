@@ -44,6 +44,8 @@ namespace UI.TabMenu.CharacterInfo
         public int currentCodexindex;
         public int selectedSkill = 0;
 
+        public Button skillsBtn;
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -60,6 +62,15 @@ namespace UI.TabMenu.CharacterInfo
             }
 
             EventSystem.current.SetSelectedGameObject(codexItems[0].gameObject);
+
+            if (playerData.spells.Count <= 0)
+            {
+                skillsBtn.gameObject.SetActive(false);
+            }
+            else
+            {
+                skillsBtn.gameObject.SetActive(true);
+            }
 
             statsPanel.SetActive(true);
             skillPanel.SetActive(false);
@@ -122,14 +133,7 @@ namespace UI.TabMenu.CharacterInfo
             statsPanel.SetActive(false);
             skillPanel.SetActive(true);
 
-            if (currentCodexindex == 0)
-            {
-                skillInfoPanel.CreateList(currentCodexindex);
-            }
-            else
-            {
-                skillInfoPanel.CreateList(currentCodexindex);
-            }
+            skillInfoPanel.CreateList(currentCodexindex);
         }
 
         public void OpenStats()
@@ -141,19 +145,24 @@ namespace UI.TabMenu.CharacterInfo
 
         public void NextSkill()
         {
-            selectedSkill = (selectedSkill + 1) % skillInfoPanel.SpellsList.Count;
-            skillInfoPanel.ShowSpellInfo(currentCodexindex, selectedSkill);
-
+            if (skillInfoPanel.SpellsList.Count > 0)
+            {
+                selectedSkill = (selectedSkill + 1) % skillInfoPanel.SpellsList.Count;
+                skillInfoPanel.ShowSpellInfo(currentCodexindex, selectedSkill);
+            }
         }
 
         public void PrevSkill()
         {
-            selectedSkill--;
-            if (selectedSkill < 0)
+            if (skillInfoPanel.SpellsList.Count > 0)
             {
-                selectedSkill += skillInfoPanel.SpellsList.Count;
+                selectedSkill--;
+                if (selectedSkill < 0)
+                {
+                    selectedSkill += skillInfoPanel.SpellsList.Count;
+                }
+                skillInfoPanel.ShowSpellInfo(currentCodexindex, selectedSkill);
             }
-            skillInfoPanel.ShowSpellInfo(currentCodexindex, selectedSkill);
         }
     }
 }

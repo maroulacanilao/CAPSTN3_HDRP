@@ -23,12 +23,20 @@ namespace UI.TabMenu.CharacterInfo
 
         public void ShowSpellInfo(int index_, int spellIndex_)
         {
-            spellDisplay.DisplaySkill(index_, SpellsList[spellIndex_]);
+            if (SpellsList != null)
+            {
+                spellDisplay.DisplaySkill(index_, SpellsList[spellIndex_]);
+            }
+            else
+            {
+                spellDisplay.DisplayNull();
+            }
         }
 
         public void CreateList(int index_)
         {
             SpellsList.Clear();
+            SpellsList = new();
 
             if (index_ == 0)
             {
@@ -51,7 +59,10 @@ namespace UI.TabMenu.CharacterInfo
                 }
             }
 
-            ShowSpellInfo(index_, 0);
+            if (index_ >= 0 && index_ < SpellsList.Count)
+            {
+                ShowSpellInfo(index_, 0);
+            }
         }
     }
 }

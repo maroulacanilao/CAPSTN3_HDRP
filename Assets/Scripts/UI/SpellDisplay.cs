@@ -52,12 +52,17 @@ public class SpellDisplay : MonoBehaviour
         spellDamageText.text = $"Damage: {spellObject_.damage}";
     }
 
+    // NEW SPELL DISPLAY FUNCTION
     public virtual void DisplaySkill(int index_, SpellData spellData_)
     {
-        spellIcon.sprite = spellData_.icon;
-        spellNameText.text = spellData_.spellName;
-        spellCostText.text = $"-{spellData_.manaCost}mp";
-        spellDescText.text = spellData_.Description;
+        if (spellIcon != null)
+        {
+            spellIcon.sprite = spellData_.icon;
+            spellIcon.gameObject.SetActive(true);
+        }
+        if (spellNameText != null) spellNameText.text = spellData_.spellName;
+        if (spellCostText != null) spellCostText.text = $"-{spellData_.manaCost}mp";
+        if (spellDescText != null) spellDescText.text = spellData_.Description;
 
         if (index_ == 0)
         {
@@ -73,6 +78,7 @@ public class SpellDisplay : MonoBehaviour
 
     public virtual void DisplayNull()
     {
+        if (spellIcon != null) spellIcon.gameObject.SetActive(false);
         if (spellNameText != null) spellNameText.text = "No Spell Selected";
         if (spellTypeText != null) spellTypeText.text = "Spell Type: ???";
         if (spellCostText != null) spellCostText.text = "Mana Cost: ???";
