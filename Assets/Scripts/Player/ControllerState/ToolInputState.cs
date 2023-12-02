@@ -84,12 +84,7 @@ namespace Player.ControllerState
         }
         
         public override void Enter()
-        {
-            if (player.playerEquipment.CurrentItem.Data is WateringCanData waterData)
-            {
-                if (waterData.CurrentUsage <= 0) return;
-            }
-            
+        {   
             player.animator.SetTrigger(player.wateringHash);
             base.Enter();
             AudioManager.PlayWatering();

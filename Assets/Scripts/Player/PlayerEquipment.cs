@@ -202,7 +202,7 @@ namespace Player
 
             }
             
-            if (CurrentItem.Data is WateringCanData)
+            if (CurrentItem.Data is WateringCanData wateringCanData)
             {
                 if (fishingTile != null) return EquipmentAction.Refill; // This is for refill
                 
@@ -212,6 +212,11 @@ namespace Player
                 }
                 
                 if(currTile.tileState == TileState.ReadyToHarvest) return EquipmentAction.Harvest;
+
+                if (wateringCanData.CurrentUsage <= 0)
+                {
+                    return EquipmentAction.None;
+                }
 
                 return EquipmentAction.Water;
             }
