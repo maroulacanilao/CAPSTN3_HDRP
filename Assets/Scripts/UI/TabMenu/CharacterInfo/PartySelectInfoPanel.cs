@@ -13,6 +13,7 @@ using BattleSystem;
 using Character.CharacterComponents;
 using Unity.VisualScripting;
 using System.Collections.Generic;
+using System.Dynamic;
 
 namespace UI.TabMenu.CharacterInfo.Party
 {
@@ -30,8 +31,10 @@ namespace UI.TabMenu.CharacterInfo.Party
         [SerializeField] protected TextMeshProUGUI nameTxt;
         [SerializeField] protected TextMeshProUGUI descriptionTxt;
 
-        [SerializeField] public GameObject[] switchBtns;
+        // public GameObject[] switchBtns;
+        public Button selectedPartyBtn;
 
+        // DONT USE THIS
         public void DisplayAllySelected(PartyInfo allyInfo)
         {
             nameTxt.text = allyInfo.name;
@@ -39,7 +42,17 @@ namespace UI.TabMenu.CharacterInfo.Party
             allyIcon.sprite = allyInfo.sprite;
             allyIcon.gameObject.SetActive(true);
 
-            ShowButtons();
+            // ShowButtons();
+        }
+
+        public void DisplayAllyDetail(AllyData ally)
+        {
+            nameTxt.text = ally.characterName;
+            descriptionTxt.text = ally.encyclopediaInfo.description;
+            allyIcon.sprite = ally.encyclopediaInfo.sprite;
+            allyIcon.gameObject.SetActive(true);
+
+            selectedPartyBtn.interactable = true;
         }
 
         public void DisplayNull()
@@ -48,14 +61,17 @@ namespace UI.TabMenu.CharacterInfo.Party
             descriptionTxt.SetText("--");
             allyIcon.sprite = null;
             allyIcon.gameObject.SetActive(false);
+
+            selectedPartyBtn.interactable = false;
         }
 
-        public void ShowButtons()
-        {
-            for (int i = 0; i < switchBtns.Length; i++)
-            {
-                switchBtns[i].SetActive(true);
-            }
-        }
+        // DONT USE THIS
+        //public void ShowButtons()
+        //{
+        //    for (int i = 0; i < switchBtns.Length; i++)
+        //    {
+        //        switchBtns[i].SetActive(true);
+        //    }
+        //}
     }
 }

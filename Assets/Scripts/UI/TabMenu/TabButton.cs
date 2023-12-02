@@ -95,7 +95,7 @@ namespace UI.TabMenu
         {
             if (selectedImageGO != null)
             {
-                selectedImageGO.transform.DOLocalMoveY(originalPos.y, 0.25f);
+                selectedImageGO.transform.DOLocalMoveY(originalPos.y, 0.1f);
                 selectedImageGO.SetActive(false);
             }
         }

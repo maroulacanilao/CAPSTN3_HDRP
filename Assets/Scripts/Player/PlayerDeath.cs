@@ -7,6 +7,7 @@ using CustomHelpers;
 using Managers;
 using ScriptableObjectData.CharacterData;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Player
 {
@@ -29,8 +30,13 @@ namespace Player
         private void OnDeath(CharacterHealth arg1_, DamageInfo arg2_)
         {
             if(!isActiveAndEnabled) return;
-            if(!GameManager.IsDungeonSceneActive()) return;
-            canvas.SetActive(true);
+            if (SceneManager.GetActiveScene().name != "SampleDungeonScene") return;
+            if(canvas != null) canvas.SetActive(true);
+            
+            // Debug.Log($"Current Scene: {SceneManager.GetActiveScene().name}");
+            // Debug.Log($"IsDungeonSceneActive: {GameManager.IsDungeonSceneActive()}");
+            //if(!GameManager.IsDungeonSceneActive()) return;
+            
         }
 
         public void NextScene()
