@@ -20,6 +20,7 @@ namespace UI.ShrineUI.StatStore
         [SerializeField] private Image vitality_IMG, strength_IMG, intelligence_IMG, defense_IMG, speed_IMG;
         [SerializeField] private TextMeshProUGUI vitalityLabel, strengthLabel, intelligenceLabel, defenseLabel, speedLabel;
         [SerializeField] private Color selectColor;
+        [SerializeField] private Color originalColor = Color.white;
 
         private PlayerData playerData => gameDataBase.playerData;
         private CombatStats baseStats => playerData.statsData.GetLeveledStats(playerData.level) + playerData.statsData.equipmentStats;
@@ -70,11 +71,11 @@ namespace UI.ShrineUI.StatStore
             defenseLabel.transform.localScale = defenseLabelScale;
             speedLabel.transform.localScale = speedLabelScale;
             
-            vitalityLabel.color = Color.white;
-            strengthLabel.color = Color.white;
-            intelligenceLabel.color = Color.white;
-            defenseLabel.color = Color.white;
-            speedLabel.color = Color.white;
+            vitalityLabel.color = originalColor;
+            strengthLabel.color = originalColor;
+            intelligenceLabel.color = originalColor;
+            defenseLabel.color = originalColor;
+            speedLabel.color = originalColor;
         }
 
         private void Enlarge(StatType statType_)

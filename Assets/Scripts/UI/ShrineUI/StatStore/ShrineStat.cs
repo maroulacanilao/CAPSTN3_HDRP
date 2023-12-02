@@ -35,6 +35,8 @@ namespace UI.ShrineUI.StatStore
         
         public static readonly Evt OnUpdateDisplay = new Evt();
 
+        [SerializeField] private Button confirmButton, cancelButton;
+
         private void Awake()
         {
             confirmMenu.Initialize(this);
@@ -62,6 +64,8 @@ namespace UI.ShrineUI.StatStore
         public void CreateList()
         {
             confirmMenu.gameObject.SetActive(false);
+            if (confirmButton != null) confirmButton.gameObject.SetActive(false);
+            if (cancelButton != null) cancelButton.gameObject.SetActive(false);
             var _consumable = GetConsumableInInventory();
 
             ClearList();
@@ -77,7 +81,7 @@ namespace UI.ShrineUI.StatStore
             }
             shrineStatsDisplay.UpdateDisplay();
             errorTxt.gameObject.SetActive(consumableBtns.Count <= 0);
-            if(consumableBtns.Count <= 0) return;
+            if (consumableBtns.Count <= 0) return;
             
             EventSystem.current.SetSelectedGameObject(consumableBtns.First().Value.gameObject);
             Canvas.ForceUpdateCanvases();
@@ -102,6 +106,8 @@ namespace UI.ShrineUI.StatStore
             var _result = shrineData.OfferConsumable(itemConsumable_, count_);
             
             confirmMenu.gameObject.SetActive(false);
+            if (confirmButton != null) confirmButton.gameObject.SetActive(false);
+            if (cancelButton != null) cancelButton.gameObject.SetActive(false);
             CreateList();
             shrineStatsDisplay.UpdateDisplay();
         }
@@ -157,6 +163,8 @@ namespace UI.ShrineUI.StatStore
             Debug.Log(GetMaxCanOffer(btn_.item));
             
             confirmMenu.DisplayConfirmation(btn_);
+            if (confirmButton != null) confirmButton.gameObject.SetActive(!btn_.IsEmptyOrDestroyed() || btn_.item != null);
+            if (cancelButton != null) cancelButton.gameObject.SetActive(!btn_.IsEmptyOrDestroyed() || btn_.item != null);
         }
     }
 }

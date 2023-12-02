@@ -119,7 +119,7 @@ namespace UI.ShrineUI.StatStore
             var _data = item.Data as ConsumableData;
             var _statType = _data.GetStatType();
             statIcon.sprite = _statType.GetSpriteIcon();
-            statTXT.text = $"{_statType.ToString()} +{count}";
+            statTXT.text = $"{_statType} +{count}";
         }
     }
 }
