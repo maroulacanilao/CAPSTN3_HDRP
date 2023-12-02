@@ -47,7 +47,7 @@ namespace UI.TabMenu.CharacterInfo.Party
 
         public void DisplayAllyDetail(AllyData ally)
         {
-            nameTxt.text = ally.name;
+            nameTxt.text = ally.characterName;
             descriptionTxt.text = ally.encyclopediaInfo.description;
             allyIcon.sprite = ally.encyclopediaInfo.sprite;
             allyIcon.gameObject.SetActive(true);
