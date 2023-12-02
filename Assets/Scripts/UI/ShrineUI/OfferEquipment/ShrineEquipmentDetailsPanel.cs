@@ -44,13 +44,12 @@ namespace UI.ShrineUI
             OfferButton.interactable = (item != null);
             base.DisplayItem(item);
             DisplayConversion(item);
-            descriptionPanel.gameObject.SetActive(false);
         }
 
         public override void DisplayNull()
         {
             base.DisplayNull();
-            descriptionPanel.gameObject.SetActive(false);
+            descriptionPanel.SetActive(false);
             OfferButton.interactable = false;
         }
 
@@ -62,11 +61,11 @@ namespace UI.ShrineUI
             
             var _seedData = shrineData.GetGearToSeedConversion(_gearData);
             if(_seedData == null) return;
-            
-            seedIcon.sprite = _seedData.Icon;
-            seedNameTxt.text = _seedData.ItemName;
-            seedCountTxt.text = $"x{item.Level}";
-            seedPanel.gameObject.SetActive(_seedData != null);
+
+            if (seedIcon != null) seedIcon.sprite = _seedData.Icon;
+            if (seedNameTxt != null) seedNameTxt.text = _seedData.ItemName;
+            if (seedCountTxt != null) seedCountTxt.text = $"x{item.Level}";
+            if (seedPanel != null) seedPanel.SetActive(_seedData != null);
         }
     }
 }

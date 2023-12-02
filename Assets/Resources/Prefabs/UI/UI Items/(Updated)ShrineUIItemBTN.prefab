@@ -187,10 +187,10 @@ GameObject:
   - component: {fileID: 4957214284808470420}
   - component: {fileID: 4616463235896930891}
   - component: {fileID: 476180011964913898}
-  - component: {fileID: 7592703735182151579}
+  - component: {fileID: 1050872093751010416}
   - component: {fileID: 1905961128314650639}
   m_Layer: 7
-  m_Name: (Updated)ShrineSpellItemBTN
+  m_Name: (Updated)ShrineUIItemBTN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -286,7 +286,7 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 52fe0c2bfc83f97488bb088a63412ad2,
+    m_HighlightedSprite: {fileID: 21300000, guid: 18ca9f5e0e5e14c48a1417342b71d518,
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 18ca9f5e0e5e14c48a1417342b71d518, type: 3}
     m_SelectedSprite: {fileID: 21300000, guid: 18ca9f5e0e5e14c48a1417342b71d518, type: 3}
@@ -317,7 +317,7 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 1, b: 1, a: 0}
   m_EffectDistance: {x: 3, y: 3}
   m_UseGraphicAlpha: 1
---- !u!114 &7592703735182151579
+--- !u!114 &1050872093751010416
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -326,7 +326,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4977682528715954909}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c93e7b17f804d364796cc70437df33fa, type: 3}
+  m_Script: {fileID: 11500000, guid: 021c7cbfa5a6da749a066b1686333f49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <Text>k__BackingField: {fileID: 0}
@@ -335,10 +335,8 @@ MonoBehaviour:
   <outline>k__BackingField: {fileID: 476180011964913898}
   <outlineColor>k__BackingField: {r: 0.6862745, g: 0.007843138, b: 0.23921569, a: 1}
   <outlineSize>k__BackingField: {x: 3, y: 3}
-  spellNameTxt: {fileID: 4971906117574163642}
-  requirementIcon: {fileID: 1900710874354887507}
-  requirementTxt: {fileID: 3775620767548688655}
-  spellIcon: {fileID: 7239862112972634058}
+  txt: {fileID: 4971906117574163642}
+  icon: {fileID: 7239862112972634058}
 --- !u!114 &1905961128314650639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,7 +355,6 @@ MonoBehaviour:
   selectSfxName: ButtonSelect
   clickSfxName: ButtonClick
   selectIcon: {fileID: 0}
-  WantToAnimate: 1
 --- !u!1 &5666476004042891618
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,7 +443,7 @@ GameObject:
   - component: {fileID: 4788528968933464054}
   - component: {fileID: 7239862112972634058}
   m_Layer: 7
-  m_Name: SpellIcon
+  m_Name: ItemIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -77,12 +77,13 @@ namespace UI.HUD
         private void PlayObjectivePanelAnimation()
         {
             panel.transform.localPosition = new Vector3(1000f, originalPos.y);
+            panel.SetActive(true);
 
             var sequence = DOTween.Sequence();
             sequence.Append(panel.transform.DOLocalMoveX(originalPos.x, 1f));
             sequence.AppendInterval(10f);
             sequence.Append(panel.transform.DOLocalMoveX(1000f, 1f));
-
+            panel.SetActive(false);
         }
     }
 }
