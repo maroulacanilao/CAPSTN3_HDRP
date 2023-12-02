@@ -10,9 +10,11 @@ namespace UI.ShrineUI.EquipmentStore
     public class ShrineStoreEquipmentDetails : ItemDetailsPanel
     {
         [SerializeField] private ShrineEquipmentStore shrineEquipmentStore;
-        [SerializeField] private TextMeshProUGUI errorTXt;
+        [SerializeField] private TextMeshProUGUI errorTxt;
         [SerializeField] private Button buyBtn;
         [SerializeField] private ShrineRequirementItem requirementItem;
+
+        [SerializeField] private GameObject requirementPanel;
         
         public ShrineEquipmentStoreItem currentEquipmentStoreItem { get; private set; }
 
@@ -28,17 +30,21 @@ namespace UI.ShrineUI.EquipmentStore
         public void SetItem(ShrineEquipmentStoreItem item_)
         {
             currentEquipmentStoreItem = item_;
-            DisplayItem(item_.gearItem);
-            descriptionPanel.gameObject.SetActive(false);
+            if (item_ != null)
+            {
+                DisplayItem(item_.gearItem);
+            }
             
             if (item_ != null)
             {
                 requirementItem.Set(item_.offerRequirement);
                 requirementItem.gameObject.SetActive(true);
+                requirementPanel.gameObject.SetActive(true);
             }
             else
             {
                 requirementItem.gameObject.SetActive(false);
+                requirementPanel.gameObject.SetActive(false);
                 buyBtn.interactable = false;
                 return;
             }
@@ -46,17 +52,18 @@ namespace UI.ShrineUI.EquipmentStore
             var _result = shrineEquipmentStore.CanBuyItem(item_);
             buyBtn.interactable = _result == OfferingResult.Success;
 
+            errorTxt.gameObject.SetActive(true);
             switch (_result)
             {
                 case OfferingResult.NoOpenSlot:
-                    errorTXt.text = "No open slot";
+                    errorTxt.text = "No open slot";
                     break;
                 case OfferingResult.NoRequirementInInventoryStorage:
                 case OfferingResult.NotEnoughRequirementsCount:
-                    errorTXt.text = "Not enough requirement";
+                    errorTxt.text = "Not enough requirement";
                     break;
                 default:
-                    errorTXt.text = "";
+                    errorTxt.text = "";
                     break;
             }
         }
@@ -66,7 +73,9 @@ namespace UI.ShrineUI.EquipmentStore
             base.DisplayNull();
             buyBtn.interactable = false;
             requirementItem.gameObject.SetActive(false);
+            requirementPanel.gameObject.SetActive(false);
             descriptionPanel.gameObject.SetActive(false);
+            errorTxt.gameObject.SetActive(false);
         }
     }
 }

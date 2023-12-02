@@ -2,6 +2,7 @@ using System;
 using Character;
 using CustomHelpers;
 using Items;
+using Items.Inventory;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,6 +35,10 @@ namespace UI
         [SerializeField] protected Image itemIcon;
         
         protected Item currItem;
+
+        [SerializeField] private PlayerInventory playerInventory;
+        public PlayerInventory Inventory => playerInventory;
+
 
         private void Awake()
         {
@@ -70,10 +75,24 @@ namespace UI
             if (descriptionTxt != null) descriptionTxt.SetText(_data.Description.Beautify());
             if (itemIcon != null) itemIcon.sprite = _data.Icon;
 
-            if (currItem != null && currItem is ItemGear _gear)
+            //if (currItem != null && currItem is ItemGear _gear)
+            //{
+            //    statsPanel.DisplayDynamic(_gear.Stats, false);
+            //    nameTxt.SetText($"{_gear.Data.ItemName} - Lv.{_gear.Level}");
+            //}
+            //else statsPanel.gameObject.SetActive(false);
+
+            if (currItem != null && currItem is ItemArmor _armor)
             {
-                statsPanel.DisplayDynamic(_gear.Stats, false);
-                nameTxt.SetText($"{_gear.Data.ItemName} - Lv.{_gear.Level}");
+                var _oldStats = Inventory.ArmorEquipped?.Stats ?? new CombatStats();
+                statsPanel.DisplayDiffDynamic(_armor.Stats, _oldStats, false);
+                nameTxt.SetText($"{_armor.Data.ItemName} - Lv.{_armor.Level}");
+            }
+            else if (currItem != null && currItem is ItemWeapon _weapon)
+            {
+                var _oldStats = Inventory.WeaponEquipped?.Stats ?? new CombatStats();
+                statsPanel.DisplayDiffDynamic(_weapon.Stats, _oldStats, false);
+                nameTxt.SetText($"{_weapon.Data.ItemName} - Lv.{_weapon.Level}");
             }
             else statsPanel.gameObject.SetActive(false);
         }
@@ -89,6 +108,7 @@ namespace UI
                 itemIcon.sprite = null;
                 itemIcon.color = Color.clear;
             }
+            if (ItemTypeRarityTxt != null) ItemTypeRarityTxt.SetText("???");
             // statsPanel.DisplayDynamic(new CombatStats(), false);
             statsPanel.gameObject.SetActive(false);
             

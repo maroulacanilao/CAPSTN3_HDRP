@@ -49,7 +49,6 @@ namespace UI.ShrineUI
         public override void DisplayNull()
         {
             base.DisplayNull();
-            descriptionPanel.SetActive(false);
             OfferButton.interactable = false;
         }
 

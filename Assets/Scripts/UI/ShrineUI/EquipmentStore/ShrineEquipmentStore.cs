@@ -9,7 +9,6 @@ namespace UI.ShrineUI.EquipmentStore
 {
     public class ShrineEquipmentStore : ShrineMenu
     {
-        [SerializeField] ShrineData shrineData;
         [SerializeField] Transform contentParent;
         [SerializeField] private ShrineStoreEquipmentDetails detailPanel;
         [SerializeField] private ShrineEquipmentStoreItem equipmentStoreItemPrefab;
@@ -62,21 +61,25 @@ namespace UI.ShrineUI.EquipmentStore
                 _btn.SelectButton();
                 EventSystem.current.SetSelectedGameObject(_btn.gameObject);
                 detailPanel.SetItem(_btn);
+                detailPanel.gameObject.SetActive(true);
                 errorTxt.gameObject.SetActive(false);
             }
             else
             {
-                errorTxt.text = "No more gears available";
+                errorTxt.text = "No more gears available.";
                 errorTxt.gameObject.SetActive(true);
                 detailPanel.SetItem(null);
+                detailPanel.gameObject.SetActive(false);
+                detailPanel.DisplayNull();
             }
         }
         
         private void OnClickItem(ShrineEquipmentStoreItem buttonItem_)
         {
             detailPanel.SetItem(buttonItem_);
+            detailPanel.gameObject.SetActive(true);
         }
-        
+
         public OfferingResult CanBuyItem(ShrineEquipmentStoreItem buttonItem_)
         {
             if(buttonItem_ == null)
@@ -99,10 +102,10 @@ namespace UI.ShrineUI.EquipmentStore
                     break;
                 case OfferingResult.Success:
                     CreateList();
-                    errorTxt.text = "";
+                    errorTxt.text = "No more gears available.";
                     break;
                 default:
-                    errorTxt.text = "";
+                    errorTxt.text = "No more gears available.";
                     break;
             }
         }

@@ -38,7 +38,7 @@ namespace UI.ShrineUI
             }
             else
             {
-                countTxt.text = $"<color=#af023d>00</color>/{_count}";
+                countTxt.text = $"<color=#af023d>0</color>/{_count}";
             }
         }
 

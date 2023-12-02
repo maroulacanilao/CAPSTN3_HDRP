@@ -755,6 +755,7 @@ MonoBehaviour:
   descriptionTxt: {fileID: 2329169128676621194}
   ItemTypeRarityTxt: {fileID: 8754835413179650512}
   itemIcon: {fileID: 6794808681455253496}
+  playerInventory: {fileID: 11400000, guid: 2e52e9402952ab649b5a934475b711d1, type: 2}
   shrineData: {fileID: 11400000, guid: a627ee42844abae4089364a40f831ab8, type: 2}
   OfferButton: {fileID: 3187368605117880129}
   shrineGearToSeed: {fileID: 3277070358919177453}
@@ -2793,7 +2794,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300.3529, y: 0}
+  m_SizeDelta: {x: 270.6241, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9216288662050842474
 CanvasRenderer:
@@ -2823,9 +2824,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Buy
-
-'
+  m_text: Offer
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c416996b7ad4aee45b833c2dbaa71880, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 36e436f7be1c29149a57d162a6422228, type: 2}

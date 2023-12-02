@@ -6,7 +6,6 @@ using Shop;
 using Spells.Base;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace UI.ShrineUI.GetSpells
 {
@@ -65,6 +64,7 @@ namespace UI.ShrineUI.GetSpells
         
         private void OnClickSpell(ShrineSpellItem spellBtn_)
         {
+            spellDetails.gameObject.SetActive(true);
             spellDetails.DisplaySpell(spellBtn_);
         }
 
@@ -75,6 +75,7 @@ namespace UI.ShrineUI.GetSpells
                 var _btn = spellItems[0];
                 _btn.SelectButton();
                 EventSystem.current.SetSelectedGameObject(_btn.gameObject);
+                spellDetails.gameObject.SetActive(true);
                 spellDetails.DisplaySpell(_btn);
                 errorTxt.gameObject.SetActive(false);
             }
@@ -83,6 +84,7 @@ namespace UI.ShrineUI.GetSpells
                 errorTxt.text = "No more spells available.";
                 errorTxt.gameObject.SetActive(true);
                 spellDetails.DisplayNull();
+                spellDetails.gameObject.SetActive(false);
             }
         }
         
