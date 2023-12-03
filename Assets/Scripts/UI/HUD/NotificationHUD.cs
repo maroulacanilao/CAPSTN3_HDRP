@@ -14,6 +14,7 @@ namespace UI.HUD
     {
         [SerializeField] private GameObject harvestNotification;
         [SerializeField] private Image harvestIcon;
+        [SerializeField] private TextMeshProUGUI harvestNameTxt;
         [SerializeField] private TextMeshProUGUI harvestTxt;
 
         [SerializeField] private TextMeshProUGUI expTxt;
@@ -21,12 +22,16 @@ namespace UI.HUD
         private Vector3 defaultHarvestNotificationPos;
         private Vector3 defaultExpNotificationPos;
         private Transform Player;
-        
+
+        private Vector3 originalPos;
+
         private void Start()
         {
             defaultExpNotificationPos = expTxt.transform.position;
             defaultHarvestNotificationPos = harvestNotification.transform.position;
             Player = GameObject.FindGameObjectWithTag("Player").transform;
+
+            originalPos = harvestNotification.transform.localPosition;
         }
 
         private void OnEnable()
@@ -41,11 +46,14 @@ namespace UI.HUD
         {
             FarmTileManager.OnSuccessHarvest.RemoveListener(OnSuccessHarvest);
             FishingManager.OnCatchSuccess.RemoveListener(OnSuccessHarvest);
+
+            harvestNotification.transform.localPosition = originalPos;
         }
-        
+
         private void OnSuccessHarvest(Item item, int exp_)
         {
-            StartCoroutine(Co_DisplayHarvest(item));
+            // StartCoroutine(Co_DisplayHarvest(item));
+            PlayHarvestNotifAnim(item);
             StartCoroutine(Co_DisplayExp(exp_));
             Debug.Log(item.Data.name);
             Debug.Log(exp_);
@@ -56,6 +64,7 @@ namespace UI.HUD
             harvestNotification.SetActive(false);
             if (item == null) yield break;
             harvestIcon.sprite = item.Data.Icon;
+            if (harvestNameTxt != null) harvestNameTxt.text = item.Data.ItemName;
             harvestTxt.SetText($"+{item.StackCount}");
             harvestNotification.SetActive(true);
 
@@ -84,6 +93,22 @@ namespace UI.HUD
             yield return expTxt.transform.DOMoveY(_pos.y + 100f, 1f).SetEase(Ease.OutCubic).SetUpdate(true).WaitForCompletion();
             
             expTxt.gameObject.SetActive(false);
+        }
+
+        private void PlayHarvestNotifAnim(Item item)
+        {
+            harvestNotification.transform.localPosition = new Vector3(1600f, originalPos.y);
+            harvestNotification.SetActive(true);
+
+            if (item == null) return;
+            harvestIcon.sprite = item.Data.Icon;
+            if (harvestNameTxt != null) harvestNameTxt.text = item.Data.ItemName;
+            harvestTxt.SetText($"+{item.StackCount}");
+
+            var sequence = DOTween.Sequence();
+            sequence.Append(harvestNotification.transform.DOLocalMoveX(originalPos.x, 0.5f));
+            sequence.AppendInterval(1.5f);
+            sequence.Append(harvestNotification.transform.DOLocalMoveX(1600f, 0.5f));
         }
     }
 }
