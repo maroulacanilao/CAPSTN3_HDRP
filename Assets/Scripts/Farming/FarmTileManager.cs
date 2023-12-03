@@ -169,7 +169,7 @@ namespace Farming
         {
             if(seedData_ == null) return;
             var _item = seedData_.produceData.GetConsumableItem(1);
-            var _exp = 50;
+            var _exp = 10;
             
             inventory.AddItem(_item);
             

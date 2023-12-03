@@ -336,6 +336,7 @@ namespace Player
             {
                 wateringCanData.RefreshUsage();
                 OnRefillAction.Invoke(wateringCanData.MaxUsages);
+                AudioManager.PlayWatering();
             }
         }
 
