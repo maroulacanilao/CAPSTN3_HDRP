@@ -43,12 +43,12 @@ public class BorderTeleport : MonoBehaviour
 
     private void LateUpdate()
     {
-          if(playerPosition.x < leftBorder.x) Teleport();
-          else if(playerPosition.x > rightBorder.x) Teleport();
-          else if (playerPosition.y > topBorder.y) Teleport();
-          else if(playerPosition.y < bottomBorder.y) Teleport();
-          else if(playerPosition.z < frontBorder.z) Teleport();
-          else if(playerPosition.z > backBorder.z) Teleport();
+        if(playerPosition.x < leftBorder.x) Teleport();
+        else if(playerPosition.x > rightBorder.x) Teleport();
+        else if (playerPosition.y > topBorder.y) Teleport();
+        else if(playerPosition.y < bottomBorder.y) Teleport();
+        else if(playerPosition.z < frontBorder.z) Teleport();
+        else if(playerPosition.z > backBorder.z) Teleport();
     }
 
     private void Teleport()
