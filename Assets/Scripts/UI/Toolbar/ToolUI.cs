@@ -76,6 +76,7 @@ namespace UI.Toolbar
             if (item_ == null || toolIcon.sprite == null)
             {
                 toolIcon.color = Color.clear;
+                wateringCanRefillBar.SetActive(false);
             }
             else
             {
@@ -87,6 +88,7 @@ namespace UI.Toolbar
                 if (currItem.Data is WateringCanData wateringCanData)
                 {
                     wateringCanRefillBar.SetActive(true);
+                    PlayerEquipment.OnRefillAction.Invoke(wateringCanData.MaxUsages);
                     PlayerEquipment.OnRefillReduced.Invoke(wateringCanData.CurrentUsage);
                 }
                 else
