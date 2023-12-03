@@ -98,15 +98,15 @@ namespace UI.HUD
             var _addedTxt = $" <color=green>+{addedExp_}</color>";
             DOTween.To(() => prevExp_, x => prevExp_ = x, newExp_, effectDuration).OnUpdate(() =>
             {
-                expText.text = $"{Mathf.Clamp(prevExp_,0,neededExp_):0} / {neededExp_:0} {_addedTxt}";
+                if (expText != null) expText.text = $"{Mathf.Clamp(prevExp_,0,neededExp_):0} / {neededExp_:0} {_addedTxt}";
             }).SetUpdate(true);
         }
         
         private void DisplayLevel(bool willDisableOtherObjects_ = true)
         {
-            levelText.transform.localScale = defaultSize;
+            // levelText.transform.localScale = defaultSize;
             levelText.text = $"{lvlData.CurrentLevel}";
-            expText.text = $"{lvlData.CurrentLevelExperience} / {lvlData.CurrentExperienceNeeded}";
+            if (expText != null) expText.text = $"{lvlData.CurrentLevelExperience} / {lvlData.CurrentExperienceNeeded}";
             
             expBar.fillAmount = lvlData.CurrentLevelExperience / (float) lvlData.CurrentExperienceNeeded;
             if(willDisableOtherObjects_) StartCoroutine(Co_SetOtherObjectActive(false, 0.5f));
@@ -115,8 +115,8 @@ namespace UI.HUD
         private IEnumerator Co_SetOtherObjectActive(bool willActivate_, float initialDelay_)
         {
             yield return new WaitForSeconds(initialDelay_);
-            expText.gameObject.SetActive(willActivate_);
-            expBarBG.gameObject.SetActive(willActivate_);
+            if (expText != null) expText.gameObject.SetActive(willActivate_);
+            // expBarBG.gameObject.SetActive(willActivate_);
         }
     }
 }
