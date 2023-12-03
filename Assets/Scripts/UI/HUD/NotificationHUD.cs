@@ -25,13 +25,16 @@ namespace UI.HUD
 
         private Vector3 originalPos;
 
+        private void Awake()
+        {
+            originalPos = harvestNotification.transform.localPosition;
+        }
+
         private void Start()
         {
             defaultExpNotificationPos = expTxt.transform.position;
             defaultHarvestNotificationPos = harvestNotification.transform.position;
             Player = GameObject.FindGameObjectWithTag("Player").transform;
-
-            originalPos = harvestNotification.transform.localPosition;
         }
 
         private void OnEnable()
