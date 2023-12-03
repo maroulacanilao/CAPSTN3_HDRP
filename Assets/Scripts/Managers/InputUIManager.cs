@@ -28,12 +28,16 @@ public class InputUIManager : MonoBehaviour
     public static readonly Evt OnFishesMenu = new Evt();
     public static readonly Evt OnMonstersMenu = new Evt();
 
+    private void Awake()
+    {
+        inputSystemUi = GetComponent<InputSystemUIInputModule>();
 
+        inputSystemUi.cancel.ToInputAction().started += this.Cancel;
+        inputSystemUi.move.action.performed += this.Move;
+    }
 
     public void OnEnable()
     {
-        inputSystemUi = GetComponent<InputSystemUIInputModule>();
-        
         inputSystemUi.cancel.ToInputAction().started += this.Cancel;
         inputSystemUi.move.action.performed += this.Move;
     }
