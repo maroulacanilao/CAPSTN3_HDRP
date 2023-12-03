@@ -2939,7 +2939,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1681577811167782498}
   - component: {fileID: 2009597963162944080}
-  - component: {fileID: 1841349320920963734}
   - component: {fileID: 5205719265290793350}
   m_Layer: 0
   m_Name: FishesPanel
@@ -2979,27 +2978,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1028713397866556898}
   m_CullTransparentMesh: 1
---- !u!114 &1841349320920963734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1028713397866556898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5760670c4b78eea45bcdb5fca9a2551d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  codexItemPrefab: {fileID: 7686315612618497495, guid: 886bbc8ac31f719498692342ca658ceb,
-    type: 3}
-  contentParent: {fileID: 9082012450780140695}
-  codexInfoDisplay: {fileID: 0}
-  errorTXT: {fileID: 4742477628285098929}
-  codexItems: []
-  blockerPanel: {fileID: 2033589627216939410}
-  cropDataBase: {fileID: 11400000, guid: 11c580dce9cfa124d842295967d21c3e, type: 2}
-  codexInfoDisplayRevised: {fileID: 6141999635428879506}
 --- !u!114 &5205719265290793350
 MonoBehaviour:
   m_ObjectHideFlags: 0
