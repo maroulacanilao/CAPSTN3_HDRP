@@ -64,6 +64,7 @@ namespace SaveSystem
         public CombatStats statsBought;
         public PlayStatsSaveData[] enemyKills;
         public PlayStatsSaveData[] cropHarvested;
+        public PlayStatsSaveData[] fishCaught;
     }
     
     [Serializable]

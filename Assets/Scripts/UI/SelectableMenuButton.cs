@@ -48,12 +48,12 @@ namespace UI
             if (GetComponent<TextMeshProUGUI>())
             {
                 if (Text == null) Text = GetComponent<TextMeshProUGUI>();
-                defaultColor = Text.color;
+                if (Text != null) defaultColor = Text.color;
             }
             else
             {
                 if (Background == null) Background = GetComponent<Image>();
-                defaultColor = Background.color;
+                if (Background != null) defaultColor = Background.color;
             }
 
             outline.effectDistance = outlineSize;

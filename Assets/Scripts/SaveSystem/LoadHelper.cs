@@ -108,6 +108,13 @@ namespace SaveSystem
                 gameDataBase_.cropDataBase.AddHarvest(_itemData as ConsumableData, _cropStat.value);
             }
 
+            foreach (var _fishStat in saveData_.playerSaveData.fishCaught)
+            {
+                var _itemData = gameDataBase_.itemDatabase.ItemDataDictionary.TryGetValue(_fishStat.key, out var _item) ? _item : null;
+                if (_item == null) continue;
+                gameDataBase_.fishDataBase.AddCatch(_itemData as ConsumableData, _fishStat.value);
+            }
+
             foreach (var _enemyKill in saveData_.playerSaveData.enemyKills)
             {
                 var _enemyData = gameDataBase_.enemyDataBase.enemyDataDictionary.TryGetValue(_enemyKill.key, out var _enemy) ? _enemy : null;

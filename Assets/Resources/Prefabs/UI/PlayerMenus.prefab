@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1809367721753045960}
-  - component: {fileID: 1809367721753045963}
   - component: {fileID: 1404032783393185892}
   - component: {fileID: 1809367721753045962}
   m_Layer: 0
@@ -32,28 +31,13 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1688059184296707200}
-  - {fileID: 6883926808293279323}
   - {fileID: 6949038989149310349}
   - {fileID: 5415108679860605887}
+  - {fileID: 6883926808293279323}
   - {fileID: 3742124441005583286}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1809367721753045963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1809367721753045961}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ae398bee455dc84e90a1dc2daaafd22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Menus: []
-  tabGroup: {fileID: 0}
-  inventoryMenu: {fileID: 5415108679860605884}
 --- !u!114 &1404032783393185892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,7 +228,7 @@ PrefabInstance:
     - target: {fileID: 5252795957910343139, guid: 1632e38e67899d140bc571bcb3fd363c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5252795957910343139, guid: 1632e38e67899d140bc571bcb3fd363c,
         type: 3}
@@ -1684,7 +1668,7 @@ PrefabInstance:
     - target: {fileID: 4346092296533956568, guid: 838eb08ad9bef2e4cad143c60a1111c6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4346092296533956568, guid: 838eb08ad9bef2e4cad143c60a1111c6,
         type: 3}
@@ -2414,6 +2398,11 @@ PrefabInstance:
     - target: {fileID: 6127763474685198305, guid: 838eb08ad9bef2e4cad143c60a1111c6,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6141999635428879506, guid: 838eb08ad9bef2e4cad143c60a1111c6,
+        type: 3}
+      propertyPath: isForFishCodex
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6151112410240556842, guid: 838eb08ad9bef2e4cad143c60a1111c6,
@@ -4127,7 +4116,7 @@ PrefabInstance:
     - target: {fileID: 4489941604621738362, guid: 430ada981105a1b4b93523e31c917dca,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4489941604621738362, guid: 430ada981105a1b4b93523e31c917dca,
         type: 3}
@@ -4710,6 +4699,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 204.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5782457193775117312, guid: ad7875097d8d24f478c796a8c2c6f20f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5805487429521330325, guid: ad7875097d8d24f478c796a8c2c6f20f,
         type: 3}

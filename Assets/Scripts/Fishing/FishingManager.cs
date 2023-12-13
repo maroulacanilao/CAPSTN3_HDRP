@@ -128,6 +128,7 @@ public class FishingManager : Singleton<FishingManager>
         var _item = fish_.GetConsumableItem(1);
         AudioManager.PlayHarvesting();
         inventory.AddItem(_item);
+        gameDataBase.fishDataBase.AddCatch(_item.Data as ConsumableData);
         fishableFish.Clear();
 
         OnCatchSuccess.Invoke(_item, 1);

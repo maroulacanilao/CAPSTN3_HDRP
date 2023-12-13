@@ -158,7 +158,19 @@ namespace SaveSystem
                 };
                 _cropStats.Add(_harvestStat);
             }
-            
+
+            var _fishStats = new List<PlayStatsSaveData>();
+
+            foreach (var _fishCatchStats in gameDataBase_.fishDataBase.fishCatchStats)
+            {
+                var _catchStat = new PlayStatsSaveData()
+                {
+                    key = _fishCatchStats.Key.ItemID,
+                    value = _fishCatchStats.Value
+                };
+                _fishStats.Add(_catchStat);
+            }
+
             var _spellIdList = gameDataBase_.playerData.spells.Select(spell_ => spell_.spellName).ToArray();
 
 
@@ -171,6 +183,7 @@ namespace SaveSystem
                 enemyKills = _enemyKills.ToArray(),
                 spells = _spellIdList,
                 cropHarvested = _cropStats.ToArray(),
+                fishCaught = _fishStats.ToArray(),
             };
         }
 

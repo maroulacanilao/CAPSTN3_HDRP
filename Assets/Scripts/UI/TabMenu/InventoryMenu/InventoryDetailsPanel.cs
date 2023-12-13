@@ -45,6 +45,8 @@ namespace UI.TabMenu.InventoryMenu
             equipBtn.onClick.AddListener(EquipItem);
             discardBtn.onClick.AddListener(DiscardItem);
             unequipBtn.onClick.AddListener(UnEquipItem);
+
+            DisplayNull();
         }
 
         private void OnEnable()

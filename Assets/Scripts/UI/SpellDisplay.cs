@@ -57,8 +57,8 @@ public class SpellDisplay : MonoBehaviour
     {
         if (spellIcon != null)
         {
-            spellIcon.sprite = spellData_.icon;
             spellIcon.gameObject.SetActive(true);
+            spellIcon.sprite = spellData_.icon;
         }
         if (spellNameText != null) spellNameText.text = spellData_.spellName;
         if (spellCostText != null) spellCostText.text = $"-{spellData_.manaCost}mp";

@@ -178,6 +178,7 @@ namespace ScriptableObjectData
             gameDataBase.sessionData.farmLoadType = FarmLoadType.NewGame;
             gameDataBase.sessionData.dungeonLevel = 1;
             gameDataBase.cropDataBase.cropHarvestStats.Clear();
+            gameDataBase.fishDataBase.fishCatchStats.Clear();
             gameDataBase.enemyDataBase.enemyKillsStats.Clear();
             gameDataBase.statShopData.SetBoughtStats(new CombatStats());
             TutorialValues.ResetValues();

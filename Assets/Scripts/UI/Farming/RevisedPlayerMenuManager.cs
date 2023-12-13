@@ -36,7 +36,7 @@ namespace UI.Farming
             }
             SceneManager.activeSceneChanged += OnSceneChanged;
 
-            InputUIManager.OnMenu.AddListener(OpenMenu);
+            InputUIManager.OnMenu.AddListener(Inventory);
             InputUIManager.OnInventoryMenu.AddListener(Inventory);
 
             InputUIManager.OnCharacterInfo.AddListener(ProfileInfo);
@@ -44,14 +44,14 @@ namespace UI.Farming
             InputUIManager.OnCropsMenu.AddListener(Crops);
             InputUIManager.OnFishesMenu.AddListener(Fishes);
             InputUIManager.OnMonstersMenu.AddListener(Monsters);
-            InputUIManager.OnCancel.AddListener(Settings);
+            InputUIManager.OnCancel.AddListener(OpenMenu);
         }
 
         private void OnDestroy()
         {
             SceneManager.activeSceneChanged -= OnSceneChanged;
 
-            InputUIManager.OnMenu.RemoveListener(OpenMenu);
+            InputUIManager.OnMenu.RemoveListener(Inventory);
             InputUIManager.OnInventoryMenu.RemoveListener(Inventory);
 
             InputUIManager.OnCharacterInfo.RemoveListener(ProfileInfo);
@@ -59,7 +59,7 @@ namespace UI.Farming
             InputUIManager.OnCropsMenu.RemoveListener(Crops);
             InputUIManager.OnFishesMenu.RemoveListener(Fishes);
             InputUIManager.OnMonstersMenu.RemoveListener(Monsters);
-            InputUIManager.OnCancel.RemoveListener(Settings);
+            InputUIManager.OnCancel.RemoveListener(OpenMenu);
         }
 
         private void OnSceneChanged(Scene arg0_, Scene next_)

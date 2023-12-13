@@ -172,7 +172,7 @@ Transform:
   - {fileID: 1221668908}
   - {fileID: 832575519}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &54687559 stripped
 Transform:
@@ -413,7 +413,7 @@ PrefabInstance:
     - target: {fileID: 5818444317520269742, guid: 2c2a74c767758b843b3b6fdbb233caed,
         type: 3}
       propertyPath: m_RootOrder
-      value: 25
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 5818444317520269742, guid: 2c2a74c767758b843b3b6fdbb233caed,
         type: 3}
@@ -619,7 +619,7 @@ Transform:
   - {fileID: 476183746}
   - {fileID: 1050237694}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &211870014
 GameObject:
@@ -767,7 +767,7 @@ Transform:
   - {fileID: 1224797654}
   - {fileID: 1652193273}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &222192707
 MonoBehaviour:
@@ -841,7 +841,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22488902, guid: 8a005a9e0713f4cc1b5ad29fb07657d3, type: 3}
       propertyPath: m_RootOrder
-      value: 24
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 22488902, guid: 8a005a9e0713f4cc1b5ad29fb07657d3, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1002,7 +1002,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
 --- !u!114 &330585549
 MonoBehaviour:
@@ -1209,7 +1209,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &476183744
 GameObject:
@@ -1360,7 +1360,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &499039382
 MonoBehaviour:
@@ -1514,7 +1514,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &512517820
 GameObject:
@@ -2051,6 +2051,8 @@ GameObject:
   - component: {fileID: 524328226}
   - component: {fileID: 524328239}
   - component: {fileID: 524328238}
+  - component: {fileID: 524328240}
+  - component: {fileID: 524328241}
   m_Layer: 0
   m_Name: Apolaki Flowcharrt
   m_TagString: Untagged
@@ -2330,9 +2332,9 @@ MonoBehaviour:
     width: 0
     height: 0
   selectedBlocks:
-  - {fileID: 524328155}
+  - {fileID: 524328212}
   selectedCommands:
-  - {fileID: 524328153}
+  - {fileID: 524328240}
   variables:
   - {fileID: 524328183}
   - {fileID: 524328173}
@@ -4124,7 +4126,7 @@ MonoBehaviour:
   showAlways: 1
   showCount: 1
   extendPrevious: 0
-  fadeWhenDone: 1
+  fadeWhenDone: 0
   waitForClick: 1
   stopVoiceover: 1
   waitForVO: 0
@@ -4216,6 +4218,8 @@ MonoBehaviour:
   - {fileID: 524328202}
   - {fileID: 524328218}
   - {fileID: 524328209}
+  - {fileID: 524328241}
+  - {fileID: 524328240}
   - {fileID: 524328201}
   - {fileID: 524328222}
   - {fileID: 524328223}
@@ -5857,6 +5861,90 @@ MonoBehaviour:
   stopVoiceover: 1
   waitForVO: 0
   setSayDialog: {fileID: 0}
+--- !u!114 &524328240
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524328150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422cd568a9c4a31ad7c36d0572b9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 85
+  indentLevel: 1
+  storyText: '{i} You can equip armor and weapons similar to equipping tool items
+    by opening your inventory. {/i}'
+  description: 
+  character: {fileID: 0}
+  portrait: {fileID: 0}
+  voiceOverClip: {fileID: 0}
+  showAlways: 1
+  showCount: 1
+  extendPrevious: 0
+  fadeWhenDone: 1
+  waitForClick: 1
+  stopVoiceover: 1
+  waitForVO: 0
+  setSayDialog: {fileID: 0}
+--- !u!114 &524328241
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524328150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d9ff288f3904c05ada7ac9c9a075bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 86
+  indentLevel: 1
+  description: 
+  delay: 0
+  invokeType: 0
+  staticEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222192707}
+        m_TargetAssemblyTypeName: FungusWrapper.FungusReceiver, Assembly-CSharp
+        m_MethodName: EnablePlayerPortrait
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  booleanParameter:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+  booleanEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  integerParameter:
+    integerRef: {fileID: 0}
+    integerVal: 0
+  integerEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  floatParameter:
+    floatRef: {fileID: 0}
+    floatVal: 0
+  floatEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  stringParameter:
+    stringRef: {fileID: 0}
+    stringVal: 
+  stringEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &527464523
 GameObject:
   m_ObjectHideFlags: 0
@@ -6414,7 +6502,7 @@ Transform:
   - {fileID: 1737275665}
   - {fileID: 512517821}
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &738520384
 MonoBehaviour:
@@ -7992,7 +8080,7 @@ PrefabInstance:
     - target: {fileID: 7963115199863514140, guid: aa0977c480e0be14c87998557670edcc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 22
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 7963115199863514140, guid: aa0977c480e0be14c87998557670edcc,
         type: 3}
@@ -9369,7 +9457,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &971054355
 GameObject:
@@ -12940,9 +13028,9 @@ MonoBehaviour:
     width: 0
     height: 0
   selectedBlocks:
-  - {fileID: 1108394470}
+  - {fileID: 1108394450}
   selectedCommands:
-  - {fileID: 1108394468}
+  - {fileID: 1108394419}
   variables:
   - {fileID: 1108394462}
   - {fileID: 1108394457}
@@ -14002,7 +14090,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1173970774
 GameObject:
@@ -14086,7 +14174,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1173970779
 MonoBehaviour:
@@ -14346,7 +14434,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 355.66833, y: 150.53351}
+  scrollPos: {x: 505.66833, y: 157.67625}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 443.19998
@@ -14358,9 +14446,9 @@ MonoBehaviour:
     width: 1114
     height: 859
   selectedBlocks:
-  - {fileID: 1179788330}
+  - {fileID: 1179788158}
   selectedCommands:
-  - {fileID: 1179788367}
+  - {fileID: 1179788210}
   variables:
   - {fileID: 1179788282}
   - {fileID: 1179788281}
@@ -14406,7 +14494,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 7
   indentLevel: 0
-  storyText: USE YOUR <color=#af023d><b>WASD KEYS</b></color> TO MOVE AROUND and
+  storyText: USE YOUR <color=#af023d><b>WASD KEYS</b></color> TO MOVE AROUND AND
     <color=#af023d><b>SPACEBAR</b></color> TO JUMP.
   description: 
   character: {fileID: 0}
@@ -14649,7 +14737,7 @@ MonoBehaviour:
   nodeRect:
     serializedVersion: 2
     x: 89.92551
-    y: 335.76477
+    y: 337.19333
     width: 95.714264
     height: 40
   tint: {r: 0.5895567, g: 1, b: 0, a: 1}
@@ -15261,7 +15349,7 @@ MonoBehaviour:
   nodeRect:
     serializedVersion: 2
     x: 522.1151
-    y: 399.52185
+    y: 400.9504
     width: 94.2857
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
@@ -15379,7 +15467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 48
   indentLevel: 1
-  storyText: To open your inventory press the <color=#af023d><b>I</b></color> on
+  storyText: To open your inventory press the <color=#af023d><b>TAB</b></color> on
     the keyboard.
   description: 
   character: {fileID: 0}
@@ -19451,7 +19539,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 144
   indentLevel: 1
-  storyText: "I have a gift for you, I summoned a box with items you'll be needing
+  storyText: "I have a gift for you, I summoned a chest with items you'll be needing
     to tend to the farm. \n"
   description: 
   character: {fileID: 1520260010}
@@ -21908,7 +21996,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61dddfdc5e0e44ca298d8f46f7f5a915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedFlowchart: {fileID: 1224797713}
+  selectedFlowchart: {fileID: 524328162}
 --- !u!4 &1183074055
 Transform:
   m_ObjectHideFlags: 1
@@ -21922,7 +22010,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1221668907
 GameObject:
@@ -22170,7 +22258,7 @@ MonoBehaviour:
   itemId: 64
   indentLevel: 1
   storyText: '{i} You can also press <color=#af023d><b>O</b></color> to go directly
-    to the Character panel. {/i}'
+    to the Character Profile. {/i}'
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -22178,7 +22266,7 @@ MonoBehaviour:
   showAlways: 1
   showCount: 1
   extendPrevious: 0
-  fadeWhenDone: 0
+  fadeWhenDone: 1
   waitForClick: 1
   stopVoiceover: 1
   waitForVO: 0
@@ -24051,7 +24139,7 @@ MonoBehaviour:
   nodeRect:
     serializedVersion: 2
     x: 790.03094
-    y: 512.03094
+    y: 513.8491
     width: 77.272705
     height: 40
   tint: {r: 1, g: 1, b: 1, a: 1}
@@ -24068,8 +24156,8 @@ MonoBehaviour:
   - {fileID: 1224797663}
   - {fileID: 1224797684}
   - {fileID: 1224797723}
-  - {fileID: 1224797657}
   - {fileID: 1224797715}
+  - {fileID: 1224797657}
   - {fileID: 1224797659}
   - {fileID: 1224797655}
   - {fileID: 1224797670}
@@ -24942,7 +25030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 769.38245, y: -127.74488}
+  scrollPos: {x: 496.65594, y: 274.07306}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 544
@@ -24954,9 +25042,9 @@ MonoBehaviour:
     width: 0
     height: 0
   selectedBlocks:
-  - {fileID: 1224797666}
+  - {fileID: 1224797687}
   selectedCommands:
-  - {fileID: 1224797665}
+  - {fileID: 1224797723}
   variables:
   - {fileID: 1224797698}
   - {fileID: 1224797693}
@@ -25006,8 +25094,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 69
   indentLevel: 1
-  storyText: '{i} To check your stats, press <color=#af023d><b>Tab</b></color> and
-    go to the character section. {/i}'
+  storyText: '{i} To check your stats, press <color=#af023d><b>ESC</b></color> and
+    go to the Profile section. {/i}'
   description: 
   character: {fileID: 0}
   portrait: {fileID: 0}
@@ -25015,7 +25103,7 @@ MonoBehaviour:
   showAlways: 1
   showCount: 1
   extendPrevious: 0
-  fadeWhenDone: 1
+  fadeWhenDone: 0
   waitForClick: 1
   stopVoiceover: 1
   waitForVO: 0
@@ -26495,7 +26583,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1348997017
 GameObject:
@@ -26549,7 +26637,7 @@ PrefabInstance:
     - target: {fileID: 5818444317520269742, guid: 2c2a74c767758b843b3b6fdbb233caed,
         type: 3}
       propertyPath: m_RootOrder
-      value: 27
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 5818444317520269742, guid: 2c2a74c767758b843b3b6fdbb233caed,
         type: 3}
@@ -26952,7 +27040,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22415102, guid: 9bb64c8df70904eecac3f71f81bf339b, type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 22415102, guid: 9bb64c8df70904eecac3f71f81bf339b, type: 3}
       propertyPath: m_AnchorMax.x
@@ -27612,9 +27700,8 @@ MonoBehaviour:
     width: 0
     height: 0
   selectedBlocks:
-  - {fileID: 1520260035}
-  selectedCommands:
-  - {fileID: 1520260057}
+  - {fileID: 1520260005}
+  selectedCommands: []
   variables:
   - {fileID: 1520260013}
   - {fileID: 1520260012}
@@ -30394,7 +30481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 81
   indentLevel: 1
-  storyText: To access this, simply press <color=#af023d><b>TAB</b></color> on your
+  storyText: To access this, simply press <color=#af023d><b>ESC</b></color> on your
     keyboard and cycle through the different sections.
   description: 
   character: {fileID: 1520260010}
@@ -30453,7 +30540,7 @@ Transform:
   m_Children:
   - {fileID: 683412344}
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1606604431
 MonoBehaviour:
@@ -31664,7 +31751,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1822862668 stripped
 Transform:
@@ -31856,7 +31943,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 23
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1936739882
 MonoBehaviour:
@@ -31994,7 +32081,7 @@ PrefabInstance:
     - target: {fileID: 5818444317520269742, guid: 2c2a74c767758b843b3b6fdbb233caed,
         type: 3}
       propertyPath: m_RootOrder
-      value: 26
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 5818444317520269742, guid: 2c2a74c767758b843b3b6fdbb233caed,
         type: 3}
@@ -32176,7 +32263,7 @@ Transform:
   m_Children:
   - {fileID: 782916605}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
 --- !u!114 &2053477840
 MonoBehaviour:
@@ -32221,7 +32308,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2063896722
 GameObject:
@@ -32592,7 +32679,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2134185527
 GameObject:
@@ -34219,7 +34306,7 @@ PrefabInstance:
     - target: {fileID: 6145453314419413504, guid: 543d67870eed88943ad091664ff0ddb5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6145453314419413504, guid: 543d67870eed88943ad091664ff0ddb5,
         type: 3}
@@ -36553,7 +36640,7 @@ PrefabInstance:
     - target: {fileID: 1402934830750384441, guid: 24591811b123804409d262c0282a9397,
         type: 3}
       propertyPath: m_RootOrder
-      value: 21
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 1402934830750384441, guid: 24591811b123804409d262c0282a9397,
         type: 3}
@@ -45973,7 +46060,7 @@ Transform:
   - {fileID: 4502937143114171744}
   - {fileID: 6204395620217221488}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &5764399401359723732
 Transform:

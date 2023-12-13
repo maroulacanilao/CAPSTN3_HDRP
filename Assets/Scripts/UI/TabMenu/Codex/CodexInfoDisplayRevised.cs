@@ -31,6 +31,8 @@ namespace UI.TabMenu.Codex
         [SerializeField] private TextMeshProUGUI basicDescriptionText;
         [SerializeField] private TextMeshProUGUI hiddenDescriptionText;
 
+        [SerializeField] private bool isForFishCodex = false;
+
         public void DisplayInfo(CodexInfoRevised codexInfo_)
         {
             if (nameText != null) nameText.text = codexInfo_.name;
@@ -46,7 +48,14 @@ namespace UI.TabMenu.Codex
                 icon.gameObject.SetActive(true);
             }
 
-            DisplayDescriptionRevised(codexInfo_);
+            if (!isForFishCodex)
+            {
+                DisplayDescriptionRevised(codexInfo_);
+            }
+            else
+            {
+                FishDescription(codexInfo_);
+            }
 
             gameObject.SetActive(true);
             Canvas.ForceUpdateCanvases();
@@ -96,6 +105,11 @@ namespace UI.TabMenu.Codex
             {
                 blocker.SetActive(false);
             }
+        }
+
+        private void FishDescription(CodexInfoRevised codexInfo_)
+        {
+            basicDescriptionText.text = codexInfo_.description;
         }
     }
 }

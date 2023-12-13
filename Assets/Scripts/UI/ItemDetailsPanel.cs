@@ -65,8 +65,8 @@ namespace UI
                 var gold = (ItemGold) currItem;
                 return;
             }
-            
-            nameTxt.SetText(_data.ItemName);
+
+            if (nameTxt != null) nameTxt.SetText(_data.ItemName);
             if (typeTxt != null) typeTxt.SetText(currItem.ItemType.ToString());
             if (rarityTxt != null) rarityTxt.SetText(currItem.RarityType.GetColoredText());
 
