@@ -120,9 +120,10 @@ namespace Fungus
             case ClickMode.ClickAnywhere:
 #if ENABLE_INPUT_SYSTEM
                 if ((UnityEngine.InputSystem.Mouse.current?.leftButton.wasPressedThisFrame ?? false) ||
-                    (UnityEngine.InputSystem.Touchscreen.current?.primaryTouch?.press.wasPressedThisFrame ?? false))
+                    (UnityEngine.InputSystem.Touchscreen.current?.primaryTouch?.press.wasPressedThisFrame ?? false) || 
+                    (UnityEngine.InputSystem.Keyboard.current?.spaceKey?.wasPressedThisFrame ?? false))
 #else
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) || Input.GetButtonDown("Space"))
 #endif
                 {
                     SetClickAnywhereClickedFlag();
