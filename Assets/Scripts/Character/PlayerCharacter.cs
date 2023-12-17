@@ -43,6 +43,14 @@ namespace Character
         {
             health.RefillHealth();
             mana.RefreshMana();
+
+            if (playerData.totalPartyData != null)
+            {
+                foreach (AllyData o in playerData.totalPartyData)
+                {
+                    o.Refill();
+                }
+            }
         }
 
         [Button("Remove some mana")]

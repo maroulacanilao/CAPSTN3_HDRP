@@ -39,6 +39,14 @@ namespace ScriptableObjectData.CharacterData
         {
             return statsData.GetTotalStats(LevelData.CurrentLevel);
         }
+
+        public void Refill()
+        {
+            health.RefillHealth();
+            mana.RefreshMana();
+            statusEffectReceiver.RemoveAllStatusEffect();
+        }
+        
         // public BattleCharacterController SpawnBattleAlly(int level_)
         // {
         //     var _enemy = battlePrefab.GetInstance();

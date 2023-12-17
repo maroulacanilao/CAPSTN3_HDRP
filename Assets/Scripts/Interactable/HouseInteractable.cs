@@ -8,11 +8,11 @@ namespace Interactable
 {
     public class HouseInteractable : InteractableObject
     {
-
         protected override void Interact()
         {
             var _character = GameObject.FindWithTag("Player").GetComponent<PlayerCharacter>();
             _character.Refill();
+            _character.statusEffectReceiver.RemoveAllStatusEffect();
             
             TimeManager.EndDay();
         }
